@@ -1,0 +1,19 @@
+set -e
+
+# Perform all actions as $POSTGRES_USER
+export PGUSER="$POSTGRES_USER"
+
+# Carve out db space
+  initdb /home/postgres/cfm_db
+
+# Start PostgreSQL server
+pg_ctl -D /home/postgres/cfm_db -l /home/postgres/logfile start
+
+/app/schema/load_db_up
+
+  
+
+
+
+
+
