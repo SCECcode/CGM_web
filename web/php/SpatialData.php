@@ -52,18 +52,53 @@ class CFM extends SpatialData {
 				if (count($criteria) !== 2) {
 					$error = true;
 				}
+
+				$criteria = array_map("floatVal", $criteria);
+
 				$query = "SELECT OBJECT_tb.gid,OBJECT_tb.name FROM OBJECT_tb WHERE strike IS NOT NULL AND strike > $1 AND strike < $2";
 				break;
 			case "dip":
 				if (count($criteria) !== 2) {
 					$error = true;
 				}
+
+				$criteria = array_map("floatVal", $criteria);
+
 				$query = "SELECT gid,name FROM OBJECT_tb WHERE dip IS NOT NULL AND dip > $1 AND dip < $2";
 				break;
 			case "latlon":
 				if (count($criteria) !== 4) {
 					$error = true;
 				}
+
+				$criteria = array_map("floatVal", $criteria);
+				list($firstlat, $firstlon, $secondlat, $secondlon) = $criteria;
+
+				if($secondlat == "0") {
+					$secondlat = $firstlat+0.001;
+					$firstlat = $firstlat-0.001;
+				}
+				if($secondlon == "0") {
+					$secondlon = $firstlon+0.001;
+					$firstlon = $firstlon-0.001;
+				}
+
+				$minlon = $firstlon;
+				$maxlon = $secondlon;
+				if($firstlon > $secondlon) {
+					$minlon = $secondlon;
+					$maxlon = $firstlon;
+				}
+
+				$minlat = $firstlat;
+				$maxlat = $secondlat;
+				if($firstlat > $secondlat) {
+					$minlat = $secondlat;
+					$maxlat = $firstlat;
+				}
+
+				$criteria = array($minlon, $minlat, $maxlon, $maxlat);
+
 				$query = "SELECT OBJECT_tb.gid,OBJECT_tb.name FROM TRACE_tb INNER JOIN OBJECT_tb ON TRACE_tb.gid = OBJECT_tb.trace_tb_gid where ST_INTERSECTS(ST_MakeEnvelope( $1, $2, $3, $4, 4326), TRACE_tb.geom)";
 				break;
 		}

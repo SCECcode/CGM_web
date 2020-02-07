@@ -202,7 +202,7 @@ function makeResultTable(str)
     var html = "";
     html+=`<div class="cfm-table" ><table>`;
     html+='<thead><tr><th class=\'text-center\'><button id="allBtn" class="btn btn-sm cfm-small-btn" title="select all visible faults" onclick="selectAll();"><span class="glyphicon glyphicon-unchecked"></span></button></th><th class=\'text-center\'></th><th>CFM5.2 Fault Objects</th></tr></thead><tbody>';
-    if (!Array.isArray(str)) {
+    if (!Array.isArray(str)) { // TODO: remove this once we fix other functions
         str = JSON.parse(str);
     }
     var sz = str.length;

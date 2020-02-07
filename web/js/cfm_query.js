@@ -1,114 +1,25 @@
 $searchResult = $("#searchResult");
 
-function searchByStrikeRange(min,max) {
-    if (min == undefined || max == undefined) {
-        $searchResult.html("");
-        return;
-    } else {
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            // code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                toggle_off_all_layer();
-                cfm_active_gid_list=[];
-                document.getElementById("phpResponseTxt").innerHTML = this.responseText;
-                var str = processSearchResult("searchByStrikeRange");
-                document.getElementById("searchResult").innerHTML = makeResultTable(str);
-            }
-        };
-        xmlhttp.open("GET","php/byStrikeRange.php?min="+min+"&max="+max,true);
-        xmlhttp.send();
-    }
-}
-
-
 function searchWithStrikeRange() {
   //grab the min and max from the slider..
   vals = $( "#slider-strike-range" ).slider("option", "values");
-  searchByStrikeRange(vals[0],vals[1]);
+    CFM_search("strike", vals);
 }
-
-
-function searchByDipRange(min,max) {
-    if (min == undefined || max == undefined) {
-        $searchResult.html("");
-        return;
-    } else {
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            // code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                toggle_off_all_layer();
-                cfm_active_gid_list=[];
-                document.getElementById("phpResponseTxt").innerHTML = this.responseText;
-                var str = processSearchResult("searchByDipRange");
-                document.getElementById("searchResult").innerHTML = makeResultTable(str);
-            }
-        };
-        xmlhttp.open("GET","php/byDipRange.php?min="+min+"&max="+max,true);
-        xmlhttp.send();
-    }
-}
-
 
 function searchWithDipRange() {
   //grab the min and max from the slider..
   vals = $( "#slider-dip-range" ).slider("option", "values");
-  searchByDipRange(vals[0],vals[1]);
+    CFM_search('dip',vals);
 }
-
 
 function searchByFaultObjectName() {
     str=document.getElementById("faultNameTxt").value;
-    if (window.XMLHttpRequest) {
-        // code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp = new XMLHttpRequest();
-    } else {
-        // code for IE6, IE5
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            toggle_off_all_layer();
-            cfm_active_gid_list=[];
-            document.getElementById("phpResponseTxt").innerHTML = this.responseText;
-            var str=processSearchResult("searchByFaultName");
-            document.getElementById("searchResult").innerHTML = makeResultTable(str);
-        }
-    };
-    xmlhttp.open("GET","php/byFaultObjectName.php?q="+str,true);
-    xmlhttp.send();
+    CFM_search('fault',str);
+
 }
 function searchByKeyword() {
-    str=document.getElementById("keywordTxt").value;
-    if (window.XMLHttpRequest) {
-        // code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp = new XMLHttpRequest();
-    } else {
-        // code for IE6, IE5
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            toggle_off_all_layer();
-            cfm_active_gid_list=[];
-            document.getElementById("phpResponseTxt").innerHTML = this.responseText;
-            var str=processSearchResult("searchByKeyword");
-            document.getElementById("searchResult").innerHTML = makeResultTable(str);
-        }
-    };
-    xmlhttp.open("GET","php/byKeyword.php?q="+str,true);
-    xmlhttp.send();
+    let str=document.getElementById("keywordTxt").value;
+    CFM_search('keyword',str);
 }
 
 // takes 2 or 4 entries
@@ -122,6 +33,8 @@ function searchByLatlon() {
     if(secondlonstr == "optional")
         secondlonstr="0";
 
+    let criteria = [firstlatstr, firstlonstr, secondlatstr, secondlonstr ];
+
 // if in hand input mode, need to add the marker+retangle..
     chk_and_add_bounding_rectangle();
     
@@ -129,69 +42,31 @@ function searchByLatlon() {
         $searchResult.html("");
         return;
     } else {
-
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            // code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                toggle_off_all_layer();
-                cfm_active_gid_list=[];
-                document.getElementById("phpResponseTxt").innerHTML = this.responseText;
-                var str=processSearchResult("searchByLatLon");
-                document.getElementById("searchResult").innerHTML = makeResultTable(str);
-            }
-        }
-        xmlhttp.open("GET","php/byLatlon.php?firstlat="+firstlatstr+"&secondlat="+secondlatstr+"&firstlon="+firstlonstr+"&secondlon="+secondlonstr,true);
-        xmlhttp.send();
+        CFM_search("latlon", criteria);
     }
 }
 
 function searchByZone(str) {
     CFM_search('zone',str);
-
-    // if (str == "") {
-    //     $searchResult.html("");
-    //     return;
-    // } else {
-    //     var criteria = JSON.stringify([str]);
-    //     $.ajax({
-    //             url: "php/search.php",
-    //             data: {t: 'zone', q: criteria},
-    //         }
-    //     ).done(function(data) {
-    //         toggle_off_all_layer();
-    //         cfm_active_gid_list=[];
-    //         document.getElementById("phpResponseTxt").innerHTML = data;
-    //         // var str=processSearchResult("searchByZone");
-    //         document.getElementById("searchResult").innerHTML = makeResultTable(data);
-    //         }
-    //     );
-    // }
 }
 
 function CFM_search(type, criteria) {
-    if (type === "" || criteria == "") {
+    if (!type || !criteria) {
         $searchResult.html("");
     }
     if (!Array.isArray(criteria)) {
         criteria = [criteria];
     }
 
-    criteria = JSON.stringify(criteria);
+    let JSON_criteria = JSON.stringify(criteria);
 
     $.ajax({
             url: "php/search.php",
-            data: {t: type, q: criteria},
+            data: {t: type, q: JSON_criteria},
         }
     ).done(function(data) {
             toggle_off_all_layer();
             cfm_active_gid_list=[];
-
 
             let tmp = JSON.parse(data);
             var sz=(Object.keys(tmp).length);
@@ -210,82 +85,15 @@ function CFM_search(type, criteria) {
 }
 
 function searchBySection(str) {
-    if (str == "") {
-        $searchResult.html("");
-        return;
-    } else {
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            // code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                toggle_off_all_layer();
-                cfm_active_gid_list=[];
-                document.getElementById("phpResponseTxt").innerHTML = this.responseText;
-                var str=processSearchResult("searchBySection");
-                document.getElementById("searchResult").innerHTML = makeResultTable(str);
-            }
-        };
-        xmlhttp.open("GET","php/bySection.php?q="+str,true);
-        xmlhttp.send();
-    }
+    CFM_search('section',str);
 }
 
 function searchByArea(str) {
-    if (str == "") {
-        $searchResult.html("");
-        return;
-    } else {
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            // code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                toggle_off_all_layer();
-                cfm_active_gid_list=[];
-                document.getElementById("phpResponseTxt").innerHTML = this.responseText;
-                var str=processSearchResult("searchByArea");
-                document.getElementById("searchResult").innerHTML = makeResultTable(str);
-            }
-        };
-        xmlhttp.open("GET","php/byArea.php?q="+str,true);
-        xmlhttp.send();
-    }
+    CFM_search('area',str);
 }
 
-
 function searchByName(str) {
-    if (str == "") {
-        $searchResult.html("");
-        return;
-    } else {
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            // code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                toggle_off_all_layer();
-                cfm_active_gid_list=[];
-                document.getElementById("phpResponseTxt").innerHTML = this.responseText;
-                var str=processSearchResult("searchByName");
-                document.getElementById("searchResult").innerHTML = makeResultTable(str);
-            }
-        };
-        xmlhttp.open("GET","php/byName.php?q="+str,true);
-        xmlhttp.send();
-    }
+    CFM_search('name',str);
 }
 
 
