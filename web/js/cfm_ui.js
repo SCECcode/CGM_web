@@ -199,31 +199,46 @@ function makeResultTable(str)
     clear_popup();
     // clear the highlight count..
 
-    // var html="<table><tr><th style=\"border:1px solid white;\">CFM5.2 Fault Objects<button id=\"allBtn\" class=\"btn cfm-small-btn\" title=\"select all visible faults\" onclick=\"selectAll()\"><span class=\"glyphicon glyphicon-unchecked\"></span></button></th></tr></table>";
     var html = "";
-    html=html+"<div class=\"cfm-table\" ><table>";
-    html+="<thead><tr><th class='text-center'><button id=\"allBtn\" class=\"btn btn-sm cfm-small-btn\" title=\"select all visible faults\" onclick=\"selectAll();\"><span class=\"glyphicon glyphicon-unchecked\"></span></button></th><th class='text-center'></th><th>CFM5.2 Fault Objects</th></tr></thead><tbody>";
-    str = JSON.parse(str);
+    html+=`<div class="cfm-table" ><table>`;
+    html+='<thead><tr><th class=\'text-center\'><button id="allBtn" class="btn btn-sm cfm-small-btn" title="select all visible faults" onclick="selectAll();"><span class="glyphicon glyphicon-unchecked"></span></button></th><th class=\'text-center\'></th><th>CFM5.2 Fault Objects</th></tr></thead><tbody>';
+    if (!Array.isArray(str)) {
+        str = JSON.parse(str);
+    }
     var sz = str.length;
     var tmp="";
     for( var i=0; i< sz; i++) {
        var s=str[i];
-       // var s = JSON.parse(str[i]);
        var gidstr=s['gid'];
        var gid=parseInt(s['gid']);
        var name=s['name'];
-       if(!in_nogeo_gid_list(gid)) {
-         var s= find_style_list(gid);
-         if(s && s['highlight']==1) {
-           var t= "<tr id=\"row_"+gid+"\"><td style=\"width:25px\"><button class=\"btn btn-sm cfm-small-btn\" id=\"button_"+gid+"\" title=\"highlight the fault\" onclick=toggle_highlight("+gid+");><span id=\"highlight_"+gid+"\" class=\"glyphicon glyphicon-check\"></span></button></td><td style=\"width:25px\"><button class=\"btn btn-sm cfm-small-btn\" title=\"toggle on/off the fault\" onclick=toggle_layer("+gid+");><span id=\"toggle_"+gid+"\" class=\"glyphicon glyphicon-eye-open\"></span></button></td><td><label for=\"button_"+gid+"\">" + name + "</label></td></tr>";
-           } else {
-             var t= "<tr id=\"row_"+gid+"\"><td style=\"width:25px\"><button class=\"btn btn-sm cfm-small-btn\" id=\"button_"+gid+"\" title=\"highlight the fault\" onclick=toggle_highlight("+gid+");><span id=\"highlight_"+gid+"\" class=\"glyphicon glyphicon-unchecked\"></span></button></td><td style=\"width:25px\"><button class=\"btn btn-sm cfm-small-btn\" title=\"toggle on/off the fault\" onclick=toggle_layer("+gid+");><span id=\"toggle_"+gid+"\" class=\"glyphicon glyphicon-eye-open\"></span></button></td><td><label for=\"button_"+gid+"\">" + name + "</label></td></tr>";
-         }
-         tmp=t+tmp;
-        } else {
-          var t="<tr id=\"row_"+gid+"\"><td style=\"width:25px\"><button class=\"btn btn-sm cfm-small-btn\" id=\"button_"+gid+"\" title=\"highlight the fault\" onclick=toggle_highlight("+gid+") disabled><span id=\"highlight_"+gid+"\" class=\"glyphicon glyphicon-unchecked\"></span></button></td><td style=\"width:25px\"><button class=\"btn btn-sm cfm-small-btn\" title=\"toggle on/off the fault\" onclick=toggle_layer("+gid+") disabled><span id=\"toggle_"+gid+"\" class=\"glyphicon glyphicon-eye-open\"></span></button></td><td><label for=\"button_"+gid+"\">" + name + "</label></td></tr>";
-          tmp=tmp+t;
-      }
+       let disabledState = "";
+       let checkState = "unchecked";
+
+        if(in_nogeo_gid_list(gid)) {
+            disabledState = "disabled";
+            checkState = "unchecked;"
+        }
+
+        if(s && s['highlight']==1) {
+            checkState = "check";
+            s= find_style_list(gid);
+        }
+         // var s= find_style_list(gid);
+
+         var t= `<tr id="row_${gid}">
+    <td style="width:25px">
+        <button class="btn btn-sm cfm-small-btn" id="button_${gid}" title="highlight the fault" onclick=toggle_highlight(${gid}); ${disabledState}>
+            <span id="highlight_${gid}" class="glyphicon glyphicon-${checkState}"></span>
+        </button>
+    </td>
+    <td style="width:25px">
+        <button class="btn btn-sm cfm-small-btn" title="toggle on/off the fault" onclick=toggle_layer(${gid}); ${disabledState}>
+        <span id="toggle_${gid}" class="glyphicon glyphicon-eye-open"></span></button></td><td><label
+        for="button_${gid}">${name}</label>
+    </td>
+</tr>`;
+       tmp=t+tmp;
     }
     html=html+ tmp + "</tbody></table></div>";
 

@@ -589,3 +589,7 @@ div.guide ul {
     text-align: center;
     font-style: italic;
 }
+
+#phpResponseTxt {
+    display: none;
+}

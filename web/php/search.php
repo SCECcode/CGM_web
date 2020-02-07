@@ -10,8 +10,8 @@ $type = $_REQUEST["t"];
 $criteria = json_decode($_REQUEST["q"]);
 
 
-print $search->search($type, $criteria);
-
-//echo $type;
-//print_r(json_decode($criteria));
-//exit;
+try {
+	print $search->search($type, $criteria)->outputJSON();
+} catch (BadFunctionCallException $e) {
+	print "";
+}

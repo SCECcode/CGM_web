@@ -4,6 +4,8 @@
 abstract class SpatialData
 {
 	protected $connection;
+	protected $search_result = [];
+
 	function __construct()
 	{
 		$this->connection = pg_connect("host=db port=5432 dbname=CFM52_db user=webonly password=scec");
@@ -11,17 +13,20 @@ abstract class SpatialData
 	}
 
 	abstract public function search($type, $criteria);
+	abstract public function outputJSON();
 
 }
 
 class CFM extends SpatialData {
-	public function search($type, $criteria)
+
+	public function search($type, $criteria) : CFM
 	{
 		if (!is_array($criteria)) {
 			$criteria = array($criteria);
 		}
 
 		$query = "";
+		$error = false;
 
 		switch ($type)
 		{
@@ -44,22 +49,28 @@ class CFM extends SpatialData {
 				$query = "SELECT OBJECT_tb.gid,OBJECT_tb.name FROM OBJECT_tb,FAULT_tb where FAULT_tb.abb=$1 and FAULT_tb.gid=OBJECT_tb.FAULT_tb_gid";
 				break;
 			case "strike":
-				assert(count($criteria) === 2, "Invalid search criteria");
+				if (count($criteria) !== 2) {
+					$error = true;
+				}
 				$query = "SELECT OBJECT_tb.gid,OBJECT_tb.name FROM OBJECT_tb WHERE strike IS NOT NULL AND strike > $1 AND strike < $2";
 				break;
 			case "dip":
-				assert(count($criteria) === 2, "Invalid search criteria");
+				if (count($criteria) !== 2) {
+					$error = true;
+				}
 				$query = "SELECT gid,name FROM OBJECT_tb WHERE dip IS NOT NULL AND dip > $1 AND dip < $2";
 				break;
 			case "latlon":
-				assert(count($criteria) === 4, "Invalid search criteria");
+				if (count($criteria) !== 4) {
+					$error = true;
+				}
 				$query = "SELECT OBJECT_tb.gid,OBJECT_tb.name FROM TRACE_tb INNER JOIN OBJECT_tb ON TRACE_tb.gid = OBJECT_tb.trace_tb_gid where ST_INTERSECTS(ST_MakeEnvelope( $1, $2, $3, $4, 4326), TRACE_tb.geom)";
 				break;
-
-
 		}
 
-
+		if ($error) {
+			throw new BadFunctionCallException("Invalid criteria");
+		}
 
 		pg_prepare($this->connection, "search_query", $query);
 		$result = pg_execute($this->connection, "search_query", $criteria);
@@ -72,6 +83,14 @@ class CFM extends SpatialData {
 			array_push($query_result, $item);
 		}
 
-		return json_encode($query_result);
+		$this->search_result = $query_result;
+		return $this;
 	}
+
+	public function outputJSON()
+	{
+		return json_encode($this->search_result);
+	}
+
+
 }
