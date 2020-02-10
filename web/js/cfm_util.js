@@ -442,8 +442,8 @@ function processGeoList() {
 
 // extract meta data blob from php backend, extract object_tb's gid and 
 // use that to grab the matching geoJson
-function processTraceMeta(metaList) {
-    var str=metaList;
+function processTraceMeta() {
+    var str=all_traces;
 
     if(str == undefined) {
        window.console.log("processTraceMeta: BAD BAD BAD");

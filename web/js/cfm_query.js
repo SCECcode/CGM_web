@@ -79,7 +79,7 @@ function CFM_search(type, criteria) {
             }
 
             document.getElementById("phpResponseTxt").innerHTML = data;
-            document.getElementById("searchResult").innerHTML = makeResultTable(data);
+            document.getElementById("searchResult").innerHTML = makeResultTable(JSON.parse(data));
         }
     );
 }
@@ -126,42 +126,36 @@ function generateResultsTable() {
         "message": "completed",
     });
 }
-// function getAllTraces() {
-//     $.ajax({
-//             url: "php/search.php",
-//             data: {t: 'alltraces', q: ''},
-//         }
-//     ).done(function(data) {
-//                 var str=processTraceMeta(data);
-//         document.getElementById("phpResponseTxt").innerHTML = data;
-//                 document.getElementById("searchResult").innerHTML = makeResultTable(str);
-//                 $.event.trigger({
-//                     type: "tableLoadCompleted",
-//                     "message": "completed",
-//                 });
-//     });
-//
-//     // if (window.XMLHttpRequest) {
-//     //     // code for IE7+, Firefox, Chrome, Opera, Safari
-//     //     xmlhttp = new XMLHttpRequest();
-//     // } else {
-//     //     // code for IE6, IE5
-//     //     xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-//     // }
-//     // xmlhttp.onreadystatechange = function() {
-//     //     if (this.readyState == 4 && this.status == 200) {
-//     //         document.getElementById("phpResponseTxt").innerHTML = this.responseText;
-//     //         var str=processTraceMeta("metaByAllTraces");
-//     //         document.getElementById("searchResult").innerHTML = makeResultTable(str);
-//     //         $.event.trigger({
-//     //             type: "tableLoadCompleted",
-//     //             "message": "completed",
-//     //         })
-//     //     }
-//     // };
-//     // xmlhttp.open("GET","php/getAllTraces.php",true);
-//     // xmlhttp.send();
-// }
+function getAllTraces() {
+                var str=processTraceMeta(all_traces);
+        // document.getElementById("phpResponseTxt").innerHTML = data;
+                document.getElementById("searchResult").innerHTML = makeResultTable(all_traces);
+                $.event.trigger({
+                    type: "tableLoadCompleted",
+                    "message": "completed",
+                });
+
+    // if (window.XMLHttpRequest) {
+    //     // code for IE7+, Firefox, Chrome, Opera, Safari
+    //     xmlhttp = new XMLHttpRequest();
+    // } else {
+    //     // code for IE6, IE5
+    //     xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    // }
+    // xmlhttp.onreadystatechange = function() {
+    //     if (this.readyState == 4 && this.status == 200) {
+    //         document.getElementById("phpResponseTxt").innerHTML = this.responseText;
+    //         var str=processTraceMeta("metaByAllTraces");
+    //         document.getElementById("searchResult").innerHTML = makeResultTable(str);
+    //         $.event.trigger({
+    //             type: "tableLoadCompleted",
+    //             "message": "completed",
+    //         })
+    //     }
+    // };
+    // xmlhttp.open("GET","php/getAllTraces.php",true);
+    // xmlhttp.send();
+}
 
 
 function getStrikeRange() {
@@ -183,25 +177,25 @@ function getDipRange() {
 function getAllGeoJSON() {
 
     // let JSON_data = JSON.parse(data);
-    for (const gid in all_geo_json) {
-        let geojson = all_geo_json[gid];
-        let trace = makeGeoJSONFeature(geojson, gid, find_meta_list(gid).meta);
-        if (trace != undefined)
-            load_a_trace(gid, trace);
-    }
-    // $.ajax({
-    //         url: "php/search.php",
-    //         data: {t: 'allgeojson'},
-    //     }
-    // ).done(function(data) {
-    //     let JSON_data = JSON.parse(data);
-    //     for (const gid in JSON_data) {
-    //         let geojson = JSON_data[gid];
-    //         let trace = makeGeoJSONFeature(geojson, gid, find_meta_list(gid).meta);
-    //         if(trace != undefined)
-    //             load_a_trace(gid,trace);
-    //     }
-    // });
+    // for (const gid in all_geo_json) {
+    //     let geojson = all_geo_json[gid];
+    //     let trace = makeGeoJSONFeature(geojson, gid, find_meta_list(gid).meta);
+    //     if (trace != undefined)
+    //         load_a_trace(gid, trace);
+    // }
+    $.ajax({
+            url: "php/search.php",
+            data: {t: 'allgeojson'},
+        }
+    ).done(function(data) {
+        let JSON_data = JSON.parse(data);
+        for (const gid in JSON_data) {
+            let geojson = JSON_data[gid];
+            let trace = makeGeoJSONFeature(geojson, gid, find_meta_list(gid).meta);
+            if(trace != undefined)
+                load_a_trace(gid,trace);
+        }
+    });
 }
 
 

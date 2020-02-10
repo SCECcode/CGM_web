@@ -59,8 +59,8 @@ jQuery(document).ready(function() {
 
   $(document).ready(function(){
   getGeoTraceList();
-  // getAllTraces();
-      generateResultsTable();
+  getAllTraces();
+  // generateResultsTable();
   setupSearch();
   addFaultColorsSelect();
   addDownloadSelect();
