@@ -27,8 +27,8 @@ $myObj->zone=$row[$zone];
 $myObj->section=$row[$section];
 $myObj->fault=$row[$fault];
 
-$myJSON = json_encode($myObj);
+//$myJSON = json_encode($myObj);
 
-return $myJSON;
+return $myObj;
 }
 ?>

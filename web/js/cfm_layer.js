@@ -109,6 +109,9 @@ var cfm_latlon_area_list=[];
 // { gid1, gid2, ... }, tracking which object is 'blind'
 var cfm_blind_gid_list=[];
 
+var all_traces=[];
+var all_geo_json=[];
+
 /*********************************************************
 *********************************************************/
 

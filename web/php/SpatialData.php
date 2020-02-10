@@ -19,7 +19,7 @@ abstract class SpatialData
 
 class CFM extends SpatialData {
 
-	public function search($type, $criteria) : CFM
+	public function search($type, $criteria="") : CFM
 	{
 		if (!is_array($criteria)) {
 			$criteria = array($criteria);
@@ -101,6 +101,34 @@ class CFM extends SpatialData {
 
 				$query = "SELECT OBJECT_tb.gid,OBJECT_tb.name FROM TRACE_tb INNER JOIN OBJECT_tb ON TRACE_tb.gid = OBJECT_tb.trace_tb_gid where ST_INTERSECTS(ST_MakeEnvelope( $1, $2, $3, $4, 4326), TRACE_tb.geom)";
 				break;
+			case "alltraces":
+				include("util.php");
+				$query = "SELECT OBJECT_tb.gid,OBJECT_tb.name,alternative,source_Author,CFM_version,model_description,descriptor,strike,dip,area,exposure,slip_sense,reference,reference_check,ID_comments,USGS_ID,blind,AREA_tb.name,ZONE_tb.name,SECTION_tb.name,FAULT_tb.name FROM OBJECT_tb, AREA_tb,ZONE_tb, SECTION_tb, FAULT_tb where AREA_tb_gid = AREA_tb.gid and ZONE_tb_gid = ZONE_tb.gid and SECTION_tb_gid = SECTION_tb.gid and FAULT_tb_gid = FAULT_tb.gid";
+
+				$result = pg_query($this->connection, $query);
+				$metaList = array();
+				while($row = pg_fetch_row($result)) {
+					array_push($metaList, makeObj($row));
+				}
+				$this->search_result = $metaList;
+				return $this;
+				break;
+			case "allgeojson":
+				$query = "select OBJECT_tb.gid, ST_AsGeoJSON(ST_TRANSFORM(TRACE_tb.geom,4326)) as geoJSONString  from OBJECT_tb,TRACE_tb where OBJECT_tb.trace_tb_gid=TRACE_tb.gid";
+				$result = pg_query($this->connection, $query);
+
+				$allGeoJSON = array();
+
+				while($row = pg_fetch_object($result)) {
+					$gid = $row->gid;
+					$allGeoJSON[$gid] = $row->geojsonstring;
+				}
+
+				$this->search_result = $allGeoJSON;
+
+				return $this;
+				break;
+
 		}
 
 		if ($error) {
@@ -122,10 +150,116 @@ class CFM extends SpatialData {
 		return $this;
 	}
 
+	public function loadMenuData($type) {
+		$query = "";
+
+		switch($type) {
+			case "area":
+				$query = "SELECT name,abb as value FROM AREA_tb";
+				break;
+			case "zone":
+				$query = "SELECT name,abb as value FROM ZONE_tb";
+				break;
+			case "name":
+				$query = "SELECT name,abb as value FROM FAULT_tb";
+				break;
+			case "section":
+				$query = "SELECT name,abb as value FROM SECTION_tb";
+				break;
+		}
+
+		if (empty($query)) {
+			throw new BadFunctionCallException("Invalid criteria");
+		}
+
+		$result = pg_query($this->connection, $query);
+		$optionsOutput = array();
+
+		while($row = pg_fetch_object($result)) {
+			array_push($optionsOutput, $row);
+		}
+
+		$this->search_result = $optionsOutput;
+		return $this;
+	}
+
+	public function outputHTMLOptions()
+	{
+		$output = "";
+		foreach($this->search_result as $object) {
+			$output .= "<option value='{$object->value}'>{$object->name}</option>";
+		}
+
+		return $output;
+	}
+
+	public function outputDataInHTML($element_id) {
+
+
+	}
+
 	public function outputJSON()
 	{
 		return json_encode($this->search_result);
 	}
 
+	public function getArrayOfObjects()
+	{
+		if (count($this->search_result) === 1) {
+			return $this->search_result[0];
+		} else {
+			return $this->search_result;
+		}
+	}
+
+	public function getStrikeRange()
+	{
+		$query = "SELECT MAX(strike) as maxstrike, min(strike) as minstrike FROM OBJECT_tb LIMIT 1 ";
+		$result = pg_query($this->connection, $query);
+		return pg_fetch_object($result);
+	}
+
+	public function getDipRange()
+	{
+		$query = "SELECT MAX(dip) as maxdip, min(dip) as mindip FROM OBJECT_tb LIMIT 1 ";
+		$result = pg_query($this->connection, $query);
+
+		return pg_fetch_object($result);
+	}
+
+	public function getObjectDetails($resolution)
+	{
+		switch($resolution) {
+			case "native":
+				$query = "SELECT OBJECT_native_tb.gid, OBJECT_native_tb.name, OBJECT_native_tb.url, OBJECT_tb.gid as objgid FROM OBJECT_tb, OBJECT_native_tb where OBJECT_tb.object_native_tb_gid=OBJECT_native_tb.gid ";
+				break;
+			case "500m":
+				$query = "SELECT OBJECT_500m_tb.gid, OBJECT_500m_tb.name, OBJECT_500m_tb.url, OBJECT_tb.gid as objgid FROM OBJECT_tb, OBJECT_500m_tb where OBJECT_tb.object_500m_tb_gid=OBJECT_500m_tb.gid ";
+				break;
+			case "1000m":
+				$query = "SELECT OBJECT_1000m_tb.gid, OBJECT_1000m_tb.name, OBJECT_1000m_tb.url, OBJECT_tb.gid as objgid FROM OBJECT_tb, OBJECT_1000m_tb where OBJECT_tb.object_1000m_tb_gid=OBJECT_1000m_tb.gid ";
+				break;
+			case "2000m":
+				$query = "SELECT OBJECT_2000m_tb.gid, OBJECT_2000m_tb.name, OBJECT_2000m_tb.url, OBJECT_tb.gid as objgid FROM OBJECT_tb, OBJECT_2000m_tb where OBJECT_tb.object_2000m_tb_gid=OBJECT_2000m_tb.gid ";
+				break;
+		}
+
+		if (empty($query)) {
+			throw new BadFunctionCallException("Invalid criteria");
+		}
+
+		$result = pg_query($this->connection, $query);
+
+		$objList=array();
+
+		while($row = pg_fetch_object($result)) {
+			array_push($objList, $row);
+		}
+
+		$this->search_result = $objList;
+
+		return $this;
+
+	}
 
 }

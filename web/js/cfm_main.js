@@ -57,8 +57,10 @@ jQuery(document).ready(function() {
         }
   });     
 
+  $(document).ready(function(){
   getGeoTraceList();
-  getAllTraces();
+  // getAllTraces();
+      generateResultsTable();
   setupSearch();
   addFaultColorsSelect();
   addDownloadSelect();
@@ -70,6 +72,7 @@ jQuery(document).ready(function() {
     });
 
     $("#search-type").trigger("change");
+  });
 }); // end of MAIN
 
 

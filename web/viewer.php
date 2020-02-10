@@ -1,6 +1,8 @@
 <?php
 require_once("php/navigation.php");
+require_once("php/SpatialData.php");
 $header = getHeader("Viewer");
+$cfm = new CFM();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -107,6 +109,7 @@ $header = getHeader("Viewer");
         });
 
     </script>
+
 </head>
 <body>
 <?php echo $header; ?>
@@ -154,7 +157,7 @@ $header = getHeader("Viewer");
                     <option value="zoneClick">Zone</option>
                     <option value="sectionClick">Section</option>
                     <option value="nameClick">Name</option>
-<!--- WAIT for better strike/dip 
+<!--- WAIT for better strike/dip
                     <option value="strikeClick">Strike</option>
                     <option value="dipClick">Dip</option>
 --->
@@ -171,7 +174,12 @@ $header = getHeader("Viewer");
                                 <div class="">
                                     <div class="" style="">
 
-                                        <div class="" id="areaList"></div>
+                                        <div class="" id="areaList">
+                                            <select class="custom-select"  id="selectArea" onchange="searchByArea(this.value)">
+                                                <option value="">  Select...</option>
+                                                <?php print $cfm->loadMenuData('area')->outputHTMLOptions(); ?>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -181,7 +189,12 @@ $header = getHeader("Viewer");
                                 <div class="">
                                     <div class="" style="">
 
-                                        <div class="" id="zoneList"></div>
+                                        <div class="" id="zoneList">
+                                            <select class="custom-select"  id="selectZone" onchange="searchByZone(this.value)">
+                                                <option value="">  Select... </option>
+												<?php print $cfm->loadMenuData('zone')->outputHTMLOptions(); ?>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -192,7 +205,10 @@ $header = getHeader("Viewer");
                                     <div class="" style="">
 
                                         <div class="" id="sectionList"></div>
-
+                                            <select class="custom-select"  id="selectSection" onchange="searchBySection(this.value)">
+                                                <option value="">  Select... </option>
+												<?php print $cfm->loadMenuData('section')->outputHTMLOptions(); ?>
+                                            </select>
                                     </div>
                                 </div>
                             </div>
@@ -203,7 +219,10 @@ $header = getHeader("Viewer");
                                     <div class="" style="">
 
                                         <div class="" id="nameList"></div>
-
+                                          <select class="custom-select"  id="selectName" onchange="searchByName(this.value)">
+                                                <option value="">  Select... </option>
+											  <?php print $cfm->loadMenuData('name')->outputHTMLOptions(); ?>
+                                            </select>
                                     </div>
                                 </div>
                             </div>
@@ -463,5 +482,30 @@ $header = getHeader("Viewer");
   </div>
 </div>
 <!--Modal: Name-->
+
+<?php
+$strikeRange = $cfm->getStrikeRange();
+$dipRange = $cfm->getDipRange();
+?>
+<div id="data" style="display:none;">
+    <div id="dataValues"
+            data-maxstrike="<?php print $strikeRange->maxstrike; ?>"
+            data-minstrike="<?php print $strikeRange->minstrike; ?>"
+            data-maxdip="<?php print $dipRange->maxdip; ?>"
+            data-mindip="<?php print $dipRange->mindip; ?>"
+    </div>
+</div>
 </body>
+    <script type="text/javascript">
+        $(document).ready(function(){
+           cfm_native_list = <?php print $cfm->getObjectDetails('native')->outputJSON(); ?>;
+           cfm_500m_list = <?php print $cfm->getObjectDetails('500m')->outputJSON(); ?>;
+           cfm_1000m_list = <?php print $cfm->getObjectDetails('1000m')->outputJSON(); ?>;
+           cfm_2000m_list = <?php print $cfm->getObjectDetails('2000m')->outputJSON(); ?>;
+           all_traces = <?php print $cfm->search('alltraces')->outputJSON(); ?>;
+           all_geo_json = <?php print $cfm->search('allgeojson')->outputJSON(); ?>;
+           makeAllLists();
+        });
+    </script>
 </html>
+

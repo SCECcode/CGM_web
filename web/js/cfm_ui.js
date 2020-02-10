@@ -49,30 +49,30 @@ function setupDipRangeSlider(min,max) {
 
 function queryByType(type)
 {
-  if(type == "area") { getAreaList(); }
-  if(type == "zone") { getZoneList(); }
-  if(type == "section") { getSectionList(); }
-  if(type == "name") { getNameList(); }
+  // if(type == "area") { getAreaList(); }
+  // if(type == "zone") { getZoneList(); }
+  // if(type == "section") { getSectionList(); }
+  // if(type == "name") { getNameList(); }
 }
 
-// use the zone list from php backend, generate the form html
-function makeZoneList() {
-    var str = $('[data-side="zones"]').data('params');
-    if (str == undefined)
-      return "";
-
-    var html= "<form autocomplete=\"off\"> <select class=\"custom-select\"  id=\"selectZone\" onchange=\"searchByZone(this.value)\"> <option value=\"\">  Select... </option>";
-
-    var sz=(Object.keys(str).length);
-    for( var i=0; i< sz; i++) {
-       var s = JSON.parse(str[i]);
-       var abb=s['abb'];
-       var name=s['name'];
-       cfm_zone_list.push( {"abb":abb, "name":name } );
-       html=html+"<option value=\"" + abb + "\">"+ name +"</option>";
-    }
-    return html;
-}
+// // use the zone list from php backend, generate the form html
+// function makeZoneList() {
+//     var str = $('[data-side="zones"]').data('params');
+//     if (str == undefined)
+//       return "";
+//
+//     var html= `<form autocomplete="off"> <select class="custom-select"  id="selectZone" onchange="searchByZone(this.value)"> <option value="">  Select... </option>`;
+//
+//     var sz=(Object.keys(str).length);
+//     for( var i=0; i< sz; i++) {
+//        var s = JSON.parse(str[i]);
+//        var abb=s['abb'];
+//        var name=s['name'];
+//        cfm_zone_list.push( {"abb":abb, "name":name } );
+//        html=html+"<option value=\"" + abb + "\">"+ name +"</option>";
+//     }
+//     return html;
+// }
 
 // use the section list from php backend, generate the form html
 function makeSectionList() {
@@ -94,23 +94,23 @@ function makeSectionList() {
 }
 
 // use the area list from php backend, generate the form html
-function makeAreaList() {
-    var str = $('[data-side="areas"]').data('params');
-    if (str == undefined)
-      return "";
-
-    var html= "<form autocomplete=\"off\"> <select class=\"custom-select\"  id=\"selectArea\" onchange=\"searchByArea(this.value)\"> <option value=\"\">  Select...</option>";
-
-    var sz=(Object.keys(str).length);
-    for( var i=0; i< sz; i++) {
-       var s = JSON.parse(str[i]);
-       var abb=s['abb'];
-       var name=s['name'];
-       cfm_area_list.push( {"abb":abb, "name":name } );
-       html=html+"<option value=\"" + abb + "\">"+ name +"</option>";
-    }
-    return html;
-}
+// function makeAreaList() {
+//     var str = $('[data-side="areas"]').data('params');
+//     if (str == undefined)
+//       return "";
+//
+//     var html= `<form autocomplete="off"> <select class="custom-select"  id="selectArea" onchange="searchByArea(this.value)"> <option value="">  Select...</option>`;
+//
+//     var sz=(Object.keys(str).length);
+//     for( var i=0; i< sz; i++) {
+//        var s = JSON.parse(str[i]);
+//        var abb=s['abb'];
+//        var name=s['name'];
+//        cfm_area_list.push( {"abb":abb, "name":name } );
+//        html=html+"<option value=\"" + abb + "\">"+ name +"</option>";
+//     }
+//     return html;
+// }
 
 // use the fault list from php backend, generate the form html
 function makeNameList() {
@@ -133,7 +133,7 @@ function makeNameList() {
 
 function makeStrikeSlider()
 {
-    var html="Strike range: <input type=\"text\" id=\"strike-range\" readonly style=\"border:0; color:orange; text-align:center;\"><button id=\"strikeBtn\" type=\"button\" title=\"search with strike range\" class=\"btn btn-default cfm-small-btn\" style=\"border:0; color:blue\" onclick=\"searchWithStrikeRange()\"><span class=\"glyphicon glyphicon-search\"></span></button></div><div id=\"slider-strike-range\"></div><br>";
+    var html=`Strike range: <input type="text" id="strike-range" readonly style="border:0; color:orange; text-align:center;"><button id="strikeBtn" type="button" title="search with strike range" class="btn btn-default cfm-small-btn" style="border:0; color:blue" onclick="searchWithStrikeRange()"><span class="glyphicon glyphicon-search"></span></button></div><div id="slider-strike-range"></div><br>`;
     return html;
 } 
 

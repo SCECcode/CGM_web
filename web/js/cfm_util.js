@@ -443,24 +443,22 @@ function processGeoList() {
 // extract meta data blob from php backend, extract object_tb's gid and 
 // use that to grab the matching geoJson
 function processTraceMeta(metaList) {
-    var str="";
-
-    if (metaList == 'metaByAllTraces') {
-        str = $('[data-side="allTraces"]').data('params');
-    }
+    var str=metaList;
 
     if(str == undefined) {
        window.console.log("processTraceMeta: BAD BAD BAD");
        return;
     }
 
+    // str = JSON.parse(str);
     var sz=(Object.keys(str).length);
     window.console.log("Number of meta blobs received from backend ->",sz);
     // iterate through the list and grab the geo info and update leaflet feature
     // structure one by one
+
     for( var i=0; i< sz; i++) {
        var t=str[i];
-       var meta = JSON.parse(str[i]);
+       var meta = str[i];
        var gidstr=meta['gid'];
        var gid=parseInt(gidstr);
        var blindstr=meta['blind'];
@@ -468,15 +466,12 @@ function processTraceMeta(metaList) {
        if (bval == 1) {
            addto_blind_gid_list(gid);
        }
-       if(metaList == 'metaByAllTraces') {
          cfm_fault_meta_list.push({"gid":gid, "meta": meta });
-         if( !in_nogeo_gid_list(gid)) {
-           getGeoJSONbyObjGid(gidstr,meta);
-         }
-         } else {
-           window.console.log("BAD ??");
-       }
+         // if( !in_nogeo_gid_list(gid)) {
+         //   getGeoJSONbyObjGid(gidstr,meta);
+         // }
     }
+    getAllGeoJSON();
     return str;
 }
 
@@ -548,84 +543,21 @@ function getGeoJSON() {
     return str;
 }
 
-function getStrikeRangeMinMax() {
-    str= $('[data-side="strike-range"]').data('params');
-    rMin=parseInt(str.min);
-    rMax=parseInt(str.max);
-    return [rMin, rMax];
-}
+function makeAllLists() {
+    let allLists = [cfm_native_list, cfm_500m_list, cfm_1000m_list, cfm_2000m_list];
+    let targetLists = [cfm_native_gid_list, cfm_500m_gid_list, cfm_1000m_gid_list, cfm_2000m_gid_list];
 
-function getDipRangeMinMax() {
-    str= $('[data-side="dip-range"]').data('params');
-    rMin=parseInt(str.min);
-    rMax=parseInt(str.max);
-    return [rMin, rMax];
-}
 
-function makeNativeList() {
-    var str = $('[data-side="objNative"]').data('params');
-    if (str == undefined)
-      return "";
+    for (var j=0;j<allLists.length;j++) {
+        let sz=(Object.keys(allLists[j]).length);
+        for( var i=0; i< sz; i++) {
+            var s = allLists[j][i];
+            var gid=parseInt(s['gid']);
+            var name=s['name'];
+            var url=s['url'];
+            var objgid=parseInt(s['objgid']);
+            targetLists[j].push(objgid);
+        }
 
-    var sz=(Object.keys(str).length);
-    for( var i=0; i< sz; i++) {
-       var s = JSON.parse(str[i]);
-       var gid=parseInt(s['gid']);
-       var name=s['name'];
-       var url=s['url'];
-       var objgid=parseInt(s['objgid']);
-       cfm_native_list.push( {"gid":gid, "name":name, "url":url, "objgid":objgid } );
-       cfm_native_gid_list.push(objgid);
-    }
-}
-
-function make500mList() {
-    var str = $('[data-side="obj500m"]').data('params');
-    if (str == undefined)
-      return "";
-
-    var sz=(Object.keys(str).length);
-    for( var i=0; i< sz; i++) {
-       var s = JSON.parse(str[i]);
-       var gid=parseInt(s['gid']);
-       var name=s['name'];
-       var url=s['url'];
-       var objgid=parseInt(s['objgid']);
-       cfm_500m_list.push( {"gid":gid, "name":name, "url":url, "objgid":objgid } );
-       cfm_500m_gid_list.push( objgid );
-    }
-}
-
-function make1000mList() {
-    var str = $('[data-side="obj1000m"]').data('params');
-    if (str == undefined)
-      return "";
-
-    var sz=(Object.keys(str).length);
-    for( var i=0; i< sz; i++) {
-       var s = JSON.parse(str[i]);
-       var gid=parseInt(s['gid']);
-       var name=s['name'];
-       var url=s['url'];
-       var objgid=parseInt(s['objgid']);
-       cfm_1000m_list.push( {"gid":gid, "name":name, "url":url, "objgid":objgid } );
-       cfm_1000m_gid_list.push(objgid);
-    }
-}
-
-function make2000mList() {
-    var str = $('[data-side="obj2000m"]').data('params');
-    if (str == undefined)
-      return "";
-
-    var sz=(Object.keys(str).length);
-    for( var i=0; i< sz; i++) {
-       var s = JSON.parse(str[i]);
-       var gid=parseInt(s['gid']);
-       var name=s['name'];
-       var url=s['url'];
-       var objgid=parseInt(s['objgid']);
-       cfm_2000m_list.push( {"gid":gid, "name":name, "url":url, "objgid":objgid } );
-       cfm_2000m_gid_list.push(objgid);
     }
 }
