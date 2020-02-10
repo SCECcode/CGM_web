@@ -176,26 +176,14 @@ function getDipRange() {
 
 function getAllGeoJSON() {
 
-    // let JSON_data = JSON.parse(data);
-    // for (const gid in all_geo_json) {
-    //     let geojson = all_geo_json[gid];
-    //     let trace = makeGeoJSONFeature(geojson, gid, find_meta_list(gid).meta);
-    //     if (trace != undefined)
-    //         load_a_trace(gid, trace);
-    // }
-    $.ajax({
-            url: "php/search.php",
-            data: {t: 'allgeojson'},
-        }
-    ).done(function(data) {
-        let JSON_data = JSON.parse(data);
-        for (const gid in JSON_data) {
-            let geojson = JSON_data[gid];
-            let trace = makeGeoJSONFeature(geojson, gid, find_meta_list(gid).meta);
-            if(trace != undefined)
-                load_a_trace(gid,trace);
-        }
-    });
+    // let JSON_data = JSON.parse(all_geo_json);
+    for (const index in all_geo_json) {
+        let gid = all_geo_json[index].gid;
+        let geojson = all_geo_json[index].geojsonstring;
+        let trace = makeGeoJSONFeature(geojson, gid, find_meta_list(gid).meta);
+        if (trace != undefined)
+            load_a_trace(gid, trace);
+    }
 }
 
 

@@ -240,7 +240,16 @@ function makeResultTable(metadata)
     html=html+ tmp + "</tbody></table></div>";
 
     if (visibleFaults.getBounds().isValid()) {
-        viewermap.fitBounds(visibleFaults.getBounds());
+
+        if (initial_page_load) {
+            viewermap.fitBounds(visibleFaults.getBounds(), {animate: false});
+            viewermap.setZoom(7, {animate:false});
+            initial_page_load = false;
+        } else {
+            viewermap.fitBounds(visibleFaults.getBounds());
+        }
+
+
     }
     return html;
 }

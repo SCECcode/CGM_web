@@ -111,6 +111,7 @@ var cfm_blind_gid_list=[];
 
 var all_traces=[];
 var all_geo_json=[];
+var initial_page_load = true;
 
 /*********************************************************
 *********************************************************/
@@ -139,7 +140,8 @@ function makeGeoJSONFeature(geoJSON, gid, meta) {
   }
   if( typeof geoJSON === 'object') {
      blob= geoJSON;
-     } else {
+     }
+  else {
        blob=JSON.parse(geoJSON);
   }
 

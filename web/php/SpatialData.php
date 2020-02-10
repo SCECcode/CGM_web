@@ -114,14 +114,14 @@ class CFM extends SpatialData {
 				return $this;
 				break;
 			case "allgeojson":
-				$query = "select OBJECT_tb.gid, ST_AsGeoJSON(ST_TRANSFORM(TRACE_tb.geom,4326)) as geoJSONString  from OBJECT_tb,TRACE_tb where OBJECT_tb.trace_tb_gid=TRACE_tb.gid";
+				$query = "select OBJECT_tb.gid, ST_AsGeoJSON(ST_TRANSFORM(TRACE_tb.geom,4326)) as geojsonstring  from OBJECT_tb,TRACE_tb where OBJECT_tb.trace_tb_gid=TRACE_tb.gid";
 				$result = pg_query($this->connection, $query);
 
 				$allGeoJSON = array();
 
 				while($row = pg_fetch_object($result)) {
 					$gid = $row->gid;
-					$allGeoJSON[$gid] = $row->geojsonstring;
+					array_push($allGeoJSON, $row);
 				}
 
 				$this->search_result = $allGeoJSON;
