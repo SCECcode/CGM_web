@@ -262,4 +262,28 @@ class CFM extends SpatialData {
 
 	}
 
+	public function getGeoTraceList() {
+		$query = "SELECT gid,name FROM OBJECT_tb where Trace_tb_gid is not null";
+		$result = pg_query($this->connection, $query);
+		$gidList=array();
+
+		while($row = pg_fetch_row($result)) {
+			array_push($gidList, $row[0]);
+		}
+
+		$query = "SELECT gid,name FROM OBJECT_tb where Trace_tb_gid is null";
+		$result = pg_query($this->connection, $query);
+
+		$nogidList=array();
+		while($row = pg_fetch_row($result)) {
+			array_push($nogidList, $row[0]);
+		}
+
+		$this->search_result = [];
+		$this->search_result["gidlist"] = $gidList;
+		$this->search_result["nogidlist"] = $nogidList;
+
+		return $this;
+	}
+
 }

@@ -58,7 +58,7 @@ jQuery(document).ready(function() {
   });     
 
   $(document).ready(function(){
-  getGeoTraceList();
+  // getGeoTraceList();
   getAllTraces();
   // generateResultsTable();
   setupSearch();

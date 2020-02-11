@@ -10,7 +10,8 @@ function setupStrikeRangeSlider(realmin,realmax) {
   var min=0;
   var max=360;
   setup_strike_range(min,max);
-  $( "#slider-strike-range" ).slider({
+  let $slider_strike_range = $( "#slider-strike-range" );
+    $slider_strike_range.slider({
     range: true,
     min: 0,
     max: 500,
@@ -20,10 +21,10 @@ function setupStrikeRangeSlider(realmin,realmax) {
       $( "#strike-range" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
     }
   });
-  $( "#strike-range" ).val( $( "#slider-strike-range" ).slider( "values", 0 ) + " - " + $( "#slider-strike-range" ).slider( "values", 1 ) );
+  $( "#strike-range" ).val( $slider_strike_range.slider( "values", 0 ) + " - " + $slider_strike_range.slider( "values", 1 ) );
 
-  $('#slider-strike-range').slider("option", "min", min);
-  $('#slider-strike-range').slider("option", "max", max);
+  $slider_strike_range.slider("option", "min", min);
+  $slider_strike_range.slider("option", "max", max);
   $( "#strike-range" ).val( min + " - " + max );
 }
 
@@ -47,33 +48,6 @@ function setupDipRangeSlider(min,max) {
   $( "#dip-range" ).val( min + " - " + max );
 }
 
-function queryByType(type)
-{
-  // if(type == "area") { getAreaList(); }
-  // if(type == "zone") { getZoneList(); }
-  // if(type == "section") { getSectionList(); }
-  // if(type == "name") { getNameList(); }
-}
-
-// // use the zone list from php backend, generate the form html
-// function makeZoneList() {
-//     var str = $('[data-side="zones"]').data('params');
-//     if (str == undefined)
-//       return "";
-//
-//     var html= `<form autocomplete="off"> <select class="custom-select"  id="selectZone" onchange="searchByZone(this.value)"> <option value="">  Select... </option>`;
-//
-//     var sz=(Object.keys(str).length);
-//     for( var i=0; i< sz; i++) {
-//        var s = JSON.parse(str[i]);
-//        var abb=s['abb'];
-//        var name=s['name'];
-//        cfm_zone_list.push( {"abb":abb, "name":name } );
-//        html=html+"<option value=\"" + abb + "\">"+ name +"</option>";
-//     }
-//     return html;
-// }
-
 // use the section list from php backend, generate the form html
 function makeSectionList() {
     var str = $('[data-side="sections"]').data('params');
@@ -93,44 +67,6 @@ function makeSectionList() {
     return html;
 }
 
-// use the area list from php backend, generate the form html
-// function makeAreaList() {
-//     var str = $('[data-side="areas"]').data('params');
-//     if (str == undefined)
-//       return "";
-//
-//     var html= `<form autocomplete="off"> <select class="custom-select"  id="selectArea" onchange="searchByArea(this.value)"> <option value="">  Select...</option>`;
-//
-//     var sz=(Object.keys(str).length);
-//     for( var i=0; i< sz; i++) {
-//        var s = JSON.parse(str[i]);
-//        var abb=s['abb'];
-//        var name=s['name'];
-//        cfm_area_list.push( {"abb":abb, "name":name } );
-//        html=html+"<option value=\"" + abb + "\">"+ name +"</option>";
-//     }
-//     return html;
-// }
-
-// use the fault list from php backend, generate the form html
-function makeNameList() {
-    var str = $('[data-side="names"]').data('params');
-    if (str == undefined)
-      return "";
-
-    var html= "<form autocomplete=\"off\"> <select class=\"custom-select\"  id=\"selectName\" onchange=\"searchByName(this.value)\"> <option value=\"\">  Select...</option>";
-
-    var sz=(Object.keys(str).length);
-    for( var i=0; i< sz; i++) {
-       var s = JSON.parse(str[i]);
-       var abb=s['abb'];
-       var name=s['name'];
-       cfm_name_list.push( {"abb":abb, "name":name } );
-       html=html+"<option value=\"" + abb + "\">"+ name +"</option>";
-    }
-    return html;
-}
-
 function makeStrikeSlider()
 {
     var html=`Strike range: <input type="text" id="strike-range" readonly style="border:0; color:orange; text-align:center;"><button id="strikeBtn" type="button" title="search with strike range" class="btn btn-default cfm-small-btn" style="border:0; color:blue" onclick="searchWithStrikeRange()"><span class="glyphicon glyphicon-search"></span></button></div><div id="slider-strike-range"></div><br>`;
@@ -139,7 +75,7 @@ function makeStrikeSlider()
 
 function makeDipSlider()
 {
-    var html="Dip range: <div><input type=\"text\" id=\"dip-range\" readonly style=\"border:0; color:orange; text-align:center;\"><button id=\"dipBtn\" type=\"button\" title=\"search with dip range\" class=\"btn btn-default cfm-small-btn\" style=\"border:0; color:blue\" onclick=\"searchWithDipRange()\"><span class=\"glyphicon glyphicon-search\"></span></button></div><div id=\"slider-dip-range\"></div></div><br>";
+    var html=`Dip range: <div><input type="text" id="dip-range" readonly style="border:0; color:orange; text-align:center;"><button id="dipBtn" type="button" title="search with dip range" class="btn btn-default cfm-small-btn" style="border:0; color:blue" onclick="searchWithDipRange()"><span class="glyphicon glyphicon-search"></span></button></div><div id="slider-dip-range"></div></div><br>`;
     return html;
 }
 

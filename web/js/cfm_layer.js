@@ -173,7 +173,7 @@ function makeGeoJSONFeature(geoJSON, gid, meta) {
 
 /* return true if target is in the trace list */
 function find_style_list(target) {
-   var found=0;
+   var found="";
    cfm_style_list.forEach(function(element) {
      if ( element['gid'] == target )
         found=element;
@@ -376,15 +376,6 @@ function select_layer_list() {
        toggle_highlight(gid);
      }
    });
-}
-
-function find_style_list(target) { 
-   var found="";
-   cfm_style_list.forEach(function(element) {
-     if ( element['gid'] == target )
-        found=element;
-   });
-   return found;
 }
 
 function get_highlight_list() {

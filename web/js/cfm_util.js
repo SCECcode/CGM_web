@@ -411,36 +411,7 @@ function getColorFromMeta(meta) {
      return color;
 }
 
-
-function processGeoList() {
-    geostr = $('[data-side="allGeoList"]').data('params');
-    nogeostr = $('[data-side="allNoGeoList"]').data('params');
-    if(geostr == undefined || nogeostr == undefined) {
-        window.console.log("processGeoList: BAD BAD BAD");
-        return;
-    }
-
-    var sz=geostr.length;
-    window.console.log("Number of geo gid from backend ->",sz);
-    for( var i=0; i< sz; i++) {
-       var gidstr=geostr[i];
-       var gid=parseInt(gidstr);
-       cfm_gid_list.push(gid);
-    }
-
-    sz=nogeostr.length;
-    window.console.log("Number of no geo gid from backend ->",sz);
-    for( var i=0; i< sz; i++) {
-       var gidstr=nogeostr[i];
-       var gid=parseInt(gidstr);
-       cfm_gid_list.push(gid);
-       cfm_nogeo_gid_list.push(gid);
-    }
-    window.console.log("total mixed geo..", cfm_gid_list.length);
-
-}
-
-// extract meta data blob from php backend, extract object_tb's gid and 
+// extract meta data blob from php backend, extract object_tb's gid and
 // use that to grab the matching geoJson
 function processTraceMeta() {
     var str=all_traces;
@@ -473,57 +444,6 @@ function processTraceMeta() {
     }
     getAllGeoJSON();
     return str;
-}
-
-function processSearchResult(rlist) {
-    cfm_search_gid_list=[];
-    var str="";
-    if (rlist == 'searchByFaultObjectName') {
-        str = $('[data-side="resultByFaultObjectName"]').data('params');
-    }
-    if (rlist == 'searchByLatLon') {
-        str = $('[data-side="resultByLatLon"]').data('params');
-    }
-    if (rlist == 'searchByKeyword') {
-        str = $('[data-side="resultByKeyword"]').data('params');
-    }
-    if (rlist == 'searchByArea') {
-        str = $('[data-side="resultByArea"]').data('params');
-    }
-    if (rlist == 'searchByZone') {
-        str = $('[data-side="resultByZone"]').data('params');
-    }
-    if (rlist == 'searchBySection') {
-        str = $('[data-side="resultBySection"]').data('params');
-    }
-    if (rlist == 'searchByName') {
-        str = $('[data-side="resultByName"]').data('params');
-    }
-    if (rlist == 'searchByStrikeRange') {
-        str = $('[data-side="resultByStrikeRange"]').data('params');
-    }
-    if (rlist == 'searchByDipRange') {
-        str = $('[data-side="resultByDipRange"]').data('params');
-    }
-
-    if(str == undefined) {
-       window.console.log("processSearchResult: BAD BAD BAD");
-       return;
-    }
-
-    // gid, name
-    var sz=(Object.keys(str).length);
-    window.console.log("Number of gid blobs received from backend ->",sz);
-    for( var i=0; i< sz; i++) {
-       var tmp= JSON.parse(str[i]);
-       var gid=parseInt(tmp['gid']);
-       cfm_active_gid_list.push(gid);
-       if( ! in_nogeo_gid_list(gid)) {
-          toggle_layer(gid);
-       }
-   
-    }
-    return (str);
 }
 
 function gotAllGeoJSON() {

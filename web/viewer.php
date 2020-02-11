@@ -504,6 +504,10 @@ $dipRange = $cfm->getDipRange();
            cfm_2000m_list = <?php print $cfm->getObjectDetails('2000m')->outputJSON(); ?>;
            all_traces = <?php print $cfm->search('alltraces')->outputJSON(); ?>;
            all_geo_json = <?php print $cfm->search('allgeojson')->outputJSON(); ?>;
+
+           let cfm_gid_lists = <?php print $cfm->getGeoTraceList()->outputJSON(); ?>;
+           cfm_gid_list = cfm_gid_lists["gidlist"];
+           cfm_nogeo_gid_list = cfm_gid_lists["nogidlist"];
            makeAllLists();
         });
     </script>

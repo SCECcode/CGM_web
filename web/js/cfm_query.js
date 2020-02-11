@@ -96,28 +96,6 @@ function searchByName(str) {
     CFM_search('name',str);
 }
 
-
-// returning 2 lists, one is gid list where each gid has a geo/shapefile
-//                    one is nogid list where no gid has a geo/shapefile
-function getGeoTraceList() {
-    if (window.XMLHttpRequest) {
-        // code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp = new XMLHttpRequest();
-    } else {
-        // code for IE6, IE5
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("phpResponseTxt").innerHTML = this.responseText;
-            processGeoList();
-        }
-    };
-    xmlhttp.open("GET","php/getGeoTraceList.php",true);
-    xmlhttp.send();
-}
-
-
 function generateResultsTable() {
     var str=processTraceMeta(all_traces);
     document.getElementById("searchResult").innerHTML = makeResultTable(str);
@@ -128,33 +106,11 @@ function generateResultsTable() {
 }
 function getAllTraces() {
                 var str=processTraceMeta(all_traces);
-        // document.getElementById("phpResponseTxt").innerHTML = data;
                 document.getElementById("searchResult").innerHTML = makeResultTable(all_traces);
                 $.event.trigger({
                     type: "tableLoadCompleted",
                     "message": "completed",
                 });
-
-    // if (window.XMLHttpRequest) {
-    //     // code for IE7+, Firefox, Chrome, Opera, Safari
-    //     xmlhttp = new XMLHttpRequest();
-    // } else {
-    //     // code for IE6, IE5
-    //     xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    // }
-    // xmlhttp.onreadystatechange = function() {
-    //     if (this.readyState == 4 && this.status == 200) {
-    //         document.getElementById("phpResponseTxt").innerHTML = this.responseText;
-    //         var str=processTraceMeta("metaByAllTraces");
-    //         document.getElementById("searchResult").innerHTML = makeResultTable(str);
-    //         $.event.trigger({
-    //             type: "tableLoadCompleted",
-    //             "message": "completed",
-    //         })
-    //     }
-    // };
-    // xmlhttp.open("GET","php/getAllTraces.php",true);
-    // xmlhttp.send();
 }
 
 
@@ -189,16 +145,8 @@ function getAllGeoJSON() {
 
 function setupSearch()
 {
-   // queryByType("area");
-   // queryByType("zone");
-   // queryByType("section");
-   // queryByType("name");
    getStrikeRange();
    getDipRange();
-   // getNativeList();
-   // get1000mList();
-   // get2000mList();
-   // get500mList();
 }
 
 
