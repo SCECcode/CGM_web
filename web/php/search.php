@@ -1,6 +1,6 @@
 <?php
 
-require_once("SpatialData.php");
+require_once("CFM.php");
 
 $search = "";
 

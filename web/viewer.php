@@ -1,6 +1,6 @@
 <?php
 require_once("php/navigation.php");
-require_once("php/SpatialData.php");
+require_once("php/CFM.php");
 $header = getHeader("Viewer");
 $cfm = new CFM();
 ?>
