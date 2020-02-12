@@ -137,6 +137,20 @@ function getAllGeoJSON() {
         let geojson = all_geo_json[index].geojsonstring;
         makeGeoJSONFeature(geojson, gid, find_meta_list(gid).meta);
     }
+    visibleFaults.addTo(viewermap);
+
+    visibleFaults.on('mouseover', function(e){
+        if (mymap && !drawing_rectangle) {
+            e.layer.setStyle({weight: 5});
+        }
+    });
+
+    visibleFaults.on('mouseout', function(e){
+        if (mymap && !drawing_rectangle) {
+            e.layer.setStyle({weight: 2});
+        }
+    });
+
 }
 
 

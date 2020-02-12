@@ -119,6 +119,21 @@ var initial_page_load = true;
 /*********************************************************
 *********************************************************/
 
+
+function MapFeature(gid, properties, geometry, scec_properties) {
+    this.type = "FeatureCollection";
+    this.gid = gid;
+    this.features =[{
+        type: "Feature",
+        id: gid,
+        properties: properties,
+        geometry: geometry,
+    }];
+    this.layer = null;
+    this.scec_properties = scec_properties;
+
+}
+
 function reset_geo_plot() {
   // can not really 'destroy' layer and so need to reuse..
   cfm_active_gid_list=[];
@@ -133,6 +148,7 @@ function reset_geo_plot() {
 
 // create a feature with just 1 geoJSON, per object_tb's gid
 function makeGeoJSONFeature(geoJSON, gid, meta) {
+   let geometry;
   if(in_trace_list(gid)) {
     return undefined;
   }
@@ -142,10 +158,10 @@ function makeGeoJSONFeature(geoJSON, gid, meta) {
     return undefined;
   }
   if( typeof geoJSON === 'object') {
-     blob= geoJSON;
+     geometry= geoJSON;
      }
   else {
-       blob=JSON.parse(geoJSON);
+       geometry=JSON.parse(geoJSON);
   }
 
   var color=getColorFromMeta(meta);
@@ -155,24 +171,20 @@ function makeGeoJSONFeature(geoJSON, gid, meta) {
       style.dashArray = blind_dash_value;
   }
 
-  var mapFeature = { "id":gid,
-             "type":"Feature", 
-             "properties": {
-                            "metadataRow": getMetadataRowForDisplay(meta),
-                             "style": style,
-                           },
-             "geometry": blob,
+  let properties = {
+      "metadataRow": getMetadataRowForDisplay(meta),
+      "style": style,
+ };
 
-          };
+   let scec_properties = { "visible": 1, "highlight": 0, };
 
-  var a_trace={
-      "type":"FeatureCollection",
-      "features":[mapFeature],
-  };
+  let cfm_trace = new MapFeature(gid, properties, geometry, scec_properties );
+  let layer = addGeoToMap(cfm_trace);
+   cfm_trace.layer = layer;
+   cfm_trace.trace = cfm_trace;
 
-  var layer=addGeoToMap(a_trace, viewermap);
-  cfm_layer_list.push({"gid":gid, "layer":layer, "trace": a_trace, "scec_properties": { "visible": 1, "highlight": 0, }});
-  return a_trace;
+  cfm_layer_list.push(cfm_trace);
+  return cfm_trace;
 }
 
 // reset to style with new color

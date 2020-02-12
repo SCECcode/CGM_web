@@ -174,70 +174,20 @@ function closeDetails(layer) {
    layer.closePopup();
 }
 
-function addGeoToMap(cfmTrace, mymap) {
+function addGeoToMap(cfmTrace) {
 
    var geoLayer=L.geoJSON(cfmTrace, {
-     filter: function (feature, layer) {
-            if (feature.properties) {
-                var tmp=feature.properties.show_on_map != undefined ? !feature.properties.show_on_map : true;
-                return tmp;
-            }
-            return false;
-     },
      style: function(feature) {
         var tmp=feature.properties.style;
-        if(feature.properties.style != undefined) {
+        if (feature.properties.style != undefined) {
             return feature.properties.style;
         } else {
-            return {color: "#0000ff", "weight":2}
+            return {...defaultStyle}
         }
      },
      onEachFeature: bindPopupEachFeature
-   }).addTo(mymap);
+   });
    visibleFaults.addLayer(geoLayer);
-
-   // var layerPopup;
-   // geoLayer.on('mouseover', function(e){
-/* not used..
-    // array of array
-    var coordinates = e.layer.feature.geometry.coordinates;
-    // pick the middle one
-    var s=Math.floor((coordinates.length)/2);
-    var tmp_coords=coordinates[s][0];
-    var swapped_coordinates = [tmp_coords[1], tmp_coords[0]];  //Swap Lat and Lng
-*/
-// leaflet-popup-close-button -- location
-//     if (mymap && !skipPopup) {
-//        var tmp=e.layer.feature.properties;
-//        var level1=tmp.popupMainContent;
-// //       layerPopup = L.popup({ autoClose: false, closeOnClick: false })
-//        layerPopup = L.popup()
-//            .setLatLng(e.latlng)
-//            .setContent(level1)
-//            .openOn(mymap);
-//     }
-//   });
-/*** XXX
-  geoLayer.on('mouseout', function (e) {
-    window.console.log("moues out..layer#"+e.layer.feature.id)
-    if (layerPopup && mymap) {
-        mymap.closePopup(layerPopup);
-        layerPopup = null;
-    }
-  });
-***/
-
-    geoLayer.on('mouseover', function(e){
-        if (mymap && !drawing_rectangle) {
-            e.layer.setStyle({weight: 5});
-        }
-   });
-
-   geoLayer.on('mouseout', function(e){
-       if (mymap && !drawing_rectangle) {
-           e.layer.setStyle({weight: 2});
-       }
-   });
 
   return geoLayer;
 }
