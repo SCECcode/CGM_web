@@ -153,7 +153,7 @@ function makeResultTable(metadata)
             checkState = "unchecked;"
         }
 
-        if(s && s['highlight']==1) {
+        if(s.hasOwnProperty("scec_properties") && s.scec_properties.highlight ==1) {
             checkState = "check";
             s= find_style_list(gid);
         }
@@ -209,8 +209,8 @@ function _makeResultTableWithGList(glist)
        var tt;
        if(!in_nogeo_gid_list(gid)) {
          var s= find_style_list(gid);
-         var h= s['highlight'];
-         var vis=s['visible'];
+         var h= s.scec_properties.highlight;
+         var vis=s.scec_properties.visible;
          if(h) {
            if(vis) {
              tt="<tr id=\"row_"+gid+"\"><td style=\"width:25px\"><button class=\"btn btn-sm cfm-small-btn\" id=\"button_"+gid+"\" title=\"highlight the fault\" onclick=toggle_highlight("+gid+");><span id=\"highlight_"+gid+"\" class=\"glyphicon glyphicon-check\"></span></button></td><td style=\"width:25px\"><button class=\"btn btn-sm cfm-small-btn\" title=\"toggle on/off the fault\" onclick=toggle_layer("+gid+");><span id=\"toggle_"+gid+"\" class=\"glyphicon glyphicon-eye-open\"></span></button></td><td><label for=\"button_"+gid+"\">" + name + "</label></td></tr>";

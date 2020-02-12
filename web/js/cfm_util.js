@@ -258,11 +258,6 @@ function startDownload()
   }
 }
 
-function plotAll() {
-//  load_geo_list_layer();
-  load_trace_list();
-}
-
 function toggleAll() {
   cfm_toggle_plot= !cfm_toggle_plot;
   if(cfm_toggle_plot) {
@@ -444,12 +439,6 @@ function processTraceMeta() {
     }
     getAllGeoJSON();
     return str;
-}
-
-function gotAllGeoJSON() {
-  if (cfm_fault_meta_list.length == cfm_trace_list.length)
-    return 1;
-  return 0;
 }
 
 // extract the geo json blob from the backend php

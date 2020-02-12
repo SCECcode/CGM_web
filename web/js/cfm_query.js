@@ -132,13 +132,10 @@ function getDipRange() {
 
 function getAllGeoJSON() {
 
-    // let JSON_data = JSON.parse(all_geo_json);
     for (const index in all_geo_json) {
         let gid = all_geo_json[index].gid;
         let geojson = all_geo_json[index].geojsonstring;
-        let trace = makeGeoJSONFeature(geojson, gid, find_meta_list(gid).meta);
-        if (trace != undefined)
-            load_a_trace(gid, trace);
+        makeGeoJSONFeature(geojson, gid, find_meta_list(gid).meta);
     }
 }
 

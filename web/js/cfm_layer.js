@@ -6,6 +6,13 @@ var skipPopup=false;
 
 var default_highlight_color = "red";
 var alternate_highlight_color = "#03F7EB";
+
+const defaultStyle = {
+    "weight":2,
+    "opacity":0.8,
+    "color": "black",
+};
+
 var highlight_style = {
     'color': default_highlight_color,
     'opacity':1,
@@ -82,11 +89,7 @@ var cfm_nogeo_gid_list=[];
 //  [ { "gid": gid1,  "meta": mmm1 }, {  "gid": gid2, "meta": mmm2 }, ... } 
 var cfm_fault_meta_list=[];
 
-// gid is objgid, trace is leaflet feature (1 per layer)
-// [ {"gid": gid1, "trace": trace1 }, {"gid":gid2, "trace":trace2}... ], only with geo
-var cfm_trace_list=[];
-
-// gid is objgid, layer is geoLayer made from geoJSON with trace-feature 
+// gid is objgid, layer is geoLayer made from geoJSON with trace-feature
 // by leaflet
 // [ {"gid": gid1, "layer": layer1 }, {"gid":gid2, "layer":layer2}...], only with geo
 var cfm_layer_list=[];
@@ -146,35 +149,36 @@ function makeGeoJSONFeature(geoJSON, gid, meta) {
   }
 
   var color=getColorFromMeta(meta);
-  var style= { "weight":2,
-               "opacity":0.8,
-               "color": color
-              };
+  var style= { ...defaultStyle };
 
   if (is_fault_blind(gid)) {
       style.dashArray = blind_dash_value;
   }
 
-  var tmp= { "id":gid,
+  var mapFeature = { "id":gid,
              "type":"Feature", 
              "properties": {
                             "metadataRow": getMetadataRowForDisplay(meta),
-                             "style": style
+                             "style": style,
                            },
-             "geometry": blob 
+             "geometry": blob,
+
           };
 
-  var a_trace={"type":"FeatureCollection", "features":[]};
-  a_trace.features.push(tmp);
-  cfm_trace_list.push({"gid":gid, "trace":a_trace});
-  cfm_style_list.push({"gid":gid, "style":style, "visible": 0, "highlight":0});
+  var a_trace={
+      "type":"FeatureCollection",
+      "features":[mapFeature],
+  };
+
+  var layer=addGeoToMap(a_trace, viewermap);
+  cfm_layer_list.push({"gid":gid, "layer":layer, "trace": a_trace, "scec_properties": { "visible": 1, "highlight": 0, }});
   return a_trace;
 }
 
 /* return true if target is in the trace list */
 function find_style_list(target) {
    var found="";
-   cfm_style_list.forEach(function(element) {
+   cfm_layer_list.forEach(function(element) {
      if ( element['gid'] == target )
         found=element;
    });
@@ -184,46 +188,20 @@ function find_style_list(target) {
 // reset to style with new color
 // in both cfm_style_list and also in layer -- but only visible ones
 function reset_fault_color() {
-  // reset fault color in the style list
-  var new_cfm_style_list=[];
-  cfm_style_list.forEach(function(element) {
-    var gid=element['gid'];
-    var gmeta=find_meta_list(gid);
-    var newcolor=getColorFromMeta(gmeta['meta']);
-    var vis=element['visible'];
-    var hl=element['highlight'];
-    var newstyle= { "weight":2,
-                    "opacity":0.8,
-                    "color": newcolor
-                  };
-    new_cfm_style_list.push({"gid":gid, "style":newstyle, "visible": vis, "highlight":hl})
-  });
-  cfm_style_list=new_cfm_style_list;
 
   cfm_layer_list.forEach(function(element) {
     var gid=element['gid'];
-    var gstyle=find_style_list(gid);
-    var style=gstyle['style'];
-    var v=gstyle['visible'];
-    var h=gstyle['highlight'];
-    if(v) {
-       if(!h) {
-           var geolayer=element['layer'];
+    if(element.scec_properties.visible == 1) {
+       if(element.scec_properties.highlight == 0) {
+           var geolayer=element.layer;
            geolayer.eachLayer(function(layer) {
-             layer.setStyle(style);
+             layer.setStyle(defaultStyle);
            }); 
        }
       } else {
       gstyle['dirty_style']=true;
     }
   });
-}
-
-function reset_style_list() {
-   cfm_style_list.forEach(function(element) {
-     element['visible ']=1;
-     element['highlight']=0;
-   });
 }
 
 function remove_layer_list() {
@@ -235,9 +213,9 @@ function remove_layer_list() {
 
 
 function get_feature(gid) {
-  var cnt=cfm_trace_list.length;
+  var cnt=cfm_layer_list.length;
   for(var i=0; i<cnt; i++) {
-    var element=cfm_trace_list[i];
+    var element=cfm_layer_list[i];
     var g=element['gid'];
     if (gid == element['gid']) {
        var trace=element["trace"];
@@ -322,7 +300,7 @@ function is_fault_blind(gid) {
 /* return true if target is in the trace list */
 function in_trace_list(target) {
    var found=0;
-   cfm_trace_list.forEach(function(element) {
+    cfm_layer_list.forEach(function(element) {
      if ( element['gid'] == target )
         found=1;
    });
@@ -345,7 +323,7 @@ function in_active_gid_list(target) {
 
 
 // find a layer from the layer list
-function find_layer_list(target) { 
+function find_layer_list(target) {
    var found="";
    cfm_layer_list.forEach(function(element) {
      if ( element['gid'] == target )
@@ -359,7 +337,7 @@ function reset_layer_list() {
    cfm_layer_list.forEach(function(element) {
      var gid=element['gid'];
      var s=find_style_list(gid);
-     if( s['highlight']==1 && s['visible']==1 ) {
+     if( s.scec_properties.highlight==1 && s.scec_properties.visible==1 ) {
        toggle_highlight(gid);
         addRemoveFromDownloadQueue(gid);
         addRemoveFromMetadataTable(gid);
@@ -372,7 +350,7 @@ function select_layer_list() {
    cfm_layer_list.forEach(function(element) {
      var gid=element['gid'];
      var s=find_style_list(gid);
-     if( s['highlight']==0 && s['visible']==1 ) {
+     if( s.scec_properties.highlight==0 && s.scec_properties.visible==1 ) {
        toggle_highlight(gid);
      }
    });
@@ -380,8 +358,8 @@ function select_layer_list() {
 
 function get_highlight_list() {
    var hlist=[];
-   cfm_style_list.forEach(function(element) {
-     if( element['highlight']==1 ) {
+   cfm_layer_list.forEach(function(element) {
+   if (element.scec_properties.highlight == 1) {
        hlist.push(element['gid']);
      }
    });
@@ -430,7 +408,8 @@ function addRemoveFromDownloadQueue(gid) {
 function addRemoveFromMetadataTable(gid) {
     var targetElem = $("#metadata-"+gid);
     var s = find_style_list(gid);
-    var h = s['highlight'];
+    // var h = s['highlight'];
+    var h = s.scec_properties.highlight;
     let features_object = get_feature(gid);
     let metadataRow = features_object.features[0].properties.metadataRow;
 
@@ -459,7 +438,7 @@ function toggle_highlight(gid) {
         this_highlight_style = highlight_style;
     }
 
-   var h=s['highlight'];
+   var h=s.scec_properties.highlight;
    let $star=$(`#highlight_${gid}`);
    let $rowSelected = $(`#row_${gid}`);
    let $itemCount = $("#itemCount");
@@ -471,9 +450,9 @@ function toggle_highlight(gid) {
    if(h==0) {
      $rowSelected.addClass("row-selected");
      $star.removeClass('glyphicon-unchecked').addClass('glyphicon-check');
-     s['highlight']=1;
+     s.scec_properties.highlight=1;
      var l=find_layer_list(gid);
-     var geolayer=l['layer'];
+     var geolayer=l.layer;
      geolayer.eachLayer(function(layer) {
        layer.setStyle(this_highlight_style);
      });
@@ -497,12 +476,13 @@ function toggle_highlight(gid) {
          } else {
            $itemCount.html(cfm_select_count).show();
        }
-       s['highlight']=0;
+
+       s.scec_properties.highlight = 0;
        var l=find_layer_list(gid);
-       var geolayer=l['layer'];
+       var geolayer=l.layer;
        var s= find_style_list(gid);
-       var original=s['style'];
-       var v=s['visible'];
+       var original= s.trace.features[0].properties.style;
+       var v=s.scec_properties.visible;
        if(v && original != undefined) {
           geolayer.eachLayer(function(layer) {
             layer.setStyle(original);
@@ -521,47 +501,11 @@ function get_leaflet_id(layer) {
 
 function find_trace_list(gid) { 
    var found=undefined;
-   cfm_trace_list.forEach(function(element) {
+    cfm_layer_list.forEach(function(element) {
      if ( element['gid'] == gid )
         found=element;
    });
    return found;
-}
-
-function load_a_trace(gid,trace) {
-  var t=find_layer_list(gid);
-  if(t) {
-    window.console.log("already plotted this layer", gid);
-    return;
-  }
-  var layer=addGeoToMap(trace, viewermap);
-  cfm_layer_list.push({"gid":gid, "layer":layer}); 
-  var s =find_style_list(gid);
-  if( s == undefined ) {
-     window.console.log("BAD!! load_a_trace..", gid);
-     return;
-  }
-  s['visible']=1; // turn it on
-}
-
-function load_trace_list()
-{
-  var sz=cfm_trace_list.length;
-  for (var i=0; i<sz; i++) {
-     var c=cfm_trace_list[i];
-     var gid=c['gid'];
-     var trace =c['trace'];
-     // if it is there already, don't add
-     var t=find_layer_list(gid);
-     if(t) {
-        window.console.log("already plotted this layer", gid);
-        continue;
-     }
-     var layer=addGeoToMap(trace, viewermap);
-     cfm_layer_list.push({"gid":gid, "layer":layer}); 
-     var s =find_style_list(gid);
-     s['visible']=1; // turn it on
-  }
 }
 
 function in_500m_gid_list(target) {
@@ -656,11 +600,11 @@ function in_nogeo_gid_list(target) {
 // is a set of search result..
 function toggle_off_all_layer()
 {
-  var sz=cfm_style_list.length;
+  var sz=cfm_layer_list.length;
   if (sz==0) return;
   for (var i=0; i<sz; i++) {
-     var s=cfm_style_list[i];
-     var vis=s['visible'];
+     var s=cfm_layer_list[i];
+     var vis=s.scec_properties.visible;
      var gid=s['gid'];
      if(vis == 1) { 
         toggle_layer(gid) 
@@ -678,7 +622,7 @@ function toggle_layer_with_list(glist)
      var s=find_style_list(gid);
      if(s == undefined)
         continue;
-     var vis=s['visible'];
+     var vis=s.scec_properties.visible;
      var gid=s['gid'];
      if(vis == 0) { 
          toggle_layer(gid) 
@@ -689,11 +633,11 @@ function toggle_layer_with_list(glist)
 // make every layer visible
 function toggle_on_all_layer()
 {
-  var sz=cfm_style_list.length;
+  var sz=cfm_layer_list.length;
   if (sz==0) return;
   for (var i=0; i<sz; i++) {
-     var s=cfm_style_list[i];
-     var vis=s['visible'];
+     var s=cfm_layer_list[i];
+     var vis=s.scec_properties.visible;
      var gid=s['gid'];
      if(vis == 0) { 
        toggle_layer(gid); 
@@ -707,11 +651,9 @@ function toggle_on_all_layer()
 
 function toggle_layer(gid)
 {
-  var c=find_layer_list(gid);
-  var s=find_style_list(gid);
-  var t=find_trace_list(gid);
-  var geolayer=c['layer'];
-  var vis=s['visible'];
+  var s=find_layer_list(gid);
+  var geolayer=s['layer'];
+  var vis=s.scec_properties.visible;
   var eye='#'+"toggle_"+gid;
   let toggledRow = '#row_'+gid;
 
@@ -724,14 +666,14 @@ function toggle_layer(gid)
     $(toggledRow).addClass("layer-hidden");
     viewermap.removeLayer(geolayer);
     visibleFaults.removeLayer(geolayer);
-    s['visible'] = 0;
+    s.scec_properties.visible = 0;
     } else {
       $(toggledRow).removeClass("layer-hidden");
       if( s['dirty_visible'] != undefined ){ // do nothing
         s['dirty_visible'] = undefined;
         return;
       }
-      s['visible'] = 1;
+      s.scec_properties.visible = 1;
       $(eye).removeClass('glyphicon-eye-close').addClass('glyphicon-eye-open');
       viewermap.addLayer(geolayer);
       visibleFaults.addLayer(geolayer);
