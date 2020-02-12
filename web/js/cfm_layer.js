@@ -175,16 +175,6 @@ function makeGeoJSONFeature(geoJSON, gid, meta) {
   return a_trace;
 }
 
-/* return true if target is in the trace list */
-function find_style_list(target) {
-   var found="";
-   cfm_layer_list.forEach(function(element) {
-     if ( element['gid'] == target )
-        found=element;
-   });
-   return found;
-}
-
 // reset to style with new color
 // in both cfm_style_list and also in layer -- but only visible ones
 function reset_fault_color() {
@@ -336,7 +326,7 @@ function find_layer_list(target) {
 function reset_layer_list() { 
    cfm_layer_list.forEach(function(element) {
      var gid=element['gid'];
-     var s=find_style_list(gid);
+     var s=find_layer_list(gid);
      if( s.scec_properties.highlight==1 && s.scec_properties.visible==1 ) {
        toggle_highlight(gid);
         addRemoveFromDownloadQueue(gid);
@@ -349,7 +339,7 @@ function reset_layer_list() {
 function select_layer_list() {
    cfm_layer_list.forEach(function(element) {
      var gid=element['gid'];
-     var s=find_style_list(gid);
+     var s=find_layer_list(gid);
      if( s.scec_properties.highlight==0 && s.scec_properties.visible==1 ) {
        toggle_highlight(gid);
      }
@@ -380,7 +370,7 @@ function addRemoveFromDownloadQueue(gid) {
     // let downloadQueueElem = $("#download-queue");
     // let downloadCounterElem = $("#download-counter");
     // let faultName = $("#row_"+gid).find("td:nth-child(3) label").html();
-    // var s = find_style_list(gid);
+    // var s = find_layer_list(gid);
     // var h = s['highlight'];
     // if (h == 0) {
     //     // exists, remove it
@@ -407,7 +397,7 @@ function addRemoveFromDownloadQueue(gid) {
 
 function addRemoveFromMetadataTable(gid) {
     var targetElem = $("#metadata-"+gid);
-    var s = find_style_list(gid);
+    var s = find_layer_list(gid);
     // var h = s['highlight'];
     var h = s.scec_properties.highlight;
     let features_object = get_feature(gid);
@@ -427,7 +417,7 @@ function addRemoveFromMetadataTable(gid) {
 
 function toggle_highlight(gid) {
     var this_highlight_style;
-   var s=find_style_list(gid);
+   var s=find_layer_list(gid);
    if (s == '') {
        return;
    }
@@ -480,7 +470,7 @@ function toggle_highlight(gid) {
        s.scec_properties.highlight = 0;
        var l=find_layer_list(gid);
        var geolayer=l.layer;
-       var s= find_style_list(gid);
+       var s= find_layer_list(gid);
        var original= s.trace.features[0].properties.style;
        var v=s.scec_properties.visible;
        if(v && original != undefined) {
@@ -497,15 +487,6 @@ function toggle_highlight(gid) {
 function get_leaflet_id(layer) {
    var id=layer['layer']._leaflet_id;
    return id;
-}
-
-function find_trace_list(gid) { 
-   var found=undefined;
-    cfm_layer_list.forEach(function(element) {
-     if ( element['gid'] == gid )
-        found=element;
-   });
-   return found;
 }
 
 function in_500m_gid_list(target) {
@@ -619,7 +600,7 @@ function toggle_layer_with_list(glist)
   if (sz==0) return;
   for (var i=0; i<sz; i++) {
      var gid=glist[i];
-     var s=find_style_list(gid);
+     var s=find_layer_list(gid);
      if(s == undefined)
         continue;
      var vis=s.scec_properties.visible;

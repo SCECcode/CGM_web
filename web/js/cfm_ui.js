@@ -155,9 +155,9 @@ function makeResultTable(metadata)
 
         if(s.hasOwnProperty("scec_properties") && s.scec_properties.highlight ==1) {
             checkState = "check";
-            s= find_style_list(gid);
+            s= find_layer_list(gid);
         }
-         // var s= find_style_list(gid);
+         // var s= find_layer_list(gid);
 
          var t= `<tr id="row_${gid}">
     <td style="width:25px">
@@ -208,7 +208,7 @@ function _makeResultTableWithGList(glist)
        var name=meta['name'];
        var tt;
        if(!in_nogeo_gid_list(gid)) {
-         var s= find_style_list(gid);
+         var s= find_layer_list(gid);
          var h= s.scec_properties.highlight;
          var vis=s.scec_properties.visible;
          if(h) {
