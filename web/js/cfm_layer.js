@@ -121,6 +121,8 @@ var initial_page_load = true;
 /// CGM
 var cgm_station_velocity_data = [];
 var cgm_arrows = [];
+var cgm_line_path_style = {weight: 1, color: "blue"};
+var cgm_line_pattern = {offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({pixelSize: 5, polygon: false, pathOptions: {stroke: true, color: "blue", weight:1}})};
 /// CGM
 
 function MapFeature(gid, properties, geometry, scec_properties) {

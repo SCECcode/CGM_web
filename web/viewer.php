@@ -67,6 +67,8 @@ $cgm = new CGM();
     <script type='text/javascript' src="plugin/Leaflet.draw/edit/handler/Edit.CircleMarker.js"></script>
     <script type='text/javascript' src="plugin/Leaflet.draw/edit/handler/Edit.Circle.js"></script>
     <script type='text/javascript' src="plugin/leaflet.polylineDecorator.js"></script>
+    <script type='text/javascript' src="plugin/leaflet.textpath.js"></script>
+    <script type='text/javascript' src="plugin/leaflet.lineextremities.js"></script>
 
     <!-- cfm js -->
     <script type="text/javascript" src="js/debug.js?v=1"></script>

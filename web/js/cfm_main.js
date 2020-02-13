@@ -75,8 +75,8 @@ jQuery(document).ready(function() {
         let lat = parseFloat(cgm_station_velocity_data[index].ref_north_latitude);
         let lon = parseFloat(cgm_station_velocity_data[index].ref_east_longitude);
         let vel_north = parseFloat(cgm_station_velocity_data[index].ref_velocity_north);
-        let vel_east = parseFloat(cgm_station_velocity_data[index].ref_velocity_east);
-        let horizontalVelocity = Math.sqrt(vel_north^2 + vel_east^2) ;
+        let vel_east = parseFloat (cgm_station_velocity_data[index].ref_velocity_east);
+        let horizontalVelocity = Math.sqrt(Math.pow(vel_north, 2) + Math.pow(vel_east, 2));
         let station_id = cgm_station_velocity_data[index].station_id;
 
         while(lon < -180){
@@ -89,47 +89,60 @@ jQuery(document).ready(function() {
         // let horizontalVelocityAdjustment = horizontalVelocity*100;
         let marker = L.circle([lat, lon],
             {
-            color: 'red',
-            fillColor: '#f03',
+            color: 'blue',
+            fillColor: 'blue',
             fillOpacity: 0.5,
             radius: 500
     }
         );
 
-        marker.bindTooltip(`station id: ${station_id}, vel: ${horizontalVelocity}`).openTooltip();
+        horizontalVelocity =  (horizontalVelocity * 1000).toFixed(2); // convert to mm/year
+        marker.bindTooltip(`station id: ${station_id}, vel: ${horizontalVelocity} mm/yr`).openTooltip();
 // see https://stackoverflow.com/questions/7477003/calculating-new-longitude-latitude-from-old-n-meters
-        let dy = vel_north*1000;
-        let dx = vel_east*1000;
+        let scaling_factor = 1000;
+        let dy = vel_north*scaling_factor;
+        let dx = vel_east*scaling_factor;
         let r_earth = 6738;
         let pi = Math.PI;
-        let new_latitude  = lat  + (dy / r_earth) * (180 / pi);
-        let new_longitude = lon + (dx / r_earth) * (180 / pi) /Math.cos(lat * pi/180);
+        let new_latitude, new_longitude;
+
+        new_latitude  = lat  + (dy / r_earth) * (180 / pi);
+        new_longitude = lon + (dx / r_earth) * (180 / pi) /Math.cos(lat * pi/180);
         let line_latlons = [
             [lat, lon],
             [new_latitude, new_longitude],
         ];
 
-        let polyline = L.polyline(line_latlons, {color: "red"}).addTo(viewermap);
+        let polyline = L.polyline(line_latlons, cgm_line_path_style).addTo(viewermap);
         var decorator = L.polylineDecorator(polyline, {
-            patterns: [
-                {offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({pixelSize: 5, polygon: false, pathOptions: {stroke: true, color: "red"}})}
-            ]
+            patterns: [cgm_line_pattern ]
         }).addTo(viewermap);
-        cgm_arrows.push(decorator);
-
-        viewermap.on("zoomend", function(e) {
-                let newZoom = viewermap.getZoom();
-                let pixelSize = Math.floor(newZoom * (1.4));
-                    for (let d in cgm_arrows) {
-                        cgm_arrows[d].setPatterns([
-                            {
-                            offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({pixelSize: pixelSize, polygon: false, pathOptions: {stroke: true, color: "red"}})
-                            // {offset: 25, repeat: 100, symbol: L.Symbol.arrowHead({pixelSize: 15, pathOptions: {color:"red'", fillOpacity: 1, weight: 0}})}
-                    }
-                            ] );
-                    }
-            }
-        );
+        // cgm_arrows.push(decorator);
+        // polyline.setText('  ►  ', {repeat: false, attributes: {fill: 'red', offset: 100 }});
+        // viewermap.on("zoomend", function(e) {
+        //         let newZoom = viewermap.getZoom();
+        //         if (newZoom <= 5) {
+        //             // let newStyle = {...cgm_line_path_style};
+        //             for (let d in cgm_arrows) {
+        //                 let new_cgm_line_pattern = {...cgm_line_pattern};
+        //                 new_cgm_line_pattern.symbol.options.pixelSize = 1;
+        //                 cgm_arrows[d].setPatterns([cgm_line_pattern]);
+        //             }
+        //         } else {
+        //             for (let d in cgm_arrows) {
+        //                 cgm_arrows[d].setPatterns([cgm_line_pattern]);
+        //             }
+        //
+        //         }
+        //     // let pixelSize = Math.floor(newZoom * (1.4));
+        //
+        //             // for (let d in cgm_arrows) {
+        //             //     let new_cgm_line_pattern = {...cgm_line_pattern};
+        //             //     new_cgm_line_pattern.symbol.options.pixelSize = pixelSize;
+        //             //     cgm_arrows[d].setPatterns([cgm_line_pattern] );
+        //             // }
+        //     }
+        // );
 
         marker.addTo(viewermap);
 
