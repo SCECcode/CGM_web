@@ -372,7 +372,6 @@ function markLatlon() {
     clear_popup();
     skipPopup = true;
     drawing_rectangle=true;
-    unbind_layer_popup();
     $('#markerBtn').css("color","red");
     } else {
        skipPopup = false;
@@ -380,7 +379,6 @@ function markLatlon() {
        skipRectangle();
        $('#markerBtn').css("color","blue");
        remove_bounding_rectangle_layer();
-       rebind_layer_popup();
   }
 }
 
@@ -389,7 +387,6 @@ function reset_markLatlon() {
   $('#markerBtn').css("color","blue");
   drawing_rectangle=false;
   skipRectangle();
-  rebind_layer_popup();
   remove_bounding_rectangle_layer();
   reset_select_latlon();
 }

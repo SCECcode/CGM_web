@@ -118,7 +118,10 @@ var initial_page_load = true;
 
 /*********************************************************
 *********************************************************/
+/// CGM
+var cgm_station_velocity_data = [];
 
+/// CGM
 
 function MapFeature(gid, properties, geometry, scec_properties) {
     this.type = "FeatureCollection";
@@ -225,29 +228,6 @@ function get_feature(gid) {
     }
   }
   return {};
-}
-
-//           layer.bindPopup(layer.feature.properties.name);
-
-// unbind layer's popup on detail content
-function unbind_layer_popup() {
-  cfm_layer_list.forEach(function(element) {
-    var geolayer=element['layer'];
-    geolayer.eachLayer(function(layer) {
-       unbindPopupEachFeature(layer);
-    });
-  });
-}
-
-// rebind layer's popup on detail content
-function rebind_layer_popup() {
-  cfm_layer_list.forEach(function(element) {
-    var geolayer=element['layer'];
-    geolayer.eachLayer(function(layer) {
-       var feature=layer.feature;
-       bindPopupEachFeature(feature,layer);
-     }); 
-  });
 }
 
 /* return true if target is in the meta list */

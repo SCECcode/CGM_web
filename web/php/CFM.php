@@ -190,10 +190,7 @@ class CFM extends SpatialData {
 
 	}
 
-	public function outputJSON()
-	{
-		return json_encode($this->search_result);
-	}
+
 
 	public function getStrikeRange()
 	{

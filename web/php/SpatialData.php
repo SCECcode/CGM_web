@@ -13,7 +13,11 @@ abstract class SpatialData
 	}
 
 	abstract public function search($type, $criteria);
-	abstract public function outputJSON();
+
+	public function outputJSON()
+	{
+		return json_encode($this->search_result);
+	}
 
 }
 

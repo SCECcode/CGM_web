@@ -1,8 +1,10 @@
 <?php
 require_once("php/navigation.php");
 require_once("php/CFM.php");
+require_once("php/CGM.php");
 $header = getHeader("Viewer");
 $cfm = new CFM();
+$cgm = new CGM();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -509,6 +511,7 @@ $dipRange = $cfm->getDipRange();
            cfm_gid_list = cfm_gid_lists["gidlist"];
            cfm_nogeo_gid_list = cfm_gid_lists["nogidlist"];
            makeAllLists();
+            cgm_station_velocity_data = <?php print $cgm->getAllStationData()->outputJSON(); ?>;
         });
     </script>
 </html>

@@ -72,6 +72,24 @@ jQuery(document).ready(function() {
     });
 
     $("#search-type").trigger("change");
+
+    for (const index in cgm_station_velocity_data) {
+        let lat = parseFloat(cgm_station_velocity_data[index].ref_north_latitude);
+        let lon = parseFloat(cgm_station_velocity_data[index].ref_east_longitude);
+        while(lon < -180){
+            lon +=360;
+        }
+        while (lon > 180){
+            lon -= 360;
+        }
+
+        let marker = L.circle([lat, lon], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5,
+            radius: 500
+        }).addTo(viewermap);
+    }
   });
 }); // end of MAIN
 

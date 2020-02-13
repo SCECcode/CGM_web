@@ -185,28 +185,10 @@ function addGeoToMap(cfmTrace) {
             return {...defaultStyle}
         }
      },
-     onEachFeature: bindPopupEachFeature
    });
    visibleFaults.addLayer(geoLayer);
 
   return geoLayer;
-}
-
-
-// binding the 'detail' fault content
-function bindPopupEachFeature(feature, layer) {
-    var popupContent="";
-
-    // if (feature.properties != undefined  && feature.properties.popupContent != undefined ) {
-    //   popupContent += feature.properties.popupContent;
-    // }
-    // layer.bindPopup(popupContent);
-    layer.on({
-        click: function(e) {
-            let clickedFaultID = feature.id;
-            toggle_highlight(clickedFaultID);
-        },
-    })
 }
 
 // https://gis.stackexchange.com/questions/148554/disable-feature-popup-when-creating-new-simple-marker

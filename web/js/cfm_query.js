@@ -151,6 +151,13 @@ function getAllGeoJSON() {
         }
     });
 
+    visibleFaults.on({
+        click: function (event) {
+            let clickedFaultID = event.layer.feature.id;
+            toggle_highlight(clickedFaultID);
+        }
+    });
+
 }
 
 
