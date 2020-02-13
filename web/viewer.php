@@ -66,6 +66,7 @@ $cgm = new CGM();
     <script type='text/javascript' src="plugin/Leaflet.draw/edit/handler/Edit.Marker.js"></script>
     <script type='text/javascript' src="plugin/Leaflet.draw/edit/handler/Edit.CircleMarker.js"></script>
     <script type='text/javascript' src="plugin/Leaflet.draw/edit/handler/Edit.Circle.js"></script>
+    <script type='text/javascript' src="plugin/leaflet.polylineDecorator.js"></script>
 
     <!-- cfm js -->
     <script type="text/javascript" src="js/debug.js?v=1"></script>
@@ -372,7 +373,6 @@ $cgm = new CGM();
             <div id="searchResult" class="mb-1">
             </div>
             <div id="geoSearchByObjGidResult" style="display:none"></div>
-            <div id="phpResponseTxt"></div>
         </div>
         <div class="col-7 pr-0 pl-2 ">
             <div class="row w-100 mb-1" id='CFM_plot'

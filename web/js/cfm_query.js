@@ -78,7 +78,6 @@ function CFM_search(type, criteria) {
                 }
             }
 
-            document.getElementById("phpResponseTxt").innerHTML = data;
             document.getElementById("searchResult").innerHTML = makeResultTable(JSON.parse(data));
         }
     );
@@ -96,21 +95,13 @@ function searchByName(str) {
     CFM_search('name',str);
 }
 
-function generateResultsTable() {
+function initializeFaultObjectTable() {
     var str=processTraceMeta(all_traces);
-    document.getElementById("searchResult").innerHTML = makeResultTable(str);
+    document.getElementById("searchResult").innerHTML = makeResultTable(all_traces);
     $.event.trigger({
         type: "tableLoadCompleted",
         "message": "completed",
     });
-}
-function getAllTraces() {
-                var str=processTraceMeta(all_traces);
-                document.getElementById("searchResult").innerHTML = makeResultTable(all_traces);
-                $.event.trigger({
-                    type: "tableLoadCompleted",
-                    "message": "completed",
-                });
 }
 
 

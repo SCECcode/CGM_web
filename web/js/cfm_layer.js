@@ -120,7 +120,7 @@ var initial_page_load = true;
 *********************************************************/
 /// CGM
 var cgm_station_velocity_data = [];
-
+var cgm_arrows = [];
 /// CGM
 
 function MapFeature(gid, properties, geometry, scec_properties) {

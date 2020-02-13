@@ -18,7 +18,7 @@ class CGM extends SpatialData
 
 	public function getAllStationData()
 	{
-		$query = "select * from cgm_station_velocities";
+		$query = "select station_id, ref_north_latitude, ref_east_longitude, ref_velocity_north, ref_velocity_east from cgm_station_velocities limit 100";
 
 		$result = pg_query($this->connection, $query);
 
