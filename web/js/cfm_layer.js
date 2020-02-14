@@ -116,14 +116,10 @@ var all_traces=[];
 var all_geo_json=[];
 var initial_page_load = true;
 
-/*********************************************************
-*********************************************************/
-/// CGM
-var cgm_station_velocity_data = [];
-var cgm_arrows = [];
-var cgm_line_path_style = {weight: 1, color: "blue"};
-var cgm_line_pattern = {offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({pixelSize: 5, polygon: false, pathOptions: {stroke: true, color: "blue", weight:1}})};
-/// CGM
+const Models = {
+    CFM: 'cfm',
+    CGM: 'cgm',
+}
 
 function MapFeature(gid, properties, geometry, scec_properties) {
     this.type = "FeatureCollection";

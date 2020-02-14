@@ -9,7 +9,7 @@ $cgm = new CGM();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Community Fault Model Viewer (Provisional)</title>
+    <title>Community Model Viewer (Provisional)</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="css/vendor/font-awesome.min.css" rel="stylesheet">
@@ -67,8 +67,6 @@ $cgm = new CGM();
     <script type='text/javascript' src="plugin/Leaflet.draw/edit/handler/Edit.CircleMarker.js"></script>
     <script type='text/javascript' src="plugin/Leaflet.draw/edit/handler/Edit.Circle.js"></script>
     <script type='text/javascript' src="plugin/leaflet.polylineDecorator.js"></script>
-    <script type='text/javascript' src="plugin/leaflet.textpath.js"></script>
-    <script type='text/javascript' src="plugin/leaflet.lineextremities.js"></script>
 
     <!-- cfm js -->
     <script type="text/javascript" src="js/debug.js?v=1"></script>
@@ -79,6 +77,7 @@ $cgm = new CGM();
     <script type="text/javascript" src="js/cfm_main.js?v=1"></script>
     <script type="text/javascript" src="js/cfm_query.js?v=1"></script>
     <script type="text/javascript" src="js/cfm_sidebar.js?v=1"></script>
+    <script type="text/javascript" src="js/cgm_main.js?v=1"></script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-495056-12"></script>
@@ -123,7 +122,7 @@ $cgm = new CGM();
 <div class="container main">
     <div class="row">
         <div class="col-12">
-            <p>The faults of the <a href="https://www.scec.org/research/cfm">SCEC Community Fault Model (CFM)</a> are three-dimensional and non-planar; however, to simplify browsing the model, the viewer below provides a two-dimensional map-based view of the SCEC CFM version 5.2 preferred fault set. The alternative fault representations are only provided in the complete CFM archive. Here, the viewer allows users to view and download fault geometry data as well as metadata for selected faults rather than downloading the entire CFM model archive. This site is currently provisional. See the <a href="guide">user guide</a> for more details and site usage instructions.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci, corporis eveniet facere id neque nesciunt odio omnis optio quis repudiandae? Amet deleniti ipsum iusto nostrum praesentium quae rem tempore vel</p>
         </div>
     </div>
 
@@ -162,10 +161,10 @@ $cgm = new CGM();
                     <option value="zoneClick">Zone</option>
                     <option value="sectionClick">Section</option>
                     <option value="nameClick">Name</option>
-<!--- WAIT for better strike/dip
-                    <option value="strikeClick">Strike</option>
-                    <option value="dipClick">Dip</option>
---->
+                    <!--- WAIT for better strike/dip
+										<option value="strikeClick">Strike</option>
+										<option value="dipClick">Dip</option>
+					--->
                 </select>
                 <div class="input-group-append">
                     <button onclick="refreshAll();" class="btn btn-dark pl-4 pr-4" type="button">Reset</button>
@@ -180,9 +179,10 @@ $cgm = new CGM();
                                     <div class="" style="">
 
                                         <div class="" id="areaList">
-                                            <select class="custom-select"  id="selectArea" onchange="searchByArea(this.value)">
+                                            <select class="custom-select" id="selectArea"
+                                                    onchange="searchByArea(this.value)">
                                                 <option value="">  Select...</option>
-                                                <?php print $cfm->loadMenuData('area')->outputHTMLOptions(); ?>
+												<?php print $cfm->loadMenuData('area')->outputHTMLOptions(); ?>
                                             </select>
                                         </div>
                                     </div>
@@ -195,7 +195,8 @@ $cgm = new CGM();
                                     <div class="" style="">
 
                                         <div class="" id="zoneList">
-                                            <select class="custom-select"  id="selectZone" onchange="searchByZone(this.value)">
+                                            <select class="custom-select" id="selectZone"
+                                                    onchange="searchByZone(this.value)">
                                                 <option value="">  Select... </option>
 												<?php print $cfm->loadMenuData('zone')->outputHTMLOptions(); ?>
                                             </select>
@@ -210,7 +211,8 @@ $cgm = new CGM();
                                     <div class="" style="">
 
                                         <div class="" id="sectionList"></div>
-                                            <select class="custom-select"  id="selectSection" onchange="searchBySection(this.value)">
+                                            <select class="custom-select" id="selectSection"
+                                                    onchange="searchBySection(this.value)">
                                                 <option value="">  Select... </option>
 												<?php print $cfm->loadMenuData('section')->outputHTMLOptions(); ?>
                                             </select>
@@ -224,7 +226,8 @@ $cgm = new CGM();
                                     <div class="" style="">
 
                                         <div class="" id="nameList"></div>
-                                          <select class="custom-select"  id="selectName" onchange="searchByName(this.value)">
+                                          <select class="custom-select" id="selectName"
+                                                  onchange="searchByName(this.value)">
                                                 <option value="">  Select... </option>
 											  <?php print $cfm->loadMenuData('name')->outputHTMLOptions(); ?>
                                             </select>
@@ -238,7 +241,7 @@ $cgm = new CGM();
                                 <div class="">
                                     <div class="" style="">
                                         <div class="" id="strikeRange"
-                                             style="padding-left:10px; padding-right:10px; overflow:hidden;"></div>
+                                                style="padding-left:10px; padding-right:10px; overflow:hidden;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -249,7 +252,7 @@ $cgm = new CGM();
                                 <div class="">
                                     <div class="" style="">
                                         <div class="" id="dipRange"
-                                             style="padding-left:10px; padding-right:10px; overflow:hidden;"></div>
+                                                style="padding-left:10px; padding-right:10px; overflow:hidden;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -260,8 +263,8 @@ $cgm = new CGM();
                                 <div class="col-12">
                                     <div class="d-flex">
                                         <input placeholder="Enter Keyword" type="text" id="keywordTxt"
-                                               class="form-control"
-                                               onfocus="this.value=''" style=""/>
+                                                class="form-control"
+                                                onfocus="this.value=''" style=""/>
                                         <button id="keywordBtn" type="button" title="search with keyword"
                                                 class="btn btn-default cfm-small-btn" onclick="searchByKeyword()">
                                             <span class="glyphicon glyphicon-search"></span>
@@ -281,27 +284,27 @@ $cgm = new CGM();
                                 <div class="row d-flex ">
                                     <div class="col-5 pr-0">
                                         <input type="text"
-                                               placeholder="Latitude"
-                                               id="firstLatTxt"
-                                               title="first lat"
-                                               onfocus="this.value=''"
-                                               class="form-control">
+                                                placeholder="Latitude"
+                                                id="firstLatTxt"
+                                                title="first lat"
+                                                onfocus="this.value=''"
+                                                class="form-control">
                                         <input type="text" id="firstLonTxt" placeholder='Longitude' title="first lon"
-                                               onfocus="this.value=''" class="form-control mt-1">
+                                                onfocus="this.value=''" class="form-control mt-1">
                                     </div>
                                     <div class="col-5 pr-0">
                                         <input type="text"
-                                               id="secondLatTxt"
-                                               title="optional second lat"
-                                               value='optional'
-                                               onfocus="this.value=''"
-                                               class="form-control">
+                                                id="secondLatTxt"
+                                                title="optional second lat"
+                                                value='optional'
+                                                onfocus="this.value=''"
+                                                class="form-control">
                                         <input type="text"
-                                               id="secondLonTxt"
-                                               title="optional second lon"
-                                               value='optional'
-                                               onfocus="this.value=''"
-                                               class="form-control mt-1">
+                                                id="secondLonTxt"
+                                                title="optional second lon"
+                                                value='optional'
+                                                onfocus="this.value=''"
+                                                class="form-control mt-1">
                                     </div>
                                     <div class="col-1 pr-0 align-items-center">
                                         <button id="latlonBtn" type="button" title="search with latlon"
@@ -336,8 +339,35 @@ $cgm = new CGM();
                 </div>
             </div>
         </div>
-        <div class="col-3 d-flex offset-5 align-items-end mb-2">
-            <div>&nbsp;</div>
+    </div>
+
+    <div class="row">
+        <div class="col-8 d-flex offset-5 align-items-end mb-2">
+<!--            <div>&nbsp;</div>-->
+<!--        <div class="col-4">-->
+            <div class="input-group input-group-sm" style='max-width: 300px;' id="model-select-container">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="model-select">Model</label>
+                </div>
+                <div class="form-check-inline" style="border: 1px solid #ced4da;">
+                <div class="ml-3 form-check form-check-inline">
+                    <label class='form-check-label' for="cfm-model">
+                        <input class='form-check-inline mr-1' type="checkbox" checked="checked" id="cfm-model"/>CFM
+                    </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <label class='form-check-label' for="cgm-model">
+                      <input class='form-check-inline mr-1' type="checkbox" id="cgm-model"/>CGM
+                  </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <label class='form-check-label ml-1 mini-option' for="cgm-model-vectors">
+                      <input class='form-check-inline mr-1' type="checkbox" id="cgm-model-vectors-toggle"/>show vectors
+                  </label>
+                </div>
+                </div>
+            </div>
+<!--        </div>-->
             <div class="input-group input-group-sm" id="map-controls">
                 <div class="input-group-prepend">
                     <label class="input-group-text" for="mapLayer">Select Map Type</label>
@@ -351,22 +381,23 @@ $cgm = new CGM();
                 </select>
             </div>
 
-<!--- WAIT for better dip/strike data
-            <div class="input-group input-group-sm ml-md-2 ml-sm-0">
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="highlight-faults">Highlight Faults By</label>
-                </div>
-                <select id="highlight-faults" class="custom-select custom-select-sm"
-                        onchange="changeFaultColor(this.value);">
-                    <option value="">Default</option>
-                    <option value="strike">Strike</option>
-                    <option value="dip">Dip</option>
-                </select>
-            </div>
---->
+            <!--- WAIT for better dip/strike data
+						<div class="input-group input-group-sm ml-md-2 ml-sm-0">
+							<div class="input-group-prepend">
+								<label class="input-group-text" for="highlight-faults">Highlight Faults By</label>
+							</div>
+							<select id="highlight-faults" class="custom-select custom-select-sm"
+									onchange="changeFaultColor(this.value);">
+								<option value="">Default</option>
+								<option value="strike">Strike</option>
+								<option value="dip">Dip</option>
+							</select>
+						</div>
+			--->
             <!--            <a class="ui-button" onclick="toggleAll();">Show/Hide Faults</a>-->
 
         </div>
+    </div>
     </div>
 
 
@@ -378,7 +409,7 @@ $cgm = new CGM();
         </div>
         <div class="col-7 pr-0 pl-2 ">
             <div class="row w-100 mb-1" id='CFM_plot'
-                 style="position:relative;border:solid 1px #ced4da; height:576px;"></div>
+                    style="position:relative;border:solid 1px #ced4da; height:576px;"></div>
 
 
         </div>
@@ -393,22 +424,23 @@ $cgm = new CGM();
                         <th>Zone</th>
                         <th>Section</th>
                         <th>CFM Version</th>
-<!--                        <th>Strike</th>-->
-<!--                        <th>Dip</th>-->
-<!--                        <th>Area (m<sup>2</sup>) </th>-->
+                        <!--                        <th>Strike</th>-->
+                        <!--                        <th>Dip</th>-->
+                        <!--                        <th>Area (m<sup>2</sup>) </th>-->
                         <th><div class="col text-center">
                                 <div class="btn-group download-now">
-                                    <button id="download-all" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"
+                                    <button id="download-all" type="button" class="btn btn-dark dropdown-toggle"
+                                            data-toggle="dropdown"
                                             aria-haspopup="true" aria-expanded="false" disabled>
                                         Download All <span id="download-counter"></span>
                                     </button>
-<!-- MODAL popup button
-&nbsp;&nbsp;&nbsp;
-                                    <button id="view3d-all" type="button" class="btn btn-dark"
-                                            data-toggle="modal" data-target="#modal3D">
-                                        View<span id="download-counter"></span>
-                                    </button>
--->
+                                    <!-- MODAL popup button
+									&nbsp;&nbsp;&nbsp;
+																		<button id="view3d-all" type="button" class="btn btn-dark"
+																				data-toggle="modal" data-target="#modal3D">
+																			View<span id="download-counter"></span>
+																		</button>
+									-->
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <button class="dropdown-item" type="button" value="meta"
                                                 onclick="executeDownload(this.value);">Metadata
@@ -426,7 +458,7 @@ $cgm = new CGM();
                                                 onclick="executeDownload(this.value);">2000m + Metadata
                                         </button>
                                         <button class="dropdown-item" type="button" value="all"
-                                              onclick="executeDownload(this.value);">All of the Above
+                                                onclick="executeDownload(this.value);">All of the Above
                                         </button>
                                     </div>
                                 </div>
@@ -459,7 +491,8 @@ $cgm = new CGM();
 <div id="dip-strike-key-container" style="display:none;">
     <div id="dip-strike-key" class="row">
         <div class="col text-right">
-		<span class="min"></span><span class="ui-slider-range" style="width: 200px;">&nbsp;</span><span class="max"></span>
+		<span class="min"></span><span class="ui-slider-range" style="width: 200px;">&nbsp;</span><span
+                    class="max"></span>
             </div>
 	</div>
 </div>
@@ -475,14 +508,14 @@ $cgm = new CGM();
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
 
-      <!--Body-->
+        <!--Body-->
       <div class="modal-body">
 <div class="row col-12">
 <iframe id="view3DIfram" src="" style="height:500px;width:100%;" frameborder="0" allowfullscreen> </iframe>
 </div>
       </div>
     </div>
-    <!--Content-->
+      <!--Content-->
   </div>
 </div>
 <!--Modal: Name-->
@@ -501,19 +534,19 @@ $dipRange = $cfm->getDipRange();
 </div>
 </body>
     <script type="text/javascript">
-        $(document).ready(function(){
-           cfm_native_list = <?php print $cfm->getObjectDetails('native')->outputJSON(); ?>;
-           cfm_500m_list = <?php print $cfm->getObjectDetails('500m')->outputJSON(); ?>;
-           cfm_1000m_list = <?php print $cfm->getObjectDetails('1000m')->outputJSON(); ?>;
-           cfm_2000m_list = <?php print $cfm->getObjectDetails('2000m')->outputJSON(); ?>;
-           all_traces = <?php print $cfm->search('alltraces')->outputJSON(); ?>;
-           all_geo_json = <?php print $cfm->search('allgeojson')->outputJSON(); ?>;
+        $(document).ready(function () {
+            cfm_native_list = <?php print $cfm->getObjectDetails('native')->outputJSON(); ?>;
+            cfm_500m_list = <?php print $cfm->getObjectDetails('500m')->outputJSON(); ?>;
+            cfm_1000m_list = <?php print $cfm->getObjectDetails('1000m')->outputJSON(); ?>;
+            cfm_2000m_list = <?php print $cfm->getObjectDetails('2000m')->outputJSON(); ?>;
+            all_traces = <?php print $cfm->search('alltraces')->outputJSON(); ?>;
+            all_geo_json = <?php print $cfm->search('allgeojson')->outputJSON(); ?>;
 
-           let cfm_gid_lists = <?php print $cfm->getGeoTraceList()->outputJSON(); ?>;
-           cfm_gid_list = cfm_gid_lists["gidlist"];
-           cfm_nogeo_gid_list = cfm_gid_lists["nogidlist"];
-           makeAllLists();
-            cgm_station_velocity_data = <?php print $cgm->getAllStationData()->outputJSON(); ?>;
+            let cfm_gid_lists = <?php print $cfm->getGeoTraceList()->outputJSON(); ?>;
+            cfm_gid_list = cfm_gid_lists["gidlist"];
+            cfm_nogeo_gid_list = cfm_gid_lists["nogidlist"];
+            makeAllLists();
+            cgm_station_data = <?php print $cgm->getAllStationData()->outputJSON(); ?>;
         });
     </script>
 </html>
