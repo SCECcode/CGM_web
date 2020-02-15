@@ -9,12 +9,12 @@ var cgm_markers = [];
 $(document).ready(function(){
 
    $("#cgm-model").on('click', function(){
-      if ($(this).is(":checked"))  {
-          CGM.showModel();
-      } else {
-          CGM.hide();
-      }
+       CGM.toggleStations();
    });
+
+    $("#cgm-model-vectors").on('click', function() {
+        CGM.toggleVectors();
+    });
 });
 
 var CGM = new function()  {
@@ -44,6 +44,9 @@ var CGM = new function()  {
          return;
      } else {
          visible.stations = true;
+         if (!$("#cgm-model").prop('checked') ) {
+             $("#cgm-model").attr('checked', true);
+         }
      }
 
     for (const index in cgm_station_data) {
@@ -77,16 +80,20 @@ var CGM = new function()  {
         marker.bindTooltip(station_info).openTooltip();
         marker.addTo(viewermap);
         cgm_station_data[index].marker = marker;
-        // cgm_markers.push( {
-        //         marker: marker,
-        //         station_id: station_id,
-        //         horizontalVelocity: horizontalVelocity_mm
-        //     }
-        //     );
     }
 };
 
 this.addVectors = function() {
+
+    if (visible.vectors === true) {
+        return;
+    } else {
+        visible.vectors = true;
+        if (!visible.stations) {
+            this.addStationMarkers();
+        }
+    }
+
     for (const index in cgm_station_data) {
        let start_latlon = cgm_station_data[index].marker.getLatLng();
         let vel_north = parseFloat(cgm_station_data[index].ref_velocity_north);
@@ -112,11 +119,20 @@ this.addVectors = function() {
 };
 
 this.removeVectors = function () {
+    if (visible.vectors === false) {
+        return;
+    } else {
+        visible.vectors = false;
+    }
+
     for (const index in cgm_station_data) {
        viewermap.removeLayer(cgm_station_data[index].vectorLine);
         viewermap.removeLayer(cgm_station_data[index].vectorArrowHead);
     }
 
+    if ($("#cgm-model-vectors").prop('checked') ) {
+        $("#cgm-model-vectors").prop('checked', false);
+    }
 };
 
     this.removeStations = function () {
@@ -127,6 +143,12 @@ this.removeVectors = function () {
             visible.stations = false;
         }
 
+        if (visible.vectors) {
+            this.removeVectors();
+        }
+
+
+
         for (const index in cgm_station_data) {
             viewermap.removeLayer(cgm_station_data[index].marker);
         }
@@ -135,7 +157,7 @@ this.removeVectors = function () {
     this.hide = function () {
         this.removeStations();
         this.removeVectors();
-};
+    };
 
     this.calculateEndVectorLatLng = function (start_latlon, vel_north, vel_east, scaling_factor) {
         // see https://stackoverflow.com/questions/7477003/calculating-new-longitude-latitude-from-old-n-meters
@@ -151,5 +173,22 @@ this.removeVectors = function () {
 
     return [end_lat, end_lon];
 };
+
+    this.toggleVectors = function () {
+        if (visible.vectors)  {
+            this.removeVectors() ;
+        } else {
+            this.addVectors();
+        }
+    };
+
+    this.toggleStations = function () {
+        if (visible.stations)  {
+            this.removeStations() ;
+        } else {
+            this.addStationMarkers();
+        }
+    };
+
 
 };

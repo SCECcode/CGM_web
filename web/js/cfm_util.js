@@ -301,6 +301,7 @@ function refreshAll() {
   dismiss_sidebar();
   clear_popup();
   reset_geo_plot();
+  cfm_visible = true;
 }
 
 // building up the content for the popup window on plot

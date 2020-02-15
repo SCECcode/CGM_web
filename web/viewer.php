@@ -149,7 +149,7 @@ $cgm = new CGM();
         </div>
     </div>
 
-    <div id="controls-container" class="row">
+    <div class="row" id="controls-container">
         <div class="col-4">
             <div class="input-group filters">
                 <select id="search-type" class="custom-select">
@@ -339,36 +339,27 @@ $cgm = new CGM();
                 </div>
             </div>
         </div>
-    </div>
+        <!--    </div>-->
 
-    <div class="row">
-        <div class="col-8 d-flex offset-5 align-items-end mb-2">
-<!--            <div>&nbsp;</div>-->
-<!--        <div class="col-4">-->
-            <div class="input-group input-group-sm" style='max-width: 300px;' id="model-select-container">
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="model-select">Model</label>
+    <div class="col-8 text-right">
+                <div id='model-options' class="form-check-inline" style="border: 1px solid #ced4da; padding:2px;">
+                    <div class="ml-3 form-check form-check-inline">
+                        <label class='form-check-label' for="cfm-model">
+                            <input class='form-check-inline mr-1' type="checkbox" value=1 checked="checked" id="cfm-model"/>CFM
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <label class='form-check-label' for="cgm-model">
+                          <input class='form-check-inline mr-1' type="checkbox" id="cgm-model"/>CGM
+                      </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <label class='form-check-label ml-1 mini-option' for="cgm-model-vectors">
+                          <input class='form-check-inline mr-1' type="checkbox" id="cgm-model-vectors"/>show vectors
+                      </label>
+                    </div>
                 </div>
-                <div class="form-check-inline" style="border: 1px solid #ced4da;">
-                <div class="ml-3 form-check form-check-inline">
-                    <label class='form-check-label' for="cfm-model">
-                        <input class='form-check-inline mr-1' type="checkbox" checked="checked" id="cfm-model"/>CFM
-                    </label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <label class='form-check-label' for="cgm-model">
-                      <input class='form-check-inline mr-1' type="checkbox" id="cgm-model"/>CGM
-                  </label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <label class='form-check-label ml-1 mini-option' for="cgm-model-vectors">
-                      <input class='form-check-inline mr-1' type="checkbox" id="cgm-model-vectors-toggle"/>show vectors
-                  </label>
-                </div>
-                </div>
-            </div>
-<!--        </div>-->
-            <div class="input-group input-group-sm" id="map-controls">
+            <div class="input-group input-group-sm custom-control-inline mr-0" id="map-controls">
                 <div class="input-group-prepend">
                     <label class="input-group-text" for="mapLayer">Select Map Type</label>
                 </div>
@@ -379,7 +370,6 @@ $cgm = new CGM();
                     <option value="otm topo">OTM Topographic</option>
                     <option value="osm street">OSM Street</option>
                 </select>
-            </div>
 
             <!--- WAIT for better dip/strike data
 						<div class="input-group input-group-sm ml-md-2 ml-sm-0">
@@ -396,7 +386,7 @@ $cgm = new CGM();
 			--->
             <!--            <a class="ui-button" onclick="toggleAll();">Show/Hide Faults</a>-->
 
-        </div>
+    </div>
     </div>
     </div>
 
@@ -414,8 +404,10 @@ $cgm = new CGM();
 
         </div>
     </div>
-        <div class="row">
-            <div class="col-12" id="metadata-viewer-container">
+    <div class="row">
+        <div class="col-12">
+            <div class="row" id="metadata-viewer-container">
+                <div class="col-12 pr-0">
                 <table id="metadata-viewer">
                     <thead>
                     <tr>
@@ -471,6 +463,7 @@ $cgm = new CGM();
                     </tr>
                     </tbody>
                 </table>
+                </div>
                 <!--                    <p>-->
                 <!--                        The CFM Viewer was developed by the <a href="https://www.scec.org/">Southern California Earthquake Center</a> (SCEC) and SCEC-->
                 <!--                        Community Fault Model researchers. More information is available on the <a-->
@@ -479,17 +472,15 @@ $cgm = new CGM();
                 <!--                    </p>-->
             </div>
         </div>
-
     </div>
 
-    <div class="row">&nbsp;</div>
+</div>
 
     <div id='queryBlock' class="col-6" style="overflow:hidden;display:none;">
 
     </div> <!-- query block -->
-</div>
-<div id="dip-strike-key-container" style="display:none;">
-    <div id="dip-strike-key" class="row">
+<div id="dip-strike-key-container row" style="display:none;">
+    <div id="dip-strike-key" class="col-3">
         <div class="col text-right">
 		<span class="min"></span><span class="ui-slider-range" style="width: 200px;">&nbsp;</span><span
                     class="max"></span>
@@ -497,28 +488,6 @@ $cgm = new CGM();
 	</div>
 </div>
 
-<!--Modal: Name-->
-<div class="modal" id="modal3D" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-
-    <!--Content-->
-    <div class="modal-content">
-      <!--Header-->
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-
-        <!--Body-->
-      <div class="modal-body">
-<div class="row col-12">
-<iframe id="view3DIfram" src="" style="height:500px;width:100%;" frameborder="0" allowfullscreen> </iframe>
-</div>
-      </div>
-    </div>
-      <!--Content-->
-  </div>
-</div>
-<!--Modal: Name-->
 
 <?php
 $strikeRange = $cfm->getStrikeRange();

@@ -1,25 +1,37 @@
 $searchResult = $("#searchResult");
 
+var CFM_searchType = {
+    keyword: 'keyword',
+    latlon: 'latlon',
+    area: 'area',
+    zone: 'zone',
+    section: 'section',
+    name: 'name',
+    fault: 'fault',
+    strike: 'strike',
+    dip: 'dip'
+};
+
 function searchWithStrikeRange() {
   //grab the min and max from the slider..
   vals = $( "#slider-strike-range" ).slider("option", "values");
-    CFM_search("strike", vals);
+    CFM_search(CFM_searchType.strike, vals);
 }
 
 function searchWithDipRange() {
   //grab the min and max from the slider..
   vals = $( "#slider-dip-range" ).slider("option", "values");
-    CFM_search('dip',vals);
+    CFM_search(CFM_searchType.dip,vals);
 }
 
 function searchByFaultObjectName() {
     str=document.getElementById("faultNameTxt").value;
-    CFM_search('fault',str);
+    CFM_search(CFM_searchType.fault,str);
 
 }
 function searchByKeyword() {
     let str=document.getElementById("keywordTxt").value;
-    CFM_search('keyword',str);
+    CFM_search(CFM_searchType.keyword,str);
 }
 
 // takes 2 or 4 entries
@@ -42,12 +54,12 @@ function searchByLatlon() {
         $searchResult.html("");
         return;
     } else {
-        CFM_search("latlon", criteria);
+        CFM_search(CFM_searchType.latlon, criteria);
     }
 }
 
 function searchByZone(str) {
-    CFM_search('zone',str);
+    CFM_search(CFM_searchType.zone,str);
 }
 
 function CFM_search(type, criteria) {

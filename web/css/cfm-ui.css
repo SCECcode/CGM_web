@@ -590,3 +590,6 @@ div.guide ul {
     font-style: italic;
 }
 
+#model-options label {
+    font-weight: normal;
+}

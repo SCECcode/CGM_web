@@ -119,7 +119,7 @@ var initial_page_load = true;
 const Models = {
     CFM: 'cfm',
     CGM: 'cgm',
-}
+};
 
 function MapFeature(gid, properties, geometry, scec_properties) {
     this.type = "FeatureCollection";
@@ -134,6 +134,8 @@ function MapFeature(gid, properties, geometry, scec_properties) {
     this.scec_properties = scec_properties;
 
 }
+
+var cfm_visible = true;
 
 function reset_geo_plot() {
   // can not really 'destroy' layer and so need to reuse..

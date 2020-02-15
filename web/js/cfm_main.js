@@ -71,60 +71,13 @@ jQuery(document).ready(function() {
 
     $("#search-type").trigger("change");
 
-//     for (const index in cgm_station_data) {
-//         let lat = parseFloat(cgm_station_data[index].ref_north_latitude);
-//         let lon = parseFloat(cgm_station_data[index].ref_east_longitude);
-//         let vel_north = parseFloat(cgm_station_data[index].ref_velocity_north);
-//         let vel_east = parseFloat (cgm_station_data[index].ref_velocity_east);
-//         let horizontalVelocity = Math.sqrt(Math.pow(vel_north, 2) + Math.pow(vel_east, 2));
-//         let station_id = cgm_station_data[index].station_id;
-//
-//         while(lon < -180){
-//             lon +=360;
-//         }
-//         while (lon > 180){
-//             lon -= 360;
-//         }
-//
-// // see https://stackoverflow.com/questions/7477003/calculating-new-longitude-latitude-from-old-n-meters
-//         let scaling_factor = 1000;
-//         let dy = vel_north*scaling_factor;
-//         let dx = vel_east*scaling_factor;
-//         let r_earth = 6738;
-//         let pi = Math.PI;
-//         let new_latitude, new_longitude;
-//
-//         new_latitude  = lat  + (dy / r_earth) * (180 / pi);
-//         new_longitude = lon + (dx / r_earth) * (180 / pi) /Math.cos(lat * pi/180);
-//         let line_latlons = [
-//             [lat, lon],
-//             [new_latitude, new_longitude],
-//         ];
-//
-//         let polyline = L.polyline(line_latlons, cgm_line_path_style).addTo(viewermap);
-//         L.polylineDecorator(polyline, {
-//             patterns: [cgm_line_pattern]
-//         }).addTo(viewermap);
-//
-//         let marker = L.circle([lat, lon],
-//             {
-//                 color: 'blue',
-//                 fillColor: 'blue',
-//                 fillOpacity: 0.5,
-//                 radius: 500,
-//                 weight: 1,
-//             }
-//         );
-//
-//         horizontalVelocity =  (horizontalVelocity * 1000).toFixed(2); // convert to mm/year
-//         let station_info = `station id: ${station_id}, vel: ${horizontalVelocity} mm/yr`;
-//         marker.bindTooltip(station_info).openTooltip();
-//         marker.addTo(viewermap);
-//
-//     }
-
-      // CGM.addStationMarkers();
-      // CGM.addVectors();
+    $("#cfm-model").click(function(){
+        if (cfm_visible) {
+            toggle_off_all_layer();
+        } else {
+            toggle_on_all_layer();
+        }
+    });
   });
 }); // end of MAIN
 
