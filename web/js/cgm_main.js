@@ -76,7 +76,7 @@ var CGM = new function()  {
         );
 
         let horizontalVelocity_mm =  (horizontalVelocity * 1000).toFixed(2); // convert to mm/year
-        let station_info = `station id: ${station_id}, vel: ${horizontalVelocity_mm} mm/yr`;
+        let station_info = `station id: ${station_id}, vel: ${horizontalVelocity_mm} mm/yr, lat/lng: ${lat}, ${lon}`;
         marker.bindTooltip(station_info).openTooltip();
         marker.addTo(viewermap);
         cgm_station_data[index].marker = marker;

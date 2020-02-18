@@ -150,10 +150,10 @@ $cgm = new CGM();
     </div>
 
     <div class="row" id="controls-container">
-        <div class="col-4">
-            <div class="input-group filters">
+<!--        <div class="col pl-0" id="CFM-search-controls">-->
+            <div class="col-4 input-group filters">
                 <select id="search-type" class="custom-select">
-                    <option value="">Search by ...</option>
+                    <option value="">Search the CFM ...</option>
                     <option value="keywordClick">Keyword</option>
                     <option value="latlonClick">Latitude &amp; Longitude</option>
                     <option disabled>-- Advanced --</option>
@@ -167,11 +167,10 @@ $cgm = new CGM();
 					--->
                 </select>
                 <div class="input-group-append">
-                    <button onclick="refreshAll();" class="btn btn-dark pl-4 pr-4" type="button">Reset</button>
+                    <button id="refresh-all-button" onclick="refreshAll();" class="btn btn-dark pl-4 pr-4" type="button">Reset</button>
                 </div>
             </div>
-            <div class="row">
-                <div class="col input-group">
+                <div class="col-8">
                     <ul id="sidebar" class="navigation">
                         <li id='area' class='navigationLi ' style="display:none;">
                             <div id='areaMenu' class='menu'>
@@ -181,7 +180,7 @@ $cgm = new CGM();
                                         <div class="" id="areaList">
                                             <select class="custom-select" id="selectArea"
                                                     onchange="searchByArea(this.value)">
-                                                <option value="">  Select...</option>
+                                                <option value="">  Select Area...</option>
 												<?php print $cfm->loadMenuData('area')->outputHTMLOptions(); ?>
                                             </select>
                                         </div>
@@ -197,7 +196,7 @@ $cgm = new CGM();
                                         <div class="" id="zoneList">
                                             <select class="custom-select" id="selectZone"
                                                     onchange="searchByZone(this.value)">
-                                                <option value="">  Select... </option>
+                                                <option value="">  Select Zone... </option>
 												<?php print $cfm->loadMenuData('zone')->outputHTMLOptions(); ?>
                                             </select>
                                         </div>
@@ -213,7 +212,7 @@ $cgm = new CGM();
                                         <div class="" id="sectionList"></div>
                                             <select class="custom-select" id="selectSection"
                                                     onchange="searchBySection(this.value)">
-                                                <option value="">  Select... </option>
+                                                <option value="">  Select Section... </option>
 												<?php print $cfm->loadMenuData('section')->outputHTMLOptions(); ?>
                                             </select>
                                     </div>
@@ -228,7 +227,7 @@ $cgm = new CGM();
                                         <div class="" id="nameList"></div>
                                           <select class="custom-select" id="selectName"
                                                   onchange="searchByName(this.value)">
-                                                <option value="">  Select... </option>
+                                                <option value="">  Select Name... </option>
 											  <?php print $cfm->loadMenuData('name')->outputHTMLOptions(); ?>
                                             </select>
                                     </div>
@@ -276,13 +275,12 @@ $cgm = new CGM();
                         </li>
                         <li id='latlon' class='navigationLi ' style="display:none">
                             <div id='latlonMenu' class='menu'>
-                                <div class="row mt-2">
-                                    <div class="col-12">
-                                        <p>Draw a rectangle on the map or enter latitudes and longitudes below.</p>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <p>Draw a rectangle on the map or enter latitudes and longitudes.</p>
                                     </div>
-                                </div>
-                                <div class="row d-flex ">
-                                    <div class="col-5 pr-0">
+                                <div class="col-8">
+                                    <div class="form-inline latlon-input-boxes">
                                         <input type="text"
                                                 placeholder="Latitude"
                                                 id="firstLatTxt"
@@ -290,9 +288,7 @@ $cgm = new CGM();
                                                 onfocus="this.value=''"
                                                 class="form-control">
                                         <input type="text" id="firstLonTxt" placeholder='Longitude' title="first lon"
-                                                onfocus="this.value=''" class="form-control mt-1">
-                                    </div>
-                                    <div class="col-5 pr-0">
+                                                onfocus="this.value=''" class="form-control">
                                         <input type="text"
                                                 id="secondLatTxt"
                                                 title="optional second lat"
@@ -304,14 +300,13 @@ $cgm = new CGM();
                                                 title="optional second lon"
                                                 value='optional'
                                                 onfocus="this.value=''"
-                                                class="form-control mt-1">
-                                    </div>
-                                    <div class="col-1 pr-0 align-items-center">
+                                                class="form-control">
                                         <button id="latlonBtn" type="button" title="search with latlon"
-                                                class="btn btn-default cfm-small-btn " onclick="searchByLatlon()">
+                                                class="btn btn-default cfm-small-btn form-control " onclick="searchByLatlon()">
                                             <span class="glyphicon glyphicon-search"></span>
                                         </button>
                                     </div>
+                                </div>
                                 </div>
                             </div>
                         </li>
@@ -337,58 +332,62 @@ $cgm = new CGM();
                     </ul>
                     <!-- pull-out -->
                 </div>
+<!--            </div>-->
+
+    </div>
+
+    <div class="row">
+            <div class="col-12 text-right">
+                        <div id='model-options' class="form-check-inline" style="">
+                                                                                         <div class="ml-2 form-check form-check-inline">
+                                                                                         <span class="mr-1">Display: </span>
+                                                                                         <label class='form-check-label' for="cfm-model">
+                                                                                         <input class='form-check-inline mr-1' type="checkbox" value=1 checked="checked"
+                                                                                         id="cfm-model"/>CFM
+                                                                                         </label>
+                                                                                         </div>
+                                                                                         <div class="form-check form-check-inline">
+                                                                                         <label class='form-check-label' for="cgm-model">
+                                                                                         <input class='form-check-inline mr-1' type="checkbox" id="cgm-model"/>CGM
+                                                                                         </label>
+                                                                                         </div>
+                                                                                         <div class="form-check form-check-inline">
+                                                                                         <label class='form-check-label ml-1 mini-option' for="cgm-model-vectors">
+                                                                                         <input class='form-check-inline mr-1' type="checkbox" id="cgm-model-vectors"/>CGM vectors
+                                                                                         </label>
+                                                                                         </div>
+                                                                                         </div>
+                    <div class="input-group input-group-sm custom-control-inline mr-0" id="map-controls">
+                                                                                                            <div class="input-group-prepend">
+                                                                                                            <label style='border-bottom:0;' class="input-group-text" for="mapLayer">Select Map Type</label>
+                                                                                                            </div>
+                                                                                                            <select id="mapLayer" class="custom-select custom-select-sm" onchange="switchLayer(this.value);">
+                                                                                                            <option selected value="esri topo">ESRI Topographic</option>
+                                                                                                            <option value="esri NG">ESRI National Geographic</option>
+                                                                                                            <option value="esri imagery">ESRI Imagery</option>
+                                                                                                            <option value="otm topo">OTM Topographic</option>
+                                                                                                            <option value="osm street">OSM Street</option>
+                                                                                                            </select>
+
+                                                                                                            <!--- WAIT for better dip/strike data
+                                                                                                            <div class="input-group input-group-sm ml-md-2 ml-sm-0">
+                                                                                                            <div class="input-group-prepend">
+                                                                                                            <label class="input-group-text" for="highlight-faults">Highlight Faults By</label>
+                                                                                                            </div>
+                                                                                                            <select id="highlight-faults" class="custom-select custom-select-sm"
+                                                                                                            onchange="changeFaultColor(this.value);">
+                                                                                                            <option value="">Default</option>
+                                                                                                            <option value="strike">Strike</option>
+                                                                                                            <option value="dip">Dip</option>
+                                                                                                            </select>
+                                                                                                            </div>
+                                                                                                            --->
+                                                                                                            <!--            <a class="ui-button" onclick="toggleAll();">Show/Hide Faults</a>-->
+
+                                                                                                            </div>
             </div>
         </div>
-        <!--    </div>-->
-
-    <div class="col-8 text-right">
-                <div id='model-options' class="form-check-inline" style="border: 1px solid #ced4da; padding:2px;">
-                    <div class="ml-3 form-check form-check-inline">
-                        <label class='form-check-label' for="cfm-model">
-                            <input class='form-check-inline mr-1' type="checkbox" value=1 checked="checked" id="cfm-model"/>CFM
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <label class='form-check-label' for="cgm-model">
-                          <input class='form-check-inline mr-1' type="checkbox" id="cgm-model"/>CGM
-                      </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <label class='form-check-label ml-1 mini-option' for="cgm-model-vectors">
-                          <input class='form-check-inline mr-1' type="checkbox" id="cgm-model-vectors"/>show vectors
-                      </label>
-                    </div>
-                </div>
-            <div class="input-group input-group-sm custom-control-inline mr-0" id="map-controls">
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="mapLayer">Select Map Type</label>
-                </div>
-                <select id="mapLayer" class="custom-select custom-select-sm" onchange="switchLayer(this.value);">
-                    <option selected value="esri topo">ESRI Topographic</option>
-                    <option value="esri NG">ESRI National Geographic</option>
-                    <option value="esri imagery">ESRI Imagery</option>
-                    <option value="otm topo">OTM Topographic</option>
-                    <option value="osm street">OSM Street</option>
-                </select>
-
-            <!--- WAIT for better dip/strike data
-						<div class="input-group input-group-sm ml-md-2 ml-sm-0">
-							<div class="input-group-prepend">
-								<label class="input-group-text" for="highlight-faults">Highlight Faults By</label>
-							</div>
-							<select id="highlight-faults" class="custom-select custom-select-sm"
-									onchange="changeFaultColor(this.value);">
-								<option value="">Default</option>
-								<option value="strike">Strike</option>
-								<option value="dip">Dip</option>
-							</select>
-						</div>
-			--->
-            <!--            <a class="ui-button" onclick="toggleAll();">Show/Hide Faults</a>-->
-
-    </div>
-    </div>
-    </div>
+    <!--    </div>-->
 
 
     <div class="row mapData">

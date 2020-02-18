@@ -593,3 +593,22 @@ div.guide ul {
 #model-options label {
     font-weight: normal;
 }
+
+#refresh-all-button {
+    max-height: 32px;
+}
+
+#mapLayer {
+    border-bottom: 0;
+}
+
+#model-options {
+    border: 1px solid #ced4da;
+    padding:2px;
+    border-bottom: 0;
+}
+
+div.latlon-input-boxes input[type='text']{
+   width: 90px;
+    margin-left: 5px;
+}

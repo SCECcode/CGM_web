@@ -57,7 +57,6 @@
         /*width:110%;*/
 	list-style: none;
 	z-index: 9999;
-    margin-top: 10px;
 }
 
 .navigationLi {
@@ -149,4 +148,7 @@
     border-radius: 2px;
 }
 
+#sidebar select, input {
+    max-width: 260px;
+}
 

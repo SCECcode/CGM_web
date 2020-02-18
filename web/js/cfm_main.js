@@ -57,27 +57,29 @@ jQuery(document).ready(function() {
         }
   });     
 
-  $(document).ready(function(){
-  initializeFaultObjectTable();
-  setupSearch();
-  addFaultColorsSelect();
-  addDownloadSelect();
-    $("#search-type").change(function () {
-        var funcToRun = $(this).val();
-        if (funcToRun != "") {
-            window[funcToRun]();
-        }
-    });
+  $(document).ready(function() {
+      initializeFaultObjectTable();
+      setupSearch();
+      addFaultColorsSelect();
+      addDownloadSelect();
+      $("#search-type").change(function () {
+          var funcToRun = $(this).val();
+          if (funcToRun != "") {
+              window[funcToRun]();
+          }
+      });
 
-    $("#search-type").trigger("change");
+      $("#search-type").trigger("change");
 
-    $("#cfm-model").click(function(){
-        if (cfm_visible) {
-            toggle_off_all_layer();
-        } else {
-            toggle_on_all_layer();
-        }
-    });
+      $("#cfm-model").on('click', function () {
+          if (cfm_visible) {
+              visibleFaults.setStyle({opacity:0});
+              cfm_visible = false;
+          } else {
+              visibleFaults.setStyle({opacity:1});
+              cfm_visible = true;
+          }
+      });
   });
 }); // end of MAIN
 
