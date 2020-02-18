@@ -167,7 +167,8 @@ $cgm = new CGM();
 					--->
                 </select>
                 <div class="input-group-append">
-                    <button id="refresh-all-button" onclick="refreshAll();" class="btn btn-dark pl-4 pr-4" type="button">Reset</button>
+                    <button id="refresh-all-button" onclick="refreshAll();" class="btn btn-dark pl-4 pr-4"
+                            type="button">Reset</button>
                 </div>
             </div>
                 <div class="col-8">
@@ -279,34 +280,35 @@ $cgm = new CGM();
                                     <div class="col-4">
                                         <p>Draw a rectangle on the map or enter latitudes and longitudes.</p>
                                     </div>
-                                <div class="col-8">
-                                    <div class="form-inline latlon-input-boxes">
-                                        <input type="text"
-                                                placeholder="Latitude"
-                                                id="firstLatTxt"
-                                                title="first lat"
-                                                onfocus="this.value=''"
-                                                class="form-control">
-                                        <input type="text" id="firstLonTxt" placeholder='Longitude' title="first lon"
-                                                onfocus="this.value=''" class="form-control">
-                                        <input type="text"
-                                                id="secondLatTxt"
-                                                title="optional second lat"
-                                                value='optional'
-                                                onfocus="this.value=''"
-                                                class="form-control">
-                                        <input type="text"
-                                                id="secondLonTxt"
-                                                title="optional second lon"
-                                                value='optional'
-                                                onfocus="this.value=''"
-                                                class="form-control">
-                                        <button id="latlonBtn" type="button" title="search with latlon"
-                                                class="btn btn-default cfm-small-btn form-control " onclick="searchByLatlon()">
-                                            <span class="glyphicon glyphicon-search"></span>
-                                        </button>
+                                    <div class="col-8">
+                                        <div class="form-inline latlon-input-boxes">
+                                            <input type="text"
+                                                    placeholder="Latitude"
+                                                    id="firstLatTxt"
+                                                    title="first lat"
+                                                    onfocus="this.value=''"
+                                                    class="form-control">
+                                            <input type="text" id="firstLonTxt" placeholder='Longitude' title="first lon"
+                                                    onfocus="this.value=''" class="form-control">
+                                            <input type="text"
+                                                    id="secondLatTxt"
+                                                    title="optional second lat"
+                                                    value='optional'
+                                                    onfocus="this.value=''"
+                                                    class="form-control">
+                                            <input type="text"
+                                                    id="secondLonTxt"
+                                                    title="optional second lon"
+                                                    value='optional'
+                                                    onfocus="this.value=''"
+                                                    class="form-control">
+                                            <button id="latlonBtn" type="button" title="search with latlon"
+                                                    class="btn btn-default cfm-small-btn form-control "
+                                                    onclick="searchByLatlon()">
+                                                <span class="glyphicon glyphicon-search"></span>
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
                                 </div>
                             </div>
                         </li>
@@ -332,63 +334,72 @@ $cgm = new CGM();
                     </ul>
                     <!-- pull-out -->
                 </div>
-<!--            </div>-->
+        <!--            </div>-->
 
     </div>
 
     <div class="row">
             <div class="col-12 text-right">
                         <div id='model-options' class="form-check-inline" style="">
-                                                                                         <div class="ml-2 form-check form-check-inline">
-                                                                                         <span class="mr-1">Display: </span>
-                                                                                         <label class='form-check-label' for="cfm-model">
-                                                                                         <input class='form-check-inline mr-1' type="checkbox" value=1 checked="checked"
-                                                                                         id="cfm-model"/>CFM
-                                                                                         </label>
-                                                                                         </div>
-                                                                                         <div class="form-check form-check-inline">
-                                                                                         <label class='form-check-label' for="cgm-model">
-                                                                                         <input class='form-check-inline mr-1' type="checkbox" id="cgm-model"/>CGM
-                                                                                         </label>
-                                                                                         </div>
-                                                                                         <div class="form-check form-check-inline">
-                                                                                         <label class='form-check-label ml-1 mini-option' for="cgm-model-vectors">
-                                                                                         <input class='form-check-inline mr-1' type="checkbox" id="cgm-model-vectors"/>CGM vectors
-                                                                                         </label>
-                                                                                         </div>
-                                                                                         </div>
+                             <div class="ml-2 form-check form-check-inline">
+                                 <span class="mr-1">Display: </span>
+                                 <label class='form-check-label'
+                                         for="cfm-model">
+                                 <input class='form-check-inline mr-1'
+                                         type="checkbox" value=1
+                                         checked="checked"
+                                         id="cfm-model"/>CFM
+                                 </label>
+                             </div>
+                             <div class="form-check form-check-inline">
+                                 <label class='form-check-label'
+                                         for="cgm-model">
+                                 <input class='form-check-inline mr-1'
+                                         type="checkbox"
+                                         id="cgm-model"/>CGM
+                                 </label>
+                             </div>
+                             <div class="form-check form-check-inline">
+                                 <label class='form-check-label ml-1 mini-option'
+                                         for="cgm-model-vectors">
+                                 <input class='form-check-inline mr-1'
+                                         type="checkbox"
+                                         id="cgm-model-vectors"/>CGM vectors
+                                 </label>
+                             </div>
+                         </div>
                     <div class="input-group input-group-sm custom-control-inline mr-0" id="map-controls">
-                                                                                                            <div class="input-group-prepend">
-                                                                                                            <label style='border-bottom:0;' class="input-group-text" for="mapLayer">Select Map Type</label>
-                                                                                                            </div>
-                                                                                                            <select id="mapLayer" class="custom-select custom-select-sm" onchange="switchLayer(this.value);">
-                                                                                                            <option selected value="esri topo">ESRI Topographic</option>
-                                                                                                            <option value="esri NG">ESRI National Geographic</option>
-                                                                                                            <option value="esri imagery">ESRI Imagery</option>
-                                                                                                            <option value="otm topo">OTM Topographic</option>
-                                                                                                            <option value="osm street">OSM Street</option>
-                                                                                                            <option value="shaded relief">Shaded Relief</option>
-                                                                                                            </select>
+                        <div class="input-group-prepend">
+                            <label style='border-bottom:0;' class="input-group-text" for="mapLayer">Select Map Type</label>
+                        </div>
+                        <select id="mapLayer" class="custom-select custom-select-sm"
+                                onchange="switchLayer(this.value);">
+                        <option selected value="esri topo">ESRI Topographic</option>
+                        <option value="esri NG">ESRI National Geographic</option>
+                        <option value="esri imagery">ESRI Imagery</option>
+                        <option value="otm topo">OTM Topographic</option>
+                        <option value="osm street">OSM Street</option>
+                        <option value="shaded relief">Shaded Relief</option>
+                        </select>
 
-                                                                                                            <!--- WAIT for better dip/strike data
-                                                                                                            <div class="input-group input-group-sm ml-md-2 ml-sm-0">
-                                                                                                            <div class="input-group-prepend">
-                                                                                                            <label class="input-group-text" for="highlight-faults">Highlight Faults By</label>
-                                                                                                            </div>
-                                                                                                            <select id="highlight-faults" class="custom-select custom-select-sm"
-                                                                                                            onchange="changeFaultColor(this.value);">
-                                                                                                            <option value="">Default</option>
-                                                                                                            <option value="strike">Strike</option>
-                                                                                                            <option value="dip">Dip</option>
-                                                                                                            </select>
-                                                                                                            </div>
-                                                                                                            --->
-                                                                                                            <!--            <a class="ui-button" onclick="toggleAll();">Show/Hide Faults</a>-->
+                        <!--- WAIT for better dip/strike data
+                        <div class="input-group input-group-sm ml-md-2 ml-sm-0">
+                        <div class="input-group-prepend">
+                        <label class="input-group-text" for="highlight-faults">Highlight Faults By</label>
+                        </div>
+                        <select id="highlight-faults" class="custom-select custom-select-sm"
+                        onchange="changeFaultColor(this.value);">
+                        <option value="">Default</option>
+                        <option value="strike">Strike</option>
+                        <option value="dip">Dip</option>
+                        </select>
+                        </div>
+                        --->
+                        <!--            <a class="ui-button" onclick="toggleAll();">Show/Hide Faults</a>-->
 
-                                                                                                            </div>
+                        </div>
             </div>
         </div>
-    <!--    </div>-->
 
 
     <div class="row mapData">
@@ -474,7 +485,6 @@ $cgm = new CGM();
         </div>
     </div>
 
-</div>
 
     <div id='queryBlock' class="col-6" style="overflow:hidden;display:none;">
 
@@ -489,19 +499,20 @@ $cgm = new CGM();
 </div>
 
 
-<?php
-$strikeRange = $cfm->getStrikeRange();
-$dipRange = $cfm->getDipRange();
-?>
-<div id="data" style="display:none;">
+	<?php
+	$strikeRange = $cfm->getStrikeRange();
+	$dipRange = $cfm->getDipRange();
+	?>
+    <div id="data" style="display:none;">
     <div id="dataValues"
             data-maxstrike="<?php print $strikeRange->maxstrike; ?>"
             data-minstrike="<?php print $strikeRange->minstrike; ?>"
             data-maxdip="<?php print $dipRange->maxdip; ?>"
-            data-mindip="<?php print $dipRange->mindip; ?>"
+            data-mindip="<?php print $dipRange->mindip; ?>">
     </div>
 </div>
-</body>
+</div>
+
     <script type="text/javascript">
         $(document).ready(function () {
             cfm_native_list = <?php print $cfm->getObjectDetails('native')->outputJSON(); ?>;
@@ -518,5 +529,6 @@ $dipRange = $cfm->getDipRange();
             cgm_station_data = <?php print $cgm->getAllStationData()->outputJSON(); ?>;
         });
     </script>
+</body>
 </html>
 
