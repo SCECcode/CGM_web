@@ -367,6 +367,7 @@ $cgm = new CGM();
                                                                                                             <option value="esri imagery">ESRI Imagery</option>
                                                                                                             <option value="otm topo">OTM Topographic</option>
                                                                                                             <option value="osm street">OSM Street</option>
+                                                                                                            <option value="shaded relief">Shaded Relief</option>
                                                                                                             </select>
 
                                                                                                             <!--- WAIT for better dip/strike data
