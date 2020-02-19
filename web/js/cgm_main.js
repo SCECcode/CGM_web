@@ -15,6 +15,16 @@ $(document).ready(function(){
     $("#cgm-model-vectors").on('click', function() {
         CGM.toggleVectors();
     });
+
+    $("#cgm-search-type").on('change',function(){
+        CGM.showSearch($(this).val());
+    });
+
+    $("#cgm-controls-container ul button").on('click', function(){
+        let searchType = $(this).data('searchType');
+        let criteria = $(this).siblings("input").val();
+        CGM.searchBox(searchType, criteria);
+    });
 });
 
 var CGM = new function()  {
@@ -22,6 +32,23 @@ var CGM = new function()  {
     var visible = {
         stations: false,
         vectors: false
+    };
+
+    this.searchType = {
+        keyword: 'keyword',
+        latlon: 'latlon',
+        stationName: 'stationName',
+
+    };
+
+    this.showSearch = function(type) {
+        switch(type) {
+            case this.searchType.keyword:
+                $("#cgm-keyword").show();
+                break;
+            case this.searchType.latlon:
+                break;
+        }
     };
 
     this.showModel = function () {
@@ -38,7 +65,20 @@ var CGM = new function()  {
         return [];
     };
 
- this.addStationMarkers = function() {
+    // var addMarker = function(latlon, ) {};
+
+    var showMarker = function(cgm_layer) {
+        visible.stations = true;
+        cgm_layer.scec_properties.visible = true;
+        cgm_layer.marker.addTo(viewermap);
+    };
+
+    var hideMarker = function(marker) {
+        marker.scec_properties.visible = false;
+        viewermap.removeLayer(marker);
+    };
+
+    this.addStationMarkers = function() {
 
      if (visible.stations === true) {
          return;
@@ -50,6 +90,12 @@ var CGM = new function()  {
      }
 
     for (const index in cgm_station_data) {
+        if (cgm_station_data[index].hasOwnProperty("scec_properties")) {
+            if (!cgm_station_data[index].scec_properties.visible) {
+                continue;
+            }
+        }
+
         let lat = parseFloat(cgm_station_data[index].ref_north_latitude);
         let lon = parseFloat(cgm_station_data[index].ref_east_longitude);
         let vel_north = parseFloat(cgm_station_data[index].ref_velocity_north);
@@ -80,7 +126,11 @@ var CGM = new function()  {
         marker.bindTooltip(station_info).openTooltip();
         marker.addTo(viewermap);
         cgm_station_data[index].marker = marker;
+        cgm_station_data[index].scec_properties =  {station_id: station_id, visible: true };
     }
+
+    $("#cfm-controls-container").hide();
+    $("#cgm-controls-container").show();
 };
 
 this.addVectors = function() {
@@ -95,6 +145,13 @@ this.addVectors = function() {
     }
 
     for (const index in cgm_station_data) {
+
+        if (cgm_station_data[index].hasOwnProperty("scec_properties")) {
+            if (!cgm_station_data[index].scec_properties.visible) {
+                continue;
+            }
+        }
+
        let start_latlon = cgm_station_data[index].marker.getLatLng();
         let vel_north = parseFloat(cgm_station_data[index].ref_velocity_north);
         let vel_east = parseFloat (cgm_station_data[index].ref_velocity_east);
@@ -125,7 +182,15 @@ this.removeVectors = function () {
         visible.vectors = false;
     }
 
+
+
     for (const index in cgm_station_data) {
+        if (cgm_station_data[index].hasOwnProperty("scec_properties")) {
+            if (!cgm_station_data[index].scec_properties.visible) {
+                continue;
+            }
+        }
+
        viewermap.removeLayer(cgm_station_data[index].vectorLine);
         viewermap.removeLayer(cgm_station_data[index].vectorArrowHead);
     }
@@ -151,6 +216,7 @@ this.removeVectors = function () {
 
         for (const index in cgm_station_data) {
             viewermap.removeLayer(cgm_station_data[index].marker);
+            cgm_station_data[index].scec_properties.visible = false;
         }
     };
 
@@ -190,5 +256,46 @@ this.removeVectors = function () {
         }
     };
 
+    this.search = function (type, criteria) {
+
+        let results = [];
+        switch (type) {
+            case CGM.searchType.keyword:
+                let criteria = $("#cgm-keywordTxt").val();
+                for (const index in cgm_station_data) {
+                    if (cgm_station_data[index].scec_properties.station_id == criteria) {
+                       results.push(cgm_station_data[index]);
+                    }
+                }
+                break;
+        }
+
+        return results;
+    };
+
+    this.searchBox = function (type, criteria) {
+        let results = this.search(type, criteria);
+
+        this.removeStations();
+        let markerLocations = [];
+
+        for (let i=0;i<results.length;i++) {
+            markerLocations.push(results[i].marker.getLatLng());
+            // results[i].marker.addTo(viewermap);
+            showMarker(results[i]);
+        }
+        let bounds = L.latLngBounds(markerLocations);
+        viewermap.fitBounds(bounds, {maxZoom: 12});
+
+    };
+
+    this.displayResult = function(results) {
+       let markerLocations = [];
+       for (let i=0;i<results.length;i++) {
+           markerLocations.push(results[i].getLatLng());
+       }
+       let bounds = L.latLngBounds(markerLocations);
+       viewermap.fitBounds(bounds);
+    };
 
 };

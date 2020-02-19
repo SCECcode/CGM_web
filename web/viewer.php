@@ -149,7 +149,7 @@ $cgm = new CGM();
         </div>
     </div>
 
-    <div class="row" id="controls-container">
+    <div class="row" id="cfm-controls-container">
 <!--        <div class="col pl-0" id="CFM-search-controls">-->
             <div class="col-4 input-group filters">
                 <select id="search-type" class="custom-select">
@@ -338,6 +338,89 @@ $cgm = new CGM();
 
     </div>
 
+    <div class="row" id="cgm-controls-container" style="display:none;">
+            <div class="col-4 input-group filters">
+                <select id="cgm-search-type" class="custom-select">
+                    <option value="">Search the CGM ...</option>
+                    <option value="keyword">Keyword</option>
+<!--                    <option value="latlonClick">Latitude &amp; Longitude</option>-->
+<!--                    <option disabled>-- Advanced --</option>-->
+<!--                    <option value="areaClick">Area</option>-->
+<!--                    <option value="zoneClick">Zone</option>-->
+<!--                    <option value="sectionClick">Section</option>-->
+<!--                    <option value="nameClick">Name</option>-->
+                    <!--- WAIT for better strike/dip
+										<option value="strikeClick">Strike</option>
+										<option value="dipClick">Dip</option>
+					--->
+                </select>
+                <div class="input-group-append">
+                    <button id="refresh-all-button" onclick="refreshAll();" class="btn btn-dark pl-4 pr-4"
+                            type="button">Reset</button>
+                </div>
+            </div>
+                <div class="col-8">
+                    <ul>
+                        <li id='cgm-keyword' class='navigationLi ' style="display:none">
+                            <div id='cgm-keywordMenu' class='menu row justify-content-center'>
+                                <div class="col-12">
+                                    <div class="d-flex">
+                                        <input placeholder="Enter Keyword" type="text" id="cgm-keywordTxt"
+                                                class="form-control"
+                                                onfocus="this.value=''" style=""/>
+                                        <button id="cgm-keywordBtn" type="button" title="search with keyword" data-search-type="keyword"
+                                                class="btn btn-default cfm-small-btn" onclick="">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li id='cgm-latlon' class='navigationLi ' style="display:none">
+                            <div id='cgm-latlonMenu' class='menu'>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <p>Draw a rectangle on the map or enter latitudes and longitudes.</p>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="form-inline latlon-input-boxes">
+                                            <input type="text"
+                                                    placeholder="Latitude"
+                                                    id="firstLatTxt"
+                                                    title="first lat"
+                                                    onfocus="this.value=''"
+                                                    class="form-control">
+                                            <input type="text" id="firstLonTxt" placeholder='Longitude' title="first lon"
+                                                    onfocus="this.value=''" class="form-control">
+                                            <input type="text"
+                                                    id="secondLatTxt"
+                                                    title="optional second lat"
+                                                    value='optional'
+                                                    onfocus="this.value=''"
+                                                    class="form-control">
+                                            <input type="text"
+                                                    id="secondLonTxt"
+                                                    title="optional second lon"
+                                                    value='optional'
+                                                    onfocus="this.value=''"
+                                                    class="form-control">
+                                            <button id="latlonBtn" type="button" title="search with latlon"
+                                                    class="btn btn-default cfm-small-btn form-control "
+                                                    onclick="searchByLatlon()">
+                                                <span class="glyphicon glyphicon-search"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                    <!-- pull-out -->
+                </div>
+            <!--            </div>-->
+
+    </div>
     <div class="row">
             <div class="col-12 text-right">
                         <div id='model-options' class="form-check-inline" style="">
@@ -350,6 +433,7 @@ $cgm = new CGM();
                                          checked="checked"
                                          id="cfm-model"/>CFM
                                  </label>
+                                 <br/>
                              </div>
                              <div class="form-check form-check-inline">
                                  <label class='form-check-label'
