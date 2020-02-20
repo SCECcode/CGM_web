@@ -166,7 +166,7 @@ var CGM = new function () {
 
     this.showModel = function () {
 
-        $cgm_model_checkbox = $("#cgm-model");
+        let $cgm_model_checkbox = $("#cgm-model");
 
         if (this.searching) {
             this.search_result.addTo(viewermap);
@@ -284,7 +284,6 @@ var CGM = new function () {
 
 
     this.hideVectors = function() {
-      // viewermap.removeLayer(CGM.cgm_vectors);
 
         if (this.searching) {
             this.search_result.eachLayer(function(layer){
@@ -294,41 +293,9 @@ var CGM = new function () {
             this.cgm_vectors.eachLayer(function(layer) {
                 viewermap.removeLayer(layer);
             });
-            // viewermap.removeLayer(this.cgm_vectors);
         }
-        // viewermap.eachLayer(function(layer){
-        //     if ( layer instanceof L.Polyline || layer instanceof L.PolylineDecorator) {
-        //         // layer.scec_properties.vector.addTo(viewermap);
-        //         // viewermap.addLayer(layer.scec_properties.vector);
-        //         viewermap.removeLayer(layer);
-        //     }
-        // });
-
     };
 
-
-        this.removeStations = function () {
-
-            if (visible.stations === false) {
-                return;
-            } else {
-                visible.stations = false;
-            }
-
-            if (visible.vectors) {
-                this.removeVectors();
-            }
-
-
-            for (const index in cgm_station_data) {
-                viewermap.removeLayer(cgm_station_data[index].marker);
-                cgm_station_data[index].scec_properties.visible = false;
-            }
-        };
-
-        // this.hide = function () {
-        //
-        // };
 
         var calculateEndVectorLatLng = function (start_latlon, vel_north, vel_east, scaling_factor) {
             // see https://stackoverflow.com/questions/7477003/calculating-new-longitude-latitude-from-old-n-meters
@@ -371,11 +338,6 @@ var CGM = new function () {
                             }
                     });
 
-                    // at lat/lon bounds of box to results
-                    // let corner1 = L.marker([criteria[0], criteria[1]]);
-                    // let corner2 = L.marker([criteria[2], criteria[3]]);
-                    // results.push(corner1);
-                    // results.push(corner2);
                     break;
             }
             return results;
@@ -409,14 +371,4 @@ var CGM = new function () {
                 viewermap.fitBounds(bounds, {maxZoom: 12});
             }
         };
-
-        this.displayResult = function (results) {
-            let markerLocations = [];
-            for (let i = 0; i < results.length; i++) {
-                markerLocations.push(results[i].getLatLng());
-            }
-            let bounds = L.latLngBounds(markerLocations);
-            viewermap.fitBounds(bounds);
-        };
-
     };
