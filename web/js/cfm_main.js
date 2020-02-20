@@ -78,6 +78,7 @@ jQuery(document).ready(function() {
           } else {
               visibleFaults.setStyle({opacity:1});
               cfm_visible = true;
+              activeModel = Models.CFM;
           }
       });
   });

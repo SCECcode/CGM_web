@@ -121,6 +121,8 @@ const Models = {
     CGM: 'cgm',
 };
 
+var activeModel = Models.CFM;
+
 function MapFeature(gid, properties, geometry, scec_properties) {
     this.type = "FeatureCollection";
     this.gid = gid;

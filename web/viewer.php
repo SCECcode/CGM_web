@@ -343,7 +343,7 @@ $cgm = new CGM();
                 <select id="cgm-search-type" class="custom-select">
                     <option value="">Search the CGM ...</option>
                     <option value="keyword">Keyword</option>
-<!--                    <option value="latlonClick">Latitude &amp; Longitude</option>-->
+                    <option value="latlon">Latitude &amp; Longitude</option>
 <!--                    <option disabled>-- Advanced --</option>-->
 <!--                    <option value="areaClick">Area</option>-->
 <!--                    <option value="zoneClick">Zone</option>-->
@@ -355,7 +355,7 @@ $cgm = new CGM();
 					--->
                 </select>
                 <div class="input-group-append">
-                    <button id="refresh-all-button" onclick="refreshAll();" class="btn btn-dark pl-4 pr-4"
+                    <button id="refresh-all-button" onclick="CGM.reset();" class="btn btn-dark pl-4 pr-4"
                             type="button">Reset</button>
                 </div>
             </div>
@@ -386,27 +386,27 @@ $cgm = new CGM();
                                         <div class="form-inline latlon-input-boxes">
                                             <input type="text"
                                                     placeholder="Latitude"
-                                                    id="firstLatTxt"
+                                                    id="cgm-firstLatTxt"
                                                     title="first lat"
                                                     onfocus="this.value=''"
                                                     class="form-control">
-                                            <input type="text" id="firstLonTxt" placeholder='Longitude' title="first lon"
+                                            <input type="text" id="cgm-firstLonTxt" placeholder='Longitude' title="first lon"
                                                     onfocus="this.value=''" class="form-control">
                                             <input type="text"
-                                                    id="secondLatTxt"
+                                                    id="cgm-secondLatTxt"
                                                     title="optional second lat"
                                                     value='optional'
                                                     onfocus="this.value=''"
                                                     class="form-control">
                                             <input type="text"
-                                                    id="secondLonTxt"
+                                                    id="cgm-secondLonTxt"
                                                     title="optional second lon"
                                                     value='optional'
                                                     onfocus="this.value=''"
                                                     class="form-control">
-                                            <button id="latlonBtn" type="button" title="search with latlon"
-                                                    class="btn btn-default cfm-small-btn form-control "
-                                                    onclick="searchByLatlon()">
+                                            <button id="cgm-latlonBtn" type="button" title="search with latlon"
+                                                    class="btn btn-default cfm-small-btn form-control " data-search-type="latlon"
+                                                    onclick="">
                                                 <span class="glyphicon glyphicon-search"></span>
                                             </button>
                                         </div>
@@ -448,7 +448,7 @@ $cgm = new CGM();
                                          for="cgm-model-vectors">
                                  <input class='form-check-inline mr-1'
                                          type="checkbox"
-                                         id="cgm-model-vectors"/>CGM vectors
+                                         id="cgm-model-vectors" value="1" />CGM vectors
                                  </label>
                              </div>
                          </div>
@@ -598,7 +598,7 @@ $cgm = new CGM();
 </div>
 
     <script type="text/javascript">
-        $(document).ready(function () {
+        // $(document).ready(function () {
             cfm_native_list = <?php print $cfm->getObjectDetails('native')->outputJSON(); ?>;
             cfm_500m_list = <?php print $cfm->getObjectDetails('500m')->outputJSON(); ?>;
             cfm_1000m_list = <?php print $cfm->getObjectDetails('1000m')->outputJSON(); ?>;
@@ -611,7 +611,7 @@ $cgm = new CGM();
             cfm_nogeo_gid_list = cfm_gid_lists["nogidlist"];
             makeAllLists();
             cgm_station_data = <?php print $cgm->getAllStationData()->outputJSON(); ?>;
-        });
+        // });
     </script>
 </body>
 </html>
