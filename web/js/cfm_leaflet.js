@@ -4,16 +4,16 @@ var rectangle_options = {
          shapeOptions: {
               stroke: true,
               color: "blue",
-              weight: 3,
+              weight: 2,
               opacity: 0.5,
               fill: true,
               fillColor: null, //same as color by default
-              fillOpacity: 0.1,
+              fillOpacity: 0.08,
               clickable: false
          }
 };
 var rectangleDrawer;
-var mymap, baseLayers, layerControl, currentLayer;
+var mymap, baseLayers, layerControl, currentLayer, currentLayerName;
 var visibleFaults = new L.FeatureGroup();
 
 function clear_popup()
@@ -61,6 +61,7 @@ function setup_viewer()
   var overLayer = {};
   var basemap = L.layerGroup();
   currentLayer = esri_topographic;
+  currentLayerName = 'esri topo';
 
 // ==> mymap <==
   mymap = L.map('CFM_plot', { drawControl:false, layers: [esri_topographic, basemap], zoomControl:true} );
@@ -225,6 +226,7 @@ function switchLayer(layerString) {
     mymap.removeLayer(currentLayer);
     mymap.addLayer(baseLayers[layerString]);
     currentLayer = baseLayers[layerString];
+    currentLayerName = layerString;
 
 }
 

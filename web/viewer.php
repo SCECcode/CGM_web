@@ -149,7 +149,7 @@ $cgm = new CGM();
         </div>
     </div>
 
-    <div class="row" id="cfm-controls-container">
+    <div class="row control-container" id="cfm-controls-container">
 <!--        <div class="col pl-0" id="CFM-search-controls">-->
             <div class="col-4 input-group filters">
                 <select id="search-type" class="custom-select">
@@ -338,7 +338,7 @@ $cgm = new CGM();
 
     </div>
 
-    <div class="row" id="cgm-controls-container" style="display:none;">
+    <div class="row control-container" id="cgm-controls-container" style="display:none;">
             <div class="col-4 input-group filters">
                 <select id="cgm-search-type" class="custom-select">
                     <option value="">Search the CGM ...</option>
@@ -423,7 +423,11 @@ $cgm = new CGM();
     </div>
     <div class="row">
             <div class="col-12 text-right">
-                        <div id='model-options' class="form-check-inline" style="">
+                        <div id='model-options' class="form-check-inline">
+                            <select id='data-download-select' class="custom-select custom-select-sm" style="width:150px;">
+                              <option selected value="cfm">CFM Data</option>
+                              <option value="cgm">CGM Data</option>
+                            </select>
                              <div class="ml-2 form-check form-check-inline">
                                  <span class="mr-1">Display: </span>
                                  <label class='form-check-label'

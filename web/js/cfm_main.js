@@ -78,8 +78,17 @@ jQuery(document).ready(function() {
           } else {
               visibleFaults.setStyle({opacity:1});
               cfm_visible = true;
-              activeModel = Models.CFM;
           }
+      });
+
+      $("#data-download-select").on('change', function(){
+         if ($(this).val() == 'cfm') {
+             activeModel = Models.CFM;
+             $("div.control-container").hide();
+             $("#cfm-controls-container").show();
+      } else if ($(this).val() == 'cgm') {
+            CGM.activateData();
+      }
       });
   });
 }); // end of MAIN

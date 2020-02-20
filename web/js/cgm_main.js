@@ -5,13 +5,8 @@ $(document).ready(function () {
     $("#cgm-model").on('click', function () {
         if (viewermap.hasLayer(CGM.cgm_layers) ||  CGM.searching) {
             CGM.hideModel();
-            $("#cfm-controls-container").show();
-            $("#cgm-controls-container").hide();
         } else {
             CGM.showModel();
-            activeModel = Models.CGM;
-            $("#cfm-controls-container").hide();
-            $("#cgm-controls-container").show();
         }
     });
 
@@ -86,6 +81,13 @@ var CGM = new function () {
         latlon: 'latlon',
         stationName: 'stationName',
 
+    };
+
+    this.activateData = function() {
+        activeModel = Models.CGM;
+        this.showModel();
+        $("div.control-container").hide();
+        $("#cgm-controls-container").show();
     };
 
     this.generateLayers = function () {
@@ -164,10 +166,20 @@ var CGM = new function () {
 
     this.showModel = function () {
 
+        $cgm_model_checkbox = $("#cgm-model");
+
         if (this.searching) {
             this.search_result.addTo(viewermap);
         } else {
             this.cgm_layers.addTo(viewermap);
+        }
+
+        if (!$cgm_model_checkbox.prop('checked')) {
+            $cgm_model_checkbox.prop('checked', true);
+        }
+
+        if (currentLayerName != 'shaded relief') {
+            switchLayer('shaded relief');
         }
     };
 
@@ -344,6 +356,7 @@ var CGM = new function () {
                         }
                     });
                     break;
+
                 case CGM.searchType.latlon:
                     $("#cgm-firstLatTxt").val(criteria[0]);
                     $("#cgm-firstLonTxt").val(criteria[1]);
@@ -357,6 +370,12 @@ var CGM = new function () {
                                results.push(layer);
                             }
                     });
+
+                    // at lat/lon bounds of box to results
+                    // let corner1 = L.marker([criteria[0], criteria[1]]);
+                    // let corner2 = L.marker([criteria[2], criteria[3]]);
+                    // results.push(corner1);
+                    // results.push(corner2);
                     break;
             }
             return results;
@@ -373,13 +392,22 @@ var CGM = new function () {
 
             for (let i = 0; i < results.length; i++) {
                 markerLocations.push(results[i].getLatLng());
-                // showMarker(results[i]);
                 this.search_result.addLayer(results[i]);
             }
             viewermap.addLayer(this.search_result);
-            let bounds = L.latLngBounds(markerLocations);
-            viewermap.fitBounds(bounds, {maxZoom: 12});
-            drawRectangle();
+
+            if (type == this.searchType.latlon) {
+                markerLocations.push(L.latLng(criteria[0],criteria[1]));
+                markerLocations.push(L.latLng(criteria[2],criteria[3]));
+                let bounds = L.latLngBounds(markerLocations);
+                viewermap.fitBounds(bounds, {maxZoom: 12});
+
+                setTimeout(drawRectangle, 500);
+
+            } else {
+                let bounds = L.latLngBounds(markerLocations);
+                viewermap.fitBounds(bounds, {maxZoom: 12});
+            }
         };
 
         this.displayResult = function (results) {
