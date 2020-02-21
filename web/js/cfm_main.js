@@ -1,6 +1,5 @@
 var viewermap;
-
-var cfmSearchResultTable;
+var cfm_metadataViewerHTML;
 
 jQuery(document).ready(function() {
 
@@ -92,16 +91,31 @@ jQuery(document).ready(function() {
              if (!$("#cfm-model").prop('checked')) {
                 $("#cfm-model").click();
              }
+
+             $("#metadata-viewer").floatThead('destroy');
+             $("#metadata-viewer").html(cfm_metadataViewerHTML);
+             $("div.cfm-search-result-container").attr('style', '');
+             $("div.mapData div.map-container").addClass("col-7 pr-0 pl-2").removeClass("col-12").css('padding-left','inherit');
+
+             var $download_queue_table = $('#metadata-viewer');
+             $download_queue_table.floatThead({
+                 scrollContainer: function ($table) {
+                     return $table.closest('div#metadata-viewer-container');
+                 },
+             });
+             // $('#metadata-viewer').html(cfm_metadataViewerHTML);
       } else if ($(this).val() == 'cgm') {
              refreshAll();
             CGM.activateData();
-             cfmSearchResultTable = $("div.cfm-search-result-container").html();
-             $("div .cfm-search-result-container").remove();
+             $("div.cfm-search-result-container").attr('style', 'display:none !important;');
              $("div.mapData div.map-container").removeClass("col-7 pr-0 pl-2").addClass("col-12").css('padding-left','30px');
-             // $("#CFM_plot").removeClass('w-100 pl-2');
              viewermap.invalidateSize();
              viewermap.setView(CGM.defaultMapView.coordinates, CGM.defaultMapView.zoom);
              $("#metadata-viewer").floatThead('destroy');
+             cfm_metadataViewerHTML = $("#metadata-viewer").html();
+
+
+             CGM.replaceResultsTable([]);
 
       }
       });

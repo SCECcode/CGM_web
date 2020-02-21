@@ -612,3 +612,9 @@ div.latlon-input-boxes input[type='text']{
    width: 90px;
     margin-left: 5px;
 }
+#metadata-viewer.cgm td.button-container,
+#metadata-viewer.cgm th.button-container {
+    width: 25px;
+    text-align: center;
+    vertical-align: middle;
+}

@@ -219,6 +219,7 @@ var CGM = new function () {
 
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
         $("#cgm-controls-container input, #cgm-controls-container select").val("");
+        this.showSearch('none');
         // $("#cgm-search-type").trigger('change');
 
         $("#cgm-model-vectors").prop('checked', false);
@@ -318,6 +319,12 @@ var CGM = new function () {
 
                     break;
             }
+
+            results = results.sort(function(a,b){
+                a = a.scec_properties.station_id;
+                b = b.scec_properties.station_id;
+                return a.toLowerCase().localeCompare(b.toLowerCase());
+            });
             return results;
         };
 
@@ -356,15 +363,16 @@ var CGM = new function () {
             this.replaceResultsTable(results);
         };
 
-        this.generateResultsTable = function (results) {
+        // private function
+       var generateResultsTable = function (results) {
 
             var html = "";
-            html+=`<table id="metadata-viewer">`;
+            html+=`<table id="metadata-viewer" class="cgm">`;
             html+=`
 <thead>
 <tr>
-<th class="text-center">
-    <button id="allBtn" class="btn btn-sm cfm-small-btn" title="select all visible stations" onclick="selectAll();">
+<th class="text-center button-container">
+    <button id="cgm-allBtn" class="btn btn-sm cfm-small-btn" title="select all visible stations" onclick="CGM.selectAll();">
     <span class="glyphicon glyphicon-unchecked"></span>
 </button>
 </th>
@@ -382,7 +390,7 @@ var CGM = new function () {
                 let coordinates = results[i].getLatLng();
                 coordinates = {lat: parseFloat(coordinates.lat).toFixed(2), lng: parseFloat(coordinates.lng).toFixed(2) };
                 html += `<tr>`;
-                html += `<td> <button class="btn btn-sm cfm-small-btn" id="" title="highlight the fault" onclick=''>
+                html += `<td class="button-container"> <button class="btn btn-sm cfm-small-btn" id="" title="highlight the fault" onclick=''>
             <span data-point-id=""  class="cgm-data-row glyphicon glyphicon-unchecked"></span>
         </button></td>`;
                 html += `<td>${results[i].scec_properties.station_id}</td>`;
@@ -393,6 +401,11 @@ var CGM = new function () {
                 html += `<td>Download...</td>`;
                 html += `</tr>`;
             }
+            if (results.length == 0) {
+                html += `<tr id="placeholder-row">
+                        <td colspan="12">Metadata for selected points will appear here.</td>
+                    </tr>`;
+            }
             html=html+ "</tbody></table>";
 
 
@@ -400,8 +413,14 @@ var CGM = new function () {
         };
 
         this.replaceResultsTable = function(results) {
-            $("#metadata-viewer-container").html(this.generateResultsTable(results));
-            $("#metadata-viewer").floatThead();
+            $("#metadata-viewer-container div").html(generateResultsTable(results));
+            // $("#metadata-viewer").floatThead();
+            var $download_queue_table = $('#metadata-viewer');
+            $download_queue_table.floatThead();
+        //         scrollContainer: function ($table) {
+        //             return $table.closest('div#metadata-viewer-container');
+        //         },
+        //     });
         };
 
     };
