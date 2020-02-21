@@ -56,7 +56,7 @@ var CGM = new function () {
     this.searching = false;
 
     this.pointType = {
-      CONTINUOUS_GPS: 'contgps',
+      CONTINUOUS_GPS: 'continuous',
         CAMPAIGN_GPS:  'campaign',
         GRID: 'grid',
     };
@@ -110,6 +110,7 @@ var CGM = new function () {
                 let vel_east = parseFloat(cgm_station_data[index].ref_velocity_east);
                 let horizontalVelocity = Math.sqrt(Math.pow(vel_north, 2) + Math.pow(vel_east, 2));
                 let station_id = cgm_station_data[index].station_id;
+                let station_type = cgm_station_data[index].station_type;
 
                 while (lon < -180) {
                     lon += 360;
@@ -129,7 +130,7 @@ var CGM = new function () {
                     horizontalVelocity: horizontalVelocity_mm,
                     vel_east: cgm_station_data[index].ref_velocity_east,
                     vel_north: cgm_station_data[index].ref_velocity_north,
-                    type: this.pointType.CONTINUOUS_GPS
+                    type: station_type
             };
 
                 // generate vectors
@@ -162,7 +163,7 @@ var CGM = new function () {
 
     this.showSearch = function (type) {
         const $all_search_controls = $("#cgm-controls-container ul li");
-        this.resetSearch();
+        // this.resetSearch();
         switch (type) {
             case this.searchType.stationName:
                 $all_search_controls.hide();
@@ -228,8 +229,9 @@ var CGM = new function () {
     };
 
     this.resetSearch = function (){
-        this.searching = false;
+        // this.hideVectors();
         viewermap.removeLayer(this.search_result);
+        this.searching = false;
         this.search_result = new L.FeatureGroup();
         // $("#cgm-controls-container ul input, #cgm-controls-container ul select").val("");
         this.replaceResultsTable([]);
@@ -262,6 +264,14 @@ var CGM = new function () {
     };
 
 
+    this.updateVectors = function() {
+        this.cgm_vectors.eachLayer(function(layer) {
+            viewermap.removeLayer(layer);
+        });
+
+        this.showVectors();
+    };
+
     this.hideVectors = function() {
 
         if (this.searching) {
@@ -272,6 +282,10 @@ var CGM = new function () {
             this.cgm_vectors.eachLayer(function(layer) {
                 viewermap.removeLayer(layer);
             });
+        }
+
+        if ($("#cgm-model-vectors").prop('checked')) {
+            $("#cgm-model-vectors").prop('checked', false);
         }
     };
 
@@ -292,6 +306,7 @@ var CGM = new function () {
         };
 
         this.search = function (type, criteria) {
+            // this.resetSearch();
 
             let results = [];
             switch (type) {
@@ -345,6 +360,10 @@ var CGM = new function () {
                     this.search_result.addLayer(results[i]);
                 }
                 viewermap.addLayer(this.search_result);
+                // changed visible stations, so update vectors
+                if (vectorVisible()) {
+                    this.updateVectors();
+                }
 
                 if (type == this.searchType.latlon) {
                     markerLocations.push(L.latLng(criteria[0],criteria[1]));
@@ -360,7 +379,12 @@ var CGM = new function () {
                 }
             }
 
+
             this.replaceResultsTable(results);
+        };
+
+        var vectorVisible = function (){
+            return $("#cgm-model-vectors").prop('checked');
         };
 
         // private function
