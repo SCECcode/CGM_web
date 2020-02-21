@@ -159,11 +159,14 @@ var CGM = new function () {
                 this.cgm_layers.addLayer(marker);
             }
         }
+        this.cgm_layers.on('click', function(event) {
+            console.log(event.layer.scec_properties.station_id);
+        });
     };
 
     this.showSearch = function (type) {
         const $all_search_controls = $("#cgm-controls-container ul li");
-        // this.resetSearch();
+        this.resetSearch();
         switch (type) {
             case this.searchType.stationName:
                 $all_search_controls.hide();
