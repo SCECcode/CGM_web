@@ -209,6 +209,7 @@ var CGM = new function () {
     };
 
     this.reset = function() {
+        this.showSearch('none');
         this.searching = false;
         this.search_result.removeLayer();
         this.search_result = new L.FeatureGroup();
@@ -219,7 +220,6 @@ var CGM = new function () {
 
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
         $("#cgm-controls-container input, #cgm-controls-container select").val("");
-        this.showSearch('none');
         // $("#cgm-search-type").trigger('change');
 
         $("#cgm-model-vectors").prop('checked', false);
@@ -367,7 +367,7 @@ var CGM = new function () {
        var generateResultsTable = function (results) {
 
             var html = "";
-            html+=`<table id="metadata-viewer" class="cgm">`;
+           // html+=`<div class="cgm-table"><table class="cgm" >`;
             html+=`
 <thead>
 <tr>
@@ -390,7 +390,7 @@ var CGM = new function () {
                 let coordinates = results[i].getLatLng();
                 coordinates = {lat: parseFloat(coordinates.lat).toFixed(2), lng: parseFloat(coordinates.lng).toFixed(2) };
                 html += `<tr>`;
-                html += `<td class="button-container"> <button class="btn btn-sm cfm-small-btn" id="" title="highlight the fault" onclick=''>
+                html += `<td style="width:25px" class="button-container"> <button class="btn btn-sm cfm-small-btn" id="" title="highlight the fault" onclick=''>
             <span data-point-id=""  class="cgm-data-row glyphicon glyphicon-unchecked"></span>
         </button></td>`;
                 html += `<td>${results[i].scec_properties.station_id}</td>`;
@@ -406,21 +406,34 @@ var CGM = new function () {
                         <td colspan="12">Metadata for selected points will appear here.</td>
                     </tr>`;
             }
-            html=html+ "</tbody></table>";
-
-
+            html=html+ "</tbody>";
             return html;
         };
 
         this.replaceResultsTable = function(results) {
-            $("#metadata-viewer-container div").html(generateResultsTable(results));
-            // $("#metadata-viewer").floatThead();
+            $("#metadata-viewer").html(generateResultsTable(results));
+
+        };
+
+        this.setupCGMInterface = function() {
             var $download_queue_table = $('#metadata-viewer');
-            $download_queue_table.floatThead();
-        //         scrollContainer: function ($table) {
-        //             return $table.closest('div#metadata-viewer-container');
-        //         },
-        //     });
+            refreshAll();
+            this.activateData();
+            $("div.cfm-search-result-container").attr('style', 'display:none !important;');
+            $("div.mapData div.map-container").removeClass("col-7 pr-0 pl-2").addClass("col-12").css('padding-left','30px');
+            // $("#CFM_plot").css('height','450px');
+            viewermap.invalidateSize();
+            viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
+            $download_queue_table.floatThead('destroy');
+
+            this.replaceResultsTable([]);
+            $download_queue_table.addClass('cgm');
+            // $download_queue_table.floatThead({
+            //     floatTableClass: 'cgm-metadata-header',
+            //     scrollContainer: function ($table) {
+            //         return $table.closest('#metadata-viewer-container');
+            //     },
+            // });
         };
 
     };

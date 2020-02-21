@@ -2,11 +2,11 @@ var viewermap;
 var cfm_metadataViewerHTML;
 
 jQuery(document).ready(function() {
-
   frameHeight=window.innerHeight;
   frameWidth=window.innerWidth;
 
   viewermap=setup_viewer();
+  cfm_metadataViewerHTML = $("#metadata-viewer").html();
 
   $("#view3d-all").on('click',function() {
      $('#view3DIfram').attr('src',"http:localhost:9999/?name=[WTRA-USAV-INDH-Indian_Hill_fault-CFM5.stl,WTRA-USAV-SNJH-San_Jose_fault-CFM5.stl,WTRA-USAV-UPLD-Upland_fault_dipslip-CFM1.stl,WTRA-USAV-WLNC-Walnut_Creek_fault-CFM5.stl]&url=[http://localhost:9999/cfm_data/WTRA-USAV-INDH-Indian_Hill_fault-CFM5.stl,http://localhost:9999/cfm_data/WTRA-USAV-SNJH-San_Jose_fault-CFM5.stl,http://localhost:9999/cfm_data/WTRA-USAV-UPLD-Upland_fault_dipslip-CFM1.stl,http://localhost:9999/cfm_data/WTRA-USAV-WLNC-Walnut_Creek_fault-CFM5.stl]");
@@ -95,27 +95,20 @@ jQuery(document).ready(function() {
              $("#metadata-viewer").floatThead('destroy');
              $("#metadata-viewer").html(cfm_metadataViewerHTML);
              $("div.cfm-search-result-container").attr('style', '');
-             $("div.mapData div.map-container").addClass("col-7 pr-0 pl-2").removeClass("col-12").css('padding-left','inherit');
+             $("div.mapData div.map-container").addClass("col-7").removeClass("col-12").css('padding-left','inherit');
 
+             // $("#CFM_plot").css('height','576px');
+             viewermap.invalidateSize();
+             switchLayer('esri topo');
              var $download_queue_table = $('#metadata-viewer');
              $download_queue_table.floatThead({
                  scrollContainer: function ($table) {
                      return $table.closest('div#metadata-viewer-container');
                  },
              });
-             // $('#metadata-viewer').html(cfm_metadataViewerHTML);
       } else if ($(this).val() == 'cgm') {
-             refreshAll();
-            CGM.activateData();
-             $("div.cfm-search-result-container").attr('style', 'display:none !important;');
-             $("div.mapData div.map-container").removeClass("col-7 pr-0 pl-2").addClass("col-12").css('padding-left','30px');
-             viewermap.invalidateSize();
-             viewermap.setView(CGM.defaultMapView.coordinates, CGM.defaultMapView.zoom);
-             $("#metadata-viewer").floatThead('destroy');
-             cfm_metadataViewerHTML = $("#metadata-viewer").html();
 
-
-             CGM.replaceResultsTable([]);
+             CGM.setupCGMInterface();
 
       }
       });
