@@ -1,5 +1,7 @@
 var viewermap;
 
+var cfmSearchResultTable;
+
 jQuery(document).ready(function() {
 
   frameHeight=window.innerHeight;
@@ -86,8 +88,21 @@ jQuery(document).ready(function() {
              activeModel = Models.CFM;
              $("div.control-container").hide();
              $("#cfm-controls-container").show();
+             CGM.reset();
+             if (!$("#cfm-model").prop('checked')) {
+                $("#cfm-model").click();
+             }
       } else if ($(this).val() == 'cgm') {
+             refreshAll();
             CGM.activateData();
+             cfmSearchResultTable = $("div.cfm-search-result-container").html();
+             $("div .cfm-search-result-container").remove();
+             $("div.mapData div.map-container").removeClass("col-7 pr-0 pl-2").addClass("col-12").css('padding-left','30px');
+             // $("#CFM_plot").removeClass('w-100 pl-2');
+             viewermap.invalidateSize();
+             viewermap.setView(CGM.defaultMapView.coordinates, CGM.defaultMapView.zoom);
+             $("#metadata-viewer").floatThead('destroy');
+
       }
       });
   });

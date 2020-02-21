@@ -38,6 +38,12 @@ $(document).ready(function () {
         CGM.searchBox(searchType, criteria);
     });
 
+    $("#cgm-controls-container input").keyup(function(event){
+            if (event.keyCode === 13) {
+               $(this).siblings('button').trigger('click');
+            }
+    });
+
     CGM.generateLayers();
 
 });
@@ -48,6 +54,12 @@ var CGM = new function () {
     this.cgm_vectors = new L.FeatureGroup();
     this.search_result = new L.FeatureGroup();
     this.searching = false;
+
+    this.pointType = {
+      CONTINUOUS_GPS: 'contgps',
+        CAMPAIGN_GPS:  'campaign',
+        GRID: 'grid',
+    };
 
     var cgm_marker_style = {
         color: 'blue',
@@ -71,16 +83,15 @@ var CGM = new function () {
         })
     };
 
-    var visible = {
-        stations: false,
-        vectors: false
+    this.defaultMapView = {
+        // coordinates: [34.3, -118.4],
+        coordinates: [34.16, -118.57],
+        zoom: 7
     };
 
     this.searchType = {
-        keyword: 'keyword',
         latlon: 'latlon',
-        stationName: 'stationName',
-
+        stationName: 'stationname',
     };
 
     this.activateData = function() {
@@ -117,7 +128,8 @@ var CGM = new function () {
                     station_id: station_id,
                     horizontalVelocity: horizontalVelocity_mm,
                     vel_east: cgm_station_data[index].ref_velocity_east,
-                    vel_north: cgm_station_data[index].ref_velocity_north
+                    vel_north: cgm_station_data[index].ref_velocity_north,
+                    type: this.pointType.CONTINUOUS_GPS
             };
 
                 // generate vectors
@@ -149,18 +161,20 @@ var CGM = new function () {
     };
 
     this.showSearch = function (type) {
+        const $all_search_controls = $("#cgm-controls-container ul li");
+        this.resetSearch();
         switch (type) {
-            case this.searchType.keyword:
-                $("#cgm-keyword").show();
+            case this.searchType.stationName:
+                $all_search_controls.hide();
+                $("#cgm-station-name").show();
                 break;
             case this.searchType.latlon:
+                $all_search_controls.hide();
                 $("#cgm-latlon").show();
-                // latlon_sidebar = true;
                 drawRectangle();
-                // drawing_rectangle = true;
                 break;
             default:
-                $("#cgm-controls-container ul li").hide();
+                $all_search_controls.hide();
         }
     };
 
@@ -180,7 +194,9 @@ var CGM = new function () {
 
         if (currentLayerName != 'shaded relief') {
             switchLayer('shaded relief');
+            $("#mapLayer").val('shaded relief');
         }
+
     };
 
     this.hideModel = function () {
@@ -193,26 +209,32 @@ var CGM = new function () {
     };
 
     this.reset = function() {
-        CGM.searching = false;
-        CGM.search_result.removeLayer();
-        CGM.search_result = new L.FeatureGroup();
+        this.searching = false;
+        this.search_result.removeLayer();
+        this.search_result = new L.FeatureGroup();
         this.hideVectors();
         this.showModel();
         remove_bounding_rectangle_layer();
+        skipRectangle();
 
-        viewermap.setView([34.3, -118.4], 7);
+        viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
         $("#cgm-controls-container input, #cgm-controls-container select").val("");
-        $("#cgm-search-type").trigger('change');
+        // $("#cgm-search-type").trigger('change');
 
         $("#cgm-model-vectors").prop('checked', false);
-        refreshAll(); //refresh CFM
+        // refreshAll(); //refresh CFM
 
     };
 
     this.resetSearch = function (){
-        CGM.searching = false;
-        CGM.search_result = new L.FeatureGroup();
-        latlon_sidebar = false;
+        this.searching = false;
+        viewermap.removeLayer(this.search_result);
+        this.search_result = new L.FeatureGroup();
+        // $("#cgm-controls-container ul input, #cgm-controls-container ul select").val("");
+        this.replaceResultsTable([]);
+        skipRectangle();
+
+        remove_bounding_rectangle_layer();
     };
 
     this.getMarkerByStationId = function (station_id) {
@@ -225,45 +247,7 @@ var CGM = new function () {
         return [];
     };
 
-    var showMarker = function (cgm_layer) {
-        cgm_layer.addTo(viewermap);
-    };
-
-    var hideMarker = function (marker) {
-        marker.scec_properties.visible = false;
-        viewermap.removeLayer(marker);
-    };
-
-    var generateVectors = function() {
-
-    };
-
-    this.addStationMarkers = function () {
-
-        if (visible.stations === true) {
-            return;
-        } else {
-            visible.stations = true;
-            if (!$("#cgm-model").prop('checked')) {
-                $("#cgm-model").attr('checked', true);
-            }
-        }
-
-        $("#cfm-controls-container").hide();
-        $("#cgm-controls-container").show();
-    };
-
     this.showVectors = function () {
-
-        // if (this.cgm_vectors.getLayers().length == 0) {
-        //
-        //     var cgm_object = this;
-        //
-        // }
-        //
-        // viewermap.eachLayer(function(layer) {
-        //     viewermap.addLayer(this.cgm_vectors);
-        // });
 
         if (this.searching) {
             this.search_result.eachLayer(function (layer) {
@@ -274,13 +258,7 @@ var CGM = new function () {
                 viewermap.addLayer(layer.scec_properties.vector);
             });
         }
-        // viewermap.eachLayer(function(layer){
-        //    if ( layer.hasOwnProperty("scec_properties")) {
-        //        layer.scec_properties.vector.addTo(viewermap);
-        //        // viewermap.addLayer(layer.scec_properties.vector);
-        //    }
-        // });
-    }
+    };
 
 
     this.hideVectors = function() {
@@ -316,9 +294,9 @@ var CGM = new function () {
 
             let results = [];
             switch (type) {
-                case CGM.searchType.keyword:
+                case CGM.searchType.stationName:
                     this.cgm_layers.eachLayer(function (layer) {
-                        if (layer.scec_properties.station_id == criteria) {
+                        if (layer.scec_properties.station_id.toLowerCase() == criteria.toLowerCase()) {
                             results.push(layer);
                         }
                     });
@@ -350,25 +328,80 @@ var CGM = new function () {
             this.searching = true;
             let results = this.search(type, criteria);
 
-            let markerLocations = [];
+            if (results.length === 0) {
+                viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
+            } else {
+                let markerLocations = [];
+
+                for (let i = 0; i < results.length; i++) {
+                    markerLocations.push(results[i].getLatLng());
+                    this.search_result.addLayer(results[i]);
+                }
+                viewermap.addLayer(this.search_result);
+
+                if (type == this.searchType.latlon) {
+                    markerLocations.push(L.latLng(criteria[0],criteria[1]));
+                    markerLocations.push(L.latLng(criteria[2],criteria[3]));
+                    let bounds = L.latLngBounds(markerLocations);
+                    viewermap.fitBounds(bounds, {maxZoom: 12});
+
+                    setTimeout(drawRectangle, 500);
+
+                } else {
+                    let bounds = L.latLngBounds(markerLocations);
+                    viewermap.fitBounds(bounds, {maxZoom: 12});
+                }
+            }
+
+            this.replaceResultsTable(results);
+        };
+
+        this.generateResultsTable = function (results) {
+
+            var html = "";
+            html+=`<table id="metadata-viewer">`;
+            html+=`
+<thead>
+<tr>
+<th class="text-center">
+    <button id="allBtn" class="btn btn-sm cfm-small-btn" title="select all visible stations" onclick="selectAll();">
+    <span class="glyphicon glyphicon-unchecked"></span>
+</button>
+</th>
+<th>Station Name</th>
+<th>Latitude</th>
+<th>Longitude</th>
+<th>Type</th>
+<th>Hor. Vel.</th>
+<th>Download</th>
+</tr>
+</thead>
+<tbody>`;
 
             for (let i = 0; i < results.length; i++) {
-                markerLocations.push(results[i].getLatLng());
-                this.search_result.addLayer(results[i]);
+                let coordinates = results[i].getLatLng();
+                coordinates = {lat: parseFloat(coordinates.lat).toFixed(2), lng: parseFloat(coordinates.lng).toFixed(2) };
+                html += `<tr>`;
+                html += `<td> <button class="btn btn-sm cfm-small-btn" id="" title="highlight the fault" onclick=''>
+            <span data-point-id=""  class="cgm-data-row glyphicon glyphicon-unchecked"></span>
+        </button></td>`;
+                html += `<td>${results[i].scec_properties.station_id}</td>`;
+                html += `<td>${coordinates.lat}</td>`;
+                html += `<td>${coordinates.lng}</td>`;
+                html += `<td>${results[i].scec_properties.type} </td>`;
+                html += `<td>${results[i].scec_properties.horizontalVelocity}</td>`;
+                html += `<td>Download...</td>`;
+                html += `</tr>`;
             }
-            viewermap.addLayer(this.search_result);
+            html=html+ "</tbody></table>";
 
-            if (type == this.searchType.latlon) {
-                markerLocations.push(L.latLng(criteria[0],criteria[1]));
-                markerLocations.push(L.latLng(criteria[2],criteria[3]));
-                let bounds = L.latLngBounds(markerLocations);
-                viewermap.fitBounds(bounds, {maxZoom: 12});
 
-                setTimeout(drawRectangle, 500);
-
-            } else {
-                let bounds = L.latLngBounds(markerLocations);
-                viewermap.fitBounds(bounds, {maxZoom: 12});
-            }
+            return html;
         };
+
+        this.replaceResultsTable = function(results) {
+            $("#metadata-viewer-container").html(this.generateResultsTable(results));
+            $("#metadata-viewer").floatThead();
+        };
+
     };

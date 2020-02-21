@@ -342,7 +342,7 @@ $cgm = new CGM();
             <div class="col-4 input-group filters">
                 <select id="cgm-search-type" class="custom-select">
                     <option value="">Search the CGM ...</option>
-                    <option value="keyword">Keyword</option>
+                    <option value="stationname">Station Name</option>
                     <option value="latlon">Latitude &amp; Longitude</option>
 <!--                    <option disabled>-- Advanced --</option>-->
 <!--                    <option value="areaClick">Area</option>-->
@@ -361,14 +361,14 @@ $cgm = new CGM();
             </div>
                 <div class="col-8">
                     <ul>
-                        <li id='cgm-keyword' class='navigationLi ' style="display:none">
-                            <div id='cgm-keywordMenu' class='menu row justify-content-center'>
+                        <li id='cgm-station-name' class='navigationLi ' style="display:none">
+                            <div class='menu row justify-content-center'>
                                 <div class="col-12">
                                     <div class="d-flex">
-                                        <input placeholder="Enter Keyword" type="text" id="cgm-keywordTxt"
+                                        <input placeholder="Enter Station Name" type="text"
                                                 class="form-control"
-                                                onfocus="this.value=''" style=""/>
-                                        <button id="cgm-keywordBtn" type="button" title="search with keyword" data-search-type="keyword"
+                                                style=""/>
+                                        <button type="button" title="search with keyword" data-search-type="stationname"
                                                 class="btn btn-default cfm-small-btn" onclick="">
                                             <span class="glyphicon glyphicon-search"></span>
                                         </button>
@@ -422,7 +422,7 @@ $cgm = new CGM();
 
     </div>
     <div class="row">
-            <div class="col-12 text-right">
+            <div class="col-12 text-right pr-0">
                         <div id='model-options' class="form-check-inline">
                             <select id='data-download-select' class="custom-select custom-select-sm" style="width:150px;">
                               <option selected value="cfm">CFM Data</option>
@@ -491,14 +491,17 @@ $cgm = new CGM();
 
 
     <div class="row mapData">
-        <div class="col-5 button-container d-flex flex-column" style="overflow:hidden;">
+        <div class="col-5 button-container d-flex flex-column cfm-search-result-container pr-1" style="overflow:hidden;">
             <div id="searchResult" class="mb-1">
             </div>
             <div id="geoSearchByObjGidResult" style="display:none"></div>
         </div>
-        <div class="col-7 pr-0 pl-2 ">
-            <div class="row w-100 mb-1" id='CFM_plot'
-                    style="position:relative;border:solid 1px #ced4da; height:576px;"></div>
+        <div class="col-7 map-container">
+            <div class="row" >
+                <div class="col" id='CFM_plot'
+                        style="position:relative;border:solid 1px #ced4da; height:576px;">
+                </div>
+            </div>
 
 
         </div>
