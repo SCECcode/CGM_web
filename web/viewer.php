@@ -605,7 +605,6 @@ $cgm = new CGM();
 </div>
 
     <script type="text/javascript">
-        // $(document).ready(function () {
             cfm_native_list = <?php print $cfm->getObjectDetails('native')->outputJSON(); ?>;
             cfm_500m_list = <?php print $cfm->getObjectDetails('500m')->outputJSON(); ?>;
             cfm_1000m_list = <?php print $cfm->getObjectDetails('1000m')->outputJSON(); ?>;
@@ -618,7 +617,11 @@ $cgm = new CGM();
             cfm_nogeo_gid_list = cfm_gid_lists["nogidlist"];
             makeAllLists();
             cgm_station_data = <?php print $cgm->getAllStationData()->outputJSON(); ?>;
-        // });
+            <?php if ($_REQUEST['model'] == 'cgm'):  ?>
+            $(document).on("page-ready", function () {
+                CGM.setupCGMInterface();
+            });
+			<?php endif; ?>
     </script>
 </body>
 </html>

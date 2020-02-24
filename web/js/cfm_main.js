@@ -112,6 +112,11 @@ jQuery(document).ready(function() {
 
       }
       });
+
+      $.event.trigger({
+          type: "page-ready",
+          "message": "completed",
+      });
   });
 }); // end of MAIN
 

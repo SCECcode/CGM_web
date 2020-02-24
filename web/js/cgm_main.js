@@ -455,6 +455,7 @@ var CGM = new function () {
 
             this.replaceResultsTable([]);
             $download_queue_table.addClass('cgm');
+            $("#data-download-select").val("cgm");
             // $download_queue_table.floatThead({
             //     floatTableClass: 'cgm-metadata-header',
             //     scrollContainer: function ($table) {
