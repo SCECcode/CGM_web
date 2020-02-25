@@ -85,27 +85,32 @@ var CGM = new function () {
         GRID: 'grid',
     };
 
+    var cgm_colors = {
+        normal: '#006E90',
+        selected: '#B02E0C',
+    };
+
     var cgm_marker_style = {
         normal: {
-            color: 'blue',
-            fillColor: 'blue',
+            color: cgm_colors.normal,
+            fillColor: cgm_colors.normal,
             fillOpacity: 0.5,
             radius: 500,
             weight: 1,
         },
         selected: {
-            color: 'orange',
-            fillColor: 'orange',
+            color: cgm_colors.selected,
+            fillColor: cgm_colors.selected,
             fillOpacity: 0.5,
             radius: 500,
             weight: 1,
         },
         hover: {
-            color: 'orange',
-            fillColor: 'orange',
+            // color: cgm_colors.selected,
+            // fillColor: cgm_colors.selected,
             fillOpacity: 0.5,
-            radius: 800,
-            weight: 1,
+            radius: 2000,
+            weight: 2,
         },
     };
     var cgm_line_path_style = {weight: 1, color: "blue"};
@@ -117,7 +122,7 @@ var CGM = new function () {
             polygon: false,
             pathOptions: {
                 stroke: true,
-                color: "blue",
+                color: cgm_colors.normal,
                 weight: 1
             }
         })
@@ -204,6 +209,7 @@ var CGM = new function () {
                 marker.scec_properties.vector = new L.FeatureGroup();
                 marker.scec_properties.vector.addLayer(polyline);
                 marker.scec_properties.vector.addLayer(arrowHeadDecorator);
+                marker.scec_properties.vectorArrowHead = arrowHeadDecorator;
                 this.cgm_vectors.addLayer(marker.scec_properties.vector);
 
                 // this.cgm_vectors.addLayer(polyline);
@@ -216,7 +222,36 @@ var CGM = new function () {
         this.cgm_layers.on('click', function(event) {
             console.log(event.layer.scec_properties.station_id);
             CGM.toggleStationSelected(event.layer);
+        });
 
+        this.cgm_layers.on('mouseover', function(event) {
+            if (viewermap.getZoom() <= 10) {
+                let layer = event.layer;
+                // layer.setStyle(cgm_marker_style.hover);
+                layer.setRadius(cgm_marker_style.hover.radius);
+                // layer.scec_properties.vector.setStyle(cgm_marker_style.selected);
+                let newArrowPattern = {...cgm_line_pattern};
+                newArrowPattern.symbol.options.pathOptions.color = cgm_marker_style.hover.color;
+                newArrowPattern.symbol.options.pathOptions.weight = cgm_marker_style.hover.weight;
+                layer.scec_properties.vectorArrowHead.setPatterns([newArrowPattern]);
+            }
+        });
+
+
+        this.cgm_layers.on('mouseout', function(event) {
+            let layer = event.layer;
+            // layer.setStyle(cgm_marker_style.hover);
+            layer.setRadius(cgm_marker_style.normal.radius);
+            // layer.scec_properties.vector.setStyle(cgm_marker_style);
+            let newArrowPattern = {...cgm_line_pattern};
+            let oldColor = cgm_marker_style.normal.color;
+
+            if (layer.scec_properties.selected) {
+               oldColor = cgm_marker_style.selected.color;
+            }
+            newArrowPattern.symbol.options.pathOptions.color = oldColor;
+            newArrowPattern.symbol.options.pathOptions.weight = cgm_marker_style.normal.weight;
+            layer.scec_properties.vectorArrowHead.setPatterns([newArrowPattern]);
         });
     };
 
@@ -245,17 +280,27 @@ var CGM = new function () {
     this.selectStationByLayer = function (layer) {
         layer.scec_properties.selected = true;
         layer.setStyle(cgm_marker_style.selected);
+        layer.scec_properties.vector.setStyle({color: cgm_marker_style.selected.color});
+        let newArrowPattern = {...cgm_line_pattern};
+        newArrowPattern.symbol.options.pathOptions.color = cgm_marker_style.selected.color;
+        layer.scec_properties.vectorArrowHead.setPatterns([newArrowPattern]);
         let gid = layer.scec_properties.gid;
 
         let $row = $(`tr[data-point-gid='${gid}'`);
         let $glyphElem = $row.find('span');
         $row.addClass('row-selected');
         $glyphElem.removeClass('glyphicon-unchecked').addClass('glyphicon-check');
+
+        // move row to top
+        let $rowHTML = $row.prop('outerHTML');
+        $row.remove();
+        $("#metadata-viewer.cgm tbody" ).prepend($rowHTML);
     };
 
     this.unselectStationByLayer = function (layer) {
         layer.scec_properties.selected = false;
         layer.setStyle(cgm_marker_style.normal);
+        layer.scec_properties.vector.setStyle({color: cgm_marker_style.normal.color});
 
         let gid = layer.scec_properties.gid;
 
@@ -374,7 +419,7 @@ var CGM = new function () {
         html += `<td>${coordinates.lat}</td>`;
         html += `<td>${coordinates.lng}</td>`;
         html += `<td>${layer.scec_properties.type} </td>`;
-        html += `<td>${layer.scec_properties.horizontalVelocity}</td>`;
+        html += `<td>${layer.scec_properties.horizontalVelocity} mm/yr</td>`;
         html += `<td>Download</td>`;
         html += `</tr>`;
 
@@ -589,12 +634,14 @@ var CGM = new function () {
                 }
 
                 if (type == this.searchType.latlon) {
+                    this.unselectAll();
                     markerLocations.push(L.latLng(criteria[0],criteria[1]));
                     markerLocations.push(L.latLng(criteria[2],criteria[3]));
                     let bounds = L.latLngBounds(markerLocations);
                     viewermap.fitBounds(bounds, {maxZoom: 12});
 
                     // setTimeout(drawRectangle, 500);
+                    setTimeout(skipRectangle, 500);
 
                 } else {
                     let bounds = L.latLngBounds(markerLocations);

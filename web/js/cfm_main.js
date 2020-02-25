@@ -90,8 +90,11 @@ jQuery(document).ready(function() {
                 $("#cfm-model").click();
              }
 
-             $("#metadata-viewer").floatThead('destroy');
-             $("#metadata-viewer").html(cfm_metadataViewerHTML);
+             var $download_queue_table = $('#metadata-viewer');
+
+             $download_queue_table.floatThead('destroy');
+             $download_queue_table.html(cfm_metadataViewerHTML);
+             $download_queue_table.removeClass('cgm');
              $("div.cfm-search-result-container").attr('style', '');
              $("div.mapData div.map-container").addClass("col-7").removeClass("col-12").css('padding-left','inherit');
 
