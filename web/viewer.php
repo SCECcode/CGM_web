@@ -404,6 +404,9 @@ $cgm = new CGM();
                                                     value='optional'
                                                     onfocus="this.value=''"
                                                     class="form-control">
+                                            <span id="cgm-drawRect" title="search by drawing rectangle"
+                                                    class="glyphicon glyphicon-pencil btn-default cfm-small-btn ml-2">
+                                            </span>
                                             <button id="cgm-latlonBtn" type="button" title="search with latlon"
                                                     class="btn btn-default cfm-small-btn form-control " data-search-type="latlon"
                                                     onclick="">

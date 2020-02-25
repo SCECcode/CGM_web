@@ -143,22 +143,24 @@ function getAllGeoJSON() {
     visibleFaults.addTo(viewermap);
 
     visibleFaults.on('mouseover', function(e){
-        if (mymap && !drawing_rectangle) {
+        if (activeModel == Models.CFM && mymap && !drawing_rectangle) {
             e.layer.setStyle({weight: 5});
         }
     });
 
     visibleFaults.on('mouseout', function(e){
-        if (mymap && !drawing_rectangle) {
+        if (activeModel == Models.CFM && mymap && !drawing_rectangle) {
             e.layer.setStyle({weight: 2});
         }
     });
 
     visibleFaults.on({
         click: function (event) {
-            let clickedFaultID = event.layer.feature.id;
-            toggle_highlight(clickedFaultID);
-        }
+            if (activeModel == Models.CFM && mymap && !drawing_rectangle) {
+                let clickedFaultID = event.layer.feature.id;
+                toggle_highlight(clickedFaultID);
+                }
+            }
     });
 
 }

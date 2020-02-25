@@ -619,3 +619,12 @@ div.latlon-input-boxes input[type='text']{
     text-align: center;
     vertical-align: middle;
 }
+
+#metadata-viewer.cgm tr {
+    cursor: default;
+}
+
+
+#cgm-drawRect {
+    cursor: pointer;
+}

@@ -370,3 +370,16 @@ function saveAsURLFile(gid,url) {
   delete dload;
 }
 
+function hideCFMLayer() {
+    visibleFaults.setStyle({opacity:0});
+    cfm_visible = false;
+
+    if ($("#cfm-model").prop('checked')) {
+        $("#cfm-model").prop('checked',false);
+    }
+}
+
+function showCFMLayer() {
+    visibleFaults.setStyle({opacity:1});
+    cfm_visible = true;
+}

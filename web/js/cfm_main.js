@@ -74,11 +74,9 @@ jQuery(document).ready(function() {
 
       $("#cfm-model").on('click', function () {
           if (cfm_visible) {
-              visibleFaults.setStyle({opacity:0});
-              cfm_visible = false;
+              hideCFMLayer();
           } else {
-              visibleFaults.setStyle({opacity:1});
-              cfm_visible = true;
+              showCFMLayer();
           }
       });
 
@@ -97,7 +95,7 @@ jQuery(document).ready(function() {
              $("div.cfm-search-result-container").attr('style', '');
              $("div.mapData div.map-container").addClass("col-7").removeClass("col-12").css('padding-left','inherit');
 
-             // $("#CFM_plot").css('height','576px');
+             $("#CFM_plot").css('height','576px');
              viewermap.invalidateSize();
              switchLayer('esri topo');
              var $download_queue_table = $('#metadata-viewer');
@@ -117,7 +115,9 @@ jQuery(document).ready(function() {
           type: "page-ready",
           "message": "completed",
       });
+
   });
+
 }); // end of MAIN
 
 

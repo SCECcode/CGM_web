@@ -38,10 +38,34 @@ $(document).ready(function () {
         CGM.searchBox(searchType, criteria);
     });
 
+    $("#cgm-drawRect").on('click', function(){
+       drawRectangle();
+    });
+
     $("#cgm-controls-container input").keyup(function(event){
             if (event.keyCode === 13) {
                $(this).siblings('button').trigger('click');
             }
+    });
+
+    $("#metadata-viewer-container").on('click','#metadata-viewer.cgm tr', function(){
+        if ($(this).find('button[id="cgm-allBtn"]').length != 0) {
+            return;
+        }
+
+        let $glyphElem = $(this).find('span');
+        let gid = $(this).data('point-gid');
+        let isElemSelected = CGM.toggleStationSelectedByGid(gid);
+
+        if (isElemSelected) {
+            $(this).addClass('row-selected');
+            $glyphElem.removeClass('glyphicon-unchecked').addClass('glyphicon-check');
+        } else {
+            $(this).removeClass('row-selected');
+            $glyphElem.addClass('glyphicon-unchecked').removeClass('glyphicon-check');
+        }
+
+
     });
 
     CGM.generateLayers();
@@ -62,11 +86,27 @@ var CGM = new function () {
     };
 
     var cgm_marker_style = {
-        color: 'blue',
-        fillColor: 'blue',
-        fillOpacity: 0.5,
-        radius: 500,
-        weight: 1,
+        normal: {
+            color: 'blue',
+            fillColor: 'blue',
+            fillOpacity: 0.5,
+            radius: 500,
+            weight: 1,
+        },
+        selected: {
+            color: 'orange',
+            fillColor: 'orange',
+            fillOpacity: 0.5,
+            radius: 500,
+            weight: 1,
+        },
+        hover: {
+            color: 'orange',
+            fillColor: 'orange',
+            fillOpacity: 0.5,
+            radius: 800,
+            weight: 1,
+        },
     };
     var cgm_line_path_style = {weight: 1, color: "blue"};
     var cgm_line_pattern = {
@@ -94,14 +134,24 @@ var CGM = new function () {
         stationName: 'stationname',
     };
 
+    var tablePlaceholderRow = `<tr id="placeholder-row">
+                        <td colspan="12">Metadata for selected points will appear here.</td>
+                    </tr>`;
+
     this.activateData = function() {
         activeModel = Models.CGM;
         this.showModel();
         $("div.control-container").hide();
         $("#cgm-controls-container").show();
+
+        if (cfm_visible) {
+            hideCFMLayer();
+        }
     };
 
     this.generateLayers = function () {
+        this.cgm_layers = new L.FeatureGroup();
+        this.cgm_vectors = new L.FeatureGroup();
         for (const index in cgm_station_data) {
             if (cgm_station_data.hasOwnProperty(index)) {
                 let lat = parseFloat(cgm_station_data[index].ref_north_latitude);
@@ -111,6 +161,7 @@ var CGM = new function () {
                 let horizontalVelocity = Math.sqrt(Math.pow(vel_north, 2) + Math.pow(vel_east, 2));
                 let station_id = cgm_station_data[index].station_id;
                 let station_type = cgm_station_data[index].station_type;
+                let gid = cgm_station_data[index].gid;
 
                 while (lon < -180) {
                     lon += 360;
@@ -120,7 +171,7 @@ var CGM = new function () {
 
                 }
 
-                let marker = L.circle([lat, lon], cgm_marker_style);
+                let marker = L.circle([lat, lon], cgm_marker_style.normal);
 
                 let horizontalVelocity_mm = (horizontalVelocity * 1000).toFixed(2); // convert to mm/year
                 let station_info = `station id: ${station_id}, vel: ${horizontalVelocity_mm} mm/yr`;//, lat/lng: ${lat}, ${lon}`;
@@ -130,7 +181,9 @@ var CGM = new function () {
                     horizontalVelocity: horizontalVelocity_mm,
                     vel_east: cgm_station_data[index].ref_velocity_east,
                     vel_north: cgm_station_data[index].ref_velocity_north,
-                    type: station_type
+                    type: station_type,
+                    gid: gid,
+                    selected: false,
             };
 
                 // generate vectors
@@ -159,9 +212,173 @@ var CGM = new function () {
                 this.cgm_layers.addLayer(marker);
             }
         }
+
         this.cgm_layers.on('click', function(event) {
             console.log(event.layer.scec_properties.station_id);
+            CGM.toggleStationSelected(event.layer);
+
         });
+    };
+
+    this.toggleStationSelected = function(layer) {
+        if (typeof layer.scec_properties.selected === 'undefined') {
+            layer.scec_properties.selected = true;
+        } else {
+            layer.scec_properties.selected = !layer.scec_properties.selected;
+        }
+
+        if (layer.scec_properties.selected) {
+            this.selectStationByLayer(layer);
+
+        } else {
+            this.unselectStationByLayer(layer);
+        }
+
+       return layer.scec_properties.selected;
+    };
+
+    this.toggleStationSelectedByGid = function(gid) {
+        let layer = this.getLayerByGid(gid);
+        return this.toggleStationSelected(layer);
+    };
+
+    this.selectStationByLayer = function (layer) {
+        layer.scec_properties.selected = true;
+        layer.setStyle(cgm_marker_style.selected);
+        let gid = layer.scec_properties.gid;
+
+        let $row = $(`tr[data-point-gid='${gid}'`);
+        let $glyphElem = $row.find('span');
+        $row.addClass('row-selected');
+        $glyphElem.removeClass('glyphicon-unchecked').addClass('glyphicon-check');
+    };
+
+    this.unselectStationByLayer = function (layer) {
+        layer.scec_properties.selected = false;
+        layer.setStyle(cgm_marker_style.normal);
+
+        let gid = layer.scec_properties.gid;
+
+        let $row = $(`tr[data-point-gid='${gid}'`);
+        let $glyphElem = $row.find('span');
+        $row.removeClass('row-selected');
+        $glyphElem.addClass('glyphicon-unchecked').removeClass('glyphicon-check');
+    };
+
+    // this.showStationByLayer = function(layer) {
+    //
+    // };
+    //
+    // this.showStationByGid = function (gid) {
+    //     let layer = this.getLayerByGid(gid);
+    //     this.selectStationByLayer(layer);
+    // };
+
+    this.showStationsByLayers = function(layers) {
+        viewermap.addLayer(layers);
+        var cgm_object = this;
+        this.search_result.eachLayer(function(layer){
+            cgm_object.addToResultsTable(layer);
+        });
+    };
+
+
+    // this.hideStationByGid = function (gid) {
+    //    let layer = this.getLayerByGid(gid);
+    //    this.unselectStationByLayer(layer);
+    // };
+
+
+
+    this.toggleSelectAll = function() {
+        var cgm_object = this;
+
+        let $selectAllButton = $("#cgm-allBtn span");
+        if (!$selectAllButton.hasClass('glyphicon-check')) {
+            this.search_result.eachLayer(function(layer){
+                cgm_object.selectStationByLayer(layer);
+            });
+            $selectAllButton.addClass('glyphicon-check').removeClass('glyphicon-unchecked')
+        } else {
+            this.unselectAll();
+
+        }
+    };
+
+    this.unselectAll = function() {
+        var cgm_object = this;
+        this.search_result.eachLayer(function(layer){
+            cgm_object.unselectStationByLayer(layer);
+        });
+        $("#cgm-allBtn span").removeClass('glyphicon-check').addClass('glyphicon-unchecked')
+    };
+
+    // unselect every layer
+    this.clearAllSelections = function() {
+        var cgm_object = this;
+        this.cgm_layers.eachLayer(function(layer){
+            if (layer.scec_properties.selected) {
+                cgm_object.unselectStationByLayer(layer);
+            }
+        });
+        $("#metadata-viewer.cgm tr.row-selected button span.glyphicon.glyphicon-check").removeClass('glyphicon-check').addClass('glyphicon-unchecked');
+        $("#metadata-viewer.cgm tr.row-selected").removeClass('row-selected');
+    };
+
+
+
+    this.getLayerByGid = function(gid) {
+        let foundLayer = false;
+        this.cgm_layers.eachLayer(function(layer){
+          if (layer.hasOwnProperty("scec_properties")) {
+             if (gid == layer.scec_properties.gid) {
+                 foundLayer = layer;
+             }
+          }
+       });
+       return foundLayer;
+    };
+
+
+
+    this.addToResultsTable = function(layer) {
+        let $table = $("#metadata-viewer.cgm tbody");
+        let gid = layer.scec_properties.gid;
+
+        if ($(`tr[data-point-gid='${gid}'`).length > 0) {
+            return;
+        }
+
+        let html = generateTableRow(layer);
+
+        $table.find("tr#placeholder-row").remove();
+        $table.prepend(html);
+    };
+
+    this.removeFromResultsTable = function (gid) {
+        $(`#metadata-viewer tbody tr[data-point-gid='${gid}']`).remove();
+    };
+
+
+    var generateTableRow = function(layer) {
+        let $table = $("#metadata-viewer");
+        let html = "";
+
+        let coordinates = layer.getLatLng();
+        coordinates = {lat: parseFloat(coordinates.lat).toFixed(2), lng: parseFloat(coordinates.lng).toFixed(2) };
+        html += `<tr data-point-gid="${layer.scec_properties.gid}">`;
+        html += `<td style="width:25px" class="button-container"> <button class="btn btn-sm cfm-small-btn" id="" title="highlight the fault" onclick=''>
+            <span class="cgm-data-row glyphicon glyphicon-unchecked"></span>
+        </button></td>`;
+        html += `<td>${layer.scec_properties.station_id}</td>`;
+        html += `<td>${coordinates.lat}</td>`;
+        html += `<td>${coordinates.lng}</td>`;
+        html += `<td>${layer.scec_properties.type} </td>`;
+        html += `<td>${layer.scec_properties.horizontalVelocity}</td>`;
+        html += `<td>Download</td>`;
+        html += `</tr>`;
+
+        return html;
     };
 
     this.showSearch = function (type) {
@@ -227,6 +444,9 @@ var CGM = new function () {
         // $("#cgm-search-type").trigger('change');
 
         $("#cgm-model-vectors").prop('checked', false);
+        this.clearAllSelections();
+
+        // this.generateLayers();
         // refreshAll(); //refresh CFM
 
     };
@@ -362,7 +582,7 @@ var CGM = new function () {
                     markerLocations.push(results[i].getLatLng());
                     this.search_result.addLayer(results[i]);
                 }
-                viewermap.addLayer(this.search_result);
+                this.showStationsByLayers(this.search_result);
                 // changed visible stations, so update vectors
                 if (vectorVisible()) {
                     this.updateVectors();
@@ -374,7 +594,7 @@ var CGM = new function () {
                     let bounds = L.latLngBounds(markerLocations);
                     viewermap.fitBounds(bounds, {maxZoom: 12});
 
-                    setTimeout(drawRectangle, 500);
+                    // setTimeout(drawRectangle, 500);
 
                 } else {
                     let bounds = L.latLngBounds(markerLocations);
@@ -399,7 +619,7 @@ var CGM = new function () {
 <thead>
 <tr>
 <th class="text-center button-container">
-    <button id="cgm-allBtn" class="btn btn-sm cfm-small-btn" title="select all visible stations" onclick="CGM.selectAll();">
+    <button id="cgm-allBtn" class="btn btn-sm cfm-small-btn" title="select all visible stations" onclick="CGM.toggleSelectAll();">
     <span class="glyphicon glyphicon-unchecked"></span>
 </button>
 </th>
@@ -408,30 +628,17 @@ var CGM = new function () {
 <th>Longitude</th>
 <th>Type</th>
 <th>Hor. Vel.</th>
-<th>Download</th>
+<th>Download All</th>
 </tr>
 </thead>
 <tbody>`;
 
             for (let i = 0; i < results.length; i++) {
-                let coordinates = results[i].getLatLng();
-                coordinates = {lat: parseFloat(coordinates.lat).toFixed(2), lng: parseFloat(coordinates.lng).toFixed(2) };
-                html += `<tr>`;
-                html += `<td style="width:25px" class="button-container"> <button class="btn btn-sm cfm-small-btn" id="" title="highlight the fault" onclick=''>
-            <span data-point-id=""  class="cgm-data-row glyphicon glyphicon-unchecked"></span>
-        </button></td>`;
-                html += `<td>${results[i].scec_properties.station_id}</td>`;
-                html += `<td>${coordinates.lat}</td>`;
-                html += `<td>${coordinates.lng}</td>`;
-                html += `<td>${results[i].scec_properties.type} </td>`;
-                html += `<td>${results[i].scec_properties.horizontalVelocity}</td>`;
-                html += `<td>Download...</td>`;
-                html += `</tr>`;
+                html += generateTableRow(results[i]);
+                // CGM.selectStationByLayer(results[i]);
             }
             if (results.length == 0) {
-                html += `<tr id="placeholder-row">
-                        <td colspan="12">Metadata for selected points will appear here.</td>
-                    </tr>`;
+                html += tablePlaceholderRow;
             }
             html=html+ "</tbody>";
             return html;
@@ -448,7 +655,7 @@ var CGM = new function () {
             this.activateData();
             $("div.cfm-search-result-container").attr('style', 'display:none !important;');
             $("div.mapData div.map-container").removeClass("col-7 pr-0 pl-2").addClass("col-12").css('padding-left','30px');
-            // $("#CFM_plot").css('height','450px');
+            $("#CFM_plot").css('height','400px');
             viewermap.invalidateSize();
             viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
             $download_queue_table.floatThead('destroy');
