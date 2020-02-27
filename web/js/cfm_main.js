@@ -98,7 +98,7 @@ jQuery(document).ready(function() {
              $("div.cfm-search-result-container").attr('style', '');
              $("div.mapData div.map-container").addClass("col-7").removeClass("col-12").css('padding-left','inherit');
 
-             $("#CFM_plot").css('height','576px');
+             $("#CFM_plot").css('height','400px');
              viewermap.invalidateSize();
              switchLayer('esri topo');
              var $download_queue_table = $('#metadata-viewer');

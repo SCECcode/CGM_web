@@ -502,7 +502,7 @@ $cgm = new CGM();
         <div class="col-7 map-container">
             <div class="row" >
                 <div class="col" id='CFM_plot'
-                        style="position:relative;border:solid 1px #ced4da; height:576px;">
+                        style="position:relative;border:solid 1px #ced4da; height:400px;">
                 </div>
             </div>
 

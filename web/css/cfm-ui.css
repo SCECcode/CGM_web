@@ -485,7 +485,7 @@ tr.layer-hidden * {
 }
 
 #searchResult {
-    height: 576px;
+    height: 400px;
     border: 1px solid #ced4da;
 }
 
@@ -627,4 +627,8 @@ div.latlon-input-boxes input[type='text']{
 
 #cgm-drawRect {
     cursor: pointer;
+}
+
+#metadata-viewer.cgm tr.row-selected {
+    background-color: #dede0036;
 }

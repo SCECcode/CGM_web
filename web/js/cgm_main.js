@@ -113,7 +113,7 @@ var CGM = new function () {
             weight: 2,
         },
     };
-    var cgm_line_path_style = {weight: 1, color: "blue"};
+    var cgm_line_path_style = {weight: 1, color: cgm_colors.normal};
     var cgm_line_pattern = {
         offset: '100%',
         repeat: 0,
@@ -193,7 +193,7 @@ var CGM = new function () {
 
                 // generate vectors
                 let start_latlon = marker.getLatLng();
-                let end_latlng = calculateEndVectorLatLng(start_latlon, vel_north, vel_east, 1000);
+                let end_latlng = calculateEndVectorLatLng(start_latlon, vel_north, vel_east, 500);
 
                 let line_latlons = [
                     [start_latlon.lat, start_latlon.lng],
@@ -221,7 +221,7 @@ var CGM = new function () {
 
         this.cgm_layers.on('click', function(event) {
             console.log(event.layer.scec_properties.station_id);
-            CGM.toggleStationSelected(event.layer);
+            CGM.toggleStationSelected(event.layer, true);
         });
 
         this.cgm_layers.on('mouseover', function(event) {
@@ -255,7 +255,7 @@ var CGM = new function () {
         });
     };
 
-    this.toggleStationSelected = function(layer) {
+    this.toggleStationSelected = function(layer, clickFromMap=false) {
         if (typeof layer.scec_properties.selected === 'undefined') {
             layer.scec_properties.selected = true;
         } else {
@@ -263,7 +263,7 @@ var CGM = new function () {
         }
 
         if (layer.scec_properties.selected) {
-            this.selectStationByLayer(layer);
+            this.selectStationByLayer(layer, clickFromMap);
 
         } else {
             this.unselectStationByLayer(layer);
@@ -274,10 +274,10 @@ var CGM = new function () {
 
     this.toggleStationSelectedByGid = function(gid) {
         let layer = this.getLayerByGid(gid);
-        return this.toggleStationSelected(layer);
+        return this.toggleStationSelected(layer, false);
     };
 
-    this.selectStationByLayer = function (layer) {
+    this.selectStationByLayer = function (layer, moveTableRow=false) {
         layer.scec_properties.selected = true;
         layer.setStyle(cgm_marker_style.selected);
         layer.scec_properties.vector.setStyle({color: cgm_marker_style.selected.color});
@@ -287,14 +287,22 @@ var CGM = new function () {
         let gid = layer.scec_properties.gid;
 
         let $row = $(`tr[data-point-gid='${gid}'`);
+        let rowHTML = "";
+        if ($row.length == 0) {
+           this.addToResultsTable(layer);
+        }
+
+        $row = $(`tr[data-point-gid='${gid}'`);
         let $glyphElem = $row.find('span');
         $row.addClass('row-selected');
         $glyphElem.removeClass('glyphicon-unchecked').addClass('glyphicon-check');
 
         // move row to top
-        let $rowHTML = $row.prop('outerHTML');
-        $row.remove();
-        $("#metadata-viewer.cgm tbody" ).prepend($rowHTML);
+        if (moveTableRow) {
+            let $rowHTML = $row.prop('outerHTML');
+            $row.remove();
+            $("#metadata-viewer.cgm tbody").prepend($rowHTML);
+        }
     };
 
     this.unselectStationByLayer = function (layer) {
