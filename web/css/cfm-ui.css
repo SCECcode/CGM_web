@@ -632,3 +632,10 @@ div.latlon-input-boxes input[type='text']{
 #metadata-viewer.cgm tr.row-selected {
     background-color: #dede0036;
 }
+
+#wait-spinner {
+    z-index: 9999;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}

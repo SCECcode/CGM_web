@@ -22,7 +22,7 @@ $(document).ready(function () {
         CGM.showSearch($(this).val());
     });
 
-    $("#cgm-controls-container ul button").on('click', function () {
+    $("#cgm-controls-container ul button").not('#cgm-drawRect').on('click', function () {
         let searchType = $(this).data('searchType');
         let $criteria = $(this).siblings("input");
 
@@ -35,7 +35,10 @@ $(document).ready(function () {
                 criteria.push($(this).val());
             });
         }
-        CGM.searchBox(searchType, criteria);
+
+        $("div#wait-spinner").show(400, function(){
+            CGM.searchBox(searchType, criteria);
+           });
     });
 
     $("#cgm-drawRect").on('click', function(){
@@ -95,21 +98,23 @@ var CGM = new function () {
             color: cgm_colors.normal,
             fillColor: cgm_colors.normal,
             fillOpacity: 0.5,
-            radius: 500,
+            radius: 3,
+            riseOnHover: true,
             weight: 1,
         },
         selected: {
             color: cgm_colors.selected,
             fillColor: cgm_colors.selected,
-            fillOpacity: 0.5,
-            radius: 500,
+            fillOpacity: 1,
+            radius: 3,
+            riseOnHover: true,
             weight: 1,
         },
         hover: {
             // color: cgm_colors.selected,
             // fillColor: cgm_colors.selected,
-            fillOpacity: 0.5,
-            radius: 2000,
+            fillOpacity: 1,
+            radius: 10,
             weight: 2,
         },
     };
@@ -176,7 +181,7 @@ var CGM = new function () {
 
                 }
 
-                let marker = L.circle([lat, lon], cgm_marker_style.normal);
+                let marker = L.circleMarker([lat, lon], cgm_marker_style.normal);
 
                 let horizontalVelocity_mm = (horizontalVelocity * 1000).toFixed(2); // convert to mm/year
                 let station_info = `station id: ${station_id}, vel: ${horizontalVelocity_mm} mm/yr`;//, lat/lng: ${lat}, ${lon}`;
@@ -193,7 +198,7 @@ var CGM = new function () {
 
                 // generate vectors
                 let start_latlon = marker.getLatLng();
-                let end_latlng = calculateEndVectorLatLng(start_latlon, vel_north, vel_east, 500);
+                let end_latlng = calculateEndVectorLatLng(start_latlon, vel_north, vel_east, 750);
 
                 let line_latlons = [
                     [start_latlon.lat, start_latlon.lng],
@@ -225,7 +230,6 @@ var CGM = new function () {
         });
 
         this.cgm_layers.on('mouseover', function(event) {
-            if (viewermap.getZoom() <= 10) {
                 let layer = event.layer;
                 // layer.setStyle(cgm_marker_style.hover);
                 layer.setRadius(cgm_marker_style.hover.radius);
@@ -234,7 +238,6 @@ var CGM = new function () {
                 newArrowPattern.symbol.options.pathOptions.color = cgm_marker_style.hover.color;
                 newArrowPattern.symbol.options.pathOptions.weight = cgm_marker_style.hover.weight;
                 layer.scec_properties.vectorArrowHead.setPatterns([newArrowPattern]);
-            }
         });
 
 
@@ -281,9 +284,6 @@ var CGM = new function () {
         layer.scec_properties.selected = true;
         layer.setStyle(cgm_marker_style.selected);
         layer.scec_properties.vector.setStyle({color: cgm_marker_style.selected.color});
-        let newArrowPattern = {...cgm_line_pattern};
-        newArrowPattern.symbol.options.pathOptions.color = cgm_marker_style.selected.color;
-        layer.scec_properties.vectorArrowHead.setPatterns([newArrowPattern]);
         let gid = layer.scec_properties.gid;
 
         let $row = $(`tr[data-point-gid='${gid}'`);
@@ -308,7 +308,9 @@ var CGM = new function () {
     this.unselectStationByLayer = function (layer) {
         layer.scec_properties.selected = false;
         layer.setStyle(cgm_marker_style.normal);
-        layer.scec_properties.vector.setStyle({color: cgm_marker_style.normal.color});
+        layer.scec_properties.vector.setStyle({color: cgm_colors.normal});
+        let newArrowPattern = {...cgm_line_pattern};
+        newArrowPattern.symbol.options.pathOptions.color = cgm_colors.normal;
 
         let gid = layer.scec_properties.gid;
 
@@ -419,6 +421,9 @@ var CGM = new function () {
 
         let coordinates = layer.getLatLng();
         coordinates = {lat: parseFloat(coordinates.lat).toFixed(2), lng: parseFloat(coordinates.lng).toFixed(2) };
+
+        let downloadURL = getDataDownloadURL(layer.scec_properties.station_id);
+
         html += `<tr data-point-gid="${layer.scec_properties.gid}">`;
         html += `<td style="width:25px" class="button-container"> <button class="btn btn-sm cfm-small-btn" id="" title="highlight the fault" onclick=''>
             <span class="cgm-data-row glyphicon glyphicon-unchecked"></span>
@@ -428,7 +433,7 @@ var CGM = new function () {
         html += `<td>${coordinates.lng}</td>`;
         html += `<td>${layer.scec_properties.type} </td>`;
         html += `<td>${layer.scec_properties.horizontalVelocity} mm/yr</td>`;
-        html += `<td>Download</td>`;
+        html += `<td><a href="${downloadURL}">Download POS</a></td>`;
         html += `</tr>`;
 
         return html;
@@ -494,13 +499,9 @@ var CGM = new function () {
 
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
         $("#cgm-controls-container input, #cgm-controls-container select").val("");
-        // $("#cgm-search-type").trigger('change');
 
         $("#cgm-model-vectors").prop('checked', false);
         this.clearAllSelections();
-
-        // this.generateLayers();
-        // refreshAll(); //refresh CFM
 
     };
 
@@ -582,13 +583,13 @@ var CGM = new function () {
         };
 
         this.search = function (type, criteria) {
-            // this.resetSearch();
 
             let results = [];
             switch (type) {
                 case CGM.searchType.stationName:
                     this.cgm_layers.eachLayer(function (layer) {
-                        if (layer.scec_properties.station_id.toLowerCase() == criteria.toLowerCase()) {
+                        // if (layer.scec_properties.station_id.toLowerCase() == criteria.toLowerCase()) {
+                        if (layer.scec_properties.station_id.toLowerCase().indexOf(criteria.toLowerCase()) > -1){
                             results.push(layer);
                         }
                     });
@@ -607,7 +608,6 @@ var CGM = new function () {
                                results.push(layer);
                             }
                     });
-
                     break;
             }
 
@@ -620,6 +620,7 @@ var CGM = new function () {
         };
 
         this.searchBox = function (type, criteria) {
+
             this.hideModel();
             this.resetSearch();
 
@@ -648,20 +649,21 @@ var CGM = new function () {
                     let bounds = L.latLngBounds(markerLocations);
                     viewermap.fitBounds(bounds, {maxZoom: 12});
 
-                    // setTimeout(drawRectangle, 500);
                     setTimeout(skipRectangle, 500);
 
                 } else {
                     let bounds = L.latLngBounds(markerLocations);
-                    viewermap.fitBounds(bounds, {maxZoom: 12});
+                    viewermap.flyToBounds(bounds, {maxZoom: 12 });
                 }
             }
 
 
             this.replaceResultsTable(results);
+
+            $("#wait-spinner").hide();
         };
 
-        var vectorVisible = function (){
+    var vectorVisible = function (){
             return $("#cgm-model-vectors").prop('checked');
         };
 
@@ -704,6 +706,11 @@ var CGM = new function () {
 
         };
 
+        var getDataDownloadURL = function(station_id)  {
+          let urlPrefix = "https://files.scec.org/s3fs-public/projects/cgm/1.0/time-series/pos/";
+          return urlPrefix + station_id + ".cgm.edits_nam08.pos";
+        };
+
         this.setupCGMInterface = function() {
             var $download_queue_table = $('#metadata-viewer');
             refreshAll();
@@ -718,12 +725,12 @@ var CGM = new function () {
             this.replaceResultsTable([]);
             $download_queue_table.addClass('cgm');
             $("#data-download-select").val("cgm");
-            // $download_queue_table.floatThead({
-            //     floatTableClass: 'cgm-metadata-header',
-            //     scrollContainer: function ($table) {
-            //         return $table.closest('#metadata-viewer-container');
-            //     },
-            // });
+            $download_queue_table.floatThead({
+                // floatTableClass: 'cgm-metadata-header',
+                scrollContainer: function ($table) {
+                    return $table.closest('#metadata-viewer-container');
+                },
+            });
         };
 
     };

@@ -155,7 +155,9 @@ function setup_viewer()
         if (activeModel == Models.CFM) {
             searchByLatlon();
         } else if (activeModel == Models.CGM) {
-            CGM.searchBox(CGM.searchType.latlon, [sw['lat'], sw['lng'], ne['lat'], ne['lng']]);
+            $("div#wait-spinner").show(400, function(){
+                CGM.searchBox(CGM.searchType.latlon, [sw['lat'], sw['lng'], ne['lat'], ne['lng']]);
+            });
         }
     }
   });

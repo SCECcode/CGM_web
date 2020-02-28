@@ -404,9 +404,9 @@ $cgm = new CGM();
                                                     value='optional'
                                                     onfocus="this.value=''"
                                                     class="form-control">
-                                            <span id="cgm-drawRect" title="search by drawing rectangle"
-                                                    class="glyphicon glyphicon-pencil btn-default cfm-small-btn ml-2">
-                                            </span>
+                                            <button id="cgm-drawRect" title="search by drawing rectangle"
+                                                    class="glyphicon glyphicon-pencil btn btn-default cfm-small-btn" type="button">
+                                            </button>
                                             <button id="cgm-latlonBtn" type="button" title="search with latlon"
                                                     class="btn btn-default cfm-small-btn form-control " data-search-type="latlon"
                                                     onclick="">
@@ -500,9 +500,18 @@ $cgm = new CGM();
             <div id="geoSearchByObjGidResult" style="display:none"></div>
         </div>
         <div class="col-7 map-container">
+
             <div class="row" >
+
                 <div class="col" id='CFM_plot'
                         style="position:relative;border:solid 1px #ced4da; height:400px;">
+                    <div  id='wait-spinner' style="display:none;">
+                        <div class="d-flex justify-content-center" >
+                          <div class="spinner-border text-light" role="status">
+                            <span class="sr-only">Loading...</span>
+                          </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
