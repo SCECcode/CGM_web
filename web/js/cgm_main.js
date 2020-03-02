@@ -735,4 +735,8 @@ var CGM = new function () {
             $("#wait-spinner").hide();
         };
 
+        this.downloadHorizontalVelocities = function(gid_list) {
+            // TODO
+    };
+
     };

@@ -122,7 +122,7 @@ $cgm = new CGM();
 <div class="container main">
     <div class="row">
         <div class="col-12">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci, corporis eveniet facere id neque nesciunt odio omnis optio quis repudiandae? Amet deleniti ipsum iusto nostrum praesentium quae rem tempore vel</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci, corporis eveniet facere id neque nesciunt odio omnis optio quis repudiandae. Amet deleniti ipsum iusto nostrum praesentium quae rem tempore vel.</p>
         </div>
     </div>
 

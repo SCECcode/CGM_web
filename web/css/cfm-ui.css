@@ -271,7 +271,7 @@ div.button-container button {
 }
 
 .cfm-table {
-    max-height: 576px;
+    max-height: 400px;
     overflow: auto;
 }
 
