@@ -505,7 +505,7 @@ $cgm = new CGM();
 
                 <div class="col" id='CFM_plot'
                         style="position:relative;border:solid 1px #ced4da; height:400px;">
-                    <div  id='wait-spinner' style="display:none;">
+                    <div  id='wait-spinner' style="">
                         <div class="d-flex justify-content-center" >
                           <div class="spinner-border text-light" role="status">
                             <span class="sr-only">Loading...</span>

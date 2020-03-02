@@ -118,6 +118,7 @@ jQuery(document).ready(function() {
           type: "page-ready",
           "message": "completed",
       });
+      $("#wait-spinner").hide();
 
   });
 
