@@ -4,7 +4,7 @@
 $host_site_actual_path = "/";
 if (isset($_SERVER['HTTP_X_FORWARDED_SERVER'])) {
 	// check that we're behind a proxy
-	$host_site_actual_path = "/research/cfm-viewer/";
+	$host_site_actual_path = "/research/cgm-viewer/";
 }
 
 
@@ -16,9 +16,9 @@ function getHeader($this_page) {
 
 	$all_pages = [
 		$host_site_actual_path => "Viewer",
-		"guide" => "User Guide",
-		"disclaimer" => "Disclaimer",
-		"contact" => "Contact"
+//		"guide" => "User Guide",
+//		"disclaimer" => "Disclaimer",
+//		"contact" => "Contact"
 	];
 
 	$page_links_html = "";
