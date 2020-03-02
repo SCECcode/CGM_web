@@ -118,6 +118,9 @@ jQuery(document).ready(function() {
           type: "page-ready",
           "message": "completed",
       });
+
+
+      CGM.setupCGMInterface();
       $("#wait-spinner").hide();
 
   });
