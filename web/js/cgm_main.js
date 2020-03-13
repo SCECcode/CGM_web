@@ -571,7 +571,7 @@ var CGM = new function () {
             // see https://stackoverflow.com/questions/7477003/calculating-new-longitude-latitude-from-old-n-meters
             let dy = vel_north * scaling_factor;
             let dx = vel_east * scaling_factor;
-            let r_earth = 6738;
+            let r_earth = 6371;
             let pi = Math.PI;
 
             let start_lat = start_latlon.lat;
