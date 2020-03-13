@@ -98,7 +98,7 @@ var CGM = new function () {
             color: cgm_colors.normal,
             fillColor: cgm_colors.normal,
             fillOpacity: 0.5,
-            radius: 3,
+            radius: 5,
             riseOnHover: true,
             weight: 1,
         },
@@ -106,7 +106,7 @@ var CGM = new function () {
             color: cgm_colors.selected,
             fillColor: cgm_colors.selected,
             fillOpacity: 1,
-            radius: 3,
+            radius: 5,
             riseOnHover: true,
             weight: 1,
         },
@@ -181,13 +181,21 @@ var CGM = new function () {
 
                 }
 
-                let marker = L.circleMarker([lat, lon], cgm_marker_style.normal);
+                let markerStyle = cgm_marker_style.normal;
+                if (station_type == 'continuous') {
+                    markerStyle.shape = "square";
+                } else {
+                    markerStyle.shape = "triangle";
+
+                }
+                let marker = L.shapeMarker([lat, lon], markerStyle);
 
                 let horizontalVelocity_mm = (horizontalVelocity * 1000).toFixed(2); // convert to mm/year
                 let station_info = `station id: ${station_id}, vel: ${horizontalVelocity_mm} mm/yr`;//, lat/lng: ${lat}, ${lon}`;
                 marker.bindTooltip(station_info).openTooltip();
                 marker.scec_properties = {
                     station_id: station_id,
+                    station_type: station_type,
                     horizontalVelocity: horizontalVelocity_mm,
                     vel_east: cgm_station_data[index].ref_velocity_east,
                     vel_north: cgm_station_data[index].ref_velocity_north,
@@ -207,18 +215,14 @@ var CGM = new function () {
 
                 let polyline = L.polyline(line_latlons, cgm_line_path_style);
                 var arrowHeadDecorator = L.polylineDecorator(polyline, {
-                    patterns: [cgm_line_pattern]
+                    patterns: [{...cgm_line_pattern}]
                 });
 
-                // marker.scec_properties.vector = new L.FeatureGroup([polyline, arrowHeadDecorator]);
                 marker.scec_properties.vector = new L.FeatureGroup();
                 marker.scec_properties.vector.addLayer(polyline);
                 marker.scec_properties.vector.addLayer(arrowHeadDecorator);
                 marker.scec_properties.vectorArrowHead = arrowHeadDecorator;
                 this.cgm_vectors.addLayer(marker.scec_properties.vector);
-
-                // this.cgm_vectors.addLayer(polyline);
-                // r.cgm_vectors.addLayer(arrowHeadDecorator);
 
                 this.cgm_layers.addLayer(marker);
             }
@@ -231,13 +235,7 @@ var CGM = new function () {
 
         this.cgm_layers.on('mouseover', function(event) {
                 let layer = event.layer;
-                // layer.setStyle(cgm_marker_style.hover);
                 layer.setRadius(cgm_marker_style.hover.radius);
-                // layer.scec_properties.vector.setStyle(cgm_marker_style.selected);
-                let newArrowPattern = {...cgm_line_pattern};
-                newArrowPattern.symbol.options.pathOptions.color = cgm_marker_style.hover.color;
-                newArrowPattern.symbol.options.pathOptions.weight = cgm_marker_style.hover.weight;
-                layer.scec_properties.vectorArrowHead.setPatterns([newArrowPattern]);
         });
 
 
@@ -246,15 +244,15 @@ var CGM = new function () {
             // layer.setStyle(cgm_marker_style.hover);
             layer.setRadius(cgm_marker_style.normal.radius);
             // layer.scec_properties.vector.setStyle(cgm_marker_style);
-            let newArrowPattern = {...cgm_line_pattern};
-            let oldColor = cgm_marker_style.normal.color;
-
-            if (layer.scec_properties.selected) {
-               oldColor = cgm_marker_style.selected.color;
-            }
-            newArrowPattern.symbol.options.pathOptions.color = oldColor;
-            newArrowPattern.symbol.options.pathOptions.weight = cgm_marker_style.normal.weight;
-            layer.scec_properties.vectorArrowHead.setPatterns([newArrowPattern]);
+            // let newArrowPattern = {...cgm_line_pattern};
+            // let oldColor = cgm_marker_style.normal.color;
+            //
+            // if (layer.scec_properties.selected) {
+            //    oldColor = cgm_marker_style.selected.color;
+            // }
+            // newArrowPattern.symbol.options.pathOptions.color = oldColor;
+            // newArrowPattern.symbol.options.pathOptions.weight = cgm_marker_style.normal.weight;
+            // layer.scec_properties.vectorArrowHead.setPatterns([newArrowPattern]);
         });
     };
 
@@ -280,10 +278,21 @@ var CGM = new function () {
         return this.toggleStationSelected(layer, false);
     };
 
+    var getStationShape = function(layer) {
+        let station_type = layer.scec_properties.station_type;
+        if (station_type == 'continuous') {
+            return "square";
+        } else {
+           return "triangle";
+        }
+    };
+
     this.selectStationByLayer = function (layer, moveTableRow=false) {
         layer.scec_properties.selected = true;
-        layer.setStyle(cgm_marker_style.selected);
-        layer.scec_properties.vector.setStyle({color: cgm_marker_style.selected.color});
+        let newStyle = {...cgm_marker_style.selected};
+        newStyle.shape = getStationShape(layer);
+
+        layer.setStyle(newStyle);
         let gid = layer.scec_properties.gid;
 
         let $row = $(`tr[data-point-gid='${gid}'`);
@@ -307,8 +316,11 @@ var CGM = new function () {
 
     this.unselectStationByLayer = function (layer) {
         layer.scec_properties.selected = false;
-        layer.setStyle(cgm_marker_style.normal);
-        layer.scec_properties.vector.setStyle({color: cgm_colors.normal});
+
+        let newStyle = {...cgm_marker_style.normal};
+        newStyle.shape = getStationShape(layer);
+        layer.setStyle(newStyle);
+
         let newArrowPattern = {...cgm_line_pattern};
         newArrowPattern.symbol.options.pathOptions.color = cgm_colors.normal;
 
@@ -320,15 +332,6 @@ var CGM = new function () {
         $glyphElem.addClass('glyphicon-unchecked').removeClass('glyphicon-check');
     };
 
-    // this.showStationByLayer = function(layer) {
-    //
-    // };
-    //
-    // this.showStationByGid = function (gid) {
-    //     let layer = this.getLayerByGid(gid);
-    //     this.selectStationByLayer(layer);
-    // };
-
     this.showStationsByLayers = function(layers) {
         viewermap.addLayer(layers);
         var cgm_object = this;
@@ -336,14 +339,6 @@ var CGM = new function () {
             cgm_object.addToResultsTable(layer);
         });
     };
-
-
-    // this.hideStationByGid = function (gid) {
-    //    let layer = this.getLayerByGid(gid);
-    //    this.unselectStationByLayer(layer);
-    // };
-
-
 
     this.toggleSelectAll = function() {
         var cgm_object = this;
