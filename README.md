@@ -1,5 +1,6 @@
-# Community Fault Model 
-
+# ~~Community Fault Model~~
+ _TODO: Write new documentation, the below is copied from the CFM repo back in Jan 2020._
+ 
 ### https://www.scec.org/research/cfm
 
 ## CFM viewer
