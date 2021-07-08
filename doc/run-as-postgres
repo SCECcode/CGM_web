@@ -4,10 +4,10 @@ set -e
 export PGUSER="$POSTGRES_USER"
 
 # Carve out db space
-  initdb /home/postgres/cfm_db
+  initdb /home/postgres/cgm_db
 
 # Start PostgreSQL server
-pg_ctl -D /home/postgres/cfm_db -l /home/postgres/logfile start
+pg_ctl -D /home/postgres/cgm_db -l /home/postgres/logfile start
 
 /app/schema/load_db_up
 

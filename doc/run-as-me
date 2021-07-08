@@ -1,7 +1,7 @@
 ## run as installer of the system stack
 
    yum install git
-   git clone https://github.com/SCECcode/CFM_web.git
+   git clone https://github.com/SCECcode/CGM_web.git
    yum install gcc
    yum install readline-devel
    yum install zlib-devel
