@@ -19,5 +19,5 @@ services:
     restart: always
     ports:
       - 8084:8081
-      - 8080:80
+      - 8085:80
 
