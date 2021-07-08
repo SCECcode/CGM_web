@@ -136,7 +136,7 @@ th {
     position: relative;
 }
 
-.cfm-control-colors-expanded {
+.cxm-control-colors-expanded {
     overflow: hidden;
     position: absolute;
     left: 88%;
@@ -149,31 +149,31 @@ th {
     border-radius: 4px;
 }
 
-.cfm-control-colors-list {
+.cxm-control-colors-list {
     display: none;
 }
 
-.cfm-control-colors-expanded .cfm-control-colors-list {
+.cxm-control-colors-expanded .cxm-control-colors-list {
     display: block;
     position: relative;
 }
 
-.cfm-control-colors-selector {
+.cxm-control-colors-selector {
     margin-top: 2px;
     position: relative;
 }
 
-.cfm-control-colors label {
+.cxm-control-colors label {
     display: block;
 }
 
-.cfm-control-colors-base {
+.cxm-control-colors-base {
     margin-left: 10px;
     text-align: left;
     border: 2px solid transparent;
 }
 
-.cfm-control-download-expanded {
+.cxm-control-download-expanded {
     overflow: hidden;
     position: absolute;
     right: 10px;
@@ -186,26 +186,26 @@ th {
     border-radius: 4px;
 }
 
-.cfm-control-download-list {
+.cxm-control-download-list {
     display: none;
 }
 
-.cfm-control-download-expanded .cfm-control-download-list {
+.cxm-control-download-expanded .cxm-control-download-list {
     display: block;
     position: relative;
 }
 
-.cfm-control-download-selector {
+.cxm-control-download-selector {
     margin-top: 2px;
     position: relative;
     top: 1px;
 }
 
-.cfm-control-download label {
+.cxm-control-download label {
     display: block;
 }
 
-.cfm-control-download-base {
+.cxm-control-download-base {
     margin-left: 10px;
     text-align: left;
     border: 2px solid transparent;
@@ -237,7 +237,7 @@ div.mapData {
     font-weight: bold;
 }
 
-.cfm-top-small-btn {
+.cxm-top-small-btn {
     background: white;
     padding: 6px 6px;
     /*font-size: 14px;*/
@@ -251,14 +251,14 @@ div.mapData {
     border-radius: 2px;
 }
 
-.cfm-small-btn {
+.cxm-small-btn {
     background: transparent;
     color: #53A2BE;
     border: none;
     display: inline-block;
 }
 
-.cfm-small-btn:disabled {
+.cxm-small-btn:disabled {
     color: white;
 }
 
@@ -270,12 +270,12 @@ div.button-container button {
     /*font-size: 1em;*/
 }
 
-.cfm-table {
+.cxm-table {
     max-height: 400px;
     overflow: auto;
 }
 
-.cfm-top-btn {
+.cxm-top-btn {
     background: #D5D5D5;
     padding: 1px 3px;
     border: 2px solid #D5D5D5;
@@ -285,7 +285,7 @@ div.button-container button {
     display: inline-block;
 }
 
-.cfm-btn {
+.cxm-btn {
     background: white;
     border: 0px solid #D5D5D5;
     color: #011638;
@@ -295,11 +295,11 @@ div.button-container button {
 }
 
 
-.cfm-btn:disabled {
+.cxm-btn:disabled {
     color: white;
 }
 
-.cfm-div {
+.cxm-div {
     position: relative;
     left: 10px;
     width: 90%;
@@ -531,13 +531,13 @@ table tr td label {
     position: relative;
 }
 
-.info-page-container.guide .cfm-interface img {
+.info-page-container.guide .cxm-interface img {
    border: 1px solid #ddd;
     max-width: 630px;
     width: 100%;
 }
 
-.info-page-container.guide .cfm-perspective-view {
+.info-page-container.guide .cxm-perspective-view {
     max-width: 550px;
 }
 
@@ -571,7 +571,7 @@ div.guide ul {
     display: table-cell;
 }
 
-#metadata-viewer .cfm-btn {
+#metadata-viewer .cxm-btn {
     background-color: inherit;
     padding: 0;
 }

@@ -154,9 +154,6 @@ var CGM = new function () {
         $("div.control-container").hide();
         $("#cgm-controls-container").show();
 
-        if (cfm_visible) {
-            hideCFMLayer();
-        }
     };
 
     this.generateLayers = function () {
