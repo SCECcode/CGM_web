@@ -12,7 +12,7 @@ alter table tmp1
         primary key (gid);
 
 COPY tmp1(station_id, ref_date_time, ref_north_latitude, ref_east_longitude, ref_up, ref_velocity_north, ref_velocity_east, ref_velocity_up, first_epoch, last_epoch)
-    FROM PROGRAM 'tail -n +8 /home/postgres/CFM/schema/CGM_data/wus_gps_final_names.short.geocsv ' DELIMITER ',' CSV;
+    FROM PROGRAM 'tail -n +8 /home/postgres/CGM/schema/CGM_data/wus_gps_final_names.short.geocsv ' DELIMITER ',' CSV;
 
 UPDATE tmp1 set station_type = 'continuous';
 UPDATE tmp1 set cgm_version = '1';
@@ -24,7 +24,7 @@ truncate table tmp1;
 -----------------------
 
 COPY tmp1(station_id, ref_date_time, ref_north_latitude, ref_east_longitude, ref_up, ref_velocity_north, ref_velocity_east, ref_velocity_up, first_epoch, last_epoch)
-    FROM PROGRAM 'tail -n +8 /home/postgres/CFM/schema/CGM_data/crowell_campaign_velocities.short.geocsv' DELIMITER ',' CSV;
+    FROM PROGRAM 'tail -n +8 /home/postgres/CGM/schema/CGM_data/crowell_campaign_velocities.short.geocsv' DELIMITER ',' CSV;
 
 UPDATE tmp1 set station_type = 'campaign';
 UPDATE tmp1 set cgm_version = '1';
@@ -56,7 +56,7 @@ drop table tmp1;
 --
 --
 -- COPY tmp1(station_id, ref_date_time, ref_north_latitude, ref_east_longitude, ref_up, ref_velocity_north, ref_velocity_east, ref_velocity_up, first_epoch, last_epoch)
---     FROM PROGRAM 'tail -n +8 /home/postgres/CFM/schema/CGM_data/wus_gps_final_names.short.geocsv ' DELIMITER ', ' CSV;
+--     FROM PROGRAM 'tail -n +8 /home/postgres/CGM/schema/CGM_data/wus_gps_final_names.short.geocsv ' DELIMITER ', ' CSV;
 --
 -- UPDATE tmp1 set station_type = 'continuous';
 -- UPDATE tmp1 set cgm_version = '1';
