@@ -580,7 +580,6 @@ var CGM = new function () {
         };
 
         this.search = function (type, criteria) {
-
             let results = [];
             switch (type) {
                 case CGM.searchType.stationName:
@@ -732,8 +731,5 @@ var CGM = new function () {
             $("#wait-spinner").hide();
         };
 
-        this.downloadHorizontalVelocities = function(gid_list) {
-            // TODO
-    };
-
+        this.downloadHorizontalVelocities = function(gid_list) { // TODO };
     };
