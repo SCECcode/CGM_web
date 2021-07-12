@@ -12,6 +12,8 @@ psql postgresql://postgres:example@localhost/CGM1_db << AAA
   \i '/home/postgres/CGM/CGM_data/cgm_schema.sql';
   \i '/home/postgres/CGM/CGM_data/setup_cgm.sql';
 
+DROP ROLE webonly;
+CREATE ROLE webonly WITH LOGIN PASSWORD 'scec';
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO webonly;
 REVOKE CREATE ON SCHEMA public FROM PUBLIC;
 
