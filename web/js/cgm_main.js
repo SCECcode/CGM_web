@@ -1,6 +1,13 @@
+var viewermap;
+const Models = {
+    CGM: 'cgm'
+};
+
 var cgm_station_data;
 
 $(document).ready(function () {
+
+    viewermap=setup_viewer();
 
     $("#cgm-model").on('click', function () {
         if (viewermap.hasLayer(CGM.cgm_layers) ||  CGM.searching) {
@@ -71,8 +78,22 @@ $(document).ready(function () {
 
     });
 
+    $("#data-download-select").on('change', function(){
+       if ($(this).val() == 'cgm') {
+           CGM.setupCGMInterface();
+       }
+    });
+
     CGM.generateLayers();
 
+    $.event.trigger({
+        type: "page-ready",
+        "message": "completed",
+    });
+
+
+    CGM.setupCGMInterface();
+    $("#wait-spinner").hide();
 });
 
 var CGM = new function () {
@@ -422,7 +443,7 @@ var CGM = new function () {
         let downloadURL = getDataDownloadURL(layer.scec_properties.station_id);
 
         html += `<tr data-point-gid="${layer.scec_properties.gid}">`;
-        html += `<td style="width:25px" class="button-container"> <button class="btn btn-sm cfm-small-btn" id="" title="highlight the fault" onclick=''>
+        html += `<td style="width:25px" class="button-container"> <button class="btn btn-sm cxm-small-btn" id="" title="highlight the fault" onclick=''>
             <span class="cgm-data-row glyphicon glyphicon-unchecked"></span>
         </button></td>`;
         html += `<td>${layer.scec_properties.station_id}</td>`;
@@ -672,7 +693,7 @@ var CGM = new function () {
 <thead>
 <tr>
 <th class="text-center button-container">
-    <button id="cgm-allBtn" class="btn btn-sm cfm-small-btn" title="select all visible stations" onclick="CGM.toggleSelectAll();">
+    <button id="cgm-allBtn" class="btn btn-sm cxm-small-btn" title="select all visible stations" onclick="CGM.toggleSelectAll();">
     <span class="glyphicon glyphicon-unchecked"></span>
 </button>
 </th>
@@ -709,11 +730,10 @@ var CGM = new function () {
 
         this.setupCGMInterface = function() {
             var $download_queue_table = $('#metadata-viewer');
-            refreshAll();
+            //refreshAll();
             this.activateData();
-            $("div.cfm-search-result-container").attr('style', 'display:none !important;');
             $("div.mapData div.map-container").removeClass("col-7 pr-0 pl-2").addClass("col-12").css('padding-left','30px');
-            $("#CFM_plot").css('height','400px');
+            $("#CGM_plot").css('height','400px');
             viewermap.invalidateSize();
             viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
             $download_queue_table.floatThead('destroy');
@@ -733,3 +753,4 @@ var CGM = new function () {
 
         this.downloadHorizontalVelocities = function(gid_list) { // TODO };
     };
+}

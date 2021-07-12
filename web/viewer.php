@@ -7,7 +7,7 @@ $cgm = new CGM();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Community Model Viewer (Provisional)</title>
+    <title>Community Geodetic Viewer (Provisional)</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="css/vendor/font-awesome.min.css" rel="stylesheet">
@@ -69,6 +69,7 @@ $cgm = new CGM();
     <!-- cgm js -->
     <script type="text/javascript" src="js/debug.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_main.js?v=1"></script>
+    <script type="text/javascript" src="js/cxm_leaflet.js?v=1"></script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-495056-12"></script>
@@ -106,7 +107,7 @@ $cgm = new CGM();
 <div class="container main">
     <div class="row">
         <div class="col-12">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci, corporis eveniet facere id neque nesciunt odio omnis optio quis repudiandae. Amet deleniti ipsum iusto nostrum praesentium quae rem tempore vel.</p>
+            <p>The Community Geodetic Model (CGM) provides displacement time series and velocities of the Earth’s surface over southern California using data from Global Navigation Satellite Systems (GNSS), which includes the Global Positioning System (GPS), and interferometric synthetic aperture radar (InSAR), both space-based geodetic observation techniques.</p>
         </div>
     </div>
 
@@ -240,7 +241,7 @@ $cgm = new CGM();
     </div>
     <div class="row mapData">
         <div class="col-5 button-container d-flex flex-column cgm-search-result-container pr-1" style="overflow:hidden;">
-            <div id="searchResult" class="mb-1">
+            <div id="searchResult" class="mb-1" style="display:none">
             </div>
         </div>
         <div class="col-7 map-container">

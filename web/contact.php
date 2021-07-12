@@ -12,14 +12,14 @@ $header = getHeader("Contact");
     <link rel="stylesheet" href="css/vendor/bootstrap-grid.min.css">
     <link rel="stylesheet" href="css/vendor/jquery-ui.css">
     <link rel="stylesheet" href="css/vendor/glyphicons.css">
-    <link rel="stylesheet" href="css/cfm-ui.css">
+    <link rel="stylesheet" href="css/cxm-ui.css">
     <link rel="stylesheet" href="css/sidebar.css">
 
     <script type='text/javascript' src='js/vendor/popper.min.js'></script>
     <script type='text/javascript' src='js/vendor/jquery.min.js'></script>
     <script type='text/javascript' src='js/vendor/bootstrap.min.js'></script>
     <script type='text/javascript' src='js/vendor/jquery-ui.js'></script>
-    <title>Community Fault Model Viewer (Provisional): Contact</title>
+    <title>Community Geodetic Model Viewer (Provisional): Contact</title>
 </head>
 <body>
 <?php echo $header; ?>
