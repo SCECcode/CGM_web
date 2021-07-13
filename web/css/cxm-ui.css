@@ -1,4 +1,13 @@
 /* required styles */
+dl, ol, ul {
+   margin-top:0;
+   margin-bottom:0;
+}
+
+#cgm-latlonMenu p{
+   margin-top:0;
+   margin-bottom:0;
+}
 
 :root {
     /*font-size: 90%;*/

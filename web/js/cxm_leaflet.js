@@ -39,6 +39,9 @@ function setup_viewer()
   var esri_imagery = L.esri.basemapLayer("Imagery");
   var esri_ng = L.esri.basemapLayer("NationalGeographic");
 
+// scec 
+var scecAttribution ='<a href="https://www.scec.org">SCEC</a>';
+
 // otm topo
   var topoURL='https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
   var topoAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreeMap</a> contributors,<a href=http://viewfinderpanoramas.org"> SRTM</a> | &copy; <a href="https://www.opentopomap.org/copyright">OpenTopoMap</a>(CC-BY-SA)';
@@ -68,6 +71,7 @@ function setup_viewer()
 // ==> mymap <==
   mymap = L.map('CGM_plot', { drawControl:false, layers: [esri_topographic, basemap], zoomControl:true} );
   mymap.setView([34.3, -118.4], 7);
+  mymap.attributionControl.addAttribution(scecAttribution);
 
 // basemap selection
   var ctrl_div=document.getElementById('external_leaflet_control');
@@ -125,6 +129,7 @@ function setup_viewer()
 
   function onMapMouseOver(e) {
     if(drawing_rectangle) {
+      window.console.log("before calling draw_at.."); 
       draw_at();
     }
   }
@@ -168,9 +173,12 @@ function setup_viewer()
 }
 
 function drawRectangle(){
+  window.console.log("enable rectangle Drawer..");
   rectangleDrawer.enable();
 }
+
 function skipRectangle(){
+  window.console.log("disable rectangle Drawer..");
   rectangleDrawer.disable();
 }
 

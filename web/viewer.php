@@ -69,6 +69,7 @@ $cgm = new CGM();
     <!-- cgm js -->
     <script type="text/javascript" src="js/debug.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_main.js?v=1"></script>
+    <script type="text/javascript" src="js/cgm_util.js?v=1"></script>
     <script type="text/javascript" src="js/cxm_leaflet.js?v=1"></script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -122,8 +123,8 @@ $cgm = new CGM();
         </div>
     </div>
 
-    <div class="row control-container" id="cgm-controls-container" style="display:none;">
-            <div class="col-4 input-group filters">
+    <div class="row control-container mt-1" id="cgm-controls-container" style="display:;">
+            <div class="col-4 input-group filters mb-3">
                 <select id="cgm-search-type" class="custom-select">
                     <option value="">Search the CGM ...</option>
                     <option value="stationname">Station Name</option>
@@ -141,12 +142,8 @@ $cgm = new CGM();
                                 <div class="col-12">
                                     <div class="d-flex">
                                         <input placeholder="Enter Station Name" type="text"
-                                                class="form-control"
+                                                class="cgm-search-item form-control"
                                                 style=""/>
-                                        <button type="button" title="search with keyword" data-search-type="stationname"
-                                                class="btn btn-default cxm-small-btn" onclick="">
-                                            <span class="glyphicon glyphicon-search"></span>
-                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -164,29 +161,25 @@ $cgm = new CGM();
                                                     id="cgm-firstLatTxt"
                                                     title="first lat"
                                                     onfocus="this.value=''"
-                                                    class="form-control">
-                                            <input type="text" id="cgm-firstLonTxt" placeholder='Longitude' title="first lon"
-                                                    onfocus="this.value=''" class="form-control">
+                                                    class="cgm-search-item form-control">
+                                            <input type="text" 
+                                                    placeholder='Longitude' 
+                                                    id="cgm-firstLonTxt" 
+                                                    title="first lon"
+                                                    onfocus="this.value=''" 
+                                                    class="cgm-search-item form-control">
                                             <input type="text"
                                                     id="cgm-secondLatTxt"
                                                     title="optional second lat"
-                                                    value='optional'
+                                                    placeholder='optional'
                                                     onfocus="this.value=''"
-                                                    class="form-control">
+                                                    class="cgm-search-item form-control">
                                             <input type="text"
                                                     id="cgm-secondLonTxt"
                                                     title="optional second lon"
-                                                    value='optional'
+                                                    placeholder='optional'
                                                     onfocus="this.value=''"
-                                                    class="form-control">
-                                            <button id="cgm-drawRect" title="search by drawing rectangle"
-                                                    class="glyphicon glyphicon-pencil btn btn-default cxm-small-btn" type="button">
-                                            </button>
-                                            <button id="cgm-latlonBtn" type="button" title="search with latlon"
-                                                    class="btn btn-default cxm-small-btn form-control " data-search-type="latlon"
-                                                    onclick="">
-                                                <span class="glyphicon glyphicon-search"></span>
-                                            </button>
+                                                    class="cgm-search-item form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -200,9 +193,9 @@ $cgm = new CGM();
 
     </div>
     <div class="row">
-            <div class="col-12 text-right pr-0">
+            <div class="col-12 text-right pr-0" style="border:0px solid green">
                         <div id='model-options' class="form-check-inline">
-                            <select id='data-download-select' class="custom-select custom-select-sm" style="width:150px;">
+                            <select id='data-download-select' class="custom-select custom-select-sm mr-4" style="width:150px;">
                               <option selected value="cgm">CGM Data</option>
                             </select>
                              <div class="form-check form-check-inline">
@@ -263,8 +256,26 @@ $cgm = new CGM();
 
         </div>
     </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="row" id="metadata-viewer-container">
+                <div class="col-12 pr-0">
+                  <table id="metadata-viewer">
+                    <thead>
+                      <tr>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr id="placeholder-row">
+                          <td colspan="12">Metadata for selected piont will appear here. </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
     <script type="text/javascript">
             cgm_station_data = <?php print $cgm->getAllStationData()->outputJSON(); ?>;
             <?php if ($_REQUEST['model'] == 'cgm'):  ?>

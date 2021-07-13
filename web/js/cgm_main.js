@@ -1,7 +1,8 @@
+/***
+   cgm_main.js
+***/
+
 var viewermap;
-const Models = {
-    CGM: 'cgm'
-};
 
 var cgm_station_data;
 
@@ -29,34 +30,44 @@ $(document).ready(function () {
         CGM.showSearch($(this).val());
     });
 
-    $("#cgm-controls-container ul button").not('#cgm-drawRect').on('click', function () {
-        let searchType = $(this).data('searchType');
-        let $criteria = $(this).siblings("input");
+    $('.cgm-search-item').on('focus', function () {
+      $(this).on('blur mouseout', function () {
+        $(this).off('mouseout');
+        $(this).off('blur');
+window.console.log("causing a start of search..");
+// these is where the change in latlon causes a new search..
+          if( $(this).val() != '' ) {
+            let searchType = CGM.searchType.latlon
+            let $p=$(this).parent();
+            let $criteria = $p.children("input");
 
-        let criteria = [];
+            let criteria = [];
+            let skip = false;
 
-        if ($criteria.length === 1) {
-            criteria = $criteria.val();
-        } else {
-            $criteria.each(function(){
-                criteria.push($(this).val());
-            });
-        }
-
-        $("div#wait-spinner").show(400, function(){
-            CGM.searchBox(searchType, criteria);
-           });
-    });
-
-    $("#cgm-drawRect").on('click', function(){
-       drawRectangle();
-    });
-
-    $("#cgm-controls-container input").keyup(function(event){
-            if (event.keyCode === 13) {
-               $(this).siblings('button').trigger('click');
+            if ($criteria.length === 1) {
+               searchType = CGM.searchType.stationName;
+               criteria = $criteria.val();
+            } else {
+                $criteria.each(function(){
+                    if(!isNaN($(this).val()) && $(this).val() !='') {
+                      criteria.push($(this).val());
+                      } else {
+                        skip=true;
+                    }
+                });
             }
+
+            if(!skip) {
+              $("div#wait-spinner").show(400, function(){
+                  CGM.searchBox(searchType, criteria);
+              });
+            }
+           } else {
+              $(this).blur();
+           }
+       });
     });
+
 
     $("#metadata-viewer-container").on('click','#metadata-viewer.cgm tr', function(){
         if ($(this).find('button[id="cgm-allBtn"]').length != 0) {
@@ -93,6 +104,7 @@ $(document).ready(function () {
 
 
     CGM.setupCGMInterface();
+
     $("#wait-spinner").hide();
 });
 
@@ -180,6 +192,7 @@ var CGM = new function () {
     this.generateLayers = function () {
         this.cgm_layers = new L.FeatureGroup();
         this.cgm_vectors = new L.FeatureGroup();
+        window.console.log("HERE get all cgm_station_data");
         for (const index in cgm_station_data) {
             if (cgm_station_data.hasOwnProperty(index)) {
                 let lat = parseFloat(cgm_station_data[index].ref_north_latitude);
@@ -458,8 +471,9 @@ var CGM = new function () {
     };
 
     this.showSearch = function (type) {
+        window.console.log("calling showSeach");
         const $all_search_controls = $("#cgm-controls-container ul li");
-        this.resetSearch();
+        this.freshSearch();
         switch (type) {
             case this.searchType.stationName:
                 $all_search_controls.hide();
@@ -477,6 +491,7 @@ var CGM = new function () {
 
     this.showModel = function () {
 
+        window.console.log("showing model");
         let $cgm_model_checkbox = $("#cgm-model");
 
         if (this.searching) {
@@ -506,6 +521,7 @@ var CGM = new function () {
     };
 
     this.reset = function() {
+        window.console.log(">>> calling reset..");
         this.showSearch('none');
         this.searching = false;
         this.search_result.removeLayer();
@@ -524,16 +540,33 @@ var CGM = new function () {
     };
 
     this.resetSearch = function (){
+window.console.log(">>> calling resetSearch..");
         // this.hideVectors();
         viewermap.removeLayer(this.search_result);
+        this.unselectAll();
         this.searching = false;
         this.search_result = new L.FeatureGroup();
         // $("#cgm-controls-container ul input, #cgm-controls-container ul select").val("");
         this.replaceResultsTable([]);
         skipRectangle();
-
         remove_bounding_rectangle_layer();
     };
+
+    this.freshSearch = function (){
+window.console.log(">>> calling freshSearch..");
+        this.resetSearch();
+        if ($("#cgm-model-vectors").prop('checked')) {
+          this.showVectors();
+          } else {
+            this.hideVectors();
+        }
+        if ($("#cgm-model").prop('checked')) {
+          this.showModel();
+          } else {
+          this.hideModel();
+        }
+    };
+
 
     this.getMarkerByStationId = function (station_id) {
         for (const index in cgm_station_data) {
@@ -638,6 +671,7 @@ var CGM = new function () {
 
         this.searchBox = function (type, criteria) {
 
+window.console.log(">> calling searchBox");
             this.hideModel();
             this.resetSearch();
 
@@ -665,7 +699,6 @@ var CGM = new function () {
                     markerLocations.push(L.latLng(criteria[2],criteria[3]));
                     let bounds = L.latLngBounds(markerLocations);
                     viewermap.fitBounds(bounds, {maxZoom: 12});
-
                     setTimeout(skipRectangle, 500);
 
                 } else {
