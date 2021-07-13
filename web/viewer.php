@@ -203,7 +203,7 @@ $cgm = new CGM();
                                          for="cgm-model">
                                  <input class='form-check-inline mr-1'
                                          type="checkbox"
-                                         id="cgm-model"/>CGM
+                                         id="cgm-model"/>GNSS
                                  </label>
                              </div>
                              <div class="form-check form-check-inline">
@@ -211,7 +211,15 @@ $cgm = new CGM();
                                          for="cgm-model-vectors">
                                  <input class='form-check-inline mr-1'
                                          type="checkbox"
-                                         id="cgm-model-vectors" value="1" />CGM vectors
+                                         id="cgm-model-vectors" value="1" />GNSS vectors
+                                 </label>
+                             </div>
+                             <div class="form-check form-check-inline">
+                                 <label class='form-check-label ml-1 mini-option'
+                                         for="cgm-model-insar">
+                                 <input class='form-check-inline mr-1'
+                                         type="checkbox"
+                                         id="cgm-model-insar" value="1" />InSAR
                                  </label>
                              </div>
                          </div>
