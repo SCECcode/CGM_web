@@ -17,7 +17,8 @@ $cgm = new CGM();
     <link rel="stylesheet" href="css/vendor/bootstrap-grid.min.css">
     <link rel="stylesheet" href="css/vendor/jquery-ui.css">
     <link rel="stylesheet" href="css/vendor/glyphicons.css">
-    <link rel="stylesheet" href="css/cxm-ui.css?v=1">
+    <link rel="stylesheet" href="css/vendor/font-awesome.min.css">
+    <link rel="stylesheet" href="css/cgm-ui.css?v=1">
     <link rel="stylesheet" href="css/sidebar.css?v=1">
 
     <script type='text/javascript' src='js/vendor/popper.min.js'></script>

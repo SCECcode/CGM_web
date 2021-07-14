@@ -82,14 +82,13 @@ window.console.log("causing a start of search..");
         let gid = $(this).data('point-gid');
         let isElemSelected = CGM.toggleStationSelectedByGid(gid);
 
+        window.console.log("click once on "+gid);
         if (isElemSelected) {
             $(this).addClass('row-selected');
-            CGM.upSelectCount();
             $glyphElem.removeClass('glyphicon-unchecked').addClass('glyphicon-check');
         } else {
             $(this).removeClass('row-selected');
             $glyphElem.addClass('glyphicon-unchecked').removeClass('glyphicon-check');
-            CGM.downSelectCount();
         }
 
 
