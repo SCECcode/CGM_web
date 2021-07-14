@@ -2,17 +2,8 @@
    cgm_util.js
 ***/
 
-// control whether the main mouseover popup should be active or not
-var skipPopup=false;
 var cgm_latlon_area_list=[];
 var use_download_set = "";
-var cgm_select_count=0;
-
-var initial_page_load = true;
-const Models = {
-    CGM: 'cgm',
-};
-var activeModel = Models.CFM;
 
 function MapFeature(gid, properties, geometry, scec_properties) {
     this.type = "FeatureCollection";
@@ -39,27 +30,15 @@ function toggleOnDownloadQueue(event) {
     let gid_string = rowElem.attr("id");
     let gid_string_components = gid_string.split("_");
     let gid = gid_string_components[1];
-    addRemoveFromDownloadQueue(gid);
+    updateDownloadCounter(gid);
 }
 
-function addRemoveFromDownloadQueue(gid) {
-    // let downloadQueueElem = $("#download-queue");
-    // let downloadCounterElem = $("#download-counter");
-    // let faultName = $("#row_"+gid).find("td:nth-child(3) label").html();
-    // var s = find_layer_list(gid);
-    // var h = s['highlight'];
-    // if (h == 0) {
-    //     // exists, remove it
-    //     let elemToRemove = downloadQueueElem.find("li[data-fault-id=" + gid + "]");
-    //     elemToRemove.remove();
-    // } else {
-    //     downloadQueueElem.prepend("<li data-fault-id='" + gid + "' >" + faultName + "</li>");
-    // }
-
+function updateDownloadCounter(select_count) {
+    window.console.log("download counter updated.."+select_count);
     let downloadCounterElem = $("#download-counter");
     let buttonElem = $("#download-all");
     let placeholderTextElem = $("#placeholder-row");
-    if (cgm_select_count <= 0) {
+    if (select_count <= 0) {
         downloadCounterElem.hide();
         buttonElem.prop("disabled", true);
         placeholderTextElem.show();
@@ -68,27 +47,7 @@ function addRemoveFromDownloadQueue(gid) {
        buttonElem.prop("disabled", false);
         placeholderTextElem.hide();
     }
-    downloadCounterElem.html("(" + cgm_select_count + ")");
-}
-
-function addRemoveFromMetadataTable(gid) {
-    var targetElem = $("#metadata-"+gid);
-    var s = find_layer_list(gid);
-    // var h = s['highlight'];
-    var h = s.scec_properties.highlight;
-    let features_object = get_feature(gid);
-    let metadataRow = features_object.features[0].properties.metadataRow;
-
-    if (h == 0) {
-        // exists, remove it
-        targetElem.remove();
-    } else {
-        $("#metadata-viewer tbody").prepend(metadataRow);
-        $("#metadata-viewer").trigger('reflow');
-        if (!select_all_flag) {
-            $(`#metadata-viewer tbody tr#metadata-${gid}`).effect("highlight", {}, 1000);
-        }
-    }
+    downloadCounterElem.html("(" + select_count + ")");
 }
 
 function add_bounding_rectangle(a,b,c,d) {
@@ -116,5 +75,27 @@ window.console.log("adding bounding rectangle with layer..");
   var tmp={"layer":layer, "latlngs":[{"lat":a,"lon":b},{"lat":c,"lon":d}]};
   //set_latlons(a,b,c,d);
   cgm_latlon_area_list.push(tmp);
+}
+
+
+function executeDownload(type) {
+    use_download_set = type;
+    startDownload();
+}
+
+function startDownload(select_count)
+{
+  if(select_count == 0) {
+    alert("No item selected");
+    return;
+  }
+
+/** TODO
+  if (use_download_set == 'meta' || use_download_set == 'all') {
+    downloadCSVMeta(mlist);
+  } else if(use_download_set != 'meta') {
+    downloadURLsAsZip(mlist);
+  }
+**/
 }
 

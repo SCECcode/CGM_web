@@ -69,6 +69,7 @@ $cgm = new CGM();
     <!-- cgm js -->
     <script type="text/javascript" src="js/debug.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_main.js?v=1"></script>
+    <script type="text/javascript" src="js/cgm_model.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_util.js?v=1"></script>
     <script type="text/javascript" src="js/cxm_leaflet.js?v=1"></script>
 
@@ -115,11 +116,7 @@ $cgm = new CGM();
     <div class="row" style="display:none;">
         <div class="col justify-content-end custom-control-inline">
             <div style="display:none;" id="external_leaflet_control"></div>
-            <button id="basketBtn" class="btn cxm-top-small-btn" title="download selected faults metadata"
-                    onMouseEnter="expandDownloadControl()">
-                <span class="glyphicon glyphicon-download-alt"></span></button>
-            <div id="itemCount"></div>
-            <div id="downloadSelect" class="cxm-control-download" onMouseLeave="removeDownloadControl()"></div>
+            <div id="downloadSelect" class="cfm-control-download" onMouseLeave="removeDownloadControl()"></div>
         </div>
     </div>
 
