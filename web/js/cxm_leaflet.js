@@ -237,7 +237,19 @@ function switchLayer(layerString) {
     mymap.addLayer(baseLayers[layerString]);
     currentLayer = baseLayers[layerString];
     currentLayerName = layerString;
+}
 
+// see if layer is contained in the layerGroup
+function containsLayer(layergroup,layer) {
+    let target=layer.getLayerId();
+    let layers=layergroups.getLayers();
+    for(var i=0; i<layers.length; i++) {
+      let item=layers[i].getLayerId();
+      if(item == target) {
+        return 1;
+      }
+    }
+    return 0;
 }
 
 
