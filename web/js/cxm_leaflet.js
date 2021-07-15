@@ -241,11 +241,11 @@ function switchLayer(layerString) {
 
 // see if layer is contained in the layerGroup
 function containsLayer(layergroup,layer) {
-    let target=layer.getLayerId();
-    let layers=layergroups.getLayers();
+    let target=layergroup.getLayerId(layer);
+    let layers=layergroup.getLayers();
     for(var i=0; i<layers.length; i++) {
-      let item=layers[i].getLayerId();
-      if(item == target) {
+      let id=layergroup.getLayerId(layers[i]);
+      if(id == target) {
         return 1;
       }
     }

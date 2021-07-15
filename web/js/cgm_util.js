@@ -71,25 +71,51 @@ window.console.log("adding bounding rectangle with layer..");
 
 
 function executeDownload(type) {
-    use_download_set = type;
-    startDownload();
-}
+  use_download_set = type;
 
-function startDownload(select_count)
-{
   if(select_count == 0) {
     alert("No item selected");
     return;
   }
 
-/** TODO
-  if (use_download_set == 'meta' || use_download_set == 'all') {
-    downloadCSVMeta(mlist);
-  } else if(use_download_set != 'meta') {
-    downloadURLsAsZip(mlist);
+  switch (use_download_set) {
+    case 'type1':
+       downloadURLsAsZip();
+                break;
+    case 'type2':
+       downloadURLsAsZip();
+                break;
+    case 'all':
+       downloadURLsAsZip();
+                break;
   }
-**/
+  window.console.log("call executeDownload...");
 }
+
+function downloadURLsAsZip() {
+  var nzip=new JSZip();
+  var layers=CGM.search_result.getLayers();
+  let timestamp=$.now();
+
+  var cnt=layers.length;
+  for(var i=0; i<cnt; i++) {
+    let layer=layers[i];
+    let url = getDataDownloadURL(layer.scec_properties.station_id);
+    if(url) {
+       let dname=url.substring(url.lastIndexOf('/')+1);
+       let promise = $.get(url);
+       nzip.file(dname,promise);
+    }
+  }
+  var zipfname="CGM_"+timestamp+".zip"; 
+  nzip.generateAsync({type:"blob"}).then(function (content) {
+    // see FileSaver.js
+    saveAs(content, zipfname);
+  })
+}
+
+
+
 
 // https://www.w3schools.com/howto/howto_js_sort_table.asp
 // n is which column to sort-by
