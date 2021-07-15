@@ -77,7 +77,7 @@ var CGM = new function () {
     };
 
     var tablePlaceholderRow = `<tr id="placeholder-row">
-                        <td colspan="12">Metadata for selected points will appear here.</td>
+                        <td colspan="7">Metadata for selected points will appear here.</td>
                     </tr>`;
 
     this.activateData = function() {
@@ -164,7 +164,7 @@ window.console.log("calling zeroSelectCount..");
                 let end_latlng = calculateEndVectorLatLng(start_latlng, vel_north, vel_east, 750);
                 let dist = calculateDistanceMeter(start_latlng, {'lat':end_latlng[0], 'lng':end_latlng[1]} );
                 let p = dist / (CGM.cgm_vector_max - CGM.cgm_vector_min);
-window.console.log("XXX p is "+p);
+//window.console.log("XXX p is "+p);
 
                 let line_latlons = [
                     [start_latlng.lat, start_latlng.lng],
@@ -708,44 +708,7 @@ window.console.log(">> calling searchBox");
         // private function
        var generateResultsTable = function (results) {
 
-            var html = "";
-           // html+=`<div class="cgm-table"><table class="cgm" >`;
-            html+=`
-<thead>
-<tr>
-<th class="text-center button-container">
-    <button id="cgm-allBtn" class="btn btn-sm cxm-small-btn" title="select all visible stations" onclick="CGM.toggleSelectAll();">
-    <span class="glyphicon glyphicon-unchecked"></span>
-</button>
-</th>
-<th class="hoverColor" onClick="sortMetadataTableByRow(1,'a')">Station Name<span id='sortCol_1' class="fas fa-angle-down"></span></th>
-<th>Latitude</th>
-<th>Longitude</th>
-<th>Type</th>
-<th>Hor. Vel.</th>
-<th>
-<div class="btn-group download-now">
-                                <button id="download-all" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false" disabled>
-                                    DOWNLOAD ALL<span id="download-counter"></span>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <button class="dropdown-item" type="button" value="type1"
-                                            onclick="executeDownload(this.value);">TYPE1
-                                    </button>
-                                    <button class="dropdown-item" type="button" value="type2"
-                                            onclick="executeDownload(this.value);">TYPE2
-                                    </button>
-                                    <button class="dropdown-item" type="button" value="all"
-                                          onclick="executeDownload(this.value);">All of the Above
-                                    </button>
-</div>
-<!-- Download All -->
-</th>
-</tr>
-</thead>
-<tbody>`;
-
+            var html = "<tbody>";
             for (let i = 0; i < results.length; i++) {
                 html += generateTableRow(results[i]);
                 // CGM.selectStationByLayer(results[i]);
@@ -758,8 +721,7 @@ window.console.log(">> calling searchBox");
         };
 
         this.replaceResultsTable = function(results) {
-            $("#metadata-viewer").html(generateResultsTable(results));
-
+            $("#metadata-viewer tbody").html(generateResultsTable(results));
         };
 
 /******

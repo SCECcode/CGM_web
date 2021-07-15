@@ -268,13 +268,42 @@ $cgm = new CGM();
             <div class="row" id="metadata-viewer-container">
                 <div class="col-12 pr-0">
                   <table id="metadata-viewer">
-                    <thead>
-                      <tr>
-                      </tr>
-                    </thead>
+<thead>
+<tr>
+<th class="text-center button-container">
+    <button id="cgm-allBtn" class="btn btn-sm cxm-small-btn" title="select all visible stations" onclick="CGM.toggleSelectAll();">
+    <span class="glyphicon glyphicon-unchecked"></span>
+</button>
+</th>
+<th class="hoverColor" onClick="sortMetadataTableByRow(1,'a')">Station Name<span id='sortCol_1' class="fas fa-angle-down"></span></th>
+<th>Latitude</th>
+<th>Longitude</th>
+<th>Type</th>
+<th>Hor. Vel.</th>
+<th>
+<div class="btn-group download-now">
+                                <button id="download-all" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false" disabled>
+                                    DOWNLOAD ALL<span id="download-counter"></span>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <button class="dropdown-item" type="button" value="type1"
+                                            onclick="executeDownload(this.value);">TYPE1
+                                    </button>
+                                    <button class="dropdown-item" type="button" value="type2"
+                                            onclick="executeDownload(this.value);">TYPE2
+                                    </button>
+                                    <button class="dropdown-item" type="button" value="all"
+                                          onclick="executeDownload(this.value);">All of the Above
+                                    </button>
+</div>
+<!-- Download All -->
+</th>
+</tr>
+</thead>
                     <tbody>
                       <tr id="placeholder-row">
-                          <td colspan="12">Metadata for selected piont will appear here. </td>
+                          <td colspan="7">Metadata for selected piont will appear here. </td>
                       </tr>
                     </tbody>
                   </table>
