@@ -91,7 +91,9 @@ $cgm = new CGM();
         gtag('config', 'UA-495056-12');
 
         $(document).on("tableLoadCompleted", function () {
+window.console.log("HERE..");
             tableLoadCompleted = true;
+
             var $download_queue_table = $('#metadata-viewer');
             $download_queue_table.floatThead({
                 scrollContainer: function ($table) {
@@ -263,44 +265,52 @@ $cgm = new CGM();
 
         </div>
     </div>
-    <div class="row">
-        <div class="col-12">
-            <div class="row" id="metadata-viewer-container">
-                <div class="col-12 pr-0">
-                  <table id="metadata-viewer">
-<thead>
-<tr>
-<th class="text-center button-container">
-    <button id="cgm-allBtn" class="btn btn-sm cxm-small-btn" title="select all visible stations" onclick="CGM.toggleSelectAll();">
-    <span class="glyphicon glyphicon-unchecked"></span>
-</button>
-</th>
-<th class="hoverColor" onClick="sortMetadataTableByRow(1,'a')">Station Name<span id='sortCol_1' class="fas fa-angle-down"></span></th>
-<th>Latitude</th>
-<th>Longitude</th>
-<th>Type</th>
-<th>Hor. Vel.</th>
-<th>
-<div class="btn-group download-now">
+    <div class="row mt-1">
+        <div class="col-12" style="padding-right:0px">
+            <div id="metadata-viewer-container" style="border:solid 1px #ced4da; overflow-x:hidden">
+                <table id="metadata-viewer">
+                    <thead>
+                      <tr>
+<!-- -->
+                         <th class="text-center button-container" style="width:2rem">
+                             <button id="cgm-allBtn" class="btn btn-sm cxm-small-btn" title="select all visible stations" onclick="CGM.toggleSelectAll();">
+                             <span class="glyphicon glyphicon-unchecked"></span>
+                             </button>
+                         </th>
+                         <th class="hoverColor" onClick="sortMetadataTableByRow(1,'a')">Station Name<span id='sortCol_1' class="fas fa-angle-down"></span></th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Type</th>
+                        <th>Hor. Vel.</th>
+                        <th><div class="col text-center">
+                            <div class="btn-group download-now">
                                 <button id="download-all" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false" disabled>
                                     DOWNLOAD ALL<span id="download-counter"></span>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <button class="dropdown-item" type="button" value="type1"
-                                            onclick="executeDownload(this.value);">TYPE1
+                                    <button class="dropdown-item" type="button" value="igb14"
+                                            onclick="executeDownload(this.value);">igb14
                                     </button>
-                                    <button class="dropdown-item" type="button" value="type2"
-                                            onclick="executeDownload(this.value);">TYPE2
+                                    <button class="dropdown-item" type="button" value="nam14"
+                                            onclick="executeDownload(this.value);">nam14
+                                    </button>
+                                    <button class="dropdown-item" type="button" value="nam17"
+                                            onclick="executeDownload(this.value);">nam17
+                                    </button>
+                                    <button class="dropdown-item" type="button" value="pcf14"
+                                            onclick="executeDownload(this.value);">pcf14
                                     </button>
                                     <button class="dropdown-item" type="button" value="all"
                                           onclick="executeDownload(this.value);">All of the Above
                                     </button>
-</div>
-<!-- Download All -->
-</th>
-</tr>
-</thead>
+                                </div>
+                            </div>
+                            </div>
+                        </th>
+<!-- -->
+                      </tr>
+                    </thead>
                     <tbody>
                       <tr id="placeholder-row">
                           <td colspan="7">Metadata for selected piont will appear here. </td>
@@ -308,7 +318,6 @@ $cgm = new CGM();
                     </tbody>
                   </table>
                 </div>
-            </div>
         </div>
     </div>
 </div>

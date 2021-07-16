@@ -14,8 +14,15 @@ var CGM = new function () {
     this.search_result = new L.FeatureGroup();
     this.searching = false;
 
+    const frameType = {
+        IGB14: 'igb14',
+        NAM14: 'nam14',
+        NAM17: 'nam17',
+        PCF14: 'pcf14',
+    };
+
     this.pointType = {
-      CONTINUOUS_GPS: 'continuous',
+        CONTINUOUS_GPS: 'continuous',
         CAMPAIGN_GPS:  'campaign',
         GRID: 'grid',
     };
@@ -111,7 +118,7 @@ var CGM = new function () {
          return;
        }
        let tmp=this.cgm_select_gid.length;
-       window.console.log("=====remove from list "+gid+"("+tmp+")");
+//       window.console.log("=====remove from list "+gid+"("+tmp+")");
        this.cgm_select_gid.splice(i,1);
        updateDownloadCounter(this.cgm_select_gid.length);
     };
@@ -257,6 +264,7 @@ window.console.log("toggleStation -- by gid");
     };
 
     this.selectStationByLayer = function (layer, moveTableRow=false) {
+window.console.log("select stations by layer..");
         layer.scec_properties.selected = true;
         layer.setStyle(cgm_marker_style.selected);
         layer.scec_properties.vector.setStyle({color: cgm_marker_style.selected.color});
@@ -310,9 +318,11 @@ window.console.log("toggleStation -- by gid");
     this.showStationsByLayers = function(layers) {
         viewermap.addLayer(layers);
         var cgm_object = this;
+/** ???
         this.search_result.eachLayer(function(layer){
             cgm_object.addToResultsTable(layer);
         });
+**/
     };
 
 
@@ -395,13 +405,17 @@ window.console.log("IS in toggleSelectAll call..");
 
 
     var generateTableRow = function(layer) {
+window.console.log("generate a table row..");
         let $table = $("#metadata-viewer");
         let html = "";
 
         let coordinates = layer.getLatLng();
         coordinates = {lat: parseFloat(coordinates.lat).toFixed(2), lng: parseFloat(coordinates.lng).toFixed(2) };
 
-        let downloadURL = getDataDownloadURL(layer.scec_properties.station_id);
+        let downloadURL1 = getDataDownloadURL(layer.scec_properties.station_id,frameType.IGB14);
+        let downloadURL2 = getDataDownloadURL(layer.scec_properties.station_id,frameType.NAM14);
+        let downloadURL3 = getDataDownloadURL(layer.scec_properties.station_id,frameType.NAM17);
+        let downloadURL4 = getDataDownloadURL(layer.scec_properties.station_id,frameType.PCF14);
 
         html += `<tr data-point-gid="${layer.scec_properties.gid}">`;
         html += `<td style="width:25px" class="button-container"> <button class="btn btn-sm cxm-small-btn" id="" title="highlight the station" onclick=''>
@@ -412,7 +426,11 @@ window.console.log("IS in toggleSelectAll call..");
         html += `<td>${coordinates.lng}</td>`;
         html += `<td>${layer.scec_properties.type} </td>`;
         html += `<td>${layer.scec_properties.horizontalVelocity} mm/yr</td>`;
-        html += `<td><a href="${downloadURL}">Download POS</a></td>`;
+        html += `<td>`;
+        html = html+ `<a href=\"`+downloadURL1+`\" download> <button class=\"btn btn-xs\" title=\"download igb14 frame\"><span id=\"download_igb14_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>igb14</button></a>`;
+        html = html+`<a href=\"`+downloadURL2+`\" download> <button class=\"btn btn-xs\" title=\"download nam14 frame\"><span id=\"download_nam14_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>nam14</button></a>`;
+        html = html+`<a href=\"`+downloadURL3+`\" download> <button class=\"btn btn-xs\" title=\"download nam17 frame\"><span id=\"download_nam17_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>nam17</button></a>`;
+        html = html+`<a href=\"`+downloadURL4+`\" download> <button class=\"btn btn-xs\" title=\"download pcf14 frame\"><span id=\"download_pcf14_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>pcf14</button></a>`;
         html += `</tr>`;
 
         return html;
@@ -497,7 +515,7 @@ window.console.log(">>> calling resetSearch..");
         this.searching = false;
         this.search_result = new L.FeatureGroup();
         // $("#cgm-controls-container ul input, #cgm-controls-container ul select").val("");
-        this.replaceResultsTable([]);
+        this.replaceResultsTableBody([]);
         skipRectangle();
         remove_bounding_rectangle_layer();
     };
@@ -695,8 +713,7 @@ window.console.log(">> calling searchBox");
                 }
             }
 
-
-            this.replaceResultsTable(results);
+            this.replaceResultsTableBody(results);
 
             $("#wait-spinner").hide();
         };
@@ -708,7 +725,46 @@ window.console.log(">> calling searchBox");
         // private function
        var generateResultsTable = function (results) {
 
-            var html = "<tbody>";
+window.console.log("generateResultsTable..");
+
+            var html = "";
+            html+=`
+<thead>
+<tr>
+                         <th class="text-center button-container" style="width:2rem">
+                             <button id="cgm-allBtn" class="btn btn-sm cxm-small-btn" title="select all visible stations" onclick="CGM.toggleSelectAll();">
+                             <span class="glyphicon glyphicon-unchecked"></span>
+                             </button>
+                         </th>
+                         <th class="hoverColor" onClick="sortMetadataTableByRow(1,'a')">Station Name<span id='sortCol_1' class="fas fa-angle-down"></span></th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Type</th>
+                        <th>Hor. Vel.</th>
+                        <th><div class="col text-center">
+                            <div class="btn-group download-now">
+                                <button id="download-all" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false" disabled>
+                                    DOWNLOAD ALL<span id="download-counter"></span>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <button class="dropdown-item" type="button" value="type1"
+                                            onclick="executeDownload(this.value);">TYPE1
+                                    </button>
+                                    <button class="dropdown-item" type="button" value="type2"
+                                            onclick="executeDownload(this.value);">TYPE2
+                                    </button>
+                                    <button class="dropdown-item" type="button" value="all"
+                                          onclick="executeDownload(this.value);">All of the Above
+                                    </button>
+                                </div>
+                            </div>
+                            </div>
+                        </th>
+</tr>
+</thead>
+<tbody>`;
+
             for (let i = 0; i < results.length; i++) {
                 html += generateTableRow(results[i]);
                 // CGM.selectStationByLayer(results[i]);
@@ -716,12 +772,30 @@ window.console.log(">> calling searchBox");
             if (results.length == 0) {
                 html += tablePlaceholderRow;
             }
-            html=html+ "</tbody>";
+            html=html+"</tbody>";
             return html;
         };
 
+       var changeResultsTableBody = function (results) {
+window.console.log("changeResultsTableBody..");
+            var html = "";
+            for (let i = 0; i < results.length; i++) {
+                html += generateTableRow(results[i]);
+                // CGM.selectStationByLayer(results[i]);
+            }
+            if (results.length == 0) {
+                html += tablePlaceholderRow;
+            }
+            return html;
+        };
+
+   
+        this.replaceResultsTableBody = function(results) {
+            $("#metadata-viewer tbody").html(changeResultsTableBody(results));
+        };
+
         this.replaceResultsTable = function(results) {
-            $("#metadata-viewer tbody").html(generateResultsTable(results));
+            $("#metadata-viewer").html(generateResultsTable(results));
         };
 
 /******
@@ -729,16 +803,19 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/<cont_site>.cgm.wmrss_<frame>.pos
 http://geoweb.mit.edu/~floyd/scec/cgm/ts/<surv_site>.cgm.final_<frame>.pos
  
 where <cont_site> is a four-character continuous site ID 
-from the attached cont_site.txt file, <surv_site> is a 
-four-character survey site ID from the attached surv_site.txt file,
-and <frame> is "igb14", "nam14", "nam17" or "pcf14".
+from the attached cont_site.txt file, 
+
+<surv_site> is a four-character survey site ID from the
+     attached surv_site.txt file,
+<frame> is "igb14", "nam14", "nam17" or "pcf14".
+
 http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
 ******/
-        var getDataDownloadURL = function(station_id)  {
+        var getDataDownloadURL = function(station_id, frame)  {
 let urlPrefix = "http://geoweb.mit.edu/~floyd/scec/cgm/ts/";
-let url=urlPrefix + station_id + ".cgm.wmrss_igb14.pos";
-window.console.log(url);
+let url=urlPrefix + station_id + ".cgm.wmrss_"+frame+".pos";
           return url;
+
 /*
           let urlPrefix = "https://files.scec.org/s3fs-public/projects/cgm/1.0/time-series/pos/";
           return urlPrefix + station_id + ".cgm.edits_nam08.pos";
@@ -758,12 +835,13 @@ window.console.log(url);
             this.replaceResultsTable([]);
             $download_queue_table.addClass('cgm');
             $("#data-download-select").val("cgm");
-            // $download_queue_table.floatThead({
-            //     // floatTableClass: 'cgm-metadata-header',
-            //     scrollContainer: function ($table) {
-            //         return $table.closest('#metadata-viewer-container');
-            //     },
-            // });
+
+            $download_queue_table.floatThead({
+                 // floatTableClass: 'cgm-metadata-header',
+                 scrollContainer: function ($table) {
+                     return $table.closest('div#metadata-viewer-container');
+                 },
+            });
 
             $("#wait-spinner").hide();
         };
