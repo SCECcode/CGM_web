@@ -74,6 +74,8 @@ $cgm = new CGM();
     <script type="text/javascript" src="js/cgm_model.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_util.js?v=1"></script>
     <script type="text/javascript" src="js/cxm_leaflet.js?v=1"></script>
+    <script type="text/javascript" src="js/cfm_viewTS_util.js?v=1"></script>
+    <script type="text/javascript" src="js/cfm_viewTS.js?v=1"></script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-495056-12"></script>
@@ -284,6 +286,30 @@ window.console.log("HERE..");
                         <th class="hoverColor" onClick="sortMetadataTableByRow(5,'n')">Hor. Vel.</th>
                         <th style="width:40%"><div class="col text-center">
                             <div class="btn-group download-now">
+<!--time series plot -->
+<!-- MODAL popup button, reuse download-counter -->
+                                <button id="plotTS-all" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false" disabled>
+                                    PlotTS <span id="plot-counter"></span>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <button class="dropdown-item" type="button" value="igb14"
+                                            onclick="executePlotTS(this.value);">igb14
+                                    </button>
+                                    <button class="dropdown-item" type="button" value="nam14"
+                                            onclick="executePlotTS(this.value);">nam14
+                                    </button>
+                                    <button class="dropdown-item" type="button" value="nam17"
+                                            onclick="executePlotTS(this.value);">nam17
+                                    </button>
+                                    <button class="dropdown-item" type="button" value="pcf14"
+                                            onclick="executePlotTS(this.value);">pcf14
+                                    </button>
+                                </div>
+                            </div>
+                            &nbsp;
+
+<!--download all -->
                                 <button id="download-all" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false" disabled>
                                     DOWNLOAD ALL<span id="download-counter"></span>
@@ -320,6 +346,46 @@ window.console.log("HERE..");
         </div>
     </div>
 </div>
+
+<!--Modal: Name TS(Timeserie)-->
+<div class="modal" id="modalTS" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="modalTS" aria-hidden="true">
+  <div class="modal-dialog modal-full" id="modalTSDialog" role="document">
+
+    <!--Content-->
+    <div class="modal-content" id="modalTSContent">
+      <!--Header-->
+      <div class="modal-header">
+        <button id="viewTSToggleReprbtn" class="btn btn-outline-primary btn-sm" type="button" onclick="toggleReprTSview(this)">Show Representation</button>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body" id="modalTSBody">
+        <div id="iframe-container" class="row col-12" style="overflow:hidden">
+          <iframe id="viewTSIfram" title="SCEC CGM Time series viewer" src="" onload="setIframHeight(this.id)" height="10" width="100%" allowfullscreen></iframe>
+        </div>
+        <div id="paramsTS" value="" style="display:none"></div>
+      </div>
+
+      <div class="modal-footer justify-content-center" id="modalTSFooter">
+
+        <div class="spinDialog" style="position:absolute;top:40%;left:50%; z-index:9999;">
+          <div id="spinIconForTS" align="center" style="display:none;"><i class="glyphicon glyphicon-cog fa-spin" style="color:red"></i></div>
+        </div>
+
+        <button id="viewTSClosebtn" class="btn btn-outline-primary btn-sm" data-dismiss="modal">Close</button>
+        <button id="viewTSExpandbtn" class="btn btn-outline-primary btn-sm" type="button" onclick="toggleExpandTSview(this)">Shrink</button>
+        <button id="viewTSRefreshbtn" class="btn btn-outline-primary btn-sm" type="button" onclick="refreshTSview()">Reset</button>
+        <button id="viewTSMovebtn" class="btn btn-outline-primary btn-sm" type="button" onclick="moveTSview()">New Window</button>
+        <button id="viewTSWarnbtn" class="btn btn-outline-primary btn-sm" style="display:none" data-toggle="modal" data-target="#modalwarnTS"></button>
+        <button id="viewTSSavebtn" class="btn btn-outline-primary btn-sm" type="button" onclick="saveTSview()">Save Image</button>
+        <button id="viewTSHelpbtn" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modalinfoTS" onclick="$('#modalTS').modal('hide');">Help</button>
+      </div> <!-- footer -->
+
+    </div> <!--Content-->
+  </div>
+</div> <!--Modal: Name-->
+
+<!-- -->
     <script type="text/javascript">
             cgm_station_data = <?php print $cgm->getAllStationData()->outputJSON(); ?>;
             <?php if ($_REQUEST['model'] == 'cgm'):  ?>
