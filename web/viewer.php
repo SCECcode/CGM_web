@@ -277,12 +277,12 @@ window.console.log("HERE..");
                              <span class="glyphicon glyphicon-unchecked"></span>
                              </button>
                          </th>
-                         <th class="hoverColor" onClick="sortMetadataTableByRow(1,'a')">Station Name<span id='sortCol_1' class="fas fa-angle-down"></span></th>
-                        <th>Latitude</th>
-                        <th>Longitude</th>
+                         <th class="hoverColor" onClick="sortMetadataTableByRow(1,'a')">Station&nbsp<span id='sortCol_1' class="fas fa-angle-down"></span><br>Name</th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(2,'n')">Latitude</th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(3,'n')">Longitude</th>
                         <th>Type</th>
-                        <th>Hor. Vel.</th>
-                        <th><div class="col text-center">
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(5,'n')">Hor. Vel.</th>
+                        <th style="width:40%"><div class="col text-center">
                             <div class="btn-group download-now">
                                 <button id="download-all" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false" disabled>
@@ -290,22 +290,21 @@ window.console.log("HERE..");
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <button class="dropdown-item" type="button" value="igb14"
-                                            onclick="executeDownload(this.value);">igb14
+                                            onclick="downloadURLsAsZip(this.value);">igb14
                                     </button>
                                     <button class="dropdown-item" type="button" value="nam14"
-                                            onclick="executeDownload(this.value);">nam14
+                                            onclick="downloadURLsAsZip(this.value);">nam14
                                     </button>
                                     <button class="dropdown-item" type="button" value="nam17"
-                                            onclick="executeDownload(this.value);">nam17
+                                            onclick="downloadURLsAsZip(this.value);">nam17
                                     </button>
                                     <button class="dropdown-item" type="button" value="pcf14"
-                                            onclick="executeDownload(this.value);">pcf14
+                                            onclick="downloadURLsAsZip(this.value);">pcf14
                                     </button>
                                     <button class="dropdown-item" type="button" value="all"
-                                          onclick="executeDownload(this.value);">All of the Above
+                                          onclick="downloadURLsAsZip(this.value);">All of the Above
                                     </button>
                                 </div>
-                            </div>
                             </div>
                         </th>
 <!-- -->

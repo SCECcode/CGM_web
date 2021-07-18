@@ -3,7 +3,6 @@
 ***/
 
 var cgm_latlon_area_list=[];
-var use_download_set = "";
 
 function MapFeature(gid, properties, geometry, scec_properties) {
     this.type = "FeatureCollection";
@@ -16,12 +15,6 @@ function MapFeature(gid, properties, geometry, scec_properties) {
     }];
     this.layer = null;
     this.scec_properties = scec_properties;
-}
-
-
-function reset_download_set()
-{
-   use_download_set = "";
 }
 
 
@@ -70,32 +63,6 @@ function add_bounding_rectangle_layer(layer, a,b,c,d) {
 }
 
 
-function executeDownload(type) {
-  use_download_set = ;
-
-  if(select_count == 0) {
-    alert("No item selected");
-    return;
-  }
-
-    const frameType = {
-        IGB14: 'igb14',
-        NAM14: 'nam14',
-        NAM17: 'nam17',
-        PCF14: 'pcf14',
-    };
-
-
-  switch (type) {
-    case CGM.frameType.IGB14:
-       downloadURLsAsZip(CGM.frameType.IGB14);
-                break;
-    case 'all':
-       downloadURLsAsZip();
-                break;
-  }
-  window.console.log("call executeDownload...");
-}
 
 function downloadURLsAsZip(ftype) {
   var nzip=new JSZip();

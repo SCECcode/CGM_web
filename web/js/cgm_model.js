@@ -277,9 +277,13 @@ window.console.log("select stations by layer..");
         }
 
         $row = $(`tr[data-point-gid='${gid}'`);
-        let $glyphElem = $row.find('span');
         $row.addClass('row-selected');
+
+window.console.log("HERE..");
+
+        let $glyphElem = $row.find('span.cgm-data-row');
         $glyphElem.removeClass('glyphicon-unchecked').addClass('glyphicon-check');
+
         this.upSelectCount(gid);
 
         // move row to top
@@ -300,9 +304,10 @@ window.console.log("select stations by layer..");
         let gid = layer.scec_properties.gid;
 
         let $row = $(`tr[data-point-gid='${gid}'`);
-        let $glyphElem = $row.find('span');
         $row.removeClass('row-selected');
+        let $glyphElem = $row.find('span.cgm-data-row');
         $glyphElem.addClass('glyphicon-unchecked').removeClass('glyphicon-check');
+
         this.downSelectCount(gid);
     };
 
@@ -338,11 +343,10 @@ window.console.log("select stations by layer..");
 
         let $selectAllButton = $("#cgm-allBtn span");
         if (!$selectAllButton.hasClass('glyphicon-check')) {
-window.console.log("IS in toggleSelectAll call..");
             this.search_result.eachLayer(function(layer){
                 cgm_object.selectStationByLayer(layer);
             });
-            $selectAllButton.addClass('glyphicon-check').removeClass('glyphicon-unchecked')
+            $selectAllButton.addClass('glyphicon-check').removeClass('glyphicon-unchecked');
         } else {
             this.unselectAll();
 
@@ -351,10 +355,12 @@ window.console.log("IS in toggleSelectAll call..");
 
     this.unselectAll = function() {
         var cgm_object = this;
+
+        let $selectAllButton = $("#cgm-allBtn span");
         this.search_result.eachLayer(function(layer){
             cgm_object.unselectStationByLayer(layer);
         });
-        $("#cgm-allBtn span").removeClass('glyphicon-check').addClass('glyphicon-unchecked')
+        $("#cgm-allBtn span").removeClass('glyphicon-check').addClass('glyphicon-unchecked');
     };
 
     // unselect every layer
@@ -418,19 +424,19 @@ window.console.log("generate a table row..");
         let downloadURL4 = getDataDownloadURL(layer.scec_properties.station_id,frameType.PCF14);
 
         html += `<tr data-point-gid="${layer.scec_properties.gid}">`;
-        html += `<td style="width:25px" class="button-container"> <button class="btn btn-sm cxm-small-btn" id="" title="highlight the station" onclick=''>
+        html += `<td style="width:25px" class="cgm-data-click button-container"> <button class="btn btn-sm cxm-small-btn" id="" title="highlight the station" onclick=''>
             <span class="cgm-data-row glyphicon glyphicon-unchecked"></span>
         </button></td>`;
-        html += `<td>${layer.scec_properties.station_id}</td>`;
-        html += `<td>${coordinates.lat}</td>`;
-        html += `<td>${coordinates.lng}</td>`;
-        html += `<td>${layer.scec_properties.type} </td>`;
-        html += `<td>${layer.scec_properties.horizontalVelocity} mm/yr</td>`;
+        html += `<td class="cgm-data-click">${layer.scec_properties.station_id}</td>`;
+        html += `<td class="cgm-data-click">${coordinates.lat}</td>`;
+        html += `<td class="cgm-data-click">${coordinates.lng}</td>`;
+        html += `<td class="cgm-data-click">${layer.scec_properties.type} </td>`;
+        html += `<td class="cgm-data-click">${layer.scec_properties.horizontalVelocity} mm/yr</td>`;
         html += `<td>`;
-        html = html+ `<a href=\"`+downloadURL1+`\" download> <button class=\"btn btn-xs\" title=\"download igb14 frame\"><span id=\"download_igb14_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>igb14</button></a>`;
-        html = html+`<a href=\"`+downloadURL2+`\" download> <button class=\"btn btn-xs\" title=\"download nam14 frame\"><span id=\"download_nam14_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>nam14</button></a>`;
-        html = html+`<a href=\"`+downloadURL3+`\" download> <button class=\"btn btn-xs\" title=\"download nam17 frame\"><span id=\"download_nam17_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>nam17</button></a>`;
-        html = html+`<a href=\"`+downloadURL4+`\" download> <button class=\"btn btn-xs\" title=\"download pcf14 frame\"><span id=\"download_pcf14_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>pcf14</button></a>`;
+        html = html+ `<a href=\"`+downloadURL1+`\" download> <button class=\"btn btn-xs cgm-download\" title=\"download igb14 frame\"><span id=\"download_igb14_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>igb14</button></a>`;
+        html = html+`<a href=\"`+downloadURL2+`\" download> <button class=\"btn btn-xs cgm-download\" title=\"download nam14 frame\"><span id=\"download_nam14_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>nam14</button></a>`;
+        html = html+`<a href=\"`+downloadURL3+`\" download> <button class=\"btn btn-xs cgm-download\" title=\"download nam17 frame\"><span id=\"download_nam17_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>nam17</button></a>`;
+        html = html+`<a href=\"`+downloadURL4+`\" download> <button class=\"btn btn-xs cgm-download\" title=\"download pcf14 frame\"><span id=\"download_pcf14_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>pcf14</button></a>`;
         html += `</tr>`;
 
         return html;
@@ -736,29 +742,34 @@ window.console.log("generateResultsTable..");
                              <span class="glyphicon glyphicon-unchecked"></span>
                              </button>
                          </th>
-                         <th class="hoverColor" onClick="sortMetadataTableByRow(1,'a')">Station Name<span id='sortCol_1' class="fas fa-angle-down"></span></th>
-                        <th>Latitude</th>
-                        <th>Longitude</th>
+                         <th class="hoverColor" onClick="sortMetadataTableByRow(1,'a')">Station&nbsp<span id='sortCol_1' class="fas fa-angle-down"></span><br>Name</th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(2,'n')">Latitude</th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(3,'n')">Longitude</th>
                         <th>Type</th>
-                        <th>Hor. Vel.</th>
-                        <th><div class="col text-center">
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(5,'n')>Hor. Vel.</th>
+                        <th style="border:2px solid red; width:40%;"><div class="col text-center">
                             <div class="btn-group download-now">
                                 <button id="download-all" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false" disabled>
                                     DOWNLOAD ALL<span id="download-counter"></span>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <button class="dropdown-item" type="button" value="type1"
-                                            onclick="executeDownload(this.value);">TYPE1
+                                    <button class="dropdown-item" type="button" value="igb14"
+                                            onclick="downloadURLsAsZip(this.value);">igb14
                                     </button>
-                                    <button class="dropdown-item" type="button" value="type2"
-                                            onclick="executeDownload(this.value);">TYPE2
+                                    <button class="dropdown-item" type="button" value="nam14"
+                                            onclick="downloadURLsAsZip(this.value);">nam14
+                                    </button>
+                                    <button class="dropdown-item" type="button" value="nam17"
+                                            onclick="downloadURLsAsZip(this.value);">nam17
+                                    </button>
+                                    <button class="dropdown-item" type="button" value="pcf14"
+                                            onclick="downloadURLsAsZip(this.value);">pcf14
                                     </button>
                                     <button class="dropdown-item" type="button" value="all"
-                                          onclick="executeDownload(this.value);">All of the Above
+                                          onclick="downloadURLsAsZip(this.value);">All of the Above
                                     </button>
                                 </div>
-                            </div>
                             </div>
                         </th>
 </tr>
@@ -791,10 +802,12 @@ window.console.log("changeResultsTableBody..");
 
    
         this.replaceResultsTableBody = function(results) {
+            window.console.log("calling replaceResultsTableBody");
             $("#metadata-viewer tbody").html(changeResultsTableBody(results));
         };
 
         this.replaceResultsTable = function(results) {
+            window.console.log("calling replaceResultsTable");
             $("#metadata-viewer").html(generateResultsTable(results));
         };
 

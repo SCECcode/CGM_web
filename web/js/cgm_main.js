@@ -72,25 +72,24 @@ window.console.log("causing a start of search..");
        });
     });
 
-
-    $("#metadata-viewer-container").on('click','#metadata-viewer.cgm tr', function(){
+    $("#metadata-viewer-container").on('click','td.cgm-data-click', function(){
         if ($(this).find('button[id="cgm-allBtn"]').length != 0) {
             return;
         }
 
-        let $glyphElem = $(this).find('span');
-        let gid = $(this).data('point-gid');
+        let $glyphElem = $(this).find('span.cgm-data-row'); 
+        let parent = $(this).parent();
+
+        let gid = $(parent).data('point-gid');
         let isElemSelected = CGM.toggleStationSelectedByGid(gid);
 
-        window.console.log("click once on "+gid);
         if (isElemSelected) {
-            $(this).addClass('row-selected');
+            $(parent).addClass('row-selected');
             $glyphElem.removeClass('glyphicon-unchecked').addClass('glyphicon-check');
         } else {
-            $(this).removeClass('row-selected');
+            $(parent).removeClass('row-selected');
             $glyphElem.addClass('glyphicon-unchecked').removeClass('glyphicon-check');
         }
-
 
     });
 
