@@ -21,18 +21,25 @@ function MapFeature(gid, properties, geometry, scec_properties) {
 function updateDownloadCounter(select_count) {
 //    window.console.log("download counter updated.."+select_count);
     let downloadCounterElem = $("#download-counter");
-    let buttonElem = $("#download-all");
+    let plotCounterElem = $("#plot-counter");
+    let downloadBtnElem = $("#download-all");
+    let plotBtnElem = $("#plotTS-all");
     let placeholderTextElem = $("#placeholder-row");
     if (select_count <= 0) {
         downloadCounterElem.hide();
-        buttonElem.prop("disabled", true);
+        plotCounterElem.hide();
+        downloadBtnElem.prop("disabled", true);
+        plotBtnElem.prop("disabled", true);
         placeholderTextElem.show();
     } else {
        downloadCounterElem.show();
-       buttonElem.prop("disabled", false);
-        placeholderTextElem.hide();
+       plotCounterElem.show();
+       downloadBtnElem.prop("disabled", false);
+       plotBtnElem.prop("disabled", false);
+       placeholderTextElem.hide();
     }
     downloadCounterElem.html("(" + select_count + ")");
+    plotCounterElem.html("(" + select_count + ")");
 }
 
 function add_bounding_rectangle(a,b,c,d) {
@@ -61,53 +68,6 @@ function add_bounding_rectangle_layer(layer, a,b,c,d) {
   //set_latlons(a,b,c,d);
   cgm_latlon_area_list.push(tmp);
 }
-
-
-
-function downloadURLsAsZip(ftype) {
-  var nzip=new JSZip();
-  var layers=CGM.search_result.getLayers();
-  let timestamp=$.now();
-
-  var cnt=layers.length;
-  for(var i=0; i<cnt; i++) {
-    let layer=layers[i];
-
-    if(ftype == CGM.frameType.IGB14 || ftype == "all") {
-      let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,CGM.frameType.IGB14);
-      let dname=url.substring(downloadURL.lastIndexOf('/')+1);
-      let promise = $.get(downloadURL);
-      nzip.file(dname,promise);
-    }
-    if(ftype == CGM.frameType.NAM14 || ftype == "all") {
-      let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,CGM.frameType.NAM14);
-      let dname=url.substring(downloadURL.lastIndexOf('/')+1);
-      let promise = $.get(downloadURL);
-      nzip.file(dname,promise);
-    }
-    if(ftype == CGM.frameType.NAM17 || ftype == "all") {
-      let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,CGM.frameType.NAM14);
-      let dname=url.substring(downloadURL.lastIndexOf('/')+1);
-      let promise = $.get(downloadURL);
-      nzip.file(dname,promise);
-    }
-    if(ftype == CGM.frameType.PCF14 || ftype == "all") {
-      let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,CGM.frameType.PCF14);
-      let dname=url.substring(downloadURL.lastIndexOf('/')+1);
-      let promise = $.get(downloadURL);
-      nzip.file(dname,promise);
-    }
-  }
-
-
-  var zipfname="CGM_"+timestamp+".zip"; 
-  nzip.generateAsync({type:"blob"}).then(function (content) {
-    // see FileSaver.js
-    saveAs(content, zipfname);
-  })
-}
-
-
 
 
 // https://www.w3schools.com/howto/howto_js_sort_table.asp

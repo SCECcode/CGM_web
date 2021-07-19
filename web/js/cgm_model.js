@@ -410,7 +410,51 @@ window.console.log("HERE..");
     };
 
 
-    var generateTableRow = function(layer) {
+
+    this.downloadURLsAsZip = function(ftype) {
+        var nzip=new JSZip();
+        var layers=CGM.search_result.getLayers();
+        let timestamp=$.now();
+      
+        var cnt=layers.length;
+        for(var i=0; i<cnt; i++) {
+          let layer=layers[i];
+      
+          if(ftype == frameType.IGB14 || ftype == "all") {
+            let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.IGB14);
+            let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
+            let promise = $.get(downloadURL);
+            nzip.file(dname,promise);
+          }
+          if(ftype == frameType.NAM14 || ftype == "all") {
+            let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.NAM14);
+            let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
+            let promise = $.get(downloadURL);
+            nzip.file(dname,promise);
+          }
+          if(ftype == frameType.NAM17 || ftype == "all") {
+            let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.NAM14);
+            let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
+            let promise = $.get(downloadURL);
+            nzip.file(dname,promise);
+          }
+          if(ftype == frameType.PCF14 || ftype == "all") {
+            let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.PCF14);
+            let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
+            let promise = $.get(downloadURL);
+            nzip.file(dname,promise);
+          }
+        }
+      
+      
+        var zipfname="CGM_"+timestamp+".zip"; 
+        nzip.generateAsync({type:"blob"}).then(function (content) {
+          // see FileSaver.js
+          saveAs(content, zipfname);
+        })
+    }
+
+var generateTableRow = function(layer) {
 window.console.log("generate a table row..");
         let $table = $("#metadata-viewer");
         let html = "";
@@ -431,8 +475,8 @@ window.console.log("generate a table row..");
         html += `<td class="cgm-data-click">${coordinates.lat}</td>`;
         html += `<td class="cgm-data-click">${coordinates.lng}</td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.type} </td>`;
-        html += `<td class="cgm-data-click">${layer.scec_properties.horizontalVelocity} mm/yr</td>`;
-        html += `<td>`;
+        html += `<td class="cgm-data-click">${layer.scec_properties.horizontalVelocity}</td>`;
+        html += `<td class="text-center">`;
         html = html+ `<a href=\"`+downloadURL1+`\" download> <button class=\"btn btn-xs cgm-download\" title=\"download igb14 frame\"><span id=\"download_igb14_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>igb14</button></a>`;
         html = html+`<a href=\"`+downloadURL2+`\" download> <button class=\"btn btn-xs cgm-download\" title=\"download nam14 frame\"><span id=\"download_nam14_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>nam14</button></a>`;
         html = html+`<a href=\"`+downloadURL3+`\" download> <button class=\"btn btn-xs cgm-download\" title=\"download nam17 frame\"><span id=\"download_nam17_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>nam17</button></a>`;
@@ -743,11 +787,34 @@ window.console.log("generateResultsTable..");
                              </button>
                          </th>
                          <th class="hoverColor" onClick="sortMetadataTableByRow(1,'a')">Station&nbsp<span id='sortCol_1' class="fas fa-angle-down"></span><br>Name</th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(2,'n')">Latitude</th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(3,'n')">Longitude</th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(2,'n')">Latitude<span id='sortCol_2' class="fas fa-angle-down"></span></th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(3,'n')">Longitude<span id='sortCol_3' class="fas fa-angle-down"></span></th>
                         <th>Type</th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(5,'n')>Hor. Vel.</th>
-                        <th style="border:2px solid red; width:40%;"><div class="col text-center">
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(5,'n')">Horizontal&nbsp<span id='sortCol_5' class="fas fa-angle-down"></span><br>Velocity (mm/yr)</th>
+                        <th style="width:40%;"><div class="col text-center">
+                            <div class="btn-group download-now">
+<!--time series plot -->
+                                <button id="plotTS-all" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false" disabled>
+                                    PLOT TS<span id="plot-counter"></span>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <button class="dropdown-item" type="button" value="igb14"
+                                            onclick="executePlotTS(this.value);">igb14
+                                    </button>
+                                    <button class="dropdown-item" type="button" value="nam14"
+                                            onclick="executePlotTS(this.value);">nam14
+                                    </button>
+                                    <button class="dropdown-item" type="button" value="nam17"
+                                            onclick="executePlotTS(this.value);">nam17
+                                    </button>
+                                    <button class="dropdown-item" type="button" value="pcf14"
+                                            onclick="executePlotTS(this.value);">pcf14
+                                    </button>
+                                </div>
+                            </div>
+                            &nbsp; &nbsp;
+<!--download all -->
                             <div class="btn-group download-now">
                                 <button id="download-all" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false" disabled>
@@ -755,19 +822,19 @@ window.console.log("generateResultsTable..");
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <button class="dropdown-item" type="button" value="igb14"
-                                            onclick="downloadURLsAsZip(this.value);">igb14
+                                            onclick="CGM.downloadURLsAsZip(this.value);">igb14
                                     </button>
                                     <button class="dropdown-item" type="button" value="nam14"
-                                            onclick="downloadURLsAsZip(this.value);">nam14
+                                            onclick="CGM.downloadURLsAsZip(this.value);">nam14
                                     </button>
                                     <button class="dropdown-item" type="button" value="nam17"
-                                            onclick="downloadURLsAsZip(this.value);">nam17
+                                            onclick="CGM.downloadURLsAsZip(this.value);">nam17
                                     </button>
                                     <button class="dropdown-item" type="button" value="pcf14"
-                                            onclick="downloadURLsAsZip(this.value);">pcf14
+                                            onclick="CGM.downloadURLsAsZip(this.value);">pcf14
                                     </button>
                                     <button class="dropdown-item" type="button" value="all"
-                                          onclick="downloadURLsAsZip(this.value);">All of the Above
+                                          onclick="CGM.downloadURLsAsZip(this.value);">All of the Above
                                     </button>
                                 </div>
                             </div>

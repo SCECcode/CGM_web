@@ -74,8 +74,8 @@ $cgm = new CGM();
     <script type="text/javascript" src="js/cgm_model.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_util.js?v=1"></script>
     <script type="text/javascript" src="js/cxm_leaflet.js?v=1"></script>
-    <script type="text/javascript" src="js/cfm_viewTS_util.js?v=1"></script>
-    <script type="text/javascript" src="js/cfm_viewTS.js?v=1"></script>
+    <script type="text/javascript" src="js/cgm_viewTS_util.js?v=1"></script>
+    <script type="text/javascript" src="js/cgm_viewTS.js?v=1"></script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-495056-12"></script>
@@ -173,14 +173,14 @@ window.console.log("HERE..");
                                                     class="cgm-search-item form-control">
                                             <input type="text"
                                                     id="cgm-secondLatTxt"
-                                                    title="optional second lat"
-                                                    placeholder='optional'
+                                                    title="second lat"
+                                                    placeholder='2nd Latitude'
                                                     onfocus="this.value=''"
                                                     class="cgm-search-item form-control">
                                             <input type="text"
                                                     id="cgm-secondLonTxt"
-                                                    title="optional second lon"
-                                                    placeholder='optional'
+                                                    title="second lon"
+                                                    placeholder='2nd Longitude'
                                                     onfocus="this.value=''"
                                                     class="cgm-search-item form-control">
                                         </div>
@@ -273,67 +273,6 @@ window.console.log("HERE..");
                 <table id="metadata-viewer">
                     <thead>
                       <tr>
-<!-- -->
-                         <th class="text-center button-container" style="width:2rem">
-                             <button id="cgm-allBtn" class="btn btn-sm cxm-small-btn" title="select all visible stations" onclick="CGM.toggleSelectAll();">
-                             <span class="glyphicon glyphicon-unchecked"></span>
-                             </button>
-                         </th>
-                         <th class="hoverColor" onClick="sortMetadataTableByRow(1,'a')">Station&nbsp<span id='sortCol_1' class="fas fa-angle-down"></span><br>Name</th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(2,'n')">Latitude</th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(3,'n')">Longitude</th>
-                        <th>Type</th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(5,'n')">Hor. Vel.</th>
-                        <th style="width:40%"><div class="col text-center">
-                            <div class="btn-group download-now">
-<!--time series plot -->
-<!-- MODAL popup button, reuse download-counter -->
-                                <button id="plotTS-all" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false" disabled>
-                                    PlotTS <span id="plot-counter"></span>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <button class="dropdown-item" type="button" value="igb14"
-                                            onclick="executePlotTS(this.value);">igb14
-                                    </button>
-                                    <button class="dropdown-item" type="button" value="nam14"
-                                            onclick="executePlotTS(this.value);">nam14
-                                    </button>
-                                    <button class="dropdown-item" type="button" value="nam17"
-                                            onclick="executePlotTS(this.value);">nam17
-                                    </button>
-                                    <button class="dropdown-item" type="button" value="pcf14"
-                                            onclick="executePlotTS(this.value);">pcf14
-                                    </button>
-                                </div>
-                            </div>
-                            &nbsp;
-
-<!--download all -->
-                                <button id="download-all" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false" disabled>
-                                    DOWNLOAD ALL<span id="download-counter"></span>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <button class="dropdown-item" type="button" value="igb14"
-                                            onclick="downloadURLsAsZip(this.value);">igb14
-                                    </button>
-                                    <button class="dropdown-item" type="button" value="nam14"
-                                            onclick="downloadURLsAsZip(this.value);">nam14
-                                    </button>
-                                    <button class="dropdown-item" type="button" value="nam17"
-                                            onclick="downloadURLsAsZip(this.value);">nam17
-                                    </button>
-                                    <button class="dropdown-item" type="button" value="pcf14"
-                                            onclick="downloadURLsAsZip(this.value);">pcf14
-                                    </button>
-                                    <button class="dropdown-item" type="button" value="all"
-                                          onclick="downloadURLsAsZip(this.value);">All of the Above
-                                    </button>
-                                </div>
-                            </div>
-                        </th>
-<!-- -->
                       </tr>
                     </thead>
                     <tbody>
