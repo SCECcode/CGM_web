@@ -1,4 +1,4 @@
-/***
+***
    cgm_model.js
 ***/
 
@@ -171,7 +171,6 @@ window.console.log("calling zeroSelectCount..");
                 let end_latlng = calculateEndVectorLatLng(start_latlng, vel_north, vel_east, 750);
                 let dist = calculateDistanceMeter(start_latlng, {'lat':end_latlng[0], 'lng':end_latlng[1]} );
                 let p = dist / (CGM.cgm_vector_max - CGM.cgm_vector_min);
-//window.console.log("XXX p is "+p);
 
                 let line_latlons = [
                     [start_latlng.lat, start_latlng.lng],
@@ -409,6 +408,43 @@ window.console.log("HERE..");
         $(`#metadata-viewer tbody tr[data-point-gid='${gid}']`).remove();
     };
 
+
+    this.executePlotTS = funciton(ftype) {
+      var layers=CGM.search_result.getLayers();
+      
+      var cnt=layers.length;
+      for(var i=0; i<cnt; i++) {
+          let layer=layers[i];
+          let urllist=[];
+          var dnamelist=[];
+      
+          if(ftype == frameType.IGB14 || ftype == "all") {
+            let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.IGB14);
+            let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
+            urllist.appen(dowloadURL);
+            dnamelist.appen(dname);
+          }
+          if(ftype == frameType.NAM14 || ftype == "all") {
+            let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.NAM14);
+            let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
+            urllist.appen(dowloadURL);
+            dnamelist.appen(dname);
+          }
+          if(ftype == frameType.NAM17 || ftype == "all") {
+            let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.NAM14);
+            let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
+            urllist.appen(dowloadURL);
+            dnamelist.appen(dname);
+          }
+          if(ftype == frameType.PCF14 || ftype == "all") {
+            let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.PCF14);
+            let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
+            urllist.appen(dowloadURL);
+            dnamelist.appen(dname);
+          }
+      }
+      plotTSWithPlotly(urllist, dnamelist);
+    }
 
 
     this.downloadURLsAsZip = function(ftype) {
@@ -800,16 +836,16 @@ window.console.log("generateResultsTable..");
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <button class="dropdown-item" type="button" value="igb14"
-                                            onclick="executePlotTS(this.value);">igb14
+                                            onclick="CGM.executePlotTS(this.value);">igb14
                                     </button>
                                     <button class="dropdown-item" type="button" value="nam14"
-                                            onclick="executePlotTS(this.value);">nam14
+                                            onclick="CGM.executePlotTS(this.value);">nam14
                                     </button>
                                     <button class="dropdown-item" type="button" value="nam17"
-                                            onclick="executePlotTS(this.value);">nam17
+                                            onclick="CGM.executePlotTS(this.value);">nam17
                                     </button>
                                     <button class="dropdown-item" type="button" value="pcf14"
-                                            onclick="executePlotTS(this.value);">pcf14
+                                            onclick="CGM.executePlotTS(this.value);">pcf14
                                     </button>
                                 </div>
                             </div>
@@ -894,6 +930,7 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
         var getDataDownloadURL = function(station_id, frame)  {
 let urlPrefix = "http://geoweb.mit.edu/~floyd/scec/cgm/ts/";
 let url=urlPrefix + station_id + ".cgm.wmrss_"+frame+".pos";
+
           return url;
 
 /*
