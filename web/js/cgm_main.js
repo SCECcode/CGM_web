@@ -109,5 +109,9 @@ window.console.log("causing a start of search..");
 
     CGM.setupCGMInterface();
 
+    setup_infoTSTable();
+    setup_warnTSTable();
+
     $("#wait-spinner").hide();
+
 });

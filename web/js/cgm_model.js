@@ -1,4 +1,4 @@
-***
+/***
    cgm_model.js
 ***/
 
@@ -409,41 +409,47 @@ window.console.log("HERE..");
     };
 
 
-    this.executePlotTS = funciton(ftype) {
-      var layers=CGM.search_result.getLayers();
+    this.executePlotTS = function(ftype) {
+      let layers=CGM.search_result.getLayers();
+      let urllist=[];
+      let dnamelist=[];
+      let framelist=[];
       
       var cnt=layers.length;
       for(var i=0; i<cnt; i++) {
           let layer=layers[i];
-          let urllist=[];
-          var dnamelist=[];
       
           if(ftype == frameType.IGB14 || ftype == "all") {
             let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.IGB14);
             let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
-            urllist.appen(dowloadURL);
-            dnamelist.appen(dname);
+            urllist.push(downloadURL);
+            dnamelist.push(dname);
+            framelist.push(frameType.IGB14);
           }
           if(ftype == frameType.NAM14 || ftype == "all") {
             let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.NAM14);
             let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
-            urllist.appen(dowloadURL);
-            dnamelist.appen(dname);
+            urllist.push(downloadURL);
+            dnamelist.push(dname);
+            framelist.push(frameType.NAM14);
           }
           if(ftype == frameType.NAM17 || ftype == "all") {
-            let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.NAM14);
+            let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.NAM17);
             let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
-            urllist.appen(dowloadURL);
-            dnamelist.appen(dname);
+            urllist.push(downloadURL);
+            dnamelist.push(dname);
+            framelist.push(frameType.NAM17);
           }
           if(ftype == frameType.PCF14 || ftype == "all") {
             let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.PCF14);
             let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
-            urllist.appen(dowloadURL);
-            dnamelist.appen(dname);
+            urllist.push(downloadURL);
+            dnamelist.push(dname);
+            framelist.push(frameType.PCF14);
           }
       }
-      plotTSWithPlotly(urllist, dnamelist);
+     showTSView(urllist, dnamelist, framelist);
+     showPlotTSWarning();
     }
 
 
@@ -965,4 +971,5 @@ let url=urlPrefix + station_id + ".cgm.wmrss_"+frame+".pos";
 
         this.downloadHorizontalVelocities = function(gid_list) { // TODO };
     };
+
 }

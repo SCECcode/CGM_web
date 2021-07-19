@@ -142,7 +142,7 @@ th {
     position: relative;
 }
 
-.cxm-control-colors-expanded {
+.cgm-control-colors-expanded {
     overflow: hidden;
     position: absolute;
     left: 88%;
@@ -155,31 +155,31 @@ th {
     border-radius: 4px;
 }
 
-.cxm-control-colors-list {
+.cgm-control-colors-list {
     display: none;
 }
 
-.cxm-control-colors-expanded .cxm-control-colors-list {
+.cgm-control-colors-expanded .cgm-control-colors-list {
     display: block;
     position: relative;
 }
 
-.cxm-control-colors-selector {
+.cgm-control-colors-selector {
     margin-top: 2px;
     position: relative;
 }
 
-.cxm-control-colors label {
+.cgm-control-colors label {
     display: block;
 }
 
-.cxm-control-colors-base {
+.cgm-control-colors-base {
     margin-left: 10px;
     text-align: left;
     border: 2px solid transparent;
 }
 
-.cxm-control-download-expanded {
+.cgm-control-download-expanded {
     overflow: hidden;
     position: absolute;
     right: 10px;
@@ -192,26 +192,26 @@ th {
     border-radius: 4px;
 }
 
-.cxm-control-download-list {
+.cgm-control-download-list {
     display: none;
 }
 
-.cxm-control-download-expanded .cxm-control-download-list {
+.cgm-control-download-expanded .cgm-control-download-list {
     display: block;
     position: relative;
 }
 
-.cxm-control-download-selector {
+.cgm-control-download-selector {
     margin-top: 2px;
     position: relative;
     top: 1px;
 }
 
-.cxm-control-download label {
+.cgm-control-download label {
     display: block;
 }
 
-.cxm-control-download-base {
+.cgm-control-download-base {
     margin-left: 10px;
     text-align: left;
     border: 2px solid transparent;
@@ -243,7 +243,7 @@ div.mapData {
     font-weight: bold;
 }
 
-.cxm-top-small-btn {
+.cgm-top-small-btn {
     background: white;
     padding: 6px 6px;
     /*font-size: 14px;*/
@@ -257,14 +257,14 @@ div.mapData {
     border-radius: 2px;
 }
 
-.cxm-small-btn {
+.cgm-small-btn {
     background: transparent;
     color: #53A2BE;
     border: none;
     display: inline-block;
 }
 
-.cxm-small-btn:disabled {
+.cgm-small-btn:disabled {
     color: white;
 }
 
@@ -276,12 +276,12 @@ div.button-container button {
     /*font-size: 1em;*/
 }
 
-.cxm-table {
+.cgm-table {
     max-height: 400px;
     overflow: auto;
 }
 
-.cxm-top-btn {
+.cgm-top-btn {
     background: #D5D5D5;
     padding: 1px 3px;
     border: 2px solid #D5D5D5;
@@ -291,7 +291,7 @@ div.button-container button {
     display: inline-block;
 }
 
-.cxm-btn {
+.cgm-btn {
     background: white;
     border: 0px solid #D5D5D5;
     color: #011638;
@@ -301,11 +301,11 @@ div.button-container button {
 }
 
 
-.cxm-btn:disabled {
+.cgm-btn:disabled {
     color: white;
 }
 
-.cxm-div {
+.cgm-div {
     position: relative;
     left: 10px;
     width: 90%;
@@ -528,13 +528,13 @@ table tr td label {
     position: relative;
 }
 
-.info-page-container.guide .cxm-interface img {
+.info-page-container.guide .cgm-interface img {
    border: 1px solid #ddd;
     max-width: 630px;
     width: 100%;
 }
 
-.info-page-container.guide .cxm-perspective-view {
+.info-page-container.guide .cgm-perspective-view {
     max-width: 550px;
 }
 
@@ -568,7 +568,7 @@ div.guide ul {
     display: table-cell;
 }
 
-#metadata-viewer .cxm-btn {
+#metadata-viewer .cgm-btn {
     background-color: inherit;
     padding: 0;
 }
@@ -636,3 +636,44 @@ div.latlon-input-boxes input[type='text']{
     top: 50%;
     left: 50%;
 }
+
+/** for modal **/
+
+.viewTSIfram {
+  frameborder:2;
+}
+
+@media (min-width: 1200px) {
+   .modal-xlg {
+      max-width: 992px;
+   }
+}
+
+.modal-full {
+    width: 100%;
+    height: 100%;
+    min-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.modal-full .modal-content, modal-full-content {
+    height: auto;
+    min-height: 100%;
+    border-radius: 0;
+}
+
+.modal-full .modal-dialog, modal-full-dialog {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+}
+
+.modal-full .modal-body, modal-full-body {
+    height: 100%;
+    overflow-y: auto;
+}
+
+
+

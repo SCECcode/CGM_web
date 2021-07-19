@@ -286,7 +286,7 @@ window.console.log("HERE..");
     </div>
 </div>
 
-<!--Modal: Name TS(Timeserie)-->
+<!--Modal: Name TS(time series)-->
 <div class="modal" id="modalTS" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="modalTS" aria-hidden="true">
   <div class="modal-dialog modal-full" id="modalTSDialog" role="document">
 
@@ -323,6 +323,46 @@ window.console.log("HERE..");
     </div> <!--Content-->
   </div>
 </div> <!--Modal: Name-->
+
+<!--Modal: ModelType -->
+<div class="modal" id="modalinfoTS" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xlg" id="modalinfoTSDialog" role="document">
+    <!--Content-->
+    <div class="modal-content" id="modalinfoTSContent">
+      <!--Body-->
+      <div class="modal-body" id="modalinfoTSBody">
+        <div class="row col-md-12 ml-auto" style="overflow:hidden;">
+          <div class="col-12" id="infoTSTable-container"></div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-outline-primary btn-md" data-dismiss="modal" onclick="$('#modalTS').modal('show');"
+>Close</button>
+      </div>
+    </div> <!--Content-->
+  </div>
+</div> <!--Modal: Name-->
+
+<!--Modal: ModelType -->
+<div class="modal" id="modalwarnTS" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" id="modalwarnTSDialog" role="document">
+
+    <!--Content-->
+    <div class="modal-content" id="modalwarnTSContent">
+      <!--Body-->
+      <div class="modal-body" id="modalwarnTSBody">
+        <div class="row col-md-12 ml-auto" style="overflow:hidden;">
+          <div class="col-12" id="warnTSTable-container"></div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-outline-primary btn-md" data-dismiss="modal">Close</button>
+      </div>
+
+    </div> <!--Content-->
+  </div>
+</div> <!--Modal: Name-->
+
 
 <!-- -->
     <script type="text/javascript">
