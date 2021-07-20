@@ -418,6 +418,10 @@ window.console.log("HERE..");
       var cnt=layers.length;
       for(var i=0; i<cnt; i++) {
           let layer=layers[i];
+
+          if( !layer.scec_properties.selected ) {
+            continue;
+          }
       
           if(ftype == frameType.IGB14 || ftype == "all") {
             let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.IGB14);
@@ -461,6 +465,10 @@ window.console.log("HERE..");
         var cnt=layers.length;
         for(var i=0; i<cnt; i++) {
           let layer=layers[i];
+
+          if( !layer.scec_properties.selected ) {
+            continue;
+          }
       
           if(ftype == frameType.IGB14 || ftype == "all") {
             let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.IGB14);
