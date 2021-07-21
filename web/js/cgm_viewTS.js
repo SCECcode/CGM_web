@@ -107,7 +107,7 @@ function showTSView(url,fname) {
   $('#modalTS').modal('show');
 
   // urls causing problem when it is too large
-  let params="URL"+url+"&fileName="+fname;
+  let params="URL="+url+"&fileName="+fname;
   set_PARAMS(params);
 
   window.console.log("ShowTSView, params >>"+params);

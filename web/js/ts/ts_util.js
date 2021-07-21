@@ -24,15 +24,11 @@ function ckExist(url) {
 
 function loadAndProcessFromFile(ulist,nlist,figw,figh) {
   let sz=ulist.length;
-  let i;
-  let plot_data;
 
-  // just do one at a time
-  for(i=0;i<sz;i++) {
-    let data = ckExist(ulist[i]);
-    plot_data=processPOS(i,nlist[i],data);
-    plotly_plot_pos(plot_data,figw,figh);
-  }
+// assume there is just 1 for now
+  let data = ckExist(ulist[0]);
+  let plot_data=processPOS(0,nlist[0],data);
+  plotly_plot_pos(plot_data,figw,figh);
   
 /*** ???
   for(i=0;i<sz;i++) {

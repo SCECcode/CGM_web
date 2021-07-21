@@ -486,10 +486,10 @@ window.console.log("generate a table row..");
         html += `<td class="cgm-data-click">${layer.scec_properties.type} </td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.horizontalVelocity}</td>`;
         html += `<td class="text-center">`;
-        html = html+ `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS(\"downloadURL1\")>igb14&nbsp<span class=\"far fa-chart-line\"></span></button>`;
-        html = html+ `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS(\"downloadURL2\")>nam14&nbsp<span class=\"far fa-chart-line\"></span></button>`;
-        html = html+ `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS(\"downloadURL3\")>nam17&nbsp<span class=\"far fa-chart-line\"></span></button>`;
-        html = html+ `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS(\"downloadURL4\")>pcf14&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+        html = html+ `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS(\"${downloadURL1}\")>igb14&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+        html = html+ `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS(\"${downloadURL2}\")>nam14&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+        html = html+ `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS(\"${downloadURL3}\")>nam17&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+        html = html+ `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS(\"${downloadURL4}\")>pcf14&nbsp<span class=\"far fa-chart-line\"></span></button>`;
         html += `</tr>`;
 
         return html;
