@@ -1,19 +1,17 @@
 /*****MAIN*****/
 jQuery(document).ready(function() {
 
-  // window.parent would get to calling window
+  frameHeight=window.innerHeight;
+  frameWidth=window.innerWidth;
+
+  window.console.log("frame width/height "+frameWidth+" "+frameHeight);
 
   // grab the params from the iframe data
-  [URL, fname]=getCallingParam("uidlist");
+  [URL, fname]=getCallingParams();
 
   let myURL=['cgm_data/ANA1.cgm.wmrss_igb14.pos'];
   let myFname=[ 'ANA1.cgm.wmrss_igb14.pos' ];
 
-  var dataTypelist= loadAndProcessFromFile(myURL,myFname);
-  if(dataTypelist == null) {
-     window.console.log("ERROR, no datatype in the data file\n");
-     return;
-  }
+  loadAndProcessFromFile(myURL,myFname,frameWidth,frameHeight);
 
 }) // end of MAIN
-

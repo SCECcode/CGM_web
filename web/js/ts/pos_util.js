@@ -50,11 +50,11 @@ Se       Su Rne    Rnu    Reu  Soln
  0.00182  0.00738  0.007  0.014 -0.047 avg04
 *******************/
 
-// {id:idx, cgm_id:'ANA1',cgm_name:'ANA1_SCGN_CS2002',cgm_frame:'IGb14'}
-var pos_station_name = [];
-
 // each frame has 3 plots, one for North, East, and Up
-// {id:idx, plot:[{xlabel:'time',
+// {id:idx, station: [ { cgm_id:'ANA1',
+//                       cgm_name:'ANA1_SCGN_CS2002',
+//                       cgm_frame:'IGb14'}],
+//          plot:[{xlabel:'time',
 //                ylabel:'East(mm)',
 //                topRight:'WRMS=222.70mm;NRMS=141.08',
 //                topLeft:'Reference longitude:240.6365287078?E',
@@ -170,11 +170,49 @@ function processPOS(index,fileName,data) {
 
    }
 
-   pos_station_name.push({'id':index, 'cgm_id':cgm_id,'cgm_name':cgm_name,'cgm_frame':cgm_frame});
-
 // EAST
-    pos_plot_data.push({'id':index, plot:[{'xlabel':'time', 'ylabel':'East(mm)', 'topRight':'WRMS=222.70mm;NRMS=141.08', 'topLeft':'Reference longitude:'+ref_lng+'E', 'verticalReference': [], 'x':Xtime, 'y':Yeast, 'yError':Yeast_e, 'color':'blue', 'yrange':[-300,400], 'xrange':[xrange_start,xrange_end]}]});
+    pos_plot_data.push({id:index, 
+            station: [{ cgm_id:cgm_id,
+                        cgm_name:cgm_name,
+                        cgm_frame:cgm_frame}],
+            plot:[
+                  {xlabel:'time',
+                   ylabel:'North(mm)',
+                   topRight:'WRMS=BLAHmm;NRMS=BLAH',
+                   topLeft:'Reference latitude:'+ref_lat+'N',
+                   verticalReference: [],
+                   x:Xtime,
+                   y:Ynorth,
+                   yError:Ynorth_e,
+                   color:'blue',
+                   /* 'yrange':[-300,400], */
+                   xrange:[xrange_start,xrange_end]},
+                  {xlabel:'time',
+                   ylabel:'East(mm)',
+                   topRight:'WRMS=BLAHmm;NRMS=BLAH',
+                   topLeft:'Reference longitude:'+ref_lng+'E',
+                   verticalReference: [],
+                   x:Xtime,
+                   y:Yeast,
+                   yError:Yeast_e,
+                   color:'blue',
+                   /* 'yrange':[-300,400], */
+                   xrange:[xrange_start,xrange_end]},
+                  {xlabel:'time',
+                   ylabel:'Up(mm)',
+                   topRight:'WRMS=BLAHmm;NRMS=bLAH',
+                   topLeft:'Reference ellipsoid height:'+ref_up+'m',
+                   verticalReference: [],
+                   x:Xtime,
+                   y:Yup,
+                   yError:Yup_e,
+                   color:'blue',
+                   /* 'yrange':[-300,400], */
+                   xrange:[xrange_start,xrange_end]}]},
+                  );
 
    window.console.log("DONE...");
+
+   return pos_plot_data;
 }
 

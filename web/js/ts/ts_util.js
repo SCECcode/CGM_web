@@ -22,14 +22,16 @@ function ckExist(url) {
 };
 
 
-
-function loadAndProcessFromFile(ulist,nlist) {
+function loadAndProcessFromFile(ulist,nlist,figw,figh) {
   let sz=ulist.length;
   let i;
+  let plot_data;
 
+  // just do one at a time
   for(i=0;i<sz;i++) {
     let data = ckExist(ulist[i]);
-    processPOS(i,nlist[i],data);
+    plot_data=processPOS(i,nlist[i],data);
+    plotly_plot_pos(plot_data,figw,figh);
   }
   
 /*** ???
@@ -41,22 +43,88 @@ function loadAndProcessFromFile(ulist,nlist) {
 }
 
 // https://stackoverflow.com/questions/28295870/how-to-pass-parameters-through-iframe-from-parent-html
-function getCallingParam(pname) {
+function getCallingParams() {
 
-  var url = window.location.search.substring(1);
+  // expecting  "URL", and "fname"
+  let url = window.location.search.substring(1);
+  var myURL=null;
+  var myFname=null;
+
   window.console.log("param url is .."+url);
   if(url == "") {
     return [];
   }
-  var qArray = url.split('&'); //get key-value pairs
+  let qArray = url.split('&'); //get key-value pairs
   for (var i = 0; i < qArray.length; i++)
   {
-     var pArr = qArray[i].split('='); //split key and value
-     if (pArr[0] == pname) {
-         var r=decodeURI(pArr[1]);
-         return [r, url];
+     let pArr = qArray[i].split('='); //split key and value
+     switch (pArr[0]) {
+        case "URL":
+             myURL=pArr[1];
+             break;
+        case "fileName":
+             myFname=pArr[1];
+             break;
+        default: 
+// do nothing
+             break;
      }
   }
-  return [];
+  return [myURL, myFname];
 }
 
+
+// plotly 
+function plotly_plot_pos(pos_data,figw,figh) {
+
+  let plot=pos_data[0].plot;   
+
+  let pNorth=plot[0]; 
+  let pEast=plot[1];
+  let pUp=plot[2];
+
+  let traceNorth= { x: pNorth.x,
+                    y: pNorth.y,
+                    yaxis: 'x',
+                    yaxis: 'y',
+                    error_y: {
+                          type: 'data',
+                          array: pNorth.yError,
+                          visible: true
+                    },
+                    type: 'scatter' };
+  let traceEast = { x: pEast.x,
+                    y: pEast.y,
+                    xaxis: 'x',
+                    yaxis: 'y2',
+                    error_y: {
+                          type: 'data',
+                          array: pEast.yError,
+                          visible: true
+                    },
+                    type: 'scatter' };
+
+  let traceUp = { x: pUp.x,
+                  y: pUp.y,
+                  xaxis: 'x',
+                  yaxis: 'y3',
+                  error_y: {
+                        type: 'data',
+                        array: pUp.yError,
+                        visible: true
+                  },
+                  type: 'scatter' };
+
+  var data = [traceNorth, traceEast, traceUp ];
+  var layout = { 
+                 width: figw,
+                 height: figh,
+                 grid: {
+                    rows: 3,
+                    columns: 1,
+                    subplots: [ ['xy'],['xy2'], ['xy3'] ],
+                 }
+               };
+
+  Plotly.newPlot('myDiv', data, layout);
+}

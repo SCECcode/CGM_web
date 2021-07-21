@@ -100,18 +100,14 @@ function get_PARAMS() {
   return $('#paramsTS').attr('src');
 }
 
-function showTSView(urls,fnames,ftypes) {
+function showTSView(url,fname) {
 
 // TODO:XX need some reset/setup for plotly
 
   $('#modalTS').modal('show');
 
-  let urlstr= "["+urls.toString()+"]";
-  let fnamestr= "["+fnames.toString()+"]";
-  let ftypestr= "["+ftypes.toString()+"]";
-
   // urls causing problem when it is too large
-  let params="frameType="+ftypestr+"&URL"+urlstr+"&fileName="+fnamestr;
+  let params="URL"+url+"&fileName="+fname;
   set_PARAMS(params);
 
   window.console.log("ShowTSView, params >>"+params);

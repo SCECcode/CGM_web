@@ -409,51 +409,10 @@ window.console.log("HERE..");
     };
 
 
-    this.executePlotTS = function(ftype) {
-      let layers=CGM.search_result.getLayers();
-      let urllist=[];
-      let dnamelist=[];
-      let framelist=[];
-      
-      var cnt=layers.length;
-      for(var i=0; i<cnt; i++) {
-          let layer=layers[i];
-
-          if( !layer.scec_properties.selected ) {
-            continue;
-          }
-      
-          if(ftype == frameType.IGB14 || ftype == "all") {
-            let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.IGB14);
-            let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
-            urllist.push(downloadURL);
-            dnamelist.push(dname);
-            framelist.push(frameType.IGB14);
-          }
-          if(ftype == frameType.NAM14 || ftype == "all") {
-            let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.NAM14);
-            let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
-            urllist.push(downloadURL);
-            dnamelist.push(dname);
-            framelist.push(frameType.NAM14);
-          }
-          if(ftype == frameType.NAM17 || ftype == "all") {
-            let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.NAM17);
-            let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
-            urllist.push(downloadURL);
-            dnamelist.push(dname);
-            framelist.push(frameType.NAM17);
-          }
-          if(ftype == frameType.PCF14 || ftype == "all") {
-            let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.PCF14);
-            let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
-            urllist.push(downloadURL);
-            dnamelist.push(dname);
-            framelist.push(frameType.PCF14);
-          }
-      }
-     showTSView(urllist, dnamelist, framelist);
-     showPlotTSWarning();
+    this.executePlotTS = function(downloadURL) {
+      let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
+      showTSView(downloadURL, dname);
+      showPlotTSWarning();
     }
 
 
@@ -527,10 +486,10 @@ window.console.log("generate a table row..");
         html += `<td class="cgm-data-click">${layer.scec_properties.type} </td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.horizontalVelocity}</td>`;
         html += `<td class="text-center">`;
-        html = html+ `<a href=\"`+downloadURL1+`\" download> <button class=\"btn btn-xs cgm-download\" title=\"download igb14 frame\"><span id=\"download_igb14_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>igb14</button></a>`;
-        html = html+`<a href=\"`+downloadURL2+`\" download> <button class=\"btn btn-xs cgm-download\" title=\"download nam14 frame\"><span id=\"download_nam14_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>nam14</button></a>`;
-        html = html+`<a href=\"`+downloadURL3+`\" download> <button class=\"btn btn-xs cgm-download\" title=\"download nam17 frame\"><span id=\"download_nam17_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>nam17</button></a>`;
-        html = html+`<a href=\"`+downloadURL4+`\" download> <button class=\"btn btn-xs cgm-download\" title=\"download pcf14 frame\"><span id=\"download_pcf14_${layer.scec_properties.gid}\" class=\"far fa-arrow-alt-circle-down\"></span>pcf14</button></a>`;
+        html = html+ `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS(\"downloadURL1\")>igb14&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+        html = html+ `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS(\"downloadURL2\")>nam14&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+        html = html+ `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS(\"downloadURL3\")>nam17&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+        html = html+ `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS(\"downloadURL4\")>pcf14&nbsp<span class=\"far fa-chart-line\"></span></button>`;
         html += `</tr>`;
 
         return html;
@@ -837,33 +796,11 @@ window.console.log("generateResultsTable..");
                              </button>
                          </th>
                          <th class="hoverColor" onClick="sortMetadataTableByRow(1,'a')">Station&nbsp<span id='sortCol_1' class="fas fa-angle-down"></span><br>Name</th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(2,'n')">Latitude<span id='sortCol_2' class="fas fa-angle-down"></span></th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(3,'n')">Longitude<span id='sortCol_3' class="fas fa-angle-down"></span></th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(2,'n')">Latitude&nbsp<span id='sortCol_2' class="fas fa-angle-down"></span></th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(3,'n')">Longitude&nbsp<span id='sortCol_3' class="fas fa-angle-down"></span></th>
                         <th>Type</th>
                         <th class="hoverColor" onClick="sortMetadataTableByRow(5,'n')">Horizontal&nbsp<span id='sortCol_5' class="fas fa-angle-down"></span><br>Velocity (mm/yr)</th>
                         <th style="width:40%;"><div class="col text-center">
-                            <div class="btn-group download-now">
-<!--time series plot -->
-                                <button id="plotTS-all" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false" disabled>
-                                    PLOT TS<span id="plot-counter"></span>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <button class="dropdown-item" type="button" value="igb14"
-                                            onclick="CGM.executePlotTS(this.value);">igb14
-                                    </button>
-                                    <button class="dropdown-item" type="button" value="nam14"
-                                            onclick="CGM.executePlotTS(this.value);">nam14
-                                    </button>
-                                    <button class="dropdown-item" type="button" value="nam17"
-                                            onclick="CGM.executePlotTS(this.value);">nam17
-                                    </button>
-                                    <button class="dropdown-item" type="button" value="pcf14"
-                                            onclick="CGM.executePlotTS(this.value);">pcf14
-                                    </button>
-                                </div>
-                            </div>
-                            &nbsp; &nbsp;
 <!--download all -->
                             <div class="btn-group download-now">
                                 <button id="download-all" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"
