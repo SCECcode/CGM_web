@@ -160,8 +160,6 @@ function toggleExpandTSview(elt) {
     let nw= Math.floor(nh * 3/2);
     document.getElementById("viewTSIfram").height=nh;
     document.getElementById("viewTSIfram").width=nw;
-window.console.log("new width"+nw);
-window.console.log("new height"+nh);
     } else {
       elt.innerHTML="Shrink";
       $('#modalTSDialog').addClass('modal-full-dialog');
@@ -170,8 +168,6 @@ window.console.log("new height"+nh);
       var f=document.getElementById("modalTSFooter");
       document.getElementById("viewTSIfram").height = save_height;
       document.getElementById("viewTSIfram").width = save_width;
-window.console.log("old width"+nw);
-window.console.log("old height"+nh);
   }
 }
 
