@@ -115,6 +115,7 @@ function plotly_plot_pos(pos_data,figw,figh) {
   var layout = { 
                  width: figw,
                  height: figh,
+                 uirevision:'true',
                  grid: {
                     rows: 3,
                     columns: 1,

@@ -115,9 +115,9 @@ function processPOS(index,fileName,data) {
          let ynorth=parseFloat(vals[15])*1000;
          let yeast=parseFloat(vals[16])*1000;
          let yup=parseFloat(vals[17])*1000;
-         let ynorth_e=parseFloat(vals[18]);
-         let yeast_e=parseFloat(vals[19]);
-         let yup_e=parseFloat(vals[20]);
+         let ynorth_e=parseFloat(vals[18])*1000;
+         let yeast_e=parseFloat(vals[19])*1000;
+         let yup_e=parseFloat(vals[20])*1000;
 
          Xtime.push(xtime);
          Yeast.push(yeast);
