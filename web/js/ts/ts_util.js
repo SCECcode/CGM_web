@@ -79,31 +79,35 @@ function plotly_plot_pos(pos_data,figw,figh) {
   let pEast=plot[1];
   let pUp=plot[2];
 
-  let traceNorth= { x: pNorth.x,
-                    y: pNorth.y,
-                    yaxis: 'x',
-                    yaxis: 'y',
-                    error_y: {
-                          type: 'data',
-                          array: pNorth.yError,
-                          visible: true
-                    },
-                    type: 'scatter' };
+window.console.log("HERE..");
+
   let traceEast = { x: pEast.x,
                     y: pEast.y,
                     xaxis: 'x',
-                    yaxis: 'y2',
+                    yaxis: 'y',
+                    showlegend: false,
                     error_y: {
                           type: 'data',
                           array: pEast.yError,
                           visible: true
                     },
                     type: 'scatter' };
-
+  let traceNorth= { x: pNorth.x,
+                    y: pNorth.y,
+                    xaxis: 'x2',
+                    yaxis: 'y2',
+                    showlegend: false,
+                    error_y: {
+                          type: 'data',
+                          array: pNorth.yError,
+                          visible: true
+                    },
+                    type: 'scatter' };
   let traceUp = { x: pUp.x,
                   y: pUp.y,
-                  xaxis: 'x',
+                  xaxis: 'x3',
                   yaxis: 'y3',
+                  showlegend: false,
                   error_y: {
                         type: 'data',
                         array: pUp.yError,
@@ -111,43 +115,101 @@ function plotly_plot_pos(pos_data,figw,figh) {
                   },
                   type: 'scatter' };
 
-  var data = [traceNorth, traceEast, traceUp ];
+  var data = [traceEast, traceNorth, traceUp ];
   var layout = { 
                  width: figw,
                  height: figh,
+                 
+                 yaxis: {
+title: {text: 'East(mm)', font: { size:18,color:'#000000'}},
+showgrid: true,
+zeroline: true,
+showline: true,
+mirror: 'allticks',
+tickes: 'inside',
+gridcolor: '#bdbdbd',
+gridwidth: 1,
+zerolinecolor: '#969696',
+zerolinewidth: 1,
+linecolor: '#636363',
+linewidth: 2,
+                        },
+                 yaxis2: {
+title: {text: 'North(mm)', font: { size:18,color:'#000000'}},
+showgrid: true,
+zeroline: true,
+showline: true,
+mirror: 'allticks',
+tickes: 'inside',
+gridcolor: '#bdbdbd',
+gridwidth: 1,
+zerolinecolor: '#969696',
+zerolinewidth: 1,
+linecolor: '#636363',
+linewidth: 2
+                         },
+                 yaxis3: {
+title: {text: 'Up(mm)', font: { size:18,color:'#000000'}},
+showgrid: true,
+zeroline: true,
+showline: true,
+mirror: 'allticks',
+tickes: 'inside',
+gridcolor: '#bdbdbd',
+gridwidth: 1,
+zerolinecolor: '#969696',
+zerolinewidth: 1,
+linecolor: '#636363',
+linewidth: 2
+                         },
                  xaxis: {
 showgrid: true,
 zeroline: true,
 showline: true,
-mirror: 'ticks',
+mirror: 'allticks',
+tickes: 'inside',
 gridcolor: '#bdbdbd',
 gridwidth: 1,
 zerolinecolor: '#969696',
-zerolinewidth: 2,
+zerolinewidth: 1,
 linecolor: '#636363',
-linewidth: 4
+linewidth: 2
                          },
-                 yaxis: {
-title: 
-  {text: 'North(mm)', font: { family:'Courier New,monospace',size:18,color:'#000000'}},
-showgrid: false,
+                 xaxis2: {
+matches: 'x',
+showgrid: true,
 zeroline: true,
 showline: true,
-mirror: 'ticks',
+mirror: 'allticks',
+tickes: 'inside',
+gridcolor: '#bdbdbd',
+gridwidth: 1,
+zerolinecolor: '#969696',
+zerolinewidth: 1,
+linecolor: '#636363',
+linewidth: 2
+                         },
+                 xaxis3: {
+matches: 'x',
+showgrid: true,
+zeroline: true,
+showline: true,
+mirror: 'allticks',
+tickes: 'inside',
 gridcolor: '#bdbdbd',
 gridwidth: 1,
 zerolinecolor: '#969696',
 zerolinewidth: 2,
 linecolor: '#636363',
 linewidth: 2
-                        },
-                 yaxis2: {},
-                 yaxis3: {},
-                 grid: {
-                    rows: 3,
-                    columns: 1,
-                    subplots: [ ['xy'],['xy2'], ['xy3'] ]
-                 }
+                         },
+                 grid: { rows: 3, columns: 1,  pattern: 'independent' },
+annotations: [
+{ text: pEast.topLeft, showarrow:false, x:0, xref:"x domain",y:1.2, yref:"y domain"},
+{ text: pNorth.topLeft, showarrow:false, x:0, xref:"x domain",y:1.2, yref:"y2 domain"},
+{ text: pUp.topLeft, showarrow:false, x:0, xref:"x domain",y:1.2, yref:"y3 domain"},
+{ text: pEast.topRight, showarrow:false, x:1, xref:"x domain",y:1.2, yref:"y domain"}
+]
                };
 
    var config = {responsive: true}
