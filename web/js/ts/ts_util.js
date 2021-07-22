@@ -115,13 +115,42 @@ function plotly_plot_pos(pos_data,figw,figh) {
   var layout = { 
                  width: figw,
                  height: figh,
-                 uirevision:'true',
+                 xaxis: {
+showgrid: true,
+zeroline: true,
+showline: true,
+mirror: 'ticks',
+gridcolor: '#bdbdbd',
+gridwidth: 1,
+zerolinecolor: '#969696',
+zerolinewidth: 2,
+linecolor: '#636363',
+linewidth: 4
+                         },
+                 yaxis: {
+title: 
+  {text: 'North(mm)', font: { family:'Courier New,monospace',size:18,color:'#000000'}},
+showgrid: false,
+zeroline: true,
+showline: true,
+mirror: 'ticks',
+gridcolor: '#bdbdbd',
+gridwidth: 1,
+zerolinecolor: '#969696',
+zerolinewidth: 2,
+linecolor: '#636363',
+linewidth: 2
+                        },
+                 yaxis2: {},
+                 yaxis3: {},
                  grid: {
                     rows: 3,
                     columns: 1,
-                    subplots: [ ['xy'],['xy2'], ['xy3'] ],
+                    subplots: [ ['xy'],['xy2'], ['xy3'] ]
                  }
                };
 
-  Plotly.newPlot('myDiv', data, layout);
+   var config = {responsive: true}
+
+  Plotly.newPlot('myDiv', data, layout, config);
 }
