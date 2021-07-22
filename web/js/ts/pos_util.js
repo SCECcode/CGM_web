@@ -112,6 +112,7 @@ function processPOS(index,fileName,data) {
      if(data_start) {
          let vals=(line.trim().replace(/ +/g," ")).split(" ");
          let xtime= toTime(vals[0],vals[1]); 
+
          let ynorth=parseFloat(vals[15])*1000;
          let yeast=parseFloat(vals[16])*1000;
          let yup=parseFloat(vals[17])*1000;
