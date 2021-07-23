@@ -110,12 +110,12 @@ function plotly_plot_pos(pos_data) {
         source: "img/IMG_9334.jpg",
         xref: "paper",
         yref: "paper",
-        x:0,
-        y:1,
+        x:1,
+        y:0,
         sizex: 0.1,
-        sizey: 0.1,
-        'xanchor':'right',
-        'yanchor':'bottom'
+        sizey: 0.2,
+        'xanchor':'left',
+        'yanchor':'top'
       }];
 
 
