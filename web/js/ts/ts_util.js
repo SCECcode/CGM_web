@@ -203,7 +203,7 @@ zerolinewidth: 2,
 linecolor: '#636363',
 linewidth: 2
                          },
-                 grid: { rows: 3, columns: 1,  pattern: 'independent' },
+                 grid: { rows: 3, columns: 1, pattern: 'independent' },
 annotations: [
 { text: pEast.topLeft, showarrow:false, x:0, xref:"x domain",y:1.2, yref:"y domain"},
 { text: pNorth.topLeft, showarrow:false, x:0, xref:"x domain",y:1.2, yref:"y2 domain"},
