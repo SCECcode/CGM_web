@@ -73,9 +73,9 @@ function getCallingParams() {
 // plotly 
 function plotly_plot_pos(pos_data) {
 
-  let margin_left_offset=60;
+  let margin_offset=60;
   let frameHeight=window.innerHeight;                                    
-  let frameWidth=window.innerWidth-margin_left_offset;
+  let frameWidth=window.innerWidth-margin_offset;
 
   let frameWidth_min=800;
 
@@ -94,10 +94,12 @@ function plotly_plot_pos(pos_data) {
   }
 
   let margin_left_default=80;
+  let margin_right_default=80;
   let margin_top_default=100;
 
   let margin_top=margin_top_default+Math.floor((frameHeight-nh)/2);
-  let margin_left=margin_left_default+margin_left_offset;
+  let margin_left=margin_left_default+margin_offset;
+  let margin_right=margin_right_default+margin_offset;
 
   let plot=pos_data[0].plot;   
   let info=pos_data[0].station;
@@ -112,7 +114,7 @@ function plotly_plot_pos(pos_data) {
         yref: "paper",
         x:1,
         y:0,
-        sizex: 0.1,
+        sizex: 0.5,
         sizey: 0.2,
         'xanchor':'left',
         'yanchor':'top'
@@ -172,7 +174,7 @@ paper_bgcolor: '#f1f1f1',
                  title: info.cgm_name+" ("+info.cgm_frame+")",
                  width: nw,
                  height: nh,
-                 margin: { l:margin_left, t:margin_top },
+                 margin: { l:margin_left, t:margin_top, r:margin_right },
                  colorway: [ '#1f77b4','#1f77b4','#1f77b4'],
 images: scec_image,
                  yaxis: {
