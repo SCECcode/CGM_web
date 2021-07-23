@@ -79,7 +79,7 @@ function plotly_plot_pos(pos_data,figw,figh) {
   let pEast=plot[1];
   let pUp=plot[2];
 
-window.console.log("HERE..");
+window.console.log("ts HERE..");
 
   let traceEast = { x: pEast.x,
                     y: pEast.y,
@@ -100,7 +100,10 @@ window.console.log("HERE..");
                     error_y: {
                           type: 'data',
                           array: pNorth.yError,
-                          visible: true
+                          visible: true,
+                          color: '#ff0000',
+                          thickness: 1, 
+                          width: 1
                     },
                     type: 'scatter' };
   let traceUp = { x: pUp.x,
@@ -111,7 +114,7 @@ window.console.log("HERE..");
                   error_y: {
                         type: 'data',
                         array: pUp.yError,
-                        visible: true
+                        visible: true,
                   },
                   type: 'scatter' };
 
@@ -208,7 +211,9 @@ annotations: [
 { text: pEast.topLeft, showarrow:false, x:0, xref:"x domain",y:1.2, yref:"y domain"},
 { text: pNorth.topLeft, showarrow:false, x:0, xref:"x domain",y:1.2, yref:"y2 domain"},
 { text: pUp.topLeft, showarrow:false, x:0, xref:"x domain",y:1.2, yref:"y3 domain"},
-{ text: pEast.topRight, showarrow:false, x:1, xref:"x domain",y:1.2, yref:"y domain"}
+{ text: pEast.topRight, showarrow:false, x:1, xref:"x domain",y:1.2, yref:"y domain"},
+{ text: pNorth.topRight, showarrow:false, x:1, xref:"x domain",y:1.2, yref:"y2 domain"},
+{ text: pUp.topRight, showarrow:false, x:1, xref:"x domain",y:1.2, yref:"y3 domain"}
 ]
                };
 

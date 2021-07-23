@@ -4,7 +4,6 @@ jQuery(document).ready(function() {
   let frameHeight=window.innerHeight;
   let frameWidth=window.innerWidth;
 
-window.console.log("HERE");
   let nh=frameHeight;
   let nw= Math.floor(nh/3)*4;
   if(nw > frameWidth) {
