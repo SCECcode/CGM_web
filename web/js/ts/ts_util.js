@@ -100,6 +100,7 @@ function plotly_plot_pos(pos_data) {
   let margin_left=margin_left_default+margin_left_offset;
 
   let plot=pos_data[0].plot;   
+  let info=pos_data[0].station;
 
   let pNorth=plot[0]; 
   let pEast=plot[1];
@@ -154,6 +155,7 @@ function plotly_plot_pos(pos_data) {
 
   var data = [traceEast, traceNorth, traceUp ];
   var layout = { 
+                 title: info.cgm_name+" ("+info.cgm_frame+")",
                  width: nw,
                  height: nh,
                  margin: { l:margin_left, t:margin_top },

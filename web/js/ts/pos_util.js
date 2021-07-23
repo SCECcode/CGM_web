@@ -171,11 +171,10 @@ function processPOS(index,fileName,data) {
 
    }
 
-// EAST
-    pos_plot_data.push({id:index, 
-            station: [{ cgm_id:cgm_id,
-                        cgm_name:cgm_name,
-                        cgm_frame:cgm_frame}],
+   pos_plot_data.push({id:index, 
+            station: { cgm_id:cgm_id,
+                       cgm_name:cgm_name,
+                       cgm_frame:cgm_frame},
             plot:[
                   {xlabel:'time',
                    ylabel:'North(mm)',
