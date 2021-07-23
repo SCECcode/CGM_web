@@ -106,6 +106,19 @@ function plotly_plot_pos(pos_data) {
   let pEast=plot[1];
   let pUp=plot[2];
 
+  let scec_image=[{
+        source: "img/IMG_9334.jpg",
+        xref: "paper",
+        yref: "paper",
+        x:0,
+        y:1,
+        sizex: 0.1,
+        sizey: 0.1,
+        'xanchor':'right',
+        'yanchor':'bottom'
+      }];
+
+
 
   let traceEast = { x: pEast.x,
                     y: pEast.y,
@@ -155,11 +168,13 @@ function plotly_plot_pos(pos_data) {
 
   var data = [traceEast, traceNorth, traceUp ];
   var layout = { 
+paper_bgcolor: '#f1f1f1',
                  title: info.cgm_name+" ("+info.cgm_frame+")",
                  width: nw,
                  height: nh,
                  margin: { l:margin_left, t:margin_top },
                  colorway: [ '#1f77b4','#1f77b4','#1f77b4'],
+images: scec_image,
                  yaxis: {
 title: {text: 'East(mm)', font: { size:18,color:'#000000'}},
 showgrid: true,
