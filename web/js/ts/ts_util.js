@@ -170,7 +170,7 @@ function plotly_plot_pos(pos_data) {
 
   var data = [traceEast, traceNorth, traceUp ];
   var layout = { 
-//paper_bgcolor: '#f1f1f1',
+                 paper_bgcolor: '#f1f1f1',
                  title: info.cgm_name+" ("+info.cgm_frame+")",
                  width: nw,
                  height: nh,
