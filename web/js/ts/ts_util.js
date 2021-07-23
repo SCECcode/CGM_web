@@ -109,13 +109,13 @@ function plotly_plot_pos(pos_data) {
   let pUp=plot[2];
 
   let scec_image=[{
-        source: "img/IMG_9334.jpg",
+        source: "img/SCEC_Traditional_Logo_Red.png",
         xref: "paper",
         yref: "paper",
         x:1,
         y:0,
-        sizex: 0.5,
-        sizey: 0.2,
+        sizex: 0.3,
+        sizey: 0.1,
         'xanchor':'left',
         'yanchor':'top'
       }];
@@ -170,7 +170,7 @@ function plotly_plot_pos(pos_data) {
 
   var data = [traceEast, traceNorth, traceUp ];
   var layout = { 
-paper_bgcolor: '#f1f1f1',
+//paper_bgcolor: '#f1f1f1',
                  title: info.cgm_name+" ("+info.cgm_frame+")",
                  width: nw,
                  height: nh,
