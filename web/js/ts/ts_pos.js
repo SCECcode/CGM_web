@@ -1,6 +1,6 @@
 
 /*** 
-   pos_util.js
+   ts_pos.js
 ***/
 //
 // parsing pos file content and extract information for plotting
