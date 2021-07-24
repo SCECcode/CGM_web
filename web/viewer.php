@@ -294,7 +294,9 @@ window.console.log("HERE..");
     <div class="modal-content" id="modalTSContent">
       <!--Header-->
       <div class="modal-header">
+<!---
         <button id="viewTSToggleReprbtn" class="btn btn-outline-primary btn-sm" type="button" onclick="toggleReprTSview(this)">Show Representation</button>
+-->
       </div>
 
       <!--Body-->

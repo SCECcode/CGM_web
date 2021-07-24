@@ -103,6 +103,21 @@ function processPOS(index,fileName,data) {
    let start_epoch;
    let end_epoch;
 
+/*
+wrms = sqrt[sum(dN^2/Sn^2)/sum(1/Sn^2)] where num is the number of records.
+nrms = sqrt[sum(dN^2/Sn^2)/(n-p)], where n is the number of data (time series) points 
+and p is the number of parameters estimated (zero in the case of plotting 
+raw time series, as we are here)
+*/
+
+   let wrms_top_north=0;
+   let wrms_bottom_north=0;
+   let wrms_top_east=0;
+   let wrms_bottom_east=0;
+   let wrms_top_up=0;
+   let wrms_bottom_up=0;
+   let data_count=0;
+
    for(i=0; i<sz; i++) {
      let line=dlines[i];
 
@@ -110,15 +125,24 @@ function processPOS(index,fileName,data) {
        continue;
      }
      if(data_start) {
+         data_count=data_count+1;
          let vals=(line.trim().replace(/ +/g," ")).split(" ");
          let xtime= toTime(vals[0],vals[1]); 
 
          let ynorth=parseFloat(vals[15])*1000;
-         let yeast=parseFloat(vals[16])*1000;
-         let yup=parseFloat(vals[17])*1000;
          let ynorth_e=parseFloat(vals[18])*1000;
+         wrms_top_north=wrms_top_north+( (ynorth * ynorth)/(ynorth_e * ynorth_e));
+         wrms_bottom_north= wrms_bottom_north + (1/(ynorth_e * ynorth_e));
+
+         let yeast=parseFloat(vals[16])*1000;
          let yeast_e=parseFloat(vals[19])*1000;
+         wrms_top_east=wrms_top_east+( (yeast * yeast)/(yeast_e * yeast_e));
+         wrms_bottom_east= wrms_bottom_east + (1/(yeast_e * yeast_e));
+
+         let yup=parseFloat(vals[17])*1000;
          let yup_e=parseFloat(vals[20])*1000;
+         wrms_top_up=wrms_top_up+( (yup * yup)/(yup_e * yup_e));
+         wrms_bottom_up= wrms_bottom_up + (1/(yup_e * yup_e));
 
          Xtime.push(xtime);
          Yeast.push(yeast);
@@ -170,6 +194,12 @@ function processPOS(index,fileName,data) {
      }
 
    }
+   let wrms_north = Math.floor((Math.sqrt(wrms_top_north / wrms_bottom_north)*1000))/1000;
+   let wrms_east = Math.floor((Math.sqrt(wrms_top_east / wrms_bottom_east)*1000))/1000;
+   let wrms_up = Math.floor((Math.sqrt(wrms_top_up / wrms_bottom_up)*1000))/1000;
+   let nrms_north = Math.floor((Math.sqrt(wrms_top_north /data_count)*1000))/1000;
+   let nrms_east = Math.floor((Math.sqrt(wrms_top_east /data_count)*1000))/1000;
+   let nrms_up = Math.floor((Math.sqrt(wrms_top_up /data_count)*1000))/1000;
 
    pos_plot_data.push({id:index, 
             station: { cgm_id:cgm_id,
@@ -178,7 +208,7 @@ function processPOS(index,fileName,data) {
             plot:[
                   {xlabel:'time',
                    ylabel:'North(mm)',
-                   topRight:'WRMS=BLAHmm;NRMS=BLAH',
+                   topRight:'WRMS='+wrms_north+'mm;NRMS='+nrms_north,
                    topLeft:'Reference latitude:'+ref_lat+'N',
                    verticalReference: [],
                    x:Xtime,
@@ -189,7 +219,7 @@ function processPOS(index,fileName,data) {
                    xrange:[xrange_start,xrange_end]},
                   {xlabel:'time',
                    ylabel:'East(mm)',
-                   topRight:'WRMS=BLAHmm;NRMS=BLAH',
+                   topRight:'WRMS='+wrms_east+'mm;NRMS='+nrms_east,
                    topLeft:'Reference longitude:'+ref_lng+'E',
                    verticalReference: [],
                    x:Xtime,
@@ -200,7 +230,7 @@ function processPOS(index,fileName,data) {
                    xrange:[xrange_start,xrange_end]},
                   {xlabel:'time',
                    ylabel:'Up(mm)',
-                   topRight:'WRMS=BLAHmm;NRMS=bLAH',
+                   topRight:'WRMS='+wrms_up+'mm;NRMS='+nrms_up,
                    topLeft:'Reference ellipsoid height:'+ref_up+'m',
                    verticalReference: [],
                    x:Xtime,
