@@ -102,11 +102,8 @@ function get_PARAMS() {
 
 function showTSView(url,fname) {
 
-// TODO:XX need some reset/setup for plotly
-
   $('#modalTS').modal('show');
 
-  // urls causing problem when it is too large
   let params="URL="+url+"&fileName="+fname;
   set_PARAMS(params);
 
