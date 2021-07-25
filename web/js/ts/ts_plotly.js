@@ -6,7 +6,8 @@ function plotly_plot_pos(pos_data) {
 
   let margin_offset=60;
   let frameHeight=window.innerHeight;                                    
-  let frameWidth=window.innerWidth-margin_offset;
+  let frameWidth=window.innerWidth-margin_offset-margin_offset;
+window.console.log("frame width "+frameWidth+" frame height "+frameHeight);
 
   let frameWidth_min=800;
 
@@ -23,7 +24,7 @@ function plotly_plot_pos(pos_data) {
           nh= Math.floor((nw/3.5)*3);
        }
   }
-  nw=nw+margin_offset;
+  nw=nw+margin_offset+margin_offset;
 
   let margin_left_default=80;
   let margin_right_default=80;
@@ -32,6 +33,8 @@ function plotly_plot_pos(pos_data) {
   let margin_top=margin_top_default+Math.floor((frameHeight-nh)/2);
   let margin_left=margin_left_default+margin_offset;
   let margin_right=margin_right_default+margin_offset;
+
+  window.console.log("nw "+nw+" nh "+nh);
 
   let plot=pos_data[0].plot;   
   let info=pos_data[0].station;
@@ -120,6 +123,7 @@ yaxis: {
     showline: true,
     mirror: 'allticks',
     tickes: 'inside',
+    nticks: 8,
     gridcolor: '#f1f1f1',
     gridwidth: 1,
     zerolinecolor: '#969696',
@@ -133,6 +137,7 @@ yaxis2: {
     showline: true,
     mirror: 'allticks',
     tickes: 'inside',
+    nticks: 8,
     gridcolor: '#f1f1f1',
     gridwidth: 1,
     zerolinecolor: '#969696',
@@ -146,6 +151,7 @@ yaxis3: {
     showline: true,
     mirror: 'allticks',
     tickes: 'inside',
+    nticks: 8,
     gridcolor: '#f1f1f1',
     gridwidth: 1,
     zerolinecolor: '#969696',
@@ -201,12 +207,12 @@ xaxis3: {
     linewidth: 2 },
 grid: { rows: 3, columns: 1, pattern: 'independent' },
 annotations: [
-    { text: pEast.topLeft, showarrow:false, x:0, xref:"x domain",y:1.15, yref:"y domain"},
-    { text: pNorth.topLeft, showarrow:false, x:0, xref:"x domain",y:1.15, yref:"y2 domain"},
-    { text: pUp.topLeft, showarrow:false, x:0, xref:"x domain",y:1.15, yref:"y3 domain"},
-    { text: pEast.topRight, showarrow:false, x:1, xref:"x domain",y:1.15, yref:"y domain"},
-    { text: pNorth.topRight, showarrow:false, x:1, xref:"x domain",y:1.15, yref:"y2 domain"},
-    { text: pUp.topRight, showarrow:false, x:1, xref:"x domain",y:1.15, yref:"y3 domain"}
+    { text: pEast.topLeft, showarrow:false, x:0, xref:"x domain",y:1.18, yref:"y domain"},
+    { text: pNorth.topLeft, showarrow:false, x:0, xref:"x domain",y:1.18, yref:"y2 domain"},
+    { text: pUp.topLeft, showarrow:false, x:0, xref:"x domain",y:1.18, yref:"y3 domain"},
+    { text: pEast.topRight, showarrow:false, x:1, xref:"x domain",y:1.18, yref:"y domain"},
+    { text: pNorth.topRight, showarrow:false, x:1, xref:"x domain",y:1.18, yref:"y2 domain"},
+    { text: pUp.topRight, showarrow:false, x:1, xref:"x domain",y:1.18, yref:"y3 domain"}
     ]
 };
 
