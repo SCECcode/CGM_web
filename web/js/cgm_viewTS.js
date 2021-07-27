@@ -100,11 +100,19 @@ function get_PARAMS() {
   return $('#paramsTS').attr('src');
 }
 
-function showTSView(url,fname) {
+// urls-> array
+// ftypes -> array 
+ function showTSView(urls,ftypes) {
 
   $('#modalTS').modal('show');
 
-  let params="URL="+url+"&fileName="+fname;
+  var utmp=urls.toString();
+  var ftypes=ftypes.toString();
+
+  var  ustring="["+utmp+"]";
+  var  fstring="["+ftypes+"]";
+
+  let params= "urls="+ustring+"&ftypes="+fstring;
   set_PARAMS(params);
 
   window.console.log("ShowTSView, params >>"+params);

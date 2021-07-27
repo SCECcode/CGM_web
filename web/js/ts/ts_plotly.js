@@ -2,7 +2,12 @@
    ts_plotly.js
 ***/
 
-function plotly_plot_pos(pos_data) {
+// [ { type:ftype, pos:plot_data }]
+function plotly_plot_pos(pos_data_list) {
+
+  let sz=plot_data_list.length; 
+  let tmp=plot_data_list[0];
+  let pos_data=tmp['pos'];
 
   let margin_offset=60;
   let frameHeight=window.innerHeight;                                    

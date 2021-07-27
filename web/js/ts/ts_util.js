@@ -22,50 +22,53 @@ function ckExist(url) {
 };
 
 
-function loadAndProcessFromFile(ulist,nlist) {
+function loadAndProcessFromFile(ulist,tlist) {
   let sz=ulist.length;
+  let i;
+  let pos=[];
 
-// assume there is just 1 for now
-  let data = ckExist(ulist[0]);
-  let plot_data=processPOS(0,nlist[0],data);
-  plotly_plot_pos(plot_data);
-  
-/*** ???
   for(i=0;i<sz;i++) {
+// assume there is just 1 for now
+    let data = ckExist(ulist[i]);
+    let plot_data=processPOS(data);
+    pos.push( {'type':tlist[i], 'pos':plot_data});
+  }
+  plotly_plot_pos(pos);
+  
+/**??
     let promise = $.get(ulist[i]);
     processPOS(i,nlist[i],promise);
-  }
 ***/
 }
 
 // https://stackoverflow.com/questions/28295870/how-to-pass-parameters-through-iframe-from-parent-html
-function getCallingParams() {
+function getParams() {
 
-  // expecting  "URL", and "fname"
-  let url = window.location.search.substring(1);
-  var myURL=null;
-  var myFname=null;
+  // expecting  "urls=...&ftypes=...""
+  let tmp = window.location.search.substring(1);
 
-  window.console.log("param url is .."+url);
-  if(url == "") {
+  window.console.log("param string is .."+tmp);
+  if(tmp == "") {
     return [];
   }
+
   let qArray = url.split('&'); //get key-value pairs
   for (var i = 0; i < qArray.length; i++)
   {
      let pArr = qArray[i].split('='); //split key and value
      switch (pArr[0]) {
-        case "URL":
+        case "urls":
              myURL=pArr[1];
              break;
-        case "fileName":
-             myFname=pArr[1];
+        case "ftypes":
+             myFtypes=pArr[1];
              break;
-        default: 
+        default:
 // do nothing
              break;
      }
   }
-  return [myURL, myFname];
+
+  return [myURL, myFtypes];
 }
 

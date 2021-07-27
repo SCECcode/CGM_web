@@ -14,6 +14,9 @@ var CGM = new function () {
     this.search_result = new L.FeatureGroup();
     this.searching = false;
 
+    const cont_site=["ANA1","TWMS"];
+    const surv_site=[];
+
     const frameType = {
         IGB14: 'igb14',
         NAM14: 'nam14',
@@ -278,8 +281,6 @@ window.console.log("select stations by layer..");
         $row = $(`tr[data-point-gid='${gid}'`);
         $row.addClass('row-selected');
 
-window.console.log("HERE..");
-
         let $glyphElem = $row.find('span.cgm-data-row');
         $glyphElem.removeClass('glyphicon-unchecked').addClass('glyphicon-check');
 
@@ -408,13 +409,10 @@ window.console.log("HERE..");
         $(`#metadata-viewer tbody tr[data-point-gid='${gid}']`).remove();
     };
 
-
-    this.executePlotTS = function(downloadURL) {
-      let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
-      showTSView(downloadURL, dname);
+    this.executePlotTS = function(downloadURL, fType) {
+      showTSView(downloadURL, fType);
       showPlotTSWarning();
     }
-
 
     this.downloadURLsAsZip = function(ftype) {
         var nzip=new JSZip();
@@ -486,10 +484,9 @@ window.console.log("generate a table row..");
         html += `<td class="cgm-data-click">${layer.scec_properties.type} </td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.horizontalVelocity}</td>`;
         html += `<td class="text-center">`;
-        html = html+ `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS(\"${downloadURL1}\")>igb14&nbsp<span class=\"far fa-chart-line\"></span></button>`;
-        html = html+ `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS(\"${downloadURL2}\")>nam14&nbsp<span class=\"far fa-chart-line\"></span></button>`;
-        html = html+ `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS(\"${downloadURL3}\")>nam17&nbsp<span class=\"far fa-chart-line\"></span></button>`;
-        html = html+ `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS(\"${downloadURL4}\")>pcf14&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+<!-- one or more in an array -->
+        html = html+ `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS([\"${downloadURL1}\"],[\"igb14\"])>igb14&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+        html = html+ `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS([\"${downloadURL1}\",\"${downloadURL2}\",\"${downloadURL3}\",\"${downloadURL4}\"],[\"igb14\",\"nam14\",\"nam17\",\"pcf14\"])>plotTS&nbsp<span class=\"far fa-chart-line\"></span></button>`;
         html += `</tr>`;
 
         return html;
@@ -879,10 +876,18 @@ from the attached cont_site.txt file,
 http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
 ******/
         var getDataDownloadURL = function(station_id, frame)  {
-let urlPrefix = "http://geoweb.mit.edu/~floyd/scec/cgm/ts/";
-let url=urlPrefix + station_id + ".cgm.wmrss_"+frame+".pos";
-
+        if(cont_site.includes(station_id)) {
+          let urlPrefix = "http://geoweb.mit.edu/~floyd/scec/cgm/ts/";
+          let url=urlPrefix + station_id + ".cgm.wmrss_"+frame+".pos";
           return url;
+          } else if (surv_site.includes(station_id)) {
+            let urlPrefix = "http://geoweb.mit.edu/~floyd/scec/cgm/ts/";
+            let url=urlPrefix + station_id + ".cgm.final_"+frame+".pos";
+            return url;
+            } else {
+                window.console.log("BAD station name..");
+                return null;
+        } 
 
 /*
           let urlPrefix = "https://files.scec.org/s3fs-public/projects/cgm/1.0/time-series/pos/";

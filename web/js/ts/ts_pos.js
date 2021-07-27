@@ -82,7 +82,7 @@ function toTime(dstr,tstr) {
    return str;
 }
 
-function processPOS(index,fileName,data) {
+function processPOS(data) {
    var data_start=0;
    let dlines=data.split("\n");
    let sz=dlines.length;
@@ -201,7 +201,7 @@ raw time series, as we are here)
    let nrms_east = Math.floor((Math.sqrt(wrms_top_east /data_count)*1000))/1000;
    let nrms_up = Math.floor((Math.sqrt(wrms_top_up /data_count)*1000))/1000;
 
-   pos_plot_data.push({id:index, 
+   pos_plot_data.push({
             station: { cgm_id:cgm_id,
                        cgm_name:cgm_name,
                        cgm_frame:cgm_frame},

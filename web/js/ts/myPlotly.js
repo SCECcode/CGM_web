@@ -1,17 +1,22 @@
-/*****MAIN*****/
+/***
+  allPlotly.js
+***/
+
+// MAIN
+
 jQuery(document).ready(function() {
 
   let frameHeight=window.innerHeight;
   let frameWidth=window.innerWidth;
 
-  [URL, fname]=getCallingParams();
+  [urls, ftypes]=getParams();
 
-//window.console.log("in TS..("+URL+") ("+fname+")");
 
 //  let myURL=['cgm_data/ANA1.cgm.wmrss_igb14.pos'];
-//  let myFname=[ 'ANA1.cgm.wmrss_igb14.pos' ];
-//  loadAndProcessFromFile(myURL,myFname,frameWidth,frameHeight);
+//  let myFtypes=[ 'igb14' ];
+//  loadAndProcessFromFile(myURL, myFtypes);
 
-    loadAndProcessFromFile([URL],[fname]);
+// station name..
+    loadAndProcessFromFile(URL,ftypes);
 
 }) // end of MAIN
