@@ -14,7 +14,7 @@ var CGM = new function () {
     this.search_result = new L.FeatureGroup();
     this.searching = false;
 
-    const cont_site=["ANA1","TWMS"];
+    const cont_site=[];
     const surv_site=[];
 
     const frameType = {
@@ -895,11 +895,18 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
 
         this.setupCGMInterface = function() {
             var $download_queue_table = $('#metadata-viewer');
-            //refreshAll();
+
+            for (let i = 0; i < cgm_station_data.length; i++) {
+                let item=cgm_station_data[i];
+                if(item['station_type'] == "continuous") {
+                    cont_site.push(item['station_id']);
+                    } else {
+                       surv_site.push(item['station_id']);
+                }
+            }
+
             this.activateData();
-/* ????
-            $("div.mapData div.map-container").removeClass("col-7 pr-0 pl-2").addClass("col-12").css('padding-left','30px');
-*/
+//$("div.mapData div.map-container").removeClass("col-7 pr-0 pl-2").addClass("col-12").css('padding-left','30px');
             $("div.mapData div.map-container").css('padding-left','30px');
             $("#CGM_plot").css('height','500px');
             viewermap.invalidateSize();
