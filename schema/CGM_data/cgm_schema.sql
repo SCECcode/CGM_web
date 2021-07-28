@@ -17,3 +17,12 @@ CREATE TABLE cgm_station_velocities (
     source_filename text
 );
 
+CREATE TABLE cgm_cont_site (
+    gid serial PRIMARY KEY,
+    name VARCHAR(4) NOT NULL
+);
+
+CREATE TABLE cgm_surv_site (
+    gid serial PRIMARY KEY,
+    name VARCHAR(4) NOT NULL
+);

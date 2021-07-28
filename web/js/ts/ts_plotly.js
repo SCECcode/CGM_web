@@ -25,15 +25,14 @@ function plotly_plot_clear() {
   Plotly.purge('myDiv');
 }
 
+//Plotly.downloadImage('myDiv', {format: 'png', width: 800, height: 600, filename: fname});
 function plotly_plot_image() {
   let fname=TS_plotly_name;
-window.console.log(fname);
   if(TS_plotly_layout) {
-    Plotly.downloadImage('myDiv', {format: 'png', width: TS_plotly_layout.width, 
-                  height: TS_plotly_layout.height, filename: fname});
-    } else {
-       Plotly.downloadImage('myDiv', {format: 'png', width: 800, 
-                  height: 600, filename: fname});
+     Plotly.toImage('myDiv',{format: 'png', width: TS_plotly_layout.width, height: TS_plotly_layout.height}).
+       then(function(dataURL) {
+          savePNG(fname,dataURL);
+     });
   }
 }
 

@@ -193,11 +193,10 @@ function moveTSview() {
   document.getElementById("viewTSClosebtn").click();
 }
 
-// XXX Downloadbtn at plotly inside
+// Downloadbtn at plotly inside
 function saveTSview() {
   document.getElementById("viewTSIfram").contentDocument.getElementById("Downloadbtn").click();
 }
-
 
 function toggleTSview() {
   let nx=nextTSviewSelection();

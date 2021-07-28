@@ -35,7 +35,6 @@ insert into CGM_station_velocities (select * from tmp1);
 drop table tmp1;
 
 
-
 -- CREATE TEMP TABLE tmp1 (
 --     gid serial PRIMARY KEY,
 --     station_id VARCHAR(100) NOT NULL,

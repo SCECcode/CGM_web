@@ -101,3 +101,17 @@ window.console.log("myFtype "+ myFtype);
   return [myURL, myFtype];
 }
 
+
+// plotly's have funny file name
+function savePNG(fname,image) {
+    let d=new Date();
+    let timestamp = d.getTime();
+    let a = document.createElement('a');
+    a.href = image;
+    a.download = fname+'_'+timestamp+'.png';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    a.remove()
+}
+
