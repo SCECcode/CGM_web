@@ -43,8 +43,14 @@ function plotly_plot_pos(pdata) {
   let pos_type=pdata['type'];
 
   let margin_offset=60;
+
   let frameHeight=window.innerHeight;                                    
   let frameWidth=window.innerWidth-margin_offset-margin_offset;
+
+  let margin_left_default=80;
+  let margin_right_default=80;
+  let margin_top_default=100;
+
 window.console.log("frame width "+frameWidth+" frame height "+frameHeight);
 
   let frameWidth_min=800;
@@ -64,13 +70,12 @@ window.console.log("frame width "+frameWidth+" frame height "+frameHeight);
   }
   nw=nw+margin_offset+margin_offset;
 
-  let margin_left_default=80;
-  let margin_right_default=80;
-  let margin_top_default=100;
+  let nnl=Math.floor((frameWidth - nw)/2);
+  window.console.log("nnl is "+nnl);
 
   let margin_top=margin_top_default+Math.floor((frameHeight-nh)/2);
-  let margin_left=margin_left_default+margin_offset;
-  let margin_right=margin_right_default+margin_offset;
+  let margin_left=margin_left_default+nnl;
+  let margin_right=margin_right_default+nnl;
 
   window.console.log("nw "+nw+" nh "+nh);
 
@@ -87,7 +92,7 @@ window.console.log("frame width "+frameWidth+" frame height "+frameHeight);
         yref: "paper",
         x:1,
         y:0,
-        sizex: 0.3,
+        sizex: 0.1,
         sizey: 0.1,
         'xanchor':'left',
         'yanchor':'top'
@@ -148,6 +153,7 @@ window.console.log("frame width "+frameWidth+" frame height "+frameHeight);
 
   let layout = { 
 paper_bgcolor: '#f1fff1',
+plot_bgcolr: '#f1fff1',
 title: info.cgm_name+" ("+info.cgm_frame+")",
 width: nw,
 height: nh,

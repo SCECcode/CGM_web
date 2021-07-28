@@ -301,7 +301,7 @@ window.console.log("HERE..");
 
       <!--Body-->
       <div class="modal-body" id="modalTSBody">
-        <div id="iframe-container" class="row col-12" style="overflow:hidden">
+        <div id="iframe-container" class="row col-12" style="overflow:hidden;">
           <iframe id="viewTSIfram" title="SCEC CGM Time series viewer" src="" onload="setIframHeight(this.id)" height="10" width="100%" allowfullscreen></iframe>
         </div>
         <div id="paramsTS" value="" style="display:none"></div>
