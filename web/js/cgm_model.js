@@ -410,7 +410,7 @@ window.console.log("select stations by layer..");
     };
 
     this.executePlotTS = function(downloadURL, fType) {
-      showTSView(downloadURL, fType);
+      showTSview(downloadURL, fType);
       showPlotTSWarning();
     }
 

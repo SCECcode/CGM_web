@@ -1,4 +1,3 @@
-
 /*** 
    ts_pos.js
 ***/
@@ -68,7 +67,6 @@ Se       Su Rne    Rnu    Reu  Soln
 //                color:'blue',
 //                xrange:[-300,400],
 //                yrange:[2000,2022]}, ...] }
-var pos_plot_data = [];
 
 //'2013-10-04 22:23:00'
 function toTime(dstr,tstr) {
@@ -83,6 +81,7 @@ function toTime(dstr,tstr) {
 }
 
 function processPOS(data) {
+   var pos_plot_data = [];
    var data_start=0;
    let dlines=data.split("\n");
    let sz=dlines.length;
@@ -241,7 +240,7 @@ raw time series, as we are here)
                    xrange:[xrange_start,xrange_end]}]},
                   );
 
-   window.console.log("DONE...");
+   window.console.log("loading pos DONE...");
 
    return pos_plot_data;
 }

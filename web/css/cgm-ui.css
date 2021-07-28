@@ -95,6 +95,9 @@ th {
     text-align: left;
 }
 
+.glyphicon.glyphicon-cog {
+    font-size: 30px;
+}
 .glyphicon-ok-circle {
     color: red;
 }

@@ -1,6 +1,9 @@
 /***
    ts_util.js
 ***/
+// tracking parsed pos data
+
+var TS_pos_data=[];
 
 // should be a very small file and used for testing and so can ignore
 // >>Synchronous XMLHttpRequest on the main thread is deprecated
@@ -21,54 +24,80 @@ function ckExist(url) {
   }
 };
 
-
+//always the first one.
 function loadAndProcessFromFile(ulist,tlist) {
-  let sz=ulist.length;
-  let i;
-  let pos=[];
 
-  for(i=0;i<sz;i++) {
-// assume there is just 1 for now
-    let data = ckExist(ulist[i]);
-    let plot_data=processPOS(data);
-    pos.push( {'type':tlist[i], 'pos':plot_data});
-  }
-  plotly_plot_pos(pos);
-  
-/**??
-    let promise = $.get(ulist[i]);
-    processPOS(i,nlist[i],promise);
-***/
+  let sz=TS_pos_data.length;
+  let ftype=tlist[0];
+  let url=ulist[0];
+  let i;
+  let pos=null;
+  for(i=0; i<sz; i++) {
+     let item=TS_pos_data[i];
+     let tmp=item['type'];
+     if(ftype == tmp) { 
+        pos=item;
+        window.console.log("found existing pos data for >> "+tmp);
+        break;
+     }
+   }
+   if(pos == null) {
+     let data = ckExist(url);
+     let plot_data=processPOS(data);
+     pos={'type':ftype,'pos':plot_data};
+     TS_pos_data.push(pos);
+   }
+
+   plotly_plot_pos(pos);
+}
+
+function changeTSview(params) {
+  window.top.postMessage({'call':'fromTSviewer', value:'start loading'}, '*');
+  plotly_plot_clear();
+
+  // grab new params,
+  [urls, ftypes]=getParams(params);
+  window.console.log("changeTSview.."+urls[0]+" "+ftypes[0]);
+
+  loadAndProcessFromFile(urls,ftypes);
 }
 
 // https://stackoverflow.com/questions/28295870/how-to-pass-parameters-through-iframe-from-parent-html
-function getParams() {
+function getParams(param) {
 
-  // expecting  "urls=...&ftypes=...""
-  let tmp = window.location.search.substring(1);
-
-  window.console.log("param string is .."+tmp);
-  if(tmp == "") {
+  if(param == "") {
+    // expecting  "urls=...&ftypes=...""
+    param = window.location.search.substring(1);
+  }
+  window.console.log("param string is .."+param);
+  if(param == "") {
     return [];
   }
 
-  let qArray = url.split('&'); //get key-value pairs
+  let myURL;
+  let myFtype;
+
+  let qArray = param.split('&'); //get key-value pairs
   for (var i = 0; i < qArray.length; i++)
   {
      let pArr = qArray[i].split('='); //split key and value
+//window.console.log(pArr[1]);
+     let dd=decodeURI(pArr[1]);
      switch (pArr[0]) {
         case "urls":
-             myURL=pArr[1];
+             myURL=JSON.parse(dd);
              break;
         case "ftypes":
-             myFtypes=pArr[1];
+             myFtype=JSON.parse(dd);
              break;
         default:
 // do nothing
              break;
      }
   }
+window.console.log("myURL "+ myURL);
+window.console.log("myFtype "+ myFtype);
 
-  return [myURL, myFtypes];
+  return [myURL, myFtype];
 }
 

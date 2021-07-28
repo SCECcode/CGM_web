@@ -1,13 +1,47 @@
 /***
    ts_plotly.js
 ***/
+// tracking current plotly objects
+var TS_plotly_name;
+var TS_plotly_data;
+var TS_plotly_layout;
+var TS_plotly_config;
+
+function _savePlotly(name,data,layout,config) {
+   TS_plotly_name=name;
+   TS_plotly_data=data;
+   TS_plotly_layout=layout;
+   TS_plotly_config=config;
+}
+
+function plot_size() {
+   if(TS_plotly_layout) {
+      return [TS_plotly_layout.width, TS_plotly_layout.height];
+   }
+   return [ 0, 0 ]; 
+}
+
+function plotly_plot_clear() {
+  Plotly.purge('myDiv');
+}
+
+function plotly_plot_image() {
+  let fname=TS_plotly_name;
+window.console.log(fname);
+  if(TS_plotly_layout) {
+    Plotly.downloadImage('myDiv', {format: 'png', width: TS_plotly_layout.width, 
+                  height: TS_plotly_layout.height, filename: fname});
+    } else {
+       Plotly.downloadImage('myDiv', {format: 'png', width: 800, 
+                  height: 600, filename: fname});
+  }
+}
 
 // [ { type:ftype, pos:plot_data }]
-function plotly_plot_pos(pos_data_list) {
+function plotly_plot_pos(pdata) {
 
-  let sz=plot_data_list.length; 
-  let tmp=plot_data_list[0];
-  let pos_data=tmp['pos'];
+  let pos_data=pdata['pos'];
+  let pos_type=pdata['type'];
 
   let margin_offset=60;
   let frameHeight=window.innerHeight;                                    
@@ -111,9 +145,9 @@ window.console.log("frame width "+frameWidth+" frame height "+frameHeight);
                   },
                   type: 'scatter' };
 
-  var data = [traceEast, traceNorth, traceUp ];
+  let data = [traceEast, traceNorth, traceUp ];
 
-  var layout = { 
+  let layout = { 
 paper_bgcolor: '#f1fff1',
 title: info.cgm_name+" ("+info.cgm_frame+")",
 width: nw,
@@ -224,6 +258,7 @@ annotations: [
   var config = {displayModeBar:true,responsive:true}
 
   Plotly.newPlot('myDiv', data, layout, config);
+  _savePlotly(info.cgm_name,data,layout,config);
 
-  $("#ts-wait-spinner").hide();
+  window.top.postMessage({'call':'fromTSviewer', value:'done with loading'}, '*');
 }

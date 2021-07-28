@@ -294,9 +294,7 @@ window.console.log("HERE..");
     <div class="modal-content" id="modalTSContent">
       <!--Header-->
       <div class="modal-header">
-<!---
-        <button id="viewTSToggleReprbtn" class="btn btn-outline-primary btn-sm" type="button" onclick="toggleReprTSview(this)">Show Representation</button>
--->
+        <button id="viewTSTogglebtn" class="btn btn-outline-primary btn-sm" type="button" onclick="toggleTSview()">Switch Frame Type</button>
       </div>
 
       <!--Body-->
@@ -314,7 +312,6 @@ window.console.log("HERE..");
         </div>
 
         <button id="viewTSClosebtn" class="btn btn-outline-primary btn-sm" data-dismiss="modal">Close</button>
-        <button id="viewTSExpandbtn" class="btn btn-outline-primary btn-sm" type="button" onclick="toggleExpandTSview(this)">Shrink</button>
         <button id="viewTSRefreshbtn" class="btn btn-outline-primary btn-sm" type="button" onclick="refreshTSview()">Reset</button>
         <button id="viewTSMovebtn" class="btn btn-outline-primary btn-sm" type="button" onclick="moveTSview()">New Window</button>
         <button id="viewTSWarnbtn" class="btn btn-outline-primary btn-sm" style="display:none" data-toggle="modal" data-target="#modalwarnTS"></button>
