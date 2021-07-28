@@ -70,8 +70,11 @@ window.console.log("frame width "+frameWidth+" frame height "+frameHeight);
   }
   nw=nw+margin_offset+margin_offset;
 
+// adjust if need to
   let nnl=Math.floor((frameWidth - nw)/2);
   window.console.log("nnl is "+nnl);
+  if(nnl < margin_offset)
+     nnl=margin_offset;
 
   let margin_top=margin_top_default+Math.floor((frameHeight-nh)/2);
   let margin_left=margin_left_default+nnl;
