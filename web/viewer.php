@@ -244,11 +244,13 @@ window.console.log("HERE..");
             </div>
     </div>
     <div class="row mapData">
+<!-- NO NEED FOR THIS ??
         <div class="col-5 button-container d-flex flex-column cgm-search-result-container pr-1" style="overflow:hidden;">
             <div id="searchResult" class="mb-1" style="display:none">
             </div>
         </div>
-        <div class="col-7 map-container">
+--->
+        <div class="col-12 map-container">
 
             <div class="row" >
 

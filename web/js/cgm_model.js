@@ -897,7 +897,10 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
             var $download_queue_table = $('#metadata-viewer');
             //refreshAll();
             this.activateData();
+/* ????
             $("div.mapData div.map-container").removeClass("col-7 pr-0 pl-2").addClass("col-12").css('padding-left','30px');
+*/
+            $("div.mapData div.map-container").css('padding-left','30px');
             $("#CGM_plot").css('height','500px');
             viewermap.invalidateSize();
             viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
