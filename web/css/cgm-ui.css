@@ -26,6 +26,11 @@ dl, ol, ul {
    margin-bottom:0;
 }
 
+#cgm-vector-sliderMenu p{
+   margin-top:0;
+   margin-bottom:0;
+}
+
 :root {
     /*font-size: 90%;*/
 }
@@ -603,9 +608,14 @@ div.guide ul {
 }
 
 #model-options {
-    border: 1px solid #ced4da;
+/*    border: 1px solid #ced4da; 
+    border-bottom: 0; */
     padding:2px;
-    border-bottom: 0;
+}
+
+div.vector-slider-input-boxes input[type='text']{
+   width: 105px;
+   margin-left: 5px;
 }
 
 div.latlon-input-boxes input[type='text']{

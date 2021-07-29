@@ -5,7 +5,7 @@
 var CGM = new function () {
 
     // meters 22 - 35306
-    this.cgm_vector_max = 50000;
+    this.cgm_vector_max = -1;
     this.cgm_vector_min = 0;
 
     this.cgm_select_gid = [];
@@ -82,12 +82,13 @@ var CGM = new function () {
     };
 
     this.searchType = {
+        vectorSlider: 'vectorSlider',
         latlon: 'latlon',
         stationName: 'stationname',
     };
 
     var tablePlaceholderRow = `<tr id="placeholder-row">
-                        <td colspan="7">Metadata for selected points will appear here.</td>
+                        <td colspan="11">Metadata for selected points will appear here.</td>
                     </tr>`;
 
     this.activateData = function() {
@@ -137,11 +138,18 @@ window.console.log("calling zeroSelectCount..");
         this.cgm_vectors = new L.FeatureGroup();
         for (const index in cgm_station_data) {
             if (cgm_station_data.hasOwnProperty(index)) {
+window.console.log("HERE...");
+let tmp=cgm_station_data[index];
                 let lat = parseFloat(cgm_station_data[index].ref_north_latitude);
                 let lon = parseFloat(cgm_station_data[index].ref_east_longitude);
                 let vel_north = parseFloat(cgm_station_data[index].ref_velocity_north);
                 let vel_east = parseFloat(cgm_station_data[index].ref_velocity_east);
+                let vel_up = parseFloat(cgm_station_data[index].ref_velocity_up);
+//sqrt("Vel E"^2 + "Vel N"^2)
                 let horizontalVelocity = Math.sqrt(Math.pow(vel_north, 2) + Math.pow(vel_east, 2));
+//atan2("Vel E","Vel N")*180/pi
+                let azimuth = Math.round((Math.atan2(vel_east,vel_north) * 180 / Math.PI)*1000)/1000;
+                let verticalVelocity = vel_up;
                 let station_id = cgm_station_data[index].station_id;
                 let station_type = cgm_station_data[index].station_type;
                 let gid = cgm_station_data[index].gid;
@@ -157,23 +165,29 @@ window.console.log("calling zeroSelectCount..");
                 let marker = L.circleMarker([lat, lon], cgm_marker_style.normal);
 
                 let horizontalVelocity_mm = (horizontalVelocity * 1000).toFixed(2); // convert to mm/year
+                let verticalVelocity_mm = (verticalVelocity * 1000).toFixed(2); // convert to mm/year
                 let station_info = `station id: ${station_id}, vel: ${horizontalVelocity_mm} mm/yr`;//, lat/lng: ${lat}, ${lon}`;
                 marker.bindTooltip(station_info).openTooltip();
                 marker.scec_properties = {
                     station_id: station_id,
                     horizontalVelocity: horizontalVelocity_mm,
+                    verticalVelocity: verticalVelocity_mm,
+                    azimuth: azimuth,
                     vel_east: cgm_station_data[index].ref_velocity_east,
                     vel_north: cgm_station_data[index].ref_velocity_north,
                     type: station_type,
                     gid: gid,
                     selected: false,
-            };
+                };
 
                 // generate vectors
                 let start_latlng = marker.getLatLng();
                 let end_latlng = calculateEndVectorLatLng(start_latlng, vel_north, vel_east, 750);
                 let dist = calculateDistanceMeter(start_latlng, {'lat':end_latlng[0], 'lng':end_latlng[1]} );
                 let p = dist / (CGM.cgm_vector_max - CGM.cgm_vector_min);
+
+                // save the dist into cgm_station_data
+                cgm_station_data[index].vector_dist=dist;
 
                 let line_latlons = [
                     [start_latlng.lat, start_latlng.lng],
@@ -482,7 +496,11 @@ window.console.log("generate a table row..");
         html += `<td class="cgm-data-click">${coordinates.lat}</td>`;
         html += `<td class="cgm-data-click">${coordinates.lng}</td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.type} </td>`;
+        html += `<td class="cgm-data-click">${layer.scec_properties.vel_east} </td>`;
+        html += `<td class="cgm-data-click">${layer.scec_properties.vel_north} </td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.horizontalVelocity}</td>`;
+        html += `<td class="cgm-data-click">${layer.scec_properties.azimuth}</td>`;
+        html += `<td class="cgm-data-click">${layer.scec_properties.verticalVelocity}</td>`;
         html += `<td class="text-center">`;
         html += `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM.executePlotTS([\"${downloadURL1}\",\"${downloadURL2}\",\"${downloadURL3}\",\"${downloadURL4}\"],[\"igb14\",\"nam14\",\"nam17\",\"pcf14\"])>plotTS&nbsp<span class=\"far fa-chart-line\"></span></button>`;
         html += `</tr>`;
@@ -491,10 +509,14 @@ window.console.log("generate a table row..");
     };
 
     this.showSearch = function (type) {
-        window.console.log("calling showSeach");
+        window.console.log("calling showSearch");
         const $all_search_controls = $("#cgm-controls-container ul li");
         this.freshSearch();
         switch (type) {
+            case this.searchType.vectorSlider:
+                $all_search_controls.hide();
+                $("#cgm-vector-slider").show();
+                break;
             case this.searchType.stationName:
                 $all_search_controls.hide();
                 $("#cgm-station-name").show();
@@ -547,6 +569,9 @@ window.console.log("generate a table row..");
         this.searching = false;
         this.search_result.removeLayer();
         this.search_result = new L.FeatureGroup();
+
+        this.resetVectorSlider();
+
         this.hideVectors();
         this.showModel();
         remove_bounding_rectangle_layer();
@@ -651,9 +676,8 @@ window.console.log(">>> calling freshSearch..");
             let end_lat = start_lat + (dy / r_earth) * (180 / pi);
             let end_lng = start_lng + (dx / r_earth) * (180 / pi) / Math.cos(start_lat * pi / 180);
 
-            //calculateDistanceMeter({'lat':50.03, 'lng':-5.5 }, {'lat':58.5, 'lng':-3.04} );
+//calculateDistanceMeter({'lat':50.03, 'lng':-5.5 }, {'lat':58.5, 'lng':-3.04} );
 //let d= calculateDistanceMeter({'lat':start_lat,'lng':start_lng}, {'lat':end_lat, 'lng':end_lng} );
-//window.console.log("HERE.."+d);
 
             return [end_lat, end_lng];
         };
@@ -676,13 +700,12 @@ window.console.log(">>> calling freshSearch..");
                        Math.sin(deltaLamda/2) * Math.sin(deltaLamda/2);
              const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
              const d = R * c; // in metres
-//             window.console.log("XXX distance between them.."+d);
-             return d;
-/*
+
              if (CGM.cgm_vector_max == -1) {
+window.console.log("vector="+d);
                CGM.cgm_vector_max=d;
                CGM.cgm_vector_min=d;
-               return;
+               return d;
              }
              if (d > CGM.cgm_vector_max) {
                 CGM.cgm_vector_max = d;
@@ -690,12 +713,18 @@ window.console.log(">>> calling freshSearch..");
              if (d < CGM.cgm_vector_min) {
                 CGM.cgm_vector_min = d;
              }
-*/
+             return d;
         }
 
         this.search = function (type, criteria) {
             let results = [];
             switch (type) {
+                case CGM.searchType.vectorSlider:
+//XX TODO
+                    let minV=criteria[0];
+                    let maxV=criteria[1];
+
+                    break;
                 case CGM.searchType.stationName:
                     this.cgm_layers.eachLayer(function (layer) {
                         // if (layer.scec_properties.station_id.toLowerCase() == criteria.toLowerCase()) {
@@ -791,16 +820,21 @@ window.console.log("generateResultsTable..");
                              </button>
                          </th>
                          <th class="hoverColor" onClick="sortMetadataTableByRow(1,'a')">Station&nbsp<span id='sortCol_1' class="fas fa-angle-down"></span><br>Name</th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(2,'n')">Latitude&nbsp<span id='sortCol_2' class="fas fa-angle-down"></span></th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(3,'n')">Longitude&nbsp<span id='sortCol_3' class="fas fa-angle-down"></span></th>
-                        <th>Type</th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(5,'n')">Horizontal&nbsp<span id='sortCol_5' class="fas fa-angle-down"></span><br>Velocity (mm/yr)</th>
-                        <th style="width:40%;"><div class="col text-center">
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(2,'n')">Lat&nbsp<span id='sortCol_2' class="fas fa-angle-down"></span></th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(3,'n')">Lon&nbsp<span id='sortCol_3' class="fas fa-angle-down"></span></th>
+                        <th style="width:6rem">Type</th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(5,'n')">East Vel&nbsp<span id='sortCol_5' class="fas fa-angle-down"></span></th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(6,'n')">North Vel&nbsp<span id='sortCol_6' class="fas fa-angle-down"></span></th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(7,'n')">Horizontal&nbsp<span id='sortCol_7' class="fas fa-angle-down"></span><br>Vel (mm/yr)</th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(8,'n')">Azimuth&nbsp<span id='sortCol_8' class="fas fa-angle-down"></span></th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(9,'n')">Vertical Vel&nbsp<span id='sortCol_9' class="fas fa-angle-down"></span><br>(mm/yr)</th>
+
+                        <th style="width:20%;"><div class="col text-center">
 <!--download all -->
                             <div class="btn-group download-now">
                                 <button id="download-all" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false" disabled>
-                                    DOWNLOAD ALL<span id="download-counter"></span>
+                                    DOWNLOAD&nbsp<span id="download-counter"></span>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <button class="dropdown-item" type="button" value="igb14"
@@ -893,6 +927,22 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
 */
         };
 
+        var resetVectorRangeColor = function (target_min, target_max){
+          let minRGB= makeRangeHandlerRGB(target_min, CGM.cgm_vector_max, CGM.cgm_vector_min );
+          let maxRGB= makeRangeHandlerRGB(target_max, CGM.cgm_vector_max, CGM.cgm_vector_min );
+          let myColor="linear-gradient(to right, "+minRGB+","+maxRGB+")";
+          $("#slider-vector-range .ui-slider-range" ).css( "background", myColor );
+        }
+
+        this.resetVectorSlider = function () {
+          $("#slider-vector-range").slider('values', 
+                              [CGM.cgm_vector_min, CGM.cgm_vector_max]);
+          let tmp=CGM.cgm_vector_min;
+          window.console.log("HERE");
+          $("#cgm-minVectorSliderTxt").val(CGM.cgm_vector_min);
+          $("#cgm-maxVectorSliderTxt").val(CGM.cgm_vector_max);
+        }
+
         this.setupCGMInterface = function() {
             var $download_queue_table = $('#metadata-viewer');
 
@@ -923,6 +973,30 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
                      return $table.closest('div#metadata-viewer-container');
                  },
             });
+
+/* setup vector slider*/
+            $("#slider-vector-range").slider({ 
+                      range:true, step:0.01, min:CGM.cgm_vector_min, max:CGM.cgm_vector_max, values:[CGM.cgm_vector_min, CGM.cgm_vector_max],
+                  slide: function( event, ui ) {
+                               $("#cgm-minVectorSliderTxt").val(ui.values[0]);
+                               $("#cgm-maxVectorSliderTxt").val(ui.values[1]);
+                               resetVectorRangeColor(ui.values[0],ui.values[1]);
+                         },
+                  change: function( event, ui ) {
+                               $("#cgm-minVectorSliderTxt").val(ui.values[0]);
+                               $("#cgm-maxVectorSliderTxt").val(ui.values[1]);
+                               resetVectorRangeColor(ui.values[0],ui.values[1]);
+                         },
+                  stop: function( event, ui ) {
+                               //searchWithVectorRange();
+                         },
+                  create: function() {
+                              $("#cgm-minVectorSliderTxt").val(CGM.cgm_vector_min);
+                              $("#cgm-maxVectorSliderTxt").val(CGM.cgm_vector_max);
+                        }
+            });
+            $('#slider-vector-range').slider("option", "min", CGM.cgm_vector_min);
+            $('#slider-vector-range').slider("option", "max", CGM.cgm_vector_max);
 
             $("#wait-spinner").hide();
         };

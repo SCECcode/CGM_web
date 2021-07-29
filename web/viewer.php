@@ -73,9 +73,10 @@ $cgm = new CGM();
     <script type="text/javascript" src="js/cgm_main.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_model.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_util.js?v=1"></script>
-    <script type="text/javascript" src="js/cxm_leaflet.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_viewTS_util.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_viewTS.js?v=1"></script>
+    <script type="text/javascript" src="js/cxm_leaflet.js?v=1"></script>
+    <script type="text/javascript" src="js/cxm_misc_util.js?v=1"></script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-495056-12"></script>
@@ -132,6 +133,7 @@ window.console.log("HERE..");
                     <option value="">Search the CGM ...</option>
                     <option value="stationname">Station Name</option>
                     <option value="latlon">Latitude &amp; Longitude</option>
+                    <option value="vector">Vector</option>
                 </select>
                 <div class="input-group-append">
                     <button id="refresh-all-button" onclick="CGM.reset();" class="btn btn-dark pl-4 pr-4"
@@ -155,7 +157,7 @@ window.console.log("HERE..");
                             <div id='cgm-latlonMenu' class='menu'>
                                 <div class="row">
                                     <div class="col-4">
-                                        <p>Draw a rectangle on the map or enter latitudes and longitudes.</p>
+                                        <p>Draw a rectangle on the map or enter latitudes and longitudes</p>
                                     </div>
                                     <div class="col-8">
                                         <div class="form-inline latlon-input-boxes">
@@ -188,7 +190,34 @@ window.console.log("HERE..");
                                 </div>
                             </div>
                         </li>
-
+			<li id='cgm-vector-slider' class='navigationLi' style="display:none">
+                            <div id='cgm-vector-sliderMenu' class='menu'>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <p>Select a vector range on the slider or enter the two boundaries</p>
+                                    </div>
+                                    <div class="col-8">
+                                       <div class="form-inline vector-slider-input-boxes">
+                                           <input type="text"
+                                                  id="cgm-minVectorSliderTxt"
+                                                  title="min vector slider"
+                                                  onfocus="this.value=''"
+                                                  class="cgm-search-item form-control">
+                                           <div class="col-5">
+                                             <div id="slider-vector-range" style="border:2px solid black"></div>
+				             <div id="min-vector-slider-handle" class="ui-slider-handle"></div>
+				             <div id="max-vector-slider-handle" class="ui-slider-handle"></div>
+                                           </div>
+                                           <input type="text"
+                                                  id="cgm-maxVectorSliderTxt"
+                                                  title="max vector slider"
+                                                  onfocus="this.value=''"
+                                                  class="cgm-search-item form-control">
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
                     </ul>
                     <!-- pull-out -->
                 </div>
@@ -198,9 +227,11 @@ window.console.log("HERE..");
     <div class="row">
             <div class="col-12 text-right pr-0" style="border:0px solid green">
                         <div id='model-options' class="form-check-inline">
+<!---
                             <select id='data-download-select' class="custom-select custom-select-sm mr-4" style="width:150px;">
                               <option selected value="cgm">CGM Data</option>
                             </select>
+-->
                              <div class="form-check form-check-inline">
                                  <label class='form-check-label'
                                          for="cgm-model">
@@ -223,6 +254,14 @@ window.console.log("HERE..");
                                  <input class='form-check-inline mr-1'
                                          type="checkbox"
                                          id="cgm-model-insar" value="1" />InSAR
+                                 </label>
+                             </div>
+                             <div class="form-check form-check-inline">
+                                 <label class='form-check-label ml-1 mini-option'
+                                         for="cgm-model-cfm">
+                                 <input class='form-check-inline mr-1'
+                                         type="checkbox"
+                                         id="cgm-model-cfm" value="1" />CFM faults
                                  </label>
                              </div>
                          </div>
@@ -279,7 +318,7 @@ window.console.log("HERE..");
                     </thead>
                     <tbody>
                       <tr id="placeholder-row">
-                          <td colspan="7">Metadata for selected piont will appear here. </td>
+                          <td colspan="11">Metadata for selected piont will appear here. </td>
                       </tr>
                     </tbody>
                   </table>

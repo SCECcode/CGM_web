@@ -130,18 +130,18 @@ raw time series, as we are here)
 
          let ynorth=parseFloat(vals[15])*1000;
          let ynorth_e=parseFloat(vals[18])*1000;
-         wrms_top_north=wrms_top_north+( (ynorth * ynorth)/(ynorth_e * ynorth_e));
-         wrms_bottom_north= wrms_bottom_north + (1/(ynorth_e * ynorth_e));
+         wrms_top_north=wrms_top_north+( Math.pow(ynorth,2)/ Math.pow(ynorth_e,2));
+         wrms_bottom_north= wrms_bottom_north + (1/Math.pow(ynorth_e,2));
 
          let yeast=parseFloat(vals[16])*1000;
          let yeast_e=parseFloat(vals[19])*1000;
-         wrms_top_east=wrms_top_east+( (yeast * yeast)/(yeast_e * yeast_e));
+         wrms_top_east=wrms_top_east+( Math.pow(yeast,2)/Math.pow(yeast_e,2));
          wrms_bottom_east= wrms_bottom_east + (1/(yeast_e * yeast_e));
 
          let yup=parseFloat(vals[17])*1000;
          let yup_e=parseFloat(vals[20])*1000;
-         wrms_top_up=wrms_top_up+( (yup * yup)/(yup_e * yup_e));
-         wrms_bottom_up= wrms_bottom_up + (1/(yup_e * yup_e));
+         wrms_top_up=wrms_top_up+( Math.pow(yup,2)/Math.pow(yup_e,2));
+         wrms_bottom_up= wrms_bottom_up + (1/Math.pow(yup_e,2));
 
          Xtime.push(xtime);
          Yeast.push(yeast);

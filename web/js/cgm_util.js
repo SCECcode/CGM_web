@@ -4,6 +4,16 @@
 
 var cgm_latlon_area_list=[];
 
+/* color from blue to red */
+function makeRangeHandlerRGB(val, maxV, minV) {
+    let v= (val-minV) / (maxV-minV);
+    let blue = Math.round(255 * v);
+    let green = 0;
+    let red = Math.round((1-v)*255);
+    let color="RGB(" + red + "," + green + "," + blue + ")";
+    return color;
+}
+
 function MapFeature(gid, properties, geometry, scec_properties) {
     this.type = "FeatureCollection";
     this.gid = gid;
