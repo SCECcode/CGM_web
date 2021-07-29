@@ -82,7 +82,7 @@ var CGM = new function () {
     };
 
     this.searchType = {
-        vectorSlider: 'vectorSlider',
+        vectorSlider: 'vectorslider',
         latlon: 'latlon',
         stationName: 'stationname',
     };
@@ -138,8 +138,6 @@ window.console.log("calling zeroSelectCount..");
         this.cgm_vectors = new L.FeatureGroup();
         for (const index in cgm_station_data) {
             if (cgm_station_data.hasOwnProperty(index)) {
-window.console.log("HERE...");
-let tmp=cgm_station_data[index];
                 let lat = parseFloat(cgm_station_data[index].ref_north_latitude);
                 let lon = parseFloat(cgm_station_data[index].ref_east_longitude);
                 let vel_north = parseFloat(cgm_station_data[index].ref_velocity_north);
@@ -168,17 +166,6 @@ let tmp=cgm_station_data[index];
                 let verticalVelocity_mm = (verticalVelocity * 1000).toFixed(2); // convert to mm/year
                 let station_info = `station id: ${station_id}, vel: ${horizontalVelocity_mm} mm/yr`;//, lat/lng: ${lat}, ${lon}`;
                 marker.bindTooltip(station_info).openTooltip();
-                marker.scec_properties = {
-                    station_id: station_id,
-                    horizontalVelocity: horizontalVelocity_mm,
-                    verticalVelocity: verticalVelocity_mm,
-                    azimuth: azimuth,
-                    vel_east: cgm_station_data[index].ref_velocity_east,
-                    vel_north: cgm_station_data[index].ref_velocity_north,
-                    type: station_type,
-                    gid: gid,
-                    selected: false,
-                };
 
                 // generate vectors
                 let start_latlng = marker.getLatLng();
@@ -199,6 +186,19 @@ let tmp=cgm_station_data[index];
                 var arrowHeadDecorator = L.polylineDecorator(polyline, {
                     patterns: [cgm_line_pattern]
                 });
+
+                marker.scec_properties = {
+                    station_id: station_id,
+                    horizontalVelocity: horizontalVelocity_mm,
+                    verticalVelocity: verticalVelocity_mm,
+                    azimuth: azimuth,
+                    vel_east: cgm_station_data[index].ref_velocity_east,
+                    vel_north: cgm_station_data[index].ref_velocity_north,
+                    vector_dist: cgm_station_data[index].vector_dist,
+                    type: station_type,
+                    gid: gid,
+                    selected: false,
+                };
 
                 // marker.scec_properties.vector = new L.FeatureGroup([polyline, arrowHeadDecorator]);
                 marker.scec_properties.vector = new L.FeatureGroup();
@@ -720,9 +720,14 @@ window.console.log("vector="+d);
             let results = [];
             switch (type) {
                 case CGM.searchType.vectorSlider:
-//XX TODO
-                    let minV=criteria[0];
-                    let maxV=criteria[1];
+                    $("#cgm-minVectorSliderTxt").val(criteria[0]);
+                    $("#cgm-maxVectorSliderTxt").val(criteria[1]);
+                    this.cgm_layers.eachLayer(function (layer) {
+                        if (layer.scec_properties.vector_dist > criteria[0]
+                             && layer.scec_properties.vector_dist < criteria[1]){
+                            results.push(layer);
+                        }
+                    });
 
                     break;
                 case CGM.searchType.stationName:
@@ -790,7 +795,10 @@ window.console.log(">> calling searchBox");
                     viewermap.fitBounds(bounds, {maxZoom: 12});
                     setTimeout(skipRectangle, 500);
 
-                } else {
+                } else if (type == this.searchType.stationName) {
+                    let bounds = L.latLngBounds(markerLocations);
+                    viewermap.flyToBounds(bounds, {maxZoom: 12 });
+                } else { // vector slider.. similar to stationName
                     let bounds = L.latLngBounds(markerLocations);
                     viewermap.flyToBounds(bounds, {maxZoom: 12 });
                 }
@@ -938,7 +946,6 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
           $("#slider-vector-range").slider('values', 
                               [CGM.cgm_vector_min, CGM.cgm_vector_max]);
           let tmp=CGM.cgm_vector_min;
-          window.console.log("HERE");
           $("#cgm-minVectorSliderTxt").val(CGM.cgm_vector_min);
           $("#cgm-maxVectorSliderTxt").val(CGM.cgm_vector_max);
         }
@@ -988,7 +995,8 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
                                resetVectorRangeColor(ui.values[0],ui.values[1]);
                          },
                   stop: function( event, ui ) {
-                               //searchWithVectorRange();
+                               let searchType = CGM.searchType.vectorSlider;
+                               CGM.searchBox(searchType, ui.values);
                          },
                   create: function() {
                               $("#cgm-minVectorSliderTxt").val(CGM.cgm_vector_min);

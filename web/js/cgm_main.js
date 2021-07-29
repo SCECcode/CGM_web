@@ -47,7 +47,7 @@ $(document).ready(function () {
       $(this).on('blur mouseout', function () {
         $(this).off('mouseout');
         $(this).off('blur');
-window.console.log("causing a start of search..");
+window.console.log(">>>> causing a start of search..");
 // these is where the change in latlon causes a new search..
 // 
           if( $(this).val() != '' ) {

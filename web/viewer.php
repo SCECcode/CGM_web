@@ -133,7 +133,7 @@ window.console.log("HERE..");
                     <option value="">Search the CGM ...</option>
                     <option value="stationname">Station Name</option>
                     <option value="latlon">Latitude &amp; Longitude</option>
-                    <option value="vector">Vector</option>
+                    <option value="vectorslider">Vector</option>
                 </select>
                 <div class="input-group-append">
                     <button id="refresh-all-button" onclick="CGM.reset();" class="btn btn-dark pl-4 pr-4"
