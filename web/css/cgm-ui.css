@@ -4,6 +4,16 @@ th{
   width: 6rem;
 }
 
+#infoBtn {
+/*     outline: none !important; */
+    box-shadow: none !important; 
+} 
+
+.fas.fa-info-circle {
+/*   color: #008cb7; */
+   color: #8b8b8b;
+}
+
 .fas.fa-step-back,
 .fas.fa-caret-up,
 .fas.fa-caret-down,
@@ -270,6 +280,8 @@ div.mapData {
     color: #53A2BE;
     border: none;
     display: inline-block;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 .cgm-small-btn:disabled {

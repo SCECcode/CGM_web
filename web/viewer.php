@@ -327,6 +327,27 @@ window.console.log("HERE..");
     </div>
 </div>
 
+<!--Modal: Name Azimuth  -->
+<div class="modal" id="modalazimuth" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" id="modalazimuthDialog" role="document">
+
+    <!--Content-->
+    <div class="modal-content" id="modalazimuthContent">
+      <!--Body-->
+      <div class="modal-body" id="modalazimuthBody">
+        <div class="row col-md-12 ml-auto" style="overflow:hidden;">
+         <p> Talk about what is this azimuth about...</p>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-outline-primary btn-md" data-dismiss="modal">Close</button>
+      </div>
+
+    </div> <!--Content-->
+  </div>
+</div> <!--Modal: Name-->
+
+
 <!--Modal: Name TS(time series)-->
 <div class="modal" id="modalTS" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="modalTS" aria-hidden="true">
   <div class="modal-dialog modal-full" id="modalTSDialog" role="document">
