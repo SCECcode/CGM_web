@@ -15,10 +15,11 @@ $(document).ready(function () {
     viewermap=setup_viewer();
 
     $("#cgm-model").on('click', function () {
-        if (viewermap.hasLayer(CGM.cgm_layers) ||  CGM.searching) {
-            CGM.hideModel();
-        } else {
+//??        if (viewermap.hasLayer(CGM.cgm_layers) ||  CGM.searching) {
+        if ($(this).prop('checked')) {
             CGM.showModel();
+        } else {
+            CGM.hideModel();
         }
     });
 

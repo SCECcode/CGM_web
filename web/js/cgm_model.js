@@ -533,7 +533,7 @@ window.console.log("generate a table row..");
 
     this.showModel = function () {
 
-        window.console.log("showing model");
+window.console.log("SHOW model");
         let $cgm_model_checkbox = $("#cgm-model");
 
         if (this.searching) {
@@ -554,6 +554,7 @@ window.console.log("generate a table row..");
     };
 
     this.hideModel = function () {
+window.console.log("Hide model");
         if (CGM.searching) {
             CGM.search_result.remove();
         } else {
@@ -563,7 +564,7 @@ window.console.log("generate a table row..");
     };
 
     this.reset = function() {
-        window.console.log(">>> calling reset..");
+        window.console.log("RESET>>> calling reset..");
         this.zeroSelectCount();
         this.showSearch('none');
         this.searching = false;
@@ -586,14 +587,16 @@ window.console.log("generate a table row..");
     };
 
     this.resetSearch = function (){
-window.console.log(">>> calling resetSearch..");
+window.console.log("RESET>>> calling resetSearch..");
         // this.hideVectors();
         this.zeroSelectCount();
         viewermap.removeLayer(this.search_result);
         this.unselectAll();
         this.searching = false;
         this.search_result = new L.FeatureGroup();
+
         // $("#cgm-controls-container ul input, #cgm-controls-container ul select").val("");
+
         this.replaceResultsTableBody([]);
         skipRectangle();
         remove_bounding_rectangle_layer();
@@ -612,6 +615,11 @@ window.console.log(">>> calling freshSearch..");
           } else {
           this.hideModel();
         }
+        if ($("#cgm-model-cfm").prop('checked')) {
+          CXM.showCFMFaults(viewermap);
+          } else {
+          CXM.hideCFMFaults(viewermap);
+        }
     };
 
 
@@ -624,6 +632,7 @@ window.console.log(">>> calling freshSearch..");
 
         return [];
     };
+
 
     this.showVectors = function () {
 
@@ -765,7 +774,7 @@ window.console.log("vector="+d);
 
         this.searchBox = function (type, criteria) {
 
-window.console.log(">> calling searchBox");
+window.console.log("SEARCH >> calling searchBox");
             this.hideModel();
             this.resetSearch();
 
@@ -782,9 +791,14 @@ window.console.log(">> calling searchBox");
                     this.search_result.addLayer(results[i]);
                 }
                 this.showStationsByLayers(this.search_result);
+
                 // changed visible stations, so update vectors
                 if (vectorVisible()) {
                     this.updateVectors();
+                }
+
+                if( !modelVisible()) {
+                    this.showModel();
                 }
 
                 if (type == this.searchType.latlon) {
@@ -805,12 +819,17 @@ window.console.log(">> calling searchBox");
             }
 
             this.replaceResultsTableBody(results);
+window.console.log("DONE with BoxSearch..");
 
             $("#wait-spinner").hide();
         };
 
-    var vectorVisible = function (){
+        var vectorVisible = function (){
             return $("#cgm-model-vectors").prop('checked');
+        };
+
+        var modelVisible = function (){
+            return $("#cgm-model").prop('checked');
         };
 
         // private function
