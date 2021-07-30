@@ -181,10 +181,26 @@ window.console.log("calling zeroSelectCount..");
                     end_latlng
                 ];
 
-// var cgm_line_path_style = {weight: 1, color: cgm_colors.normal};
-                let polyline = L.polyline(line_latlons, cgm_line_path_style);
+                let new_color= makeRGB(dist, CGM.cgm_vector_max, CGM.cgm_vector_min );
+                let ncgm_line_path_style = {weight: 1, color: new_color};
+                let ncgm_line_pattern = {
+                    offset: '100%',
+                    repeat: 0,
+                    symbol: L.Symbol.arrowHead({
+                        pixelSize: 5,
+                        polygon: false,
+                        pathOptions: {
+                            stroke: true,
+                            color: new_color,
+                            weight: 1
+                        }
+                    })
+                };
+
+
+                let polyline = L.polyline(line_latlons, ncgm_line_path_style);
                 var arrowHeadDecorator = L.polylineDecorator(polyline, {
-                    patterns: [cgm_line_pattern]
+                    patterns: [ncgm_line_pattern]
                 });
 
                 marker.scec_properties = {
@@ -205,11 +221,8 @@ window.console.log("calling zeroSelectCount..");
                 marker.scec_properties.vector.addLayer(polyline);
                 marker.scec_properties.vector.addLayer(arrowHeadDecorator);
                 marker.scec_properties.vectorArrowHead = arrowHeadDecorator;
+
                 this.cgm_vectors.addLayer(marker.scec_properties.vector);
-
-                // this.cgm_vectors.addLayer(polyline);
-                // r.cgm_vectors.addLayer(arrowHeadDecorator);
-
                 this.cgm_layers.addLayer(marker);
             }
         }
@@ -955,8 +968,8 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
         };
 
         var resetVectorRangeColor = function (target_min, target_max){
-          let minRGB= makeRangeHandlerRGB(target_min, CGM.cgm_vector_max, CGM.cgm_vector_min );
-          let maxRGB= makeRangeHandlerRGB(target_max, CGM.cgm_vector_max, CGM.cgm_vector_min );
+          let minRGB= makeRGB(target_min, CGM.cgm_vector_max, CGM.cgm_vector_min );
+          let maxRGB= makeRGB(target_max, CGM.cgm_vector_max, CGM.cgm_vector_min );
           let myColor="linear-gradient(to right, "+minRGB+","+maxRGB+")";
           $("#slider-vector-range .ui-slider-range" ).css( "background", myColor );
         }

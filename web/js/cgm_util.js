@@ -5,7 +5,7 @@
 var cgm_latlon_area_list=[];
 
 /* color from blue to red */
-function makeRangeHandlerRGB(val, maxV, minV) {
+function makeRGB(val, maxV, minV) {
     let v= (val-minV) / (maxV-minV);
     let blue = Math.round(255 * v);
     let green = 0;
