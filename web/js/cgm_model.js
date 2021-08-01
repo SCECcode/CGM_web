@@ -33,6 +33,7 @@ var CGM = new function () {
     var cgm_colors = {
         normal: '#006E90',
         selected: '#B02E0C',
+        abnormal: '#00FFFF',
     };
 
     var cgm_marker_style = {
@@ -60,20 +61,9 @@ var CGM = new function () {
             weight: 2,
         },
     };
-    var cgm_line_path_style = {weight: 1, color: cgm_colors.normal};
-    var cgm_line_pattern = {
-        offset: '100%',
-        repeat: 0,
-        symbol: L.Symbol.arrowHead({
-            pixelSize: 5,
-            polygon: false,
-            pathOptions: {
-                stroke: true,
-                color: cgm_colors.normal,
-                weight: 1
-            }
-        })
-    };
+
+    var cgm_line_path_style = {};
+    var cgm_line_pattern = {};
 
     this.defaultMapView = {
         // coordinates: [34.3, -118.4],
@@ -143,11 +133,14 @@ window.console.log("calling zeroSelectCount..");
                 let vel_north = parseFloat(cgm_station_data[index].ref_velocity_north);
                 let vel_east = parseFloat(cgm_station_data[index].ref_velocity_east);
                 let vel_up = parseFloat(cgm_station_data[index].ref_velocity_up);
+                let vel_north_mm = (vel_north*1000).toFixed(3);
+                let vel_east_mm = (vel_east*1000).toFixed(3);
+                let vel_up_mm = (vel_up*1000).toFixed(3);
 //sqrt("Vel E"^2 + "Vel N"^2)
-                let horizontalVelocity = Math.sqrt(Math.pow(vel_north, 2) + Math.pow(vel_east, 2));
+                let horizontalVelocity = (Math.sqrt(Math.pow(vel_north_mm, 2) + Math.pow(vel_east_mm, 2))).toFixed(3);
 //atan2("Vel E","Vel N")*180/pi
-                let azimuth = Math.round((Math.atan2(vel_east,vel_north) * 180 / Math.PI)*1000)/1000;
-                let verticalVelocity = vel_up;
+                let azimuth = (Math.atan2(vel_east_mm,vel_north_mm) * 180 / Math.PI).toFixed(3);
+                let verticalVelocity = vel_up_mm;
                 let station_id = cgm_station_data[index].station_id;
                 let station_type = cgm_station_data[index].station_type;
                 let gid = cgm_station_data[index].gid;
@@ -162,19 +155,18 @@ window.console.log("calling zeroSelectCount..");
 
                 let marker = L.circleMarker([lat, lon], cgm_marker_style.normal);
 
-                let horizontalVelocity_mm = (horizontalVelocity * 1000).toFixed(2); // convert to mm/year
-                let verticalVelocity_mm = (verticalVelocity * 1000).toFixed(2); // convert to mm/year
-                let station_info = `station id: ${station_id}, vel: ${horizontalVelocity_mm} mm/yr`;//, lat/lng: ${lat}, ${lon}`;
-                marker.bindTooltip(station_info).openTooltip();
-
                 // generate vectors
                 let start_latlng = marker.getLatLng();
-                let end_latlng = calculateEndVectorLatLng(start_latlng, vel_north, vel_east, 750);
+                // in meter
+                let end_latlng = calculateEndVectorLatLng(start_latlng, vel_north, vel_east, 1500);
                 let dist = calculateDistanceMeter(start_latlng, {'lat':end_latlng[0], 'lng':end_latlng[1]} );
                 let p = dist / (CGM.cgm_vector_max - CGM.cgm_vector_min);
-
                 // save the dist into cgm_station_data
                 cgm_station_data[index].vector_dist=dist;
+
+                let station_info = `station id: ${station_id}, vel: ${horizontalVelocity} mm/yr <br>raw dist:${dist}`;
+                marker.bindTooltip(station_info).openTooltip();
+
 
                 let line_latlons = [
                     [start_latlng.lat, start_latlng.lng],
@@ -182,8 +174,8 @@ window.console.log("calling zeroSelectCount..");
                 ];
 
                 let new_color= makeRGB(dist, CGM.cgm_vector_max, CGM.cgm_vector_min );
-                let ncgm_line_path_style = {weight: 1, color: new_color};
-                let ncgm_line_pattern = {
+                cgm_line_path_style = {weight: 1, color: new_color};
+                cgm_line_pattern = {
                     offset: '100%',
                     repeat: 0,
                     symbol: L.Symbol.arrowHead({
@@ -198,18 +190,18 @@ window.console.log("calling zeroSelectCount..");
                 };
 
 
-                let polyline = L.polyline(line_latlons, ncgm_line_path_style);
+                let polyline = L.polyline(line_latlons, cgm_line_path_style);
                 var arrowHeadDecorator = L.polylineDecorator(polyline, {
-                    patterns: [ncgm_line_pattern]
+                    patterns: [cgm_line_pattern]
                 });
 
                 marker.scec_properties = {
                     station_id: station_id,
-                    horizontalVelocity: horizontalVelocity_mm,
-                    verticalVelocity: verticalVelocity_mm,
+                    horizontalVelocity: horizontalVelocity,
+                    verticalVelocity: verticalVelocity,
                     azimuth: azimuth,
-                    vel_east: cgm_station_data[index].ref_velocity_east,
-                    vel_north: cgm_station_data[index].ref_velocity_north,
+                    vel_east: vel_east_mm,
+                    vel_north: vel_north_mm,
                     vector_dist: cgm_station_data[index].vector_dist,
                     type: station_type,
                     gid: gid,
@@ -226,6 +218,8 @@ window.console.log("calling zeroSelectCount..");
                 this.cgm_layers.addLayer(marker);
             }
         }
+window.console.log("MAX found is "+ CGM.cgm_vector_max);
+window.console.log("MIN found is "+ CGM.cgm_vector_min);
 
 
         this.cgm_layers.on('click', function(event) {
@@ -724,7 +718,6 @@ window.console.log(">>> calling freshSearch..");
              const d = R * c; // in metres
 
              if (CGM.cgm_vector_max == -1) {
-window.console.log("vector="+d);
                CGM.cgm_vector_max=d;
                CGM.cgm_vector_min=d;
                return d;
@@ -866,8 +859,12 @@ window.console.log("generateResultsTable..");
                         <th class="hoverColor" onClick="sortMetadataTableByRow(5,'n')">East Vel&nbsp<span id='sortCol_5' class="fas fa-angle-down"></span></th>
                         <th class="hoverColor" onClick="sortMetadataTableByRow(6,'n')">North Vel&nbsp<span id='sortCol_6' class="fas fa-angle-down"></span></th>
                         <th class="hoverColor" onClick="sortMetadataTableByRow(7,'n')">Horizontal&nbsp<span id='sortCol_7' class="fas fa-angle-down"></span><br>Vel (mm/yr)</th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(8,'n')">Azimuth&nbsp<span id='sortCol_8' class="fas fa-angle-down"></span><br><button id="infoBtn" class="btn cgm-small-btn" data-toggle="modal" data-target="#modalazimuth"><span class="fas fa-info-circle"></span></button></th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(8,'n')">Azimuth&nbsp<span id='sortCol_8' class="fas fa-angle-down"></span></th>
                         <th class="hoverColor" onClick="sortMetadataTableByRow(9,'n')">Vertical Vel&nbsp<span id='sortCol_9' class="fas fa-angle-down"></span><br>(mm/yr)</th>
+
+<!-- 
+<button id="infoBtn" class="btn cgm-small-btn" data-toggle="modal" data-target="#modalazimuth"><span class="fas fa-info-circle"></span> 
+-->
 
                         <th style="width:20%;"><div class="col text-center">
 <!--download all -->

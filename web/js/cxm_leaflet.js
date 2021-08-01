@@ -97,6 +97,9 @@ var scecAttribution ='<a href="https://www.scec.org">SCEC</a>';
 // ==> scalebar <==
   L.control.scale({metric: 'false', imperial:'false', position: 'bottomleft'}).addTo(mymap);
 
+// ==>another scale bar <==
+  L.control.betterscale({metric: 'false', imperial:'false', position: 'topright'}).addTo(mymap);
+
 /* TODO
  watermark XXX
   L.Control.Watermark = L.control.extend({
