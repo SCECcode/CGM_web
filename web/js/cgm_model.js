@@ -309,6 +309,8 @@ var CGM = new function () {
                     vel_east: vel_east_mm,
                     vel_north: vel_north_mm,
                     vector_dist: cgm_station_data[index].vector_dist,
+                    vector_dist_path_style: cgm_line_path_style,
+                    vector_dist_head_pattern: cgm_line_head_pattern,
                     type: station_type,
                     gid: gid,
                     selected: false,
@@ -338,8 +340,8 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
         this.cgm_layers.on('mouseover', function(event) {
             let layer = event.layer;
             layer.setRadius(cgm_marker_style.hover.radius);
-            layer.scec_properties.vector.setStyle(cgm_line_path_style.hover);
-            layer.scec_properties.vectorArrowHead.setPatterns([cgm_line_head_pattern.hover]);
+            layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.hover);
+            layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.hover]);
         });
 
 
@@ -348,11 +350,11 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
             layer.setRadius(cgm_marker_style.normal.radius);
 
             if (layer.scec_properties.selected) {
-                layer.scec_properties.vector.setStyle(cgm_line_path_style.selected);
-                layer.scec_properties.vectorArrowHead.setPatterns([cgm_line_head_pattern.selected]);
+                layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.selected);
+                layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.selected]);
                 } else {
-                    layer.scec_properties.vector.setStyle(cgm_line_path_style.normal);
-                    layer.scec_properties.vectorArrowHead.setPatterns([cgm_line_head_pattern.normal]);
+                    layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.normal);
+                    layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.normal]);
             }
 
         });
@@ -389,8 +391,8 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
     this.selectStationByLayer = function (layer, moveTableRow=false) {
         layer.scec_properties.selected = true;
         layer.setStyle(cgm_marker_style.selected);
-        layer.scec_properties.vector.setStyle(cgm_line_path_style.selected);
-        layer.scec_properties.vectorArrowHead.setPatterns([cgm_line_head_pattern.selected]);
+        layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.selected);
+        layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.selected]);
         let gid = layer.scec_properties.gid;
 
         let $row = $(`tr[data-point-gid='${gid}'`);
@@ -419,8 +421,8 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
         layer.scec_properties.selected = false;
         layer.setStyle(cgm_marker_style.normal);
 
-        layer.scec_properties.vectorArrowHead.setPatterns([cgm_line_head_pattern.normal]);
-        layer.scec_properties.vector.setStyle(cgm_line_path_style.normal);
+        layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.normal);
+        layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.normal]);
 
         let gid = layer.scec_properties.gid;
 
