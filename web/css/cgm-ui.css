@@ -1,5 +1,15 @@
 /* required styles */
 
+.my-label {
+    position: absolute;
+    test-align:right;
+    color: #ff0000;
+    font-size:4px;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
 th{
   width: 6rem;
 }

@@ -11,6 +11,7 @@ var CGM = new function () {
     this.cgm_select_gid = [];
     this.cgm_layers = new L.FeatureGroup();
     this.cgm_vectors = new L.FeatureGroup();
+    this.cgm_vector_scale = new L.FeatureGroup();
     this.search_result = new L.FeatureGroup();
     this.searching = false;
 
@@ -64,6 +65,20 @@ var CGM = new function () {
 
     var cgm_line_path_style = {};
     var cgm_line_pattern = {};
+    cgm_scale_line_path_style = {weight: 2, color: "#ff0000"};
+    cgm_scale_line_pattern = {
+        offset: '100%',
+        repeat: 0,
+        symbol: L.Symbol.arrowHead({
+             pixelSize: 5,
+             polygon: false,
+             pathOptions: {
+                 stroke: true,
+                 color: "#ff0000",
+                 weight: 2
+             }
+        })
+    };
 
     this.defaultMapView = {
         // coordinates: [34.3, -118.4],
@@ -118,14 +133,61 @@ var CGM = new function () {
     };
 
     this.zeroSelectCount = function() {
-       this.cgm_select_gid = [];
-window.console.log("calling zeroSelectCount..");
-       updateDownloadCounter(0);
+        this.cgm_select_gid = [];
+        updateDownloadCounter(0);
     };
 
+    // generate vector scale, if here is existing one, remove and regenerate
+    this.generateVectorScale = function () {
+        // clear old set
+        this.cgm_vector_scale.eachLayer(function (layer) { viewermap.removeLayer(layer); });
+
+        let sz=viewermap.getSize();
+        // bounds of the visible map
+        let bd=viewermap.getBounds();
+        let a=bd.getNorthEast();
+        let b=bd.getSouthWest();
+        let dlat=(a['lat']- b['lat'])/5;
+        let dlng=(b['lng']-a['lng'])/20;
+        let start_lat=b['lat']+dlat;
+        let start_lng=b['lng']-dlng;
+        let start_latlng={'lat':start_lat,'lng':start_lng};
+
+   //     addMarkerLayer(start_lat, start_lng);
+        let labelIcon = L.divIcon({ className: 'my-label', iconSize: [80, 30], iconAnchor: [-10, 20], html: `<span>20 mm/yr</span>` });
+        let mylabel=L.marker(start_latlng, {icon: labelIcon});
+
+        // 20mm ???
+        let end_latlng = calculateEndVectorLatLng(start_latlng, 0.02, 0, 1500);
+        let dist = calculateDistanceMeter(start_latlng, {'lat':end_latlng[0], 'lng':end_latlng[1]} );
+        let ddist=dist/1500;
+        //addMarkerLayer(start_latlng.lat, start_latlng.lng);
+        //addMarkerLayer(end_latlng[0],end_latlng[1]);
+        let line_latlons = [
+            [start_latlng.lat, start_latlng.lng],
+            end_latlng
+        ];
+        let polyline = L.polyline(line_latlons, cgm_scale_line_path_style);
+        let arrowHeadDecorator = L.polylineDecorator(polyline, {
+                patterns: [cgm_scale_line_pattern]
+        });
+
+        // if checked, add to the map
+        if ($("#cgm-model-vectors").prop('checked')) {
+           window.console.log(">>>>>>> add to map..");
+            polyline.addTo(viewermap);
+            arrowHeadDecorator.addTo(viewermap);
+            mylabel.addTo(viewermap);
+        }
+        this.cgm_vector_scale = new L.FeatureGroup([polyline, arrowHeadDecorator,mylabel]);
+    }
+
+
     this.generateLayers = function () {
+
         this.cgm_layers = new L.FeatureGroup();
         this.cgm_vectors = new L.FeatureGroup();
+
         for (const index in cgm_station_data) {
             if (cgm_station_data.hasOwnProperty(index)) {
                 let lat = parseFloat(cgm_station_data[index].ref_north_latitude);
@@ -159,14 +221,25 @@ window.console.log("calling zeroSelectCount..");
                 let start_latlng = marker.getLatLng();
                 // in meter
                 let end_latlng = calculateEndVectorLatLng(start_latlng, vel_north, vel_east, 1500);
-                let dist = calculateDistanceMeter(start_latlng, {'lat':end_latlng[0], 'lng':end_latlng[1]} );
-                let p = dist / (CGM.cgm_vector_max - CGM.cgm_vector_min);
+                let dist_m = calculateDistanceMeter(start_latlng, {'lat':end_latlng[0], 'lng':end_latlng[1]} );
+                let dist = Math.floor((dist_m/1500)*1000)/1000;
+
+                if (CGM.cgm_vector_max == -1) {
+                  CGM.cgm_vector_max=dist;
+                  CGM.cgm_vector_min=dist;
+                }
+                if (dist > CGM.cgm_vector_max) {
+                   CGM.cgm_vector_max = dist;
+                }
+                if (dist < CGM.cgm_vector_min) {
+                   CGM.cgm_vector_min = dist;
+                }
+
                 // save the dist into cgm_station_data
                 cgm_station_data[index].vector_dist=dist;
 
                 let station_info = `station id: ${station_id}, vel: ${horizontalVelocity} mm/yr <br>raw dist:${dist}`;
                 marker.bindTooltip(station_info).openTooltip();
-
 
                 let line_latlons = [
                     [start_latlng.lat, start_latlng.lng],
@@ -221,6 +294,7 @@ window.console.log("calling zeroSelectCount..");
 window.console.log("MAX found is "+ CGM.cgm_vector_max);
 window.console.log("MIN found is "+ CGM.cgm_vector_min);
 
+        this.generateVectorScale();
 
         this.cgm_layers.on('click', function(event) {
 window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.station_id);
@@ -652,6 +726,9 @@ window.console.log(">>> calling freshSearch..");
                 viewermap.addLayer(layer.scec_properties.vector);
             });
         }
+        this.cgm_vector_scale.eachLayer(function (layer) {
+            viewermap.addLayer(layer);
+        });
     };
 
 
@@ -674,6 +751,10 @@ window.console.log(">>> calling freshSearch..");
                 viewermap.removeLayer(layer);
             });
         }
+
+        this.cgm_vector_scale.eachLayer(function (layer) {
+            viewermap.removeLayer(layer);
+        });
 
         if ($("#cgm-model-vectors").prop('checked')) {
             $("#cgm-model-vectors").prop('checked', false);
@@ -715,19 +796,7 @@ window.console.log(">>> calling freshSearch..");
                        Math.cos(theta1) * Math.cos(theta2) *
                        Math.sin(deltaLamda/2) * Math.sin(deltaLamda/2);
              const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-             const d = R * c; // in metres
-
-             if (CGM.cgm_vector_max == -1) {
-               CGM.cgm_vector_max=d;
-               CGM.cgm_vector_min=d;
-               return d;
-             }
-             if (d > CGM.cgm_vector_max) {
-                CGM.cgm_vector_max = d;
-             }
-             if (d < CGM.cgm_vector_min) {
-                CGM.cgm_vector_min = d;
-             }
+             var d = R * c; // in metres
              return d;
         }
 
@@ -1034,6 +1103,11 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
             });
             $('#slider-vector-range').slider("option", "min", CGM.cgm_vector_min);
             $('#slider-vector-range').slider("option", "max", CGM.cgm_vector_max);
+
+            viewermap.on("zoomend dragend panend",function() {
+                 CGM.generateVectorScale();
+            });
+
 
             $("#wait-spinner").hide();
         };

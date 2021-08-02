@@ -18,7 +18,6 @@ $cgm = new CGM();
     <link rel="stylesheet" href="css/vendor/jquery-ui.css">
     <link rel="stylesheet" href="css/vendor/glyphicons.css">
     <link rel="stylesheet" href="css/vendor/all.css">
-    <link rel="stylesheet" href="css/vendor/L.Control.ArrowScale.css">
     <link rel="stylesheet" href="css/cgm-ui.css?v=1">
     <link rel="stylesheet" href="css/sidebar.css?v=1">
 
@@ -32,7 +31,6 @@ $cgm = new CGM();
     <script type='text/javascript' src='js/vendor/FileSaver.js'></script>
     <script type='text/javascript' src='js/vendor/jszip.js'></script>
     <script type='text/javascript' src='js/vendor/jquery.floatThead.min.js'></script>
-    <script type='text/javascript' src='js/vendor/L.Control.ArrowScale.js'></script>
 
     <!--
     https://leaflet.github.io/Leaflet.draw/docs/Leaflet.draw-latest.html#l-draw
@@ -296,7 +294,7 @@ window.console.log("HERE..");
             <div class="row" >
 
                 <div class="col" id='CGM_plot'
-                        style="position:relative;border:solid 1px #ced4da; height:400px;">
+                        style="position:relative;border:solid 1px #ced4da; height:500px;">
                     <div  id='wait-spinner' style="">
                         <div class="d-flex justify-content-center" >
                           <div class="spinner-border text-light" role="status">

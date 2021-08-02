@@ -97,16 +97,13 @@ var scecAttribution ='<a href="https://www.scec.org">SCEC</a>';
 // ==> scalebar <==
   L.control.scale({metric: 'false', imperial:'false', position: 'bottomleft'}).addTo(mymap);
 
-// ==>another scale bar <==
-  L.control.betterscale({metric: 'false', imperial:'false', position: 'topright'}).addTo(mymap);
-
 /* TODO
  watermark XXX
   L.Control.Watermark = L.control.extend({
     onAdd: function (map) {
       var img=L.DomUtil.create('img');
       img.src = './css/images/logo.png';
-      img.stuyle.width ='200px';
+      img.style.width ='200px';
       return img;
     },
     onRemove: function(map) {
@@ -227,6 +224,11 @@ function addRectangleLayer(latA,lonA,latB,lonB) {
   var bounds = [[latA, lonA], [latB, lonB]];
   var layer=L.rectangle(bounds).addTo(viewermap);
   return layer;
+}
+
+function pointToLatLng(x,y) {
+  let latlng=viewermap.layerPointToLatLng(L.point(x,y));
+  return latlng;
 }
 
 function addMarkerLayer(lat,lon) {
