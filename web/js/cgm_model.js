@@ -149,14 +149,14 @@ var CGM = new function () {
         let bd=viewermap.getBounds();
         let a=bd.getNorthEast();
         let b=bd.getSouthWest();
-        let dlat=(a['lat']-b['lat'])/8;
+        let dlat=(a['lat']-b['lat'])/6;
         let dlng=(b['lng']-a['lng'])/50;
         let start_lat=b['lat']+dlat;
         let start_lng=b['lng']-dlng;
         let start_latlng={'lat':start_lat,'lng':start_lng};
 
    //     addMarkerLayer(start_lat, start_lng);
-        let labelIcon = L.divIcon({ className: 'my-label', iconSize: [80, 30], iconAnchor: [-10, 20], html: `<span>20 mm/yr</span>` });
+        let labelIcon = L.divIcon({ className: 'my-label', iconSize: [100, 30], iconAnchor: [-10, 20], html: `<span>20 mm/yr</span>` });
         let mylabel=L.marker(start_latlng, {icon: labelIcon});
 
         // 20mm ???
