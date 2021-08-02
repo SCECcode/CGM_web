@@ -63,10 +63,12 @@ var CGM = new function () {
         },
     };
 
-    var cgm_line_path_style = {};
-    var cgm_line_pattern = {};
+    // vector = path + head
+    cgm_line_path_style = {};
+    cgm_line_head_pattern = {};
+    // just 1 set
     cgm_scale_line_path_style = {weight: 2, color: "#ff0000"};
-    cgm_scale_line_pattern = {
+    cgm_scale_line_head_pattern = {
         offset: '100%',
         repeat: 0,
         symbol: L.Symbol.arrowHead({
@@ -147,8 +149,8 @@ var CGM = new function () {
         let bd=viewermap.getBounds();
         let a=bd.getNorthEast();
         let b=bd.getSouthWest();
-        let dlat=(a['lat']- b['lat'])/5;
-        let dlng=(b['lng']-a['lng'])/20;
+        let dlat=(a['lat']-b['lat'])/8;
+        let dlng=(b['lng']-a['lng'])/50;
         let start_lat=b['lat']+dlat;
         let start_lng=b['lng']-dlng;
         let start_latlng={'lat':start_lat,'lng':start_lng};
@@ -169,12 +171,11 @@ var CGM = new function () {
         ];
         let polyline = L.polyline(line_latlons, cgm_scale_line_path_style);
         let arrowHeadDecorator = L.polylineDecorator(polyline, {
-                patterns: [cgm_scale_line_pattern]
+                patterns: [cgm_scale_line_head_pattern]
         });
 
         // if checked, add to the map
         if ($("#cgm-model-vectors").prop('checked')) {
-           window.console.log(">>>>>>> add to map..");
             polyline.addTo(viewermap);
             arrowHeadDecorator.addTo(viewermap);
             mylabel.addTo(viewermap);
@@ -247,25 +248,57 @@ var CGM = new function () {
                 ];
 
                 let new_color= makeRGB(dist, CGM.cgm_vector_max, CGM.cgm_vector_min );
-                cgm_line_path_style = {weight: 1, color: new_color};
-                cgm_line_pattern = {
-                    offset: '100%',
-                    repeat: 0,
-                    symbol: L.Symbol.arrowHead({
-                        pixelSize: 5,
-                        polygon: false,
-                        pathOptions: {
-                            stroke: true,
-                            color: new_color,
-                            weight: 1
-                        }
-                    })
+
+                // vector's polyline
+                cgm_line_path_style = {
+                    normal: {weight: 1, color: new_color },
+                    hover:  {weight: 1, color: cgm_colors.selected },
+                    selected: {weight: 1, color: cgm_colors.selected }
+                                      };
+                // vector's arrowhead
+                cgm_line_head_pattern = {
+                    normal : { offset: '100%',
+                               repeat: 0,
+                               symbol: L.Symbol.arrowHead({
+                                   pixelSize: 5,
+                                   polygon: false,
+                                   pathOptions: {
+                                      stroke: true,
+                                      color: new_color,
+                                      weight: 1
+                                   }
+                               })
+                             },
+                   hover : { offset: '100%',
+                             repeat: 0,
+                             symbol: L.Symbol.arrowHead({
+                                 pixelSize: 10,
+                                 polygon: false,
+                                 pathOptions: {
+                                    stroke: true,
+                                    color: cgm_colors.selected,
+                                    weight: 1
+                                 }
+                             })
+                           },
+                   selected : { offset: '100%',
+                             repeat: 0,
+                             symbol: L.Symbol.arrowHead({
+                                 pixelSize: 5,
+                                 polygon: false,
+                                 pathOptions: {
+                                    stroke: true,
+                                    color: cgm_colors.selected,
+                                    weight: 1
+                                 }
+                             })
+                           },
                 };
 
 
-                let polyline = L.polyline(line_latlons, cgm_line_path_style);
+                let polyline = L.polyline(line_latlons, cgm_line_path_style.normal);
                 var arrowHeadDecorator = L.polylineDecorator(polyline, {
-                    patterns: [cgm_line_pattern]
+                    patterns: [cgm_line_head_pattern.normal]
                 });
 
                 marker.scec_properties = {
@@ -303,31 +336,25 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
         });
 
         this.cgm_layers.on('mouseover', function(event) {
-                let layer = event.layer;
-                // layer.setStyle(cgm_marker_style.hover);
-                layer.setRadius(cgm_marker_style.hover.radius);
-                // layer.scec_properties.vector.setStyle(cgm_marker_style.selected);
-                let newArrowPattern = {...cgm_line_pattern};
-                newArrowPattern.symbol.options.pathOptions.color = cgm_marker_style.hover.color;
-                newArrowPattern.symbol.options.pathOptions.weight = cgm_marker_style.hover.weight;
-                layer.scec_properties.vectorArrowHead.setPatterns([newArrowPattern]);
+            let layer = event.layer;
+            layer.setRadius(cgm_marker_style.hover.radius);
+            layer.scec_properties.vector.setStyle(cgm_line_path_style.hover);
+            layer.scec_properties.vectorArrowHead.setPatterns([cgm_line_head_pattern.hover]);
         });
 
 
         this.cgm_layers.on('mouseout', function(event) {
             let layer = event.layer;
-            // layer.setStyle(cgm_marker_style.hover);
             layer.setRadius(cgm_marker_style.normal.radius);
-            // layer.scec_properties.vector.setStyle(cgm_marker_style);
-            let newArrowPattern = {...cgm_line_pattern};
-            let oldColor = cgm_marker_style.normal.color;
 
             if (layer.scec_properties.selected) {
-               oldColor = cgm_marker_style.selected.color;
+                layer.scec_properties.vector.setStyle(cgm_line_path_style.selected);
+                layer.scec_properties.vectorArrowHead.setPatterns([cgm_line_head_pattern.selected]);
+                } else {
+                    layer.scec_properties.vector.setStyle(cgm_line_path_style.normal);
+                    layer.scec_properties.vectorArrowHead.setPatterns([cgm_line_head_pattern.normal]);
             }
-            newArrowPattern.symbol.options.pathOptions.color = oldColor;
-            newArrowPattern.symbol.options.pathOptions.weight = cgm_marker_style.normal.weight;
-            layer.scec_properties.vectorArrowHead.setPatterns([newArrowPattern]);
+
         });
 
     };
@@ -355,16 +382,15 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
     };
 
     this.toggleStationSelectedByGid = function(gid) {
-window.console.log("toggleStation -- by gid");
         let layer = this.getLayerByGid(gid);
         return this.toggleStationSelected(layer, false);
     };
 
     this.selectStationByLayer = function (layer, moveTableRow=false) {
-window.console.log("select stations by layer..");
         layer.scec_properties.selected = true;
         layer.setStyle(cgm_marker_style.selected);
-        layer.scec_properties.vector.setStyle({color: cgm_marker_style.selected.color});
+        layer.scec_properties.vector.setStyle(cgm_line_path_style.selected);
+        layer.scec_properties.vectorArrowHead.setPatterns([cgm_line_head_pattern.selected]);
         let gid = layer.scec_properties.gid;
 
         let $row = $(`tr[data-point-gid='${gid}'`);
@@ -392,9 +418,9 @@ window.console.log("select stations by layer..");
     this.unselectStationByLayer = function (layer) {
         layer.scec_properties.selected = false;
         layer.setStyle(cgm_marker_style.normal);
-        layer.scec_properties.vector.setStyle({color: cgm_colors.normal});
-        let newArrowPattern = {...cgm_line_pattern};
-        newArrowPattern.symbol.options.pathOptions.color = cgm_colors.normal;
+
+        layer.scec_properties.vectorArrowHead.setPatterns([cgm_line_head_pattern.normal]);
+        layer.scec_properties.vector.setStyle(cgm_line_path_style.normal);
 
         let gid = layer.scec_properties.gid;
 
@@ -557,7 +583,6 @@ window.console.log("select stations by layer..");
     }
 
 var generateTableRow = function(layer) {
-window.console.log("generate a table row..");
         let $table = $("#metadata-viewer");
         let html = "";
 
@@ -590,7 +615,6 @@ window.console.log("generate a table row..");
     };
 
     this.showSearch = function (type) {
-        window.console.log("calling showSearch");
         const $all_search_controls = $("#cgm-controls-container ul li");
         this.freshSearch();
         switch (type) {
