@@ -7,6 +7,7 @@ var CGM = new function () {
     // meters 22 - 35306
     this.cgm_vector_max = -1;
     this.cgm_vector_min = 0;
+    this.cgm_vector_loc = 0;
 
     this.cgm_select_gid = [];
     this.cgm_layers = new L.FeatureGroup();
@@ -154,6 +155,12 @@ var CGM = new function () {
         // vector bar target height = 34+17=51
         let targetx=pmin['x']+10;
         let targety=pmax['y']-51;
+        if(this.cgm_vector_loc == 0) {
+           targetx=pmin['x'];
+           targety=pmax['y']-40;
+           this.cgm_vector_loc=targety;
+window.console.log("here..");
+        }
 
         let start_latlng=viewermap.unproject([targetx,targety],z);
 
