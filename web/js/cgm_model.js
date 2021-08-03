@@ -153,7 +153,7 @@ var CGM = new function () {
         // scale bar height = 34 pixels
         // vector bar target height = 34+17=51
         let targetx=pmin['x']+10;
-        let targety=pmax['y']-55;
+        let targety=pmax['y']-51;
 
         let start_latlng=viewermap.unproject([targetx,targety],z);
 
