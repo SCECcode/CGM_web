@@ -144,18 +144,26 @@ var CGM = new function () {
         // clear old set
         this.cgm_vector_scale.eachLayer(function (layer) { viewermap.removeLayer(layer); });
 
-        let sz=viewermap.getSize();
+        let z=viewermap.getZoom();
         // bounds of the visible map
-        let bd=viewermap.getBounds();
-        let a=bd.getNorthEast();
-        let b=bd.getSouthWest();
-        let dlat=(a['lat']-b['lat'])/6;
-        let dlng=(b['lng']-a['lng'])/50;
-        let start_lat=b['lat']+dlat;
-        let start_lng=b['lng']-dlng;
-        let start_latlng={'lat':start_lat,'lng':start_lng};
+        let pbds=viewermap.getPixelBounds();
+        let pmin=pbds['min'];
+        let pmax=pbds['max'];
 
-   //     addMarkerLayer(start_lat, start_lng);
+        // scale bar height = 34 pixels
+        // vector bar target height = 34+17=51
+        let targetx=pmin['x']+10;
+        let targety=pmax['y']-55;
+
+        let start_latlng=viewermap.unproject([targetx,targety],z);
+
+        let o_latlng=viewermap.unproject([pmin['x'],pmax['y']],z);
+//window.console.log("origin >>"+pmin['x'],pmin['y']);
+//window.console.log("zoom >>"+z);
+//window.console.log("start_latlng>>",+start_latlng['lat'],start_latlng['lng']);
+//addMarkerLayer(start_latlng['lat'], start_latlng['lng']);
+//L.circleMarker([o_latlng['lat'], o_latlng['lng']], {color:'#FF0000'}).addTo(viewermap);
+
         let labelIcon = L.divIcon({ className: 'my-label', iconSize: [100, 30], iconAnchor: [-10, 20], html: `<span>20 mm/yr</span>` });
         let mylabel=L.marker(start_latlng, {icon: labelIcon});
 
@@ -213,7 +221,6 @@ var CGM = new function () {
                 }
                 while (lon > 180) {
                     lon -= 360;
-
                 }
 
                 let marker = L.circleMarker([lat, lon], cgm_marker_style.normal);
