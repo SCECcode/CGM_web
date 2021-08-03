@@ -174,10 +174,10 @@ window.console.log("here..");
         let labelIcon = L.divIcon({ className: 'my-label', iconSize: [100, 30], iconAnchor: [-10, 20], html: `<span>20 mm/yr</span>` });
         let mylabel=L.marker(start_latlng, {icon: labelIcon});
 
-        // 20mm ???
-        let end_latlng = calculateEndVectorLatLng(start_latlng, 0.02, 0, 1500);
+        // 20mm 
+        let end_latlng = calculateEndVectorLatLng(start_latlng, 0.02, 0, 1000000);
         let dist = calculateDistanceMeter(start_latlng, {'lat':end_latlng[0], 'lng':end_latlng[1]} );
-        let ddist=dist/1500;
+
         //addMarkerLayer(start_latlng.lat, start_latlng.lng);
         //addMarkerLayer(end_latlng[0],end_latlng[1]);
         let line_latlons = [
@@ -235,9 +235,9 @@ window.console.log("here..");
                 // generate vectors
                 let start_latlng = marker.getLatLng();
                 // in meter
-                let end_latlng = calculateEndVectorLatLng(start_latlng, vel_north, vel_east, 1500);
+                let end_latlng = calculateEndVectorLatLng(start_latlng, vel_north, vel_east, 1000000);
                 let dist_m = calculateDistanceMeter(start_latlng, {'lat':end_latlng[0], 'lng':end_latlng[1]} );
-                let dist = Math.floor((dist_m/1500)*1000)/1000;
+                let dist = dist_m/1000;
 
                 if (CGM.cgm_vector_max == -1) {
                   CGM.cgm_vector_max=dist;
@@ -253,7 +253,7 @@ window.console.log("here..");
                 // save the dist into cgm_station_data
                 cgm_station_data[index].vector_dist=dist;
 
-                let station_info = `station id: ${station_id}, vel: ${horizontalVelocity} mm/yr <br>raw dist:${dist}`;
+                let station_info = `station id: ${station_id}, vel: ${horizontalVelocity} mm/yr`;
                 marker.bindTooltip(station_info).openTooltip();
 
                 let line_latlons = [
@@ -805,7 +805,7 @@ window.console.log(">>> calling freshSearch..");
             // see https://stackoverflow.com/questions/7477003/calculating-new-longitude-latitude-from-old-n-meters
             let dy = vel_north * scaling_factor;
             let dx = vel_east * scaling_factor;
-            let r_earth = 6738;
+            let r_earth = 6371e3; // metres
             let pi = Math.PI;
 
             let start_lat = start_latlng.lat;
