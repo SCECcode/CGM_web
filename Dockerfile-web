@@ -9,7 +9,16 @@ RUN yum install -y httpd && \
     yum install -y php php-pgsql
 
 RUN amazon-linux-extras install -y python3.8 && \
-    yum install -y python38-pip
+    yum install -y git
+
+RUN git clone https://github.com/kmaterna/InSAR_CGM_readers_writers.git && \
+    cd InSAR_CGM_readers_writers && \
+    cp ../my_setup.py.py . && \
+    ./my_setup.py install --user 
+
+RUN yum install -y openblas pip 
+RUN pip install numpy netCDF4 --user
+
 
 COPY ./doc/cgm.conf /etc/httpd/conf.d/
 

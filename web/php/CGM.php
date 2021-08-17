@@ -40,7 +40,7 @@ class CGM extends SpatialData
         {
         $output = null;
         $retval = null;
-        $command = escapeshellcmd('python3.8 ./py/test.py');
+        $command = escapeshellcmd('python3.8 -v ./py/test.py');
         //$command = escapeshellcmd('whoami');
         //$command = escapeshellcmd('python3.8 -V');
         //$command = escapeshellcmd('ls -l /usr/lib/python3.8/site-packages');

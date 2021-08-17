@@ -1,0 +1,14 @@
+FROM python:3.8
+
+WORKDIR /app
+
+COPY . /app
+
+## need to download cgm_library
+
+RUN git clone https://github.com/kmaterna/InSAR_CGM_readers_writers.git && \
+    cd InSAR_CGM_readers_writers && \
+    ./setup.py install --user 
+
+RUN yum install -y openblas 
+RUN pip3 install numpy netCDF4 --user
