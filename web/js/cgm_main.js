@@ -9,6 +9,7 @@ const Models = {
 var activeModel = Models.CGM;
 var viewermap;
 var cgm_station_data;
+var cgm_insar_data;
 
 $(document).ready(function () {
 
@@ -114,6 +115,7 @@ window.console.log(">>>> causing a start of search..");
     });
 
     CGM.generateLayers();
+    CGM.generateInSARLayers();
 
     $.event.trigger({
         type: "page-ready",

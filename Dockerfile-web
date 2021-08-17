@@ -5,8 +5,11 @@ WORKDIR /app
 COPY . /app
 
 RUN yum install -y httpd && \
-	amazon-linux-extras install -y php7.2 && \
-	yum install -y php php-pgsql 
+    amazon-linux-extras install -y php7.2 && \
+    yum install -y php php-pgsql
+
+RUN amazon-linux-extras install -y python3.8 && \
+    yum install -y python38-pip
 
 COPY ./doc/cgm.conf /etc/httpd/conf.d/
 

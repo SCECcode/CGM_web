@@ -428,6 +428,7 @@ window.console.log("HERE..");
 <!-- -->
     <script type="text/javascript">
             cgm_station_data = <?php print $cgm->getAllStationData()->outputJSON(); ?>;
+            cgm_insar_data = <?php print $cgm->example_reading()->outputJSON(); ?>;
             <?php if ($_REQUEST['model'] == 'cgm'):  ?>
             $(document).on("page-ready", function () {
                 CGM.setupCGMInterface();

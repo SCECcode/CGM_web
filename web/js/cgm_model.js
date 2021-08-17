@@ -159,7 +159,6 @@ var CGM = new function () {
            targetx=pmin['x'];
            targety=pmax['y']-40;
            this.cgm_vector_loc=targety;
-window.console.log("here..");
         }
 
         let start_latlng=viewermap.unproject([targetx,targety],z);
@@ -373,6 +372,12 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
 
         });
 
+    };
+
+    //
+    this.generateInSARLayers = function () {
+        let tmp=cgm_insar_data;
+        window.console.log("HERE.. INSAR>>("+cgm_insar_data+")");
     };
 
     this.toggleStationSelected = function(layer, clickFromMap=false) {
@@ -1090,8 +1095,9 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
 
         this.setupCGMInterface = function() {
             var $download_queue_table = $('#metadata-viewer');
+            var sz=cgm_station_data.length;
 
-            for (let i = 0; i < cgm_station_data.length; i++) {
+            for (let i = 0; i < sz; i++) {
                 let item=cgm_station_data[i];
                 if(item['station_type'] == "continuous") {
                     cont_site.push(item['station_id']);

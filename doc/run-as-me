@@ -2,6 +2,7 @@
 
    yum install git
    git clone https://github.com/SCECcode/CGM_web.git
+   git clone https://github.com/kmaterna/InSAR_CGM_readers_writers.git CGM_web/web/py/vendor/InSAR_CGM_readers_writers
    yum install gcc
    yum install readline-devel
    yum install zlib-devel

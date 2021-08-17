@@ -30,9 +30,24 @@ class CGM extends SpatialData
 			$velocity_data[] = $row;
 		}
 
-			$this->search_result = $velocity_data;
+			$this->php_result = $velocity_data;
 
 			return $this;
 
 	}
+        // InSAR 
+	public function example_reading()
+        {
+        $output = null;
+        $retval = null;
+        $command = escapeshellcmd('python3.8 ./py/test.py');
+        //$command = escapeshellcmd('whoami');
+        //$command = escapeshellcmd('python3.8 -V');
+        //$command = escapeshellcmd('ls -l /usr/lib/python3.8/site-packages');
+        //$command = escapeshellcmd('ls -F /usr/lib/python3.8/site-packages/pip');
+        //$output = shell_exec($command);
+        exec($command, $output, $retval);
+	$this->php_result = $output;
+	return $this;
+        }
 }

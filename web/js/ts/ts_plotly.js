@@ -51,22 +51,16 @@ function plotly_plot_pos(pdata) {
   let margin_right_default=80;
   let margin_top_default=100;
 
-window.console.log("frame width "+frameWidth+" frame height "+frameHeight);
+//window.console.log("frame width "+frameWidth+" frame height "+frameHeight);
 
   let frameWidth_min=800;
 
   let nh=frameHeight;
-  let nw=Math.floor(nh/3)*3.5;
+  let nw=frameWidth;
   if(frameWidth < frameWidth_min) {
      window.console.log("plotting screen width is too small, should be at least "+frameWidth_min);
      nw=frameWidth_min;
-     nh= Math.floor((nw/3.5)*3);
-     } else {
-       if(nw > frameWidth) {
-          window.console.log("in recalculate..");
-          nw=frameWidth;
-          nh= Math.floor((nw/3.5)*3);
-       }
+//     nh= Math.floor((nw/3.5)*3);
   }
   nw=nw+margin_offset+margin_offset;
 

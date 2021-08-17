@@ -4,7 +4,7 @@
 abstract class SpatialData
 {
 	protected $connection;
-	protected $search_result = [];
+	protected $php_result = [];
 
 //	function __construct()
 //	{
@@ -16,7 +16,7 @@ abstract class SpatialData
 
 	public function outputJSON()
 	{
-		return json_encode($this->search_result);
+		return json_encode($this->php_result);
 	}
 
 }
