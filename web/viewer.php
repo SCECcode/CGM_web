@@ -1,6 +1,7 @@
 <?php
 require_once("php/navigation.php");
 require_once("php/CGM.php");
+require_once("php/CGM_INSAR.php");
 $header = getHeader("Viewer");
 $cgm = new CGM();
 $cgm_insar = new CGM_INSAR();
@@ -429,7 +430,7 @@ window.console.log("HERE..");
 <!-- -->
     <script type="text/javascript">
             cgm_station_data = <?php print $cgm->getAllStationData()->outputJSON(); ?>;
-            cgm_insar_data = <?php print $cgm_insar->doTesting()->outputJSON(); ?>;
+            cgm_insar_data = <?php print $cgm_insar->doPreTesting()->outputJSON(); ?>;
             <?php if ($_REQUEST['model'] == 'cgm'):  ?>
             $(document).on("page-ready", function () {
                 CGM.setupCGMInterface();

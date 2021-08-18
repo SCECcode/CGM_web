@@ -4,7 +4,7 @@ require_once("CGM_INSAR.php");
 
 $search = "";
 
-$search = new CFM_INSAR;
+$search = new CGM_INSAR;
 
 $type = $_REQUEST["t"];
 $criteria = json_decode($_REQUEST["q"]);

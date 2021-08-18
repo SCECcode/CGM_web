@@ -98,7 +98,7 @@ class CGM_INSAR extends SpatialData {
 	}
 
         // InSAR
-        public function doTesting()
+        public function doPreTesting()
         {
         $output = null;
         $retval = null;
@@ -106,7 +106,6 @@ class CGM_INSAR extends SpatialData {
           {'filelist':['./cgm_data/insar/USGS_D071_InSAR_v0_0_1.hdf5'],
            'result':['./result'],
            'pixellist':[
-//                       {'label':'ANA1','lat':34.02,'lon':-119.36 },
                        {'label':'ref_p','lat':35.32064,'lon':-116.57164 },
                        {'label':'la_p', 'lat':34.0522, 'lon':-118.2437}
                        ]}\"");
