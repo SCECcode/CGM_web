@@ -40,13 +40,19 @@ class CGM extends SpatialData
         {
         $output = null;
         $retval = null;
-        $command = escapeshellcmd('./py/test.py');
-        //$command = escapeshellcmd('./py/example_reading.py');
-        //$command = escapeshellcmd('whoami');
-        //$command = escapeshellcmd('python3.8 -V');
-        //$output = shell_exec($command);
+        $command = escapeshellcmd("./py/test.py \"
+          {'filelist':['./cgm_data/insar/USGS_D071_InSAR_v0_0_1.hdf5'],
+           'result':['./result'],
+           'pixellist':[
+//                       {'label':'ANA1','lat':34.02,'lon':-119.36 },
+                       {'label':'ref_p','lat':35.32064,'lon':-116.57164 },
+                       {'label':'la_p', 'lat':34.0522, 'lon':-118.2437} 
+                       ]}\"");
+        //$command = escapeshellcmd("./py/test.py \"hostname\"");
+        //$command = escapeshellcmd("./py/test.py \"{'filelist':['myhost','shost']}\"");
+
         exec($command, $output, $retval);
-	$this->php_result = $retval;
+	$this->php_result = $output;
 	return $this;
         }
 }

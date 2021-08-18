@@ -15,9 +15,9 @@ var CGM_searchType = {
 };
 
 function searchWithVector() {
-  //grab the min and max from the slider..
-  vals = $( "#slider-vector-range" ).slider("option", "values");
-  CGM_search(CGM_searchType.vector, vals);
+    //grab the min and max from the slider..
+    vals = $( "#slider-vector-range" ).slider("option", "values");
+    CGM_search(CGM_searchType.vector, vals);
 }
 
 function searchByStationName() {
