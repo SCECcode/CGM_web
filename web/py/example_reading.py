@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.8
+#!/usr/bin/env python3
 # Perform a pixel extraction into GeoCSV with all the metadata! 
 
 import cgm_library

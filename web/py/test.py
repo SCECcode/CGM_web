@@ -1,3 +1,5 @@
-#!/usr/bin/env python3.8
+#!/usr/bin/env python3
 
-print "Hello world"
+import cgm_library
+
+print("Hello world")
