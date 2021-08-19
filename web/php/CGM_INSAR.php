@@ -103,7 +103,8 @@ class CGM_INSAR extends SpatialData {
         $output = null;
         $retval = null;
         $command = escapeshellcmd("./py/test.py \"
-          {'filelist':['./cgm_data/insar/USGS_D071_InSAR_v0_0_1.hdf5'],
+          {'filelist':['./cgm_data/insar/USGS_D071_InSAR_v0_0_1.hdf5',
+                       './cgm_data/insar/USGS_D071_InSAR_v0_0_2.hdf5'],
            'result':['./result'],
            'pixellist':[
                        {'label':'ref_p','lat':35.32064,'lon':-116.57164 },

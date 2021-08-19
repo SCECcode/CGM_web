@@ -1,6 +1,8 @@
 /***
    ts_plotly.js
+   plotting GNSS triplet time series (triplet)
 ***/
+
 // tracking current plotly objects
 var TS_plotly_name;
 var TS_plotly_data;

@@ -14,6 +14,7 @@ var CGM_searchType = {
     velocity: 'velocity'
 };
 
+
 function searchWithVector() {
     //grab the min and max from the slider..
     vals = $( "#slider-vector-range" ).slider("option", "values");
@@ -26,7 +27,7 @@ function searchByStationName() {
 }
 
 // takes 2 or 4 entries
-function searchByLatlon() {
+function searchByLatLon() {
     var firstlatstr=document.getElementById("firstLatTxt").value;
     var firstlonstr=document.getElementById("firstLonTxt").value;
     var secondlatstr=document.getElementById("secondLatTxt").value;
@@ -48,6 +49,25 @@ function searchByLatlon() {
         CGM_search(CGM_searchType.latlon, criteria);
     }
 }
+
+function searchINSARByLatLon() {
+    var latstr=document.getElementById("insar-LatTxt").value;
+    var lonstr=document.getElementById("insar-LonTxt").value;
+    var filestr=document.getElementById("insar-hdf5Txt").value;
+
+    let criteria = [latstr, lonstr, filestr];
+
+// add the marker+retangle..
+//    chk_and_add_latlon_point();
+
+    if (latstr == "" || lonstr=="" || filestr=="") {
+        $searchResult.html("");
+        return;
+    } else {
+        CGM_search(CGM_searchType.insarlalon, criteria);
+    }
+}
+
 
 function CGM_search(type, criteria) {
     if (!type || !criteria) {

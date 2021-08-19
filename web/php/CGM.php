@@ -1,7 +1,7 @@
 <?php
 require_once("SpatialData.php");
 
-class CGM extends SpatialData
+class CGN extends SpatialData
 {
 
 	// TODO: once we're in a separate database

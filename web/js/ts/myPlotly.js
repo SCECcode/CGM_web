@@ -1,5 +1,5 @@
 /***
-  allPlotly.js
+  myPlotly.js
 ***/
 
 // MAIN
@@ -16,8 +16,7 @@ jQuery(document).ready(function() {
 //  let myFtypes=[ 'igb14' ];
 //  loadAndProcessFromFile(myURL, myFtypes);
 
-// station name..
-    loadAndProcessFromFile(urls,ftypes);
+  loadAndProcessFromFile(urls,ftypes);
 
 }) // end of MAIN
 
@@ -39,7 +38,7 @@ window.addEventListener("DOMContentLoaded", function () {
 // replot command
       if (typeof event.data == 'object' && event.data.call=='fromSCEC') {
           let myParams=decodeURI(event.data.value);
-          window.console.log("XXX"+myParams);
+          window.console.log("replot: myParams"+myParams);
           changeTSview(myParams);
           } else {
             window.console.log("IFRAME side>> invalid event data>"+event.data);
