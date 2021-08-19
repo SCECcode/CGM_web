@@ -17,8 +17,8 @@ CREATE TABLE cgm_gnss_station_velocities (
     source_filename text
 );
 
-CREATE TABLE cgm_gnss_sites (
+CREATE TABLE cgm_gnss_sites2(
     gid serial PRIMARY KEY,
     name VARCHAR(10) NOT NULL,
-    type VARCHAR(10) NOT NULL
+    type VARCHAR(10) DEFAULT 'DUMDUM'
 );
