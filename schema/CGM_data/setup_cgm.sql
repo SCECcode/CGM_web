@@ -1,8 +1,23 @@
 
 \c CGM1_db;
+-----------------------
 
+COPY CGM_gnss_sites(name)
+    FROM '/home/postgres/CGM/CGM_data/cont_site.csv' DELIMITER ',' CSV HEADER;
+UPDATE CGM_gnss_sites set type = 'cont';
+
+CREATE TABLE tmp0 AS
+    TABLE CGM_gnss_sites;
+
+COPY tmp0(name,type)
+    FROM '/home/postgres/CGM/CGM_data/surv_site.csv' DELIMITER ',' CSV HEADER;
+UPDATE tmp0 set type = 'surv';
+insert into CGM_gnss_sites (select * from tmp0);
+
+drop table tmp0;
+-----------------------
 CREATE TABLE tmp1 AS
-    TABLE CGM_station_velocities;
+    TABLE CGM_gnss_station_velocities;
 
 create sequence tmp1_gid_seq;
 alter table tmp1 alter column gid set default nextval('public.tmp1_gid_seq');
@@ -18,7 +33,7 @@ UPDATE tmp1 set station_type = 'continuous';
 UPDATE tmp1 set cgm_version = '1';
 UPDATE tmp1 set source_filename = 'wus_gps_final_names.short.geocsv';
 
-insert into CGM_station_velocities (select * from tmp1);
+INSERT into CGM_gnss_station_velocities (select * from tmp1);
 
 truncate table tmp1;
 -----------------------
@@ -30,10 +45,9 @@ UPDATE tmp1 set station_type = 'campaign';
 UPDATE tmp1 set cgm_version = '1';
 UPDATE tmp1 set source_filename = 'crowell_campaign_velocities.short.geocsv';
 
-insert into CGM_station_velocities (select * from tmp1);
+INSERT into CGM_gnss_station_velocities (select * from tmp1);
 
 drop table tmp1;
-
 
 -- CREATE TEMP TABLE tmp1 (
 --     gid serial PRIMARY KEY,

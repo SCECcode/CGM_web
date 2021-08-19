@@ -1,6 +1,6 @@
 \c CGM1_db;
 
-CREATE TABLE cgm_station_velocities (
+CREATE TABLE cgm_gnss_station_velocities (
     gid serial PRIMARY KEY,
     station_id VARCHAR(100) NOT NULL,
     ref_date_time text, -- should be 'timestamp with time zone', but values in data are invalid
@@ -15,4 +15,10 @@ CREATE TABLE cgm_station_velocities (
     station_type text,
     cgm_version text,
     source_filename text
+);
+
+CREATE TABLE cgm_gnss_sites (
+    gid serial PRIMARY KEY,
+    name VARCHAR(10) NOT NULL,
+    type VARCHAR(10) NOT NULL
 );
