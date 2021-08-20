@@ -101,7 +101,7 @@ var CGM_GNSS = new function () {
 
     this.activateData = function() {
         activeProduct = Products.GNSS;
-        this.showModel();
+        this.showProduct();
         $("div.control-container").hide();
         $("#cgm-controls-container").show();
 
@@ -657,9 +657,9 @@ var generateTableRow = function(layer) {
         }
     };
 
-    this.showModel = function () {
+    this.showProduct = function () {
 
-window.console.log("SHOW model");
+window.console.log("SHOW product");
         let $cgm_model_checkbox = $("#cgm-model");
 
         if (this.searching) {
@@ -679,8 +679,9 @@ window.console.log("SHOW model");
 
     };
 
-    this.hideModel = function () {
-window.console.log("Hide model");
+    
+    this.hideProduct = function () {
+window.console.log("Hide product, GNSS");
         if (CGM_GNSS.searching) {
             CGM_GNSS.search_result.remove();
         } else {
@@ -700,7 +701,7 @@ window.console.log("Hide model");
         this.resetVectorSlider();
 
         this.hideVectors();
-        this.showModel();
+        this.showProduct();
         remove_bounding_rectangle_layer();
         skipRectangle();
 
@@ -737,9 +738,9 @@ window.console.log(">>> calling freshSearch..");
             this.hideVectors();
         }
         if ($("#cgm-model").prop('checked')) {
-          this.showModel();
+          this.showProduct();
           } else {
-          this.hideModel();
+          this.hideProduct();
         }
         if ($("#cgm-model-cfm").prop('checked')) {
           CXM.showCFMFaults(viewermap);
@@ -895,7 +896,7 @@ window.console.log(">>> calling freshSearch..");
         this.searchBox = function (type, criteria) {
 
 window.console.log("SEARCH >> calling searchBox");
-            this.hideModel();
+            this.hideProduct();
             this.resetSearch();
 
             this.searching = true;
@@ -918,7 +919,7 @@ window.console.log("SEARCH >> calling searchBox");
                 }
 
                 if( !modelVisible()) {
-                    this.showModel();
+                    this.showProduct();
                 }
 
                 if (type == this.searchType.latlon) {

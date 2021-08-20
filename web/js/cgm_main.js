@@ -20,9 +20,9 @@ $(document).ready(function () {
     $("#cgm-model").on('click', function () {
 //??        if (viewermap.hasLayer(CGM_GNSS.cgm_layers) ||  CGM_GNSS.searching) {
         if ($(this).prop('checked')) {
-            CGM_GNSS.showModel();
+            CGM_GNSS.showProduct();
         } else {
-            CGM_GNSS.hideModel();
+            CGM_GNSS.hideProduct();
         }
     });
 

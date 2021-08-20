@@ -132,6 +132,7 @@ window.console.log("Calling sortMetadataTableByRow..",n);
       }
     }
     if (shouldSwitch) {
+window.console.log("need switching..");
       rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
       switching = true;
       switchcount ++; 
