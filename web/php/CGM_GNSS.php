@@ -18,7 +18,7 @@ class CGM_GNSS extends SpatialData
 
 	public function getAllStationData()
 	{
-		$query = "select gid, station_id, ref_north_latitude, ref_east_longitude, ref_velocity_north, ref_velocity_east, ref_velocity_up, station_type from cgm_station_velocities -- tablesample system(30) -- where station_id = 'P255'--  -- LIMIT 100";
+		$query = "select gid, station_id, ref_north_latitude, ref_east_longitude, ref_velocity_north, ref_velocity_east, ref_velocity_up, station_type from cgm_gnss_station_velocities -- tablesample system(30) -- where station_id = 'P255'--  -- LIMIT 100";
 
 
 		//where station_id = 'P213'
