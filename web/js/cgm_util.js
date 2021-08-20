@@ -3,6 +3,7 @@
 ***/
 
 var cgm_latlon_area_list=[];
+var cgm_latlon_marker_list=[];
 
 /* color from blue to red */
 function makeRGB(val, maxV, minV) {
@@ -52,9 +53,9 @@ function updateDownloadCounter(select_count) {
     plotCounterElem.html("(" + select_count + ")");
 }
 
+// supply a new layer
 function add_bounding_rectangle(a,b,c,d) {
   // remove old one and add a new one
-//window.console.log("calling add_bounding_rectangle..new layer");
   remove_bounding_rectangle_layer();
   var layer=addRectangleLayer(a,b,c,d);
   var tmp={"layer":layer, "latlngs":[{"lat":a,"lon":b},{"lat":c,"lon":d}]};
@@ -63,7 +64,6 @@ function add_bounding_rectangle(a,b,c,d) {
 
 function remove_bounding_rectangle_layer() {
    if(cgm_latlon_area_list.length == 1) {
-//window.console.log("removing bounding rectangle..");
      var area=cgm_latlon_area_list.pop();
      var l=area["layer"]; 
      viewermap.removeLayer(l);
@@ -71,7 +71,6 @@ function remove_bounding_rectangle_layer() {
 }
 
 function add_bounding_rectangle_layer(layer, a,b,c,d) {
-//window.console.log("adding bounding rectangle with layer..");
   // remove old one and add a new one
   remove_bounding_rectangle_layer();
   var tmp={"layer":layer, "latlngs":[{"lat":a,"lon":b},{"lat":c,"lon":d}]};
@@ -79,6 +78,28 @@ function add_bounding_rectangle_layer(layer, a,b,c,d) {
   cgm_latlon_area_list.push(tmp);
 }
 
+function add_marker_point(a,b) {
+  // remove old one and add a new one
+  remove_marker_point_layer();
+  var layer=addMarkerLayer(a,b);
+  var tmp={"layer":layer, "latlngs":[{"lat":a,"lon":b}]};
+  cgm_latlon_point_list.push(tmp);
+}
+
+function remove_marker_point_layer() {
+   if(cgm_latlon_point_list.length == 1) {
+     var point=cgm_latlon_point_list.pop();
+     var l=point["layer"]; 
+     viewermap.removeLayer(l);
+   }
+}
+
+function add_marker_point_layer(layer, a,b) {
+  // remove old one and add a new one
+  remove_marker_point_layer();
+  var tmp={"layer":layer, "latlngs":[{"lat":a,"lon":b}]};
+  cgm_latlon_point_list.push(tmp);
+}
 
 // https://www.w3schools.com/howto/howto_js_sort_table.asp
 // n is which column to sort-by

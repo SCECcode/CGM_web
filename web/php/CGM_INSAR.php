@@ -21,17 +21,19 @@ class CGM_INSAR extends SpatialData {
 
 		switch ($type)
 		{
-			case "station":
-				$query = "SELECT OBJECT_tb.gid,OBJECT_tb.name FROM OBJECT_tb,FAULT_tb where FAULT_tb.abb=$1 and FAULT_tb.gid=OBJECT_tb.FAULT_tb_gid";
+			case "location":
+				if (count($criteria) !== 2) {
+					$error = true;
+				}
+				$criteria = array_map("floatVal", $criteria);
+				$query = "SELECT lat, lon, velocity FROM cgm_insar_velocities where lat=$1 and lon=$2";
 				break;
 			case "velocity":
 				if (count($criteria) !== 2) {
 					$error = true;
 				}
-
 				$criteria = array_map("floatVal", $criteria);
-
-				$query = "SELECT OBJECT_tb.gid,OBJECT_tb.name FROM OBJECT_tb WHERE strike IS NOT NULL AND strike > $1 AND strike < $2";
+				$query = "SELECT lat, lon, velocity FROM cgm_insar_velocities WHERE velocity IS NOT NULL AND velocity > $1 AND velocity < $2";
 				break;
 			case "latlon":
 				if (count($criteria) !== 4) {
@@ -66,7 +68,7 @@ class CGM_INSAR extends SpatialData {
 
 				$criteria = array($minlon, $minlat, $maxlon, $maxlat);
 
-				$query = "SELECT OBJECT_tb.gid,OBJECT_tb.name FROM TRACE_tb INNER JOIN OBJECT_tb ON TRACE_tb.gid = OBJECT_tb.trace_tb_gid where ST_INTERSECTS(ST_MakeEnvelope( $1, $2, $3, $4, 4326), TRACE_tb.geom)";
+				$query = "SELECT lat,lon,velocity FROM cgm_insar_velocities where ST_INTERSECTS(ST_MakeEnvelope( $1, $2, $3, $4, 4326), geom)";
 				break;
 
 		}
@@ -81,8 +83,9 @@ class CGM_INSAR extends SpatialData {
 		$query_result = array();
 		while($row = pg_fetch_row($result)) {
 			$item = new \stdClass();
-			$item->gid=$row[0];
-			$item->name=$row[1];
+			$item->lat=$row[0];
+			$item->lon=$row[1];
+			$item->velocity=$row[1];
 			array_push($query_result, $item);
 		}
 
@@ -92,7 +95,7 @@ class CGM_INSAR extends SpatialData {
 
 	public function getVelocityRange()
 	{
-		$query = "SELECT MAX(strike) as maxstrike, min(strike) as minstrike FROM OBJECT_tb LIMIT 1 ";
+		$query = "SELECT MAX(velocity) as maxvelocity, min(velocity) as minvelocity FROM cgm_insar_velocities LIMIT 1 ";
 		$result = pg_query($this->connection, $query);
 		return pg_fetch_object($result);
 	}

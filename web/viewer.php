@@ -74,6 +74,7 @@ $cgm_insar = new CGM_INSAR();
     <script type="text/javascript" src="js/debug.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_main.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_gnss.js?v=1"></script>
+    <script type="text/javascript" src="js/cgm_insar.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_util.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_viewTS_util.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_viewTS.js?v=1"></script>
@@ -430,9 +431,7 @@ window.console.log("HERE..");
 <!-- -->
     <script type="text/javascript">
             cgm_gnss_station_data = <?php print $cgm_gnss->getAllStationData()->outputJSON(); ?>;
-/*
             cgm_insar_data = <?php print $cgm_insar->doPreTesting()->outputJSON(); ?>;
-*/
             <?php if ($_REQUEST['model'] == 'cgm'):  ?>
             $(document).on("page-ready", function () {
                 

@@ -181,12 +181,12 @@ window.console.log(">>> calling freshSearch..");
                 case CGM_INSAR.searchType.location:
                     $("#cgm-insar-LatTxt").val(criteria[0]);
                     $("#cgm-insar-LonTxt").val(criteria[1]);
-                    $("#cgm-delta").val(criteria[2]);
-                    remove_bounding_rectangle_layer();
+                    remove_marker_point_layer();
                     add_marker_point(criteria[0],criteria[1]);
-## TODO call the php to get the right location 
-##                           create a layer
-##                           results.push(layer);
+//XXX
+// TODO call the php to get the correct point right location  
+//                           create a layer
+//                           results.push(layer);
    
                     break;
                 case CGM_INSAR.searchType.latlon:
@@ -196,9 +196,9 @@ window.console.log(">>> calling freshSearch..");
                     $("#cgm-insar-secondLonTxt").val(criteria[3]);
                     remove_bounding_rectangle_layer();
                     add_bounding_rectangle(criteria[0],criteria[1],criteria[2],criteria[3]);
-## TODO call the php to get the right location 
-##                           create many layers
-##                           results.push(layer);
+// TODO call the php to get the right location 
+//                           create many layers
+//                           results.push(layer);
                     break;
             }
             return results;
@@ -222,6 +222,7 @@ window.console.log("SEARCH >> calling searchBox");
                     markerLocations.push(results[i].getLatLng());
                     this.search_result.addLayer(results[i]);
                 }
+//XX TODO
                 this.showStationsByLayers(this.search_result);
 
                 // changed visible stations, so update vectors
