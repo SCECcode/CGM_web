@@ -1,14 +1,11 @@
 <?php
 require_once("php/navigation.php");
 require_once("php/CGM.php");
+require_once("php/CGM_GNSS.php");
 require_once("php/CGM_INSAR.php");
-
 $header = getHeader("Viewer");
-
-$cgm = new CGM();
+$cgm = new CGM_GNSS();
 $cgm_insar = new CGM_INSAR();
-$cgm_gnss = new CGM_GNSS();
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -78,9 +75,6 @@ $cgm_gnss = new CGM_GNSS();
     <script type="text/javascript" src="js/debug.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_main.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_model.js?v=1"></script>
-    <script type="text/javascript" src="js/cgm_gnss.js?v=1"></script>
-    <script type="text/javascript" src="js/cgm_insar.js?v=1"></script>
-    <script type="text/javascript" src="js/cgm_query.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_util.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_viewTS_util.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_viewTS.js?v=1"></script>
@@ -135,218 +129,126 @@ window.console.log("HERE..");
             <div id="downloadSelect" class="cfm-control-download" onMouseLeave="removeDownloadControl()"></div>
         </div>
     </div>
-    <div class="row col-12" id="cgm-insar-container" style="display:none;">
-        <div class="form-inline">
-            <input type="text" placeholder="35.32064" id="insar-LatTxt" title="insar lat" onfocus="this.value=''">
-            <input type="text" placeholder='-116.57164' id="insar-LonTxt" title="insar lon" onfocus="this.value=''">
-            <input type="text" style="width:200px" id="insar-hdf5Txt" title="insar hdf5" placeholder='USGS_D071_InSAR_v0_0_1.hdf5' onfocus="this.value=''">
-            <button id="insarSearchBtn" type="button" title="retrieve InSAR by latlon"
-                  class="btn btn-default cfm-small-btn" onclick="searchINSARByLatlon()">
-                   <span class="glyphicon glyphicon-search"></span>
-            </button>
-            <button id="insarDownloadBtn" type="button" title="download InSAR ts"
-                  style="display:;"
-                  class="btn btn-default cfm-small-btn" onclick="downloadINSAR()">
-                   <span class="glyphicon glyphicon-download"></span>
-            </button>
-        </div>
-    </div>
-    <div class="row control-container mt-1" id="cgm-insar-controls-container" style="display:;">
+
+    <div class="row control-container mt-1" id="cgm-controls-container" style="display:;">
             <div class="col-4 input-group filters mb-3">
-                <select id="cgm-insar-search-type" class="custom-select">
-                    <option value="">Search the InSAR</option>
-                    <option value="location">Location</option>
-                    <option value="latlon">Latitude &amp; Longitude</option>
-                </select>
-                <div class="input-group-append">
-                    <button id="refresh-insar-all-button" onclick="CGM_INSAR.reset();" class="btn btn-dark pl-4 pr-4"
-                            type="button">Reset</button>
-                </div>
-            </div>
-            <div class="col-8">
-                <ul>
-                    <li id='cgm-insar-location' class='navigationLi ' style="display:none">
-                        <div id='cgm-insar-locationMenu' class='menu'>
-                            <div class="row">
-                                <div class="col-4">
-                                    <p>Select a location on the map or enter latitude and longitude</p>
-                                </div>
-                                <div class="col-8">
-                                    <div class="form-inline latlon-input-boxes">
-                                        <input type="text"
-                                                placeholder="Latitude"
-                                                id="cgm-insar-LatTxt"
-                                                title="insar lat"
-                                                onfocus="this.value=''"
-                                                class="cgm-insar-search-item form-control">
-                                        <input type="text" 
-                                                placeholder='Longitude' 
-                                                id="cgm-insar-LonTxt" 
-                                                title="insar lon"
-                                                onfocus="this.value=''" 
-                                                class="cgm-insar-search-item form-control">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li id='cgm-insar-latlon' class='navigationLi ' style="display:none">
-                        <div id='cgm-insar-latlonMenu' class='menu'>
-                            <div class="row">
-                                <div class="col-4">
-                                    <p>Draw a rectangle on the map or enter latitudes and longitudes</p>
-                                </div>
-                                <div class="col-8">
-                                    <div class="form-inline latlon-input-boxes">
-                                        <input type="text"
-                                                placeholder="Latitude"
-                                                id="cgm-insar-firstLatTxt"
-                                                title="first lat"
-                                                onfocus="this.value=''"
-                                                class="cgm-insar-search-item form-control">
-                                        <input type="text" 
-                                                placeholder='Longitude' 
-                                                id="cgm-insar-firstLonTxt" 
-                                                title="first lon"
-                                                onfocus="this.value=''" 
-                                                class="cgm-insar-search-item form-control">
-                                        <input type="text"
-                                                id="cgm-insar-secondLatTxt"
-                                                title="second lat"
-                                                placeholder='2nd Latitude'
-                                                onfocus="this.value=''"
-                                                class="cgm-insar-search-item form-control">
-                                        <input type="text"
-                                                id="cgm-secondLonTxt"
-                                                title="second lon"
-                                                placeholder='2nd Longitude'
-                                                onfocus="this.value=''"
-                                                class="cgm-insar-search-item form-control">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-    </div>
-    <div class="row control-container mt-1" id="cgm-gnss-controls-container" style="display:;">
-            <div class="col-4 input-group filters mb-3">
-                <select id="cgm-gnss-search-type" class="custom-select">
-                    <option value="">Search the GNSS</option>
+                <select id="cgm-search-type" class="custom-select">
+                    <option value="">Search the CGM ...</option>
                     <option value="stationname">Station Name</option>
                     <option value="latlon">Latitude &amp; Longitude</option>
                     <option value="vectorslider">Vector</option>
                 </select>
                 <div class="input-group-append">
-                    <button id="refresh-gnss-all-button" onclick="CGM_GNSS.reset();" class="btn btn-dark pl-4 pr-4"
+                    <button id="refresh-all-button" onclick="CGM.reset();" class="btn btn-dark pl-4 pr-4"
                             type="button">Reset</button>
                 </div>
             </div>
-            <div class="col-8">
-                <ul>
-                    <li id='cgm-gnss-station-name' class='navigationLi ' style="display:none">
-                        <div class='menu row justify-content-center'>
-                            <div class="col-12">
-                                <div class="d-flex">
-                                    <input placeholder="Enter Station Name" type="text"
-                                            class="cgm-gnss-search-item form-control"
-                                            style=""/>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li id='cgm-gnss-latlon' class='navigationLi ' style="display:none">
-                        <div id='cgm-gnss-latlonMenu' class='menu'>
-                            <div class="row">
-                                <div class="col-4">
-                                    <p>Draw a rectangle on the map or enter latitudes and longitudes</p>
-                                </div>
-                                <div class="col-8">
-                                    <div class="form-inline latlon-input-boxes">
-                                        <input type="text"
-                                                placeholder="Latitude"
-                                                id="cgm-firstLatTxt"
-                                                title="first lat"
-                                                onfocus="this.value=''"
-                                                class="cgm-gnss-search-item form-control">
-                                        <input type="text" 
-                                                placeholder='Longitude' 
-                                                id="cgm-firstLonTxt" 
-                                                title="first lon"
-                                                onfocus="this.value=''" 
-                                                class="cgm-gnss-search-item form-control">
-                                        <input type="text"
-                                                id="cgm-secondLatTxt"
-                                                title="second lat"
-                                                placeholder='2nd Latitude'
-                                                onfocus="this.value=''"
-                                                class="cgm-gnss-search-item form-control">
-                                        <input type="text"
-                                                id="cgm-secondLonTxt"
-                                                title="second lon"
-                                                placeholder='2nd Longitude'
-                                                onfocus="this.value=''"
-                                                class="cgm-gnss-search-item form-control">
+                <div class="col-8">
+                    <ul>
+                        <li id='cgm-station-name' class='navigationLi ' style="display:none">
+                            <div class='menu row justify-content-center'>
+                                <div class="col-12">
+                                    <div class="d-flex">
+                                        <input placeholder="Enter Station Name" type="text"
+                                                class="cgm-search-item form-control"
+                                                style=""/>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
-                    <li id='cgm-gnss-vector-slider' class='navigationLi' style="display:none">
-                        <div id='cgm-gnss-vector-sliderMenu' class='menu'>
-                            <div class="row">
-                                <div class="col-4">
-                                    <p>Select a vector range on the slider or enter the two boundaries</p>
-                                </div>
-                                <div class="col-8">
-                                   <div class="form-inline vector-slider-input-boxes">
-                                       <input type="text"
-                                              id="cgm-gnss-minVectorSliderTxt"
-                                              title="min vector slider"
-                                              onfocus="this.value=''"
-                                              class="cgm-gnss-search-item form-control">
-                                       <div class="col-5">
-                                         <div id="slider-gnss-vector-range" style="border:2px solid black"></div>
-		                         <div id="min-gnss-vector-slider-handle" class="ui-slider-handle"></div>
-		                         <div id="max-gnss-vector-slider-handle" class="ui-slider-handle"></div>
-                                       </div>
-                                       <input type="text"
-                                              id="cgm-gnss-maxVectorSliderTxt"
-                                              title="max vector slider"
-                                              onfocus="this.value=''"
-                                              class="cgm-gnss-search-item form-control">
-                                  </div>
+                        </li>
+                        <li id='cgm-latlon' class='navigationLi ' style="display:none">
+                            <div id='cgm-latlonMenu' class='menu'>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <p>Draw a rectangle on the map or enter latitudes and longitudes</p>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="form-inline latlon-input-boxes">
+                                            <input type="text"
+                                                    placeholder="Latitude"
+                                                    id="cgm-firstLatTxt"
+                                                    title="first lat"
+                                                    onfocus="this.value=''"
+                                                    class="cgm-search-item form-control">
+                                            <input type="text" 
+                                                    placeholder='Longitude' 
+                                                    id="cgm-firstLonTxt" 
+                                                    title="first lon"
+                                                    onfocus="this.value=''" 
+                                                    class="cgm-search-item form-control">
+                                            <input type="text"
+                                                    id="cgm-secondLatTxt"
+                                                    title="second lat"
+                                                    placeholder='2nd Latitude'
+                                                    onfocus="this.value=''"
+                                                    class="cgm-search-item form-control">
+                                            <input type="text"
+                                                    id="cgm-secondLonTxt"
+                                                    title="second lon"
+                                                    placeholder='2nd Longitude'
+                                                    onfocus="this.value=''"
+                                                    class="cgm-search-item form-control">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-    </div>
+                        </li>
+			<li id='cgm-vector-slider' class='navigationLi' style="display:none">
+                            <div id='cgm-vector-sliderMenu' class='menu'>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <p>Select a vector range on the slider or enter the two boundaries</p>
+                                    </div>
+                                    <div class="col-8">
+                                       <div class="form-inline vector-slider-input-boxes">
+                                           <input type="text"
+                                                  id="cgm-minVectorSliderTxt"
+                                                  title="min vector slider"
+                                                  onfocus="this.value=''"
+                                                  class="cgm-search-item form-control">
+                                           <div class="col-5">
+                                             <div id="slider-vector-range" style="border:2px solid black"></div>
+				             <div id="min-vector-slider-handle" class="ui-slider-handle"></div>
+				             <div id="max-vector-slider-handle" class="ui-slider-handle"></div>
+                                           </div>
+                                           <input type="text"
+                                                  id="cgm-maxVectorSliderTxt"
+                                                  title="max vector slider"
+                                                  onfocus="this.value=''"
+                                                  class="cgm-search-item form-control">
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- pull-out -->
+                </div>
+            <!--            </div>-->
 
+    </div>
     <div class="row">
             <div class="col-12 text-right pr-0" style="border:0px solid green">
                         <div id='model-options' class="form-check-inline">
+<!---
                             <select id='data-download-select' class="custom-select custom-select-sm mr-4" style="width:150px;">
-                              <option selected value="gnss">GNSS Data</option>
-                              <option selected value="insar">InSAR Data</option>
+                              <option selected value="cgm">CGM Data</option>
                             </select>
-
+-->
                              <div class="form-check form-check-inline">
                                  <label class='form-check-label'
-                                         for="cgm-model-gnss">
+                                         for="cgm-model">
                                  <input class='form-check-inline mr-1'
                                          type="checkbox"
-                                         id="cgm-model-gnss"/>GNSS
+                                         id="cgm-model"/>GNSS
                                  </label>
                              </div>
                              <div class="form-check form-check-inline">
                                  <label class='form-check-label ml-1 mini-option'
-                                         for="cgm-model-gnss-vectors">
+                                         for="cgm-model-vectors">
                                  <input class='form-check-inline mr-1'
                                          type="checkbox"
-                                         id="cgm-model-gnss-vectors" value="1" />GNSS vectors
+                                         id="cgm-model-vectors" value="1" />GNSS vectors
                                  </label>
                              </div>
                              <div class="form-check form-check-inline">
@@ -528,7 +430,7 @@ window.console.log("HERE..");
 
 <!-- -->
     <script type="text/javascript">
-            cgm_gnss_station_data = <?php print $cgm_gnss->getAllStationData()->outputJSON(); ?>;
+            cgm_station_data = <?php print $cgm->getAllStationData()->outputJSON(); ?>;
             cgm_insar_data = <?php print $cgm_insar->doPreTesting()->outputJSON(); ?>;
             <?php if ($_REQUEST['model'] == 'cgm'):  ?>
             $(document).on("page-ready", function () {

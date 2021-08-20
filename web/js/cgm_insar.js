@@ -50,7 +50,7 @@ var CGM_GNSS = new function () {
     };
 
     var tablePlaceholderRow = `<tr id="placeholder-row">
-                        <td colspan="11">Metadata for selected points will appear here.</td>
+                        <td colspan="5">Metadata for selected points will appear here.</td>
                     </tr>`;
 
     this.activateData = function() {
