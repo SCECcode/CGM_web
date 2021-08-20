@@ -3,15 +3,13 @@
 ***/
 
 var initial_page_load = true;
+
 const Products = {
     GNSS: 'gnss',
-    INSR: 'insar'
+    INSAR: 'insar',
 };
-
 var activeProduct = Products.GNSS;
-
 var viewermap;
-
 var cgm_gnss_station_data;
 var cgm_insar_data;
 
@@ -19,8 +17,8 @@ $(document).ready(function () {
 
     viewermap=setup_viewer();
 
-    $("#cgm-model-gnss").on('click', function () {
-//??        if (viewermap.hasLayer(CGM.cgm_layers) ||  CGM.searching) {
+    $("#cgm-model").on('click', function () {
+//??        if (viewermap.hasLayer(CGM_GNSS.cgm_layers) ||  CGM_GNSS.searching) {
         if ($(this).prop('checked')) {
             CGM_GNSS.showModel();
         } else {
@@ -28,7 +26,7 @@ $(document).ready(function () {
         }
     });
 
-    $("#cgm-model-gnss-vectors").on('click', function () {
+    $("#cgm-model-vectors").on('click', function () {
         if ($(this).prop('checked')) {
             CGM_GNSS.showVectors();
         } else {
@@ -44,18 +42,18 @@ $(document).ready(function () {
         }
     });
 
-    $("#cgm-gnss-search-type").on('change', function () {
+
+    $("#cgm-search-type").on('change', function () {
         CGM_GNSS.showSearch($(this).val());
     });
 
-    $('.cgm-gnss-search-item').on('focus', function () {
+    $('.cgm-search-item').on('focus', function () {
       $(this).on('blur mouseout', function () {
         $(this).off('mouseout');
         $(this).off('blur');
-
-// these is where the change in any cgm-search-item causes a new search..
-window.console.log(">>>> causing a start of CGM search..");
-
+window.console.log(">>>> causing a start of search..");
+// these is where the change in latlon causes a new search..
+// 
           if( $(this).val() != '' ) {
             let searchType = CGM_GNSS.searchType.latlon  // set default
             let $p=$(this).parent();
@@ -64,7 +62,6 @@ window.console.log(">>>> causing a start of CGM search..");
             let criteria = [];
             let skip = false;
 
-// criteria 1/station, 2/vector, 4/latlon
             if ($criteria.length === 1) {
                searchType = CGM_GNSS.searchType.stationName;
                criteria = $criteria.val();
@@ -92,54 +89,6 @@ window.console.log(">>>> causing a start of CGM search..");
        });
     });
 
-    $("#cgm-insar-search-type").on('change', function () {
-        CGM_INSAR.showSearch($(this).val());
-    });
-
-    $('.cgm-insar-search-item').on('focus', function () {
-      $(this).on('blur mouseout', function () {
-        $(this).off('mouseout');
-        $(this).off('blur');
-
-// these is where the change in any cgm-insar-search-item causes a new search..
-window.console.log(">>>> causing a start of CGM search..");
-
-          if( $(this).val() != '' ) {
-            let searchType = CGM_INSAR.searchType.location
-            let $p=$(this).parent();
-            let $criteria = $p.children("input");
-
-            let criteria = [];
-            let skip = false;
-
-//criteria 3/location, 2/velocity, 4/location
-            if ($criteria.length >= 2) {
-                $criteria.each(function(){
-                    if(!isNaN($(this).val()) && $(this).val() !='') {
-                      criteria.push($(this).val());
-                      } else {
-                        skip=true;
-                    }
-                });
-            }
-            if ($criteria.length === 4) {
-               searchType = CGM_INSAR.searchType.latlon;
-            }
-            if ($criteria.length === 2) {
-               searchType = CGM_INSAR.searchType.velocity;
-            }
-
-            if(!skip) {
-              $("div#wait-spinner").show(400, function(){
-                  CGM_INSAR.searchBox(searchType, criteria);
-              });
-            }
-           } else {
-              $(this).blur();
-           }
-       });
-    });
-
     $("#metadata-viewer-container").on('click','td.cgm-data-click', function(){
         if ($(this).find('button[id="cgm-allBtn"]').length != 0) {
             return;
@@ -149,7 +98,7 @@ window.console.log(">>>> causing a start of CGM search..");
         let parent = $(this).parent();
 
         let gid = $(parent).data('point-gid');
-        let isElemSelected = CGM.toggleStationSelectedByGid(gid);
+        let isElemSelected = CGM_GNSS.toggleStationSelectedByGid(gid);
 
         if (isElemSelected) {
             $(parent).addClass('row-selected');
@@ -162,16 +111,13 @@ window.console.log(">>>> causing a start of CGM search..");
     });
 
     $("#data-download-select").on('change', function(){
-       if ($(this).val() == 'gnss') {
-           CGM.setupGNSSInterface();
-       }
-       if ($(this).val() == 'insar') {
-           CGM.setupINSARInterface();
+       if ($(this).val() == 'cgm') {
+           CGM_GNSS.setupCGMInterface();
        }
     });
 
-    CGM_GNSS.generateGNSSLayers();
-    CGM_INSAR.generateINSARLayers();
+    CGM_GNSS.generateLayers();
+//    CGM_GNSS.generateInSARLayers();
 
     $.event.trigger({
         type: "page-ready",
@@ -179,7 +125,7 @@ window.console.log(">>>> causing a start of CGM search..");
     });
 
 
-    CGM.setupCGMInterface();
+    CGM_GNSS.setupCGMInterface();
 
     setup_infoTSTable();
     setup_warnTSTable();

@@ -101,9 +101,9 @@ var CGM_GNSS = new function () {
 
     this.activateData = function() {
         activeProduct = Products.GNSS;
-        this.showProduct();
+        this.showModel();
         $("div.control-container").hide();
-        $("#cgm-gnss-controls-container").show();
+        $("#cgm-controls-container").show();
 
     };
 
@@ -189,7 +189,7 @@ var CGM_GNSS = new function () {
         });
 
         // if checked, add to the map
-        if ($("#cgm-model-gnss-vectors").prop('checked')) {
+        if ($("#cgm-model-vectors").prop('checked')) {
             polyline.addTo(viewermap);
             arrowHeadDecorator.addTo(viewermap);
             mylabel.addTo(viewermap);
@@ -198,7 +198,7 @@ var CGM_GNSS = new function () {
     }
 
 
-    this.generateGNSSLayers = function () {
+    this.generateLayers = function () {
 
         this.cgm_layers = new L.FeatureGroup();
         this.cgm_vectors = new L.FeatureGroup();
@@ -372,6 +372,12 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
 
         });
 
+    };
+
+    //
+    this.generateInSARLayers = function () {
+        let tmp=cgm_insar_data;
+        window.console.log("HERE.. INSAR>>("+cgm_insar_data+")");
     };
 
     this.toggleStationSelected = function(layer, clickFromMap=false) {
@@ -590,7 +596,7 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
         }
       
       
-        var zipfname="CGM_"+timestamp+".zip"; 
+        var zipfname="CGM_GNSS_"+timestamp+".zip"; 
         nzip.generateAsync({type:"blob"}).then(function (content) {
           // see FileSaver.js
           saveAs(content, zipfname);
@@ -630,20 +636,20 @@ var generateTableRow = function(layer) {
     };
 
     this.showSearch = function (type) {
-        const $all_search_controls = $("#cgm-gnss-controls-container ul li");
+        const $all_search_controls = $("#cgm-controls-container ul li");
         this.freshSearch();
         switch (type) {
             case this.searchType.vectorSlider:
                 $all_search_controls.hide();
-                $("#cgm-gnss-vector-slider").show();
+                $("#cgm-vector-slider").show();
                 break;
             case this.searchType.stationName:
                 $all_search_controls.hide();
-                $("#cgm-gnss-station-name").show();
+                $("#cgm-station-name").show();
                 break;
             case this.searchType.latlon:
                 $all_search_controls.hide();
-                $("#cgm-gnss-latlon").show();
+                $("#cgm-latlon").show();
                 drawRectangle();
                 break;
             default:
@@ -651,10 +657,10 @@ var generateTableRow = function(layer) {
         }
     };
 
-// XX CHECK
-    this.showProduct = function () {
+    this.showModel = function () {
+
 window.console.log("SHOW model");
-        let $cgm_model_checkbox = $("#cgm-model-gnss");
+        let $cgm_model_checkbox = $("#cgm-model");
 
         if (this.searching) {
             this.search_result.addTo(viewermap);
@@ -673,14 +679,14 @@ window.console.log("SHOW model");
 
     };
 
-// XX CHECK
-    this.hideProduct = function () {
-window.console.log("Hide model/product");
+    this.hideModel = function () {
+window.console.log("Hide model");
         if (CGM_GNSS.searching) {
             CGM_GNSS.search_result.remove();
         } else {
             this.cgm_layers.remove();
         }
+
     };
 
     this.reset = function() {
@@ -694,14 +700,14 @@ window.console.log("Hide model/product");
         this.resetVectorSlider();
 
         this.hideVectors();
-        this.showProduct();
+        this.showModel();
         remove_bounding_rectangle_layer();
         skipRectangle();
 
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
-        $("#cgm-gnss-controls-container input, #cgm-gnss-controls-container select").val("");
+        $("#cgm-controls-container input, #cgm-controls-container select").val("");
 
-        $("#cgm-model-gnss-vectors").prop('checked', false);
+        $("#cgm-model-vectors").prop('checked', false);
         this.clearAllSelections();
 
     };
@@ -715,7 +721,7 @@ window.console.log("RESET>>> calling resetSearch..");
         this.searching = false;
         this.search_result = new L.FeatureGroup();
 
-        // $("#cgm-gnss-controls-container ul input, #cgm-gnss-controls-container ul select").val("");
+        // $("#cgm-controls-container ul input, #cgm-controls-container ul select").val("");
 
         this.replaceResultsTableBody([]);
         skipRectangle();
@@ -725,15 +731,15 @@ window.console.log("RESET>>> calling resetSearch..");
     this.freshSearch = function (){
 window.console.log(">>> calling freshSearch..");
         this.resetSearch();
-        if ($("#cgm-model-gnss-vectors").prop('checked')) {
+        if ($("#cgm-model-vectors").prop('checked')) {
           this.showVectors();
           } else {
             this.hideVectors();
         }
-        if ($("#cgm-model-gnss").prop('checked')) {
-          this.showProduct();
+        if ($("#cgm-model").prop('checked')) {
+          this.showModel();
           } else {
-          this.hideProduct();
+          this.hideModel();
         }
         if ($("#cgm-model-cfm").prop('checked')) {
           CXM.showCFMFaults(viewermap);
@@ -843,8 +849,8 @@ window.console.log(">>> calling freshSearch..");
             let results = [];
             switch (type) {
                 case CGM_GNSS.searchType.vectorSlider:
-                    $("#cgm-gnss-minVectorSliderTxt").val(criteria[0]);
-                    $("#cgm-gnss-maxVectorSliderTxt").val(criteria[1]);
+                    $("#cgm-minVectorSliderTxt").val(criteria[0]);
+                    $("#cgm-maxVectorSliderTxt").val(criteria[1]);
                     this.cgm_layers.eachLayer(function (layer) {
                         if (layer.scec_properties.vector_dist > criteria[0]
                              && layer.scec_properties.vector_dist < criteria[1]){
@@ -863,10 +869,10 @@ window.console.log(">>> calling freshSearch..");
                     break;
 
                 case CGM_GNSS.searchType.latlon:
-                    $("#cgm-gnss-firstLatTxt").val(criteria[0]);
-                    $("#cgm-gnss-firstLonTxt").val(criteria[1]);
-                    $("#cgm-gnss-secondLatTxt").val(criteria[2]);
-                    $("#cgm-gnss-secondLonTxt").val(criteria[3]);
+                    $("#cgm-firstLatTxt").val(criteria[0]);
+                    $("#cgm-firstLonTxt").val(criteria[1]);
+                    $("#cgm-secondLatTxt").val(criteria[2]);
+                    $("#cgm-secondLonTxt").val(criteria[3]);
                     remove_bounding_rectangle_layer();
                     add_bounding_rectangle(criteria[0],criteria[1],criteria[2],criteria[3]);
                     this.cgm_layers.eachLayer(function(layer){
@@ -889,7 +895,7 @@ window.console.log(">>> calling freshSearch..");
         this.searchBox = function (type, criteria) {
 
 window.console.log("SEARCH >> calling searchBox");
-            this.hideProduct();
+            this.hideModel();
             this.resetSearch();
 
             this.searching = true;
@@ -912,7 +918,7 @@ window.console.log("SEARCH >> calling searchBox");
                 }
 
                 if( !modelVisible()) {
-                    this.showProduct();
+                    this.showModel();
                 }
 
                 if (type == this.searchType.latlon) {
@@ -943,7 +949,7 @@ window.console.log("DONE with BoxSearch..");
         };
 
         var modelVisible = function (){
-            return $("#cgm-model-gnss").prop('checked');
+            return $("#cgm-model").prop('checked');
         };
 
         // private function
@@ -1083,13 +1089,14 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
           $("#slider-vector-range").slider('values', 
                               [CGM_GNSS.cgm_vector_min, CGM_GNSS.cgm_vector_max]);
           let tmp=CGM_GNSS.cgm_vector_min;
-          $("#cgm-gnss-minVectorSliderTxt").val(CGM_GNSS.cgm_vector_min);
-          $("#cgm-gnss-maxVectorSliderTxt").val(CGM_GNSS.cgm_vector_max);
+          $("#cgm-minVectorSliderTxt").val(CGM_GNSS.cgm_vector_min);
+          $("#cgm-maxVectorSliderTxt").val(CGM_GNSS.cgm_vector_max);
         }
 
         this.setupCGMInterface = function() {
             var $download_queue_table = $('#metadata-viewer');
             var sz=cgm_gnss_station_data.length;
+window.console.log("setupCGMInterface: retrieved stations "+sz);
 
             for (let i = 0; i < sz; i++) {
                 let item=cgm_gnss_station_data[i];
@@ -1123,13 +1130,13 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
             $("#slider-vector-range").slider({ 
                       range:true, step:0.01, min:CGM_GNSS.cgm_vector_min, max:CGM_GNSS.cgm_vector_max, values:[CGM_GNSS.cgm_vector_min, CGM_GNSS.cgm_vector_max],
                   slide: function( event, ui ) {
-                               $("#cgm-gnss-minVectorSliderTxt").val(ui.values[0]);
-                               $("#cgm-gnss-maxVectorSliderTxt").val(ui.values[1]);
+                               $("#cgm-minVectorSliderTxt").val(ui.values[0]);
+                               $("#cgm-maxVectorSliderTxt").val(ui.values[1]);
                                resetVectorRangeColor(ui.values[0],ui.values[1]);
                          },
                   change: function( event, ui ) {
-                               $("#cgm-gnss-minVectorSliderTxt").val(ui.values[0]);
-                               $("#cgm-gnss-maxVectorSliderTxt").val(ui.values[1]);
+                               $("#cgm-minVectorSliderTxt").val(ui.values[0]);
+                               $("#cgm-maxVectorSliderTxt").val(ui.values[1]);
                                resetVectorRangeColor(ui.values[0],ui.values[1]);
                          },
                   stop: function( event, ui ) {
@@ -1137,8 +1144,8 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
                                CGM_GNSS.searchBox(searchType, ui.values);
                          },
                   create: function() {
-                              $("#cgm-gnss-minVectorSliderTxt").val(CGM_GNSS.cgm_vector_min);
-                              $("#cgm-gnss-maxVectorSliderTxt").val(CGM_GNSS.cgm_vector_max);
+                              $("#cgm-minVectorSliderTxt").val(CGM_GNSS.cgm_vector_min);
+                              $("#cgm-maxVectorSliderTxt").val(CGM_GNSS.cgm_vector_max);
                         }
             });
             $('#slider-vector-range').slider("option", "min", CGM_GNSS.cgm_vector_min);

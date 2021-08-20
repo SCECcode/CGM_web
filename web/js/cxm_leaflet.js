@@ -159,9 +159,9 @@ var scecAttribution ='<a href="https://www.scec.org">SCEC</a>';
         var ne=loclist[2];
         add_bounding_rectangle_layer(layer,sw['lat'],sw['lng'],ne['lat'],ne['lng']);
         mymap.addLayer(layer);
-        if (activeModel == Models.CGM) {
+        if (activeProduct == Products.CGM) {
             $("div#wait-spinner").show(400, function(){
-                CGM.searchBox(CGM.searchType.latlon, [sw['lat'], sw['lng'], ne['lat'], ne['lng']]);
+                CGM_GNSS.searchBox(CGM_GNSS.searchType.latlon, [sw['lat'], sw['lng'], ne['lat'], ne['lng']]);
             });
         }
     }
