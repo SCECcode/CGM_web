@@ -1,17 +1,16 @@
 
 \c CGM1_db;
 -----------------------
+CREATE TABLE tmp0 AS
+    TABLE CGM_gnss_sites;
+COPY tmp0(name,type)
+    FROM '/home/postgres/CGM/CGM_data/surv_site.csv' DELIMITER ',' CSV HEADER;
+UPDATE tmp0 set type = 'surv';
 
 COPY CGM_gnss_sites(name)
     FROM '/home/postgres/CGM/CGM_data/cont_site.csv' DELIMITER ',' CSV HEADER;
 UPDATE CGM_gnss_sites set type = 'cont';
 
-CREATE TABLE tmp0 AS
-    TABLE CGM_gnss_sites;
-
-COPY tmp0(name,type)
-    FROM '/home/postgres/CGM/CGM_data/surv_site.csv' DELIMITER ',' CSV HEADER;
-UPDATE tmp0 set type = 'surv';
 insert into CGM_gnss_sites (select * from tmp0);
 
 drop table tmp0;

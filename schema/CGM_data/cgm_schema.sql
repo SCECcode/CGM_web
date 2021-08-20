@@ -20,5 +20,5 @@ CREATE TABLE cgm_gnss_station_velocities (
 CREATE TABLE cgm_gnss_sites(
     gid serial PRIMARY KEY,
     name VARCHAR(10) NOT NULL,
-    type VARCHAR(10) DEFAULT 'DUMDUM'
+    type VARCHAR(10) DEFAULT 'SCEC'
 );
