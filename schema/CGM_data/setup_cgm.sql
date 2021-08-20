@@ -3,7 +3,7 @@
 -----------------------
 CREATE TABLE tmp0 AS
     TABLE CGM_gnss_sites;
-COPY tmp0(name,type)
+COPY tmp0(name)
     FROM '/home/postgres/CGM/CGM_data/surv_site.csv' DELIMITER ',' CSV HEADER;
 UPDATE tmp0 set type = 'surv';
 
