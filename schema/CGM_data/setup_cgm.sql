@@ -49,6 +49,13 @@ INSERT into CGM_gnss_station_velocities (select * from tmp1);
 
 drop table tmp1;
 
+-----------------------
+DELETE FROM cgm_gnss_station_velocities t2
+WHERE NOT EXISTS 
+(SELECT 1 FROM cgm_gnss_sites t1
+ WHERE t1.name = t2.station_id);
+
+-----------------------
 -- CREATE TEMP TABLE tmp1 (
 --     gid serial PRIMARY KEY,
 --     station_id VARCHAR(100) NOT NULL,

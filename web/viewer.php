@@ -135,7 +135,7 @@ window.console.log("HERE..");
             <div id="downloadSelect" class="cfm-control-download" onMouseLeave="removeDownloadControl()"></div>
         </div>
     </div>
-    <div class="row col-12" id="cgm-insar-container" style="display:;">
+    <div class="row col-12" id="cgm-insar-container" style="display:none;">
         <div class="form-inline">
             <input type="text" placeholder="35.32064" id="insar-LatTxt" title="insar lat" onfocus="this.value=''">
             <input type="text" placeholder='-116.57164' id="insar-LonTxt" title="insar lon" onfocus="this.value=''">
