@@ -11,7 +11,8 @@ COPY CGM_gnss_sites(name)
     FROM '/home/postgres/CGM/CGM_data/cont_site.csv' DELIMITER ',' CSV HEADER;
 UPDATE CGM_gnss_sites set type = 'cont';
 
-insert into CGM_gnss_sites (select * from tmp0);
+insert into CGM_gnss_sites(name,type)
+   select name,type from tmp0;
 
 drop table tmp0;
 -----------------------
