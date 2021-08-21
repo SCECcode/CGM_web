@@ -10,8 +10,8 @@ const Products = {
 };
 var activeProduct = Products.GNSS;
 var viewermap;
-var cgm_gnss_station_data;
-var cgm_insar_data;
+var cgm_gnss_station_data=null;
+var cgm_insar_data=null;
 
 $(document).ready(function () {
 
@@ -33,6 +33,15 @@ $(document).ready(function () {
             CGM_GNSS.hideVectors();
         }
     });
+
+    $("#cgm-model-insar").on('click', function () {
+        if ($(this).prop('checked')) {
+            CGM_INSAR.showProduct();
+        } else {
+            CGM_INSAR.hideProduct();
+        }
+    });
+
 
     $("#cgm-model-cfm").on('click', function () {
         if ($(this).prop('checked')) {
@@ -89,6 +98,50 @@ window.console.log(">>>> causing a start of search..");
        });
     });
 
+    $("#cgm-insar-search-type").on('change', function () {
+        CGM_INSAR.showSearch($(this).val());
+    });
+
+    $('.cgm-insar-search-item').on('focus', function () {
+      $(this).on('blur mouseout', function () {
+        $(this).off('mouseout');
+        $(this).off('blur');
+window.console.log(">>>> causing a start of search..");
+// these is where the change in latlon causes a new search..
+// 
+          if( $(this).val() != '' ) {
+            let searchType = CGM_INSAR.searchType.location
+            let $p=$(this).parent();
+            let $criteria = $p.children("input");
+
+            let criteria = [];
+            let skip = false;
+
+            $criteria.each(function(){
+                if(!isNaN($(this).val()) && $(this).val() !='') {
+                  criteria.push($(this).val());
+                  } else {
+                    skip=true;
+                }
+            });
+
+            if ($criteria.length === 4) {
+               searchType = CGM_INSAR.searchType.latlon;
+            }
+
+            if(!skip) {
+              $("div#wait-spinner").show(400, function(){
+                  CGM_INSAR.searchBox(searchType, criteria);
+              });
+            }
+           } else {
+              $(this).blur();
+           }
+       });
+    });
+
+
+// CHECK NOT SURE IF INSAR needs this
     $("#metadata-viewer-container").on('click','td.cgm-data-click', function(){
         if ($(this).find('button[id="cgm-allBtn"]').length != 0) {
             return;

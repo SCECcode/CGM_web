@@ -625,7 +625,7 @@ div.guide ul {
 }
 
 #mapLayer {
-    border-bottom: 0;
+    border-bottom: 1;
 }
 
 #model-options {

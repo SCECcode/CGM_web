@@ -8,6 +8,8 @@ var CGM_INSAR = new function () {
     this.cgm_velocity_min = 0;
     this.cgm_velocity_loc = 0;
 
+    // unique label for each insar search by location or by latlon area
+    this.cgm_select_label = [];
     this.cgm_layers = new L.FeatureGroup();
     this.search_result = new L.FeatureGroup();
     this.searching = false;
@@ -44,13 +46,19 @@ var CGM_INSAR = new function () {
         },
     };
 
+    this.defaultMapView = {
+        // coordinates: [34.3, -118.4],
+        coordinates: [34.16, -118.57],
+        zoom: 7
+    };
+
     this.searchType = {
         latlon: 'latlon',
         location: 'location',
     };
 
     var tablePlaceholderRow = `<tr id="placeholder-row">
-                        <td colspan="5">Metadata for selected points will appear here.</td>
+                        <td colspan="7">Metadata for selected points will appear here.</td>
                     </tr>`;
 
     this.activateData = function() {
@@ -61,8 +69,43 @@ var CGM_INSAR = new function () {
 
     };
 
-    //
+
+    this.upSelectCount = function(label) {
+       let i=this.cgm_select_label.indexOf(label);
+       if(i != -1) {
+         window.console.log("this is bad.. already in selected list "+label);
+         return;
+       }
+
+       let tmp=this.cgm_select_label.length;
+       window.console.log("=====adding to list "+label+" ("+tmp+")");
+       this.cgm_select_label.push(label);
+       updateDownloadCounter(this.cgm_select_label.length);
+    };
+
+    this.downSelectCount = function(label) {
+       if(this.cgm_select_label.length == 0) { // just ignore..
+         return;
+       }
+       let i=this.cgm_select_label.indexOf(label);
+       if(i == -1) {
+         window.console.log("this is bad.. not in selected list "+label);
+         return;
+       }
+       let tmp=this.cgm_select_label.length;
+//       window.console.log("=====remove from list "+label+"("+tmp+")");
+       this.cgm_select_label.splice(i,1);
+       updateDownloadCounter(this.cgm_select_label.length);
+    };
+
+    this.zeroSelectCount = function() {
+        this.cgm_select_label = [];
+        updateDownloadCounter(0);
+    };
+
     this.generateInSARLayers = function () {
+        if(cgm_insar_data == null)
+          return;
         window.console.log(".....INSAR >> "+cgm_insar_data);
         let tmp=cgm_insar_data[0];
         let jblob=JSON.parse(tmp.replace(/'/g,'"'));
@@ -221,13 +264,9 @@ window.console.log("SEARCH >> calling searchBox");
                     markerLocations.push(results[i].getLatLng());
                     this.search_result.addLayer(results[i]);
                 }
-//XX TODO
-                this.showStationsByLayers(this.search_result);
-
-                // changed visible stations, so update vectors
-                if (vectorVisible()) {
-                    this.updateVectors();
-                }
+/*XXX TODO
+                this.showLocationsByLayers(this.search_result);
+*/
 
                 if( !modelVisible()) {
                     this.showProduct();
@@ -241,10 +280,7 @@ window.console.log("SEARCH >> calling searchBox");
                     viewermap.fitBounds(bounds, {maxZoom: 12});
                     setTimeout(skipRectangle, 500);
 
-                } else if (type == this.searchType.stationName) {
-                    let bounds = L.latLngBounds(markerLocations);
-                    viewermap.flyToBounds(bounds, {maxZoom: 12 });
-                } else { // vector slider.. similar to stationName
+                } else if (type == this.searchType.location) {
                     let bounds = L.latLngBounds(markerLocations);
                     viewermap.flyToBounds(bounds, {maxZoom: 12 });
                 }

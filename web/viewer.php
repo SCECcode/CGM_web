@@ -134,7 +134,7 @@ window.console.log("HERE..");
     <div class="row control-container mt-1" id="cgm-controls-container" style="display:;">
             <div class="col-4 input-group filters mb-3">
                 <select id="cgm-search-type" class="custom-select">
-                    <option value="">Search the CGM ...</option>
+                    <option value="">Search the GNSS ...</option>
                     <option value="stationname">Station Name</option>
                     <option value="latlon">Latitude &amp; Longitude</option>
                     <option value="vectorslider">Vector</option>
@@ -144,90 +144,89 @@ window.console.log("HERE..");
                             type="button">Reset</button>
                 </div>
             </div>
-                <div class="col-8">
-                    <ul>
-                        <li id='cgm-station-name' class='navigationLi ' style="display:none">
-                            <div class='menu row justify-content-center'>
-                                <div class="col-12">
-                                    <div class="d-flex">
-                                        <input placeholder="Enter Station Name" type="text"
-                                                class="cgm-search-item form-control"
-                                                style=""/>
+            <div class="col-8">
+                <ul>
+                    <li id='cgm-station-name' class='navigationLi ' style="display:none">
+                        <div class='menu row justify-content-center'>
+                            <div class="col-12">
+                                <div class="d-flex">
+                                    <input placeholder="Enter Station Name" type="text"
+                                            class="cgm-search-item form-control"
+                                            style=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id='cgm-latlon' class='navigationLi ' style="display:none">
+                        <div id='cgm-latlonMenu' class='menu'>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>Draw a rectangle on the map or enter latitudes and longitudes</p>
+                                </div>
+                                <div class="col-8">
+                                    <div class="form-inline latlon-input-boxes">
+                                        <input type="text"
+                                                placeholder="Latitude"
+                                                id="cgm-firstLatTxt"
+                                                title="first lat"
+                                                onfocus="this.value=''"
+                                                class="cgm-search-item form-control">
+                                        <input type="text" 
+                                                placeholder='Longitude' 
+                                                id="cgm-firstLonTxt" 
+                                                title="first lon"
+                                                onfocus="this.value=''" 
+                                                class="cgm-search-item form-control">
+                                        <input type="text"
+                                                id="cgm-secondLatTxt"
+                                                title="second lat"
+                                                placeholder='2nd Latitude'
+                                                onfocus="this.value=''"
+                                                class="cgm-search-item form-control">
+                                        <input type="text"
+                                                id="cgm-secondLonTxt"
+                                                title="second lon"
+                                                placeholder='2nd Longitude'
+                                                onfocus="this.value=''"
+                                                class="cgm-search-item form-control">
                                     </div>
                                 </div>
                             </div>
-                        </li>
-                        <li id='cgm-latlon' class='navigationLi ' style="display:none">
-                            <div id='cgm-latlonMenu' class='menu'>
-                                <div class="row">
-                                    <div class="col-4">
-                                        <p>Draw a rectangle on the map or enter latitudes and longitudes</p>
-                                    </div>
-                                    <div class="col-8">
-                                        <div class="form-inline latlon-input-boxes">
-                                            <input type="text"
-                                                    placeholder="Latitude"
-                                                    id="cgm-firstLatTxt"
-                                                    title="first lat"
-                                                    onfocus="this.value=''"
-                                                    class="cgm-search-item form-control">
-                                            <input type="text" 
-                                                    placeholder='Longitude' 
-                                                    id="cgm-firstLonTxt" 
-                                                    title="first lon"
-                                                    onfocus="this.value=''" 
-                                                    class="cgm-search-item form-control">
-                                            <input type="text"
-                                                    id="cgm-secondLatTxt"
-                                                    title="second lat"
-                                                    placeholder='2nd Latitude'
-                                                    onfocus="this.value=''"
-                                                    class="cgm-search-item form-control">
-                                            <input type="text"
-                                                    id="cgm-secondLonTxt"
-                                                    title="second lon"
-                                                    placeholder='2nd Longitude'
-                                                    onfocus="this.value=''"
-                                                    class="cgm-search-item form-control">
-                                        </div>
-                                    </div>
+                        </div>
+                    </li>
+                    <li id='cgm-vector-slider' class='navigationLi' style="display:none">
+                        <div id='cgm-vector-sliderMenu' class='menu'>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>Select a vector range on the slider or enter the two boundaries</p>
+                                </div>
+                                <div class="col-8">
+                                   <div class="form-inline vector-slider-input-boxes">
+                                       <input type="text"
+                                              id="cgm-minVectorSliderTxt"
+                                              title="min vector slider"
+                                              onfocus="this.value=''"
+                                              class="cgm-search-item form-control">
+                                       <div class="col-5">
+                                         <div id="slider-vector-range" style="border:2px solid black"></div>
+		           <div id="min-vector-slider-handle" class="ui-slider-handle"></div>
+		           <div id="max-vector-slider-handle" class="ui-slider-handle"></div>
+                                       </div>
+                                       <input type="text"
+                                              id="cgm-maxVectorSliderTxt"
+                                              title="max vector slider"
+                                              onfocus="this.value=''"
+                                              class="cgm-search-item form-control">
+                                  </div>
                                 </div>
                             </div>
-                        </li>
-			<li id='cgm-vector-slider' class='navigationLi' style="display:none">
-                            <div id='cgm-vector-sliderMenu' class='menu'>
-                                <div class="row">
-                                    <div class="col-4">
-                                        <p>Select a vector range on the slider or enter the two boundaries</p>
-                                    </div>
-                                    <div class="col-8">
-                                       <div class="form-inline vector-slider-input-boxes">
-                                           <input type="text"
-                                                  id="cgm-minVectorSliderTxt"
-                                                  title="min vector slider"
-                                                  onfocus="this.value=''"
-                                                  class="cgm-search-item form-control">
-                                           <div class="col-5">
-                                             <div id="slider-vector-range" style="border:2px solid black"></div>
-				             <div id="min-vector-slider-handle" class="ui-slider-handle"></div>
-				             <div id="max-vector-slider-handle" class="ui-slider-handle"></div>
-                                           </div>
-                                           <input type="text"
-                                                  id="cgm-maxVectorSliderTxt"
-                                                  title="max vector slider"
-                                                  onfocus="this.value=''"
-                                                  class="cgm-search-item form-control">
-                                      </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    <!-- pull-out -->
-                </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
     </div>
 <!-- INSAR select -->
-    <div class="row control-container mt-1" id="cgm-insar-controls-container" style="display:;">
+    <div class="row control-container mt-1" id="cgm-insar-controls-container" style="display:none;">
             <div class="col-4 input-group filters mb-3">
                 <select id="cgm-insar-search-type" class="custom-select">
                     <option value="">Search the InSAR</option>
@@ -235,13 +234,13 @@ window.console.log("HERE..");
                     <option value="latlon">Latitude &amp; Longitude</option>
                 </select>
                 <div class="input-group-append">
-                    <button id="refresh-insar-all-button" onclick="CGM_INSAR.reset();" class="btn btn-dark pl-4 pr-4"
+                    <button id="refresh-insar-all-button" onclick="CGM_INSAR.reset()" class="btn btn-dark pl-4 pr-4"
                             type="button">Reset</button>
                 </div>
             </div>
             <div class="col-8">
                 <ul>
-                    <li id='cgm-insar-location' class='navigationLi ' style="display:none">
+                    <li id='cgm-insar-location' class='navigationLi' style="display:none">
                         <div id='cgm-insar-locationMenu' class='menu'>
                             <div class="row">
                                 <div class="col-4">
@@ -266,7 +265,7 @@ window.console.log("HERE..");
                             </div>
                         </div>
                     </li>
-                    <li id='cgm-insar-latlon' class='navigationLi ' style="display:none">
+                    <li id='cgm-insar-latlon' class='navigationLi' style="display:none">
                         <div id='cgm-insar-latlonMenu' class='menu'>
                             <div class="row">
                                 <div class="col-4">
@@ -349,7 +348,7 @@ window.console.log("HERE..");
                          </div>
                     <div class="input-group input-group-sm custom-control-inline mr-0" id="map-controls">
                         <div class="input-group-prepend">
-                            <label style='border-bottom:0;' class="input-group-text" for="mapLayer">Select Map Type</label>
+                            <label style='border-bottom:1;' class="input-group-text" for="mapLayer">Select Map Type</label>
                         </div>
                         <select id="mapLayer" class="custom-select custom-select-sm"
                                 onchange="switchLayer(this.value);">
@@ -510,7 +509,7 @@ window.console.log("HERE..");
 <!-- -->
     <script type="text/javascript">
             cgm_gnss_station_data = <?php print $cgm_gnss->getAllStationData()->outputJSON(); ?>;
-            cgm_insar_data = <?php print $cgm_insar->doPreTesting()->outputJSON(); ?>;
+            //cgm_insar_data = <?php print $cgm_insar->doPreTesting()->outputJSON(); ?>;
             <?php if ($_REQUEST['model'] == 'cgm'):  ?>
             $(document).on("page-ready", function () {
                 
