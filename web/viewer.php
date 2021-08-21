@@ -341,9 +341,9 @@ window.console.log("HERE..");
                                          id="cgm-model-cfm" value="1" />CFM faults
                                  </label>
                              </div>
-                             <select id='data-download-select' class="custom-select custom-select-sm mr-10" style="width:100px;">
-                                 <option selected value="gnss">GNSS Data</option>
-                                 <option value="insar">InSAR Data</option>
+                             <select id='data-download-select' class="custom-select custom-select-sm mr-10" style="width:140px;">
+                                 <option selected value="gnss">GNSS Dataset</option>
+                                 <option value="insar">InSAR Dataset</option>
                               </select>
                          </div>
                     <div class="input-group input-group-sm custom-control-inline mr-0" id="map-controls">
