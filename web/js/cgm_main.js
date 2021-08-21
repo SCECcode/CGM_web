@@ -111,13 +111,16 @@ window.console.log(">>>> causing a start of search..");
     });
 
     $("#data-download-select").on('change', function(){
-       if ($(this).val() == 'cgm') {
+       if ($(this).val() == 'gnss') {
            CGM_GNSS.setupCGMInterface();
+       }
+       if ($(this).val() == 'insar') {
+           CGM_INSAR.setupCGMInterface();
        }
     });
 
     CGM_GNSS.generateLayers();
-//    CGM_GNSS.generateInSARLayers();
+    CGM_INSAR.generateInSARLayers();
 
     $.event.trigger({
         type: "page-ready",

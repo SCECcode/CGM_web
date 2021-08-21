@@ -1109,7 +1109,12 @@ window.console.log("setupCGMInterface: retrieved stations "+sz);
             }
 
             this.activateData();
+
+            $("#cgm-controlers-container").css('display','');
+            $("#cgm-insar-controlers-container").css('display','none');
+
 //$("div.mapData div.map-container").removeClass("col-7 pr-0 pl-2").addClass("col-12").css('padding-left','30px');
+
             $("div.mapData div.map-container").css('padding-left','30px');
             $("#CGM_plot").css('height','500px');
             viewermap.invalidateSize();
@@ -1117,8 +1122,8 @@ window.console.log("setupCGMInterface: retrieved stations "+sz);
             $download_queue_table.floatThead('destroy');
 
             this.replaceResultsTable([]);
-            $download_queue_table.addClass('cgm');
-            $("#data-download-select").val("cgm");
+            $download_queue_table.addClass('gnss');
+            $("#data-download-select").val("gnss");
 
             $download_queue_table.floatThead({
                  // floatTableClass: 'cgm-metadata-header',

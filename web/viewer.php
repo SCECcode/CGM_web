@@ -130,6 +130,7 @@ window.console.log("HERE..");
         </div>
     </div>
 
+<!-- GNSS select -->
     <div class="row control-container mt-1" id="cgm-controls-container" style="display:;">
             <div class="col-4 input-group filters mb-3">
                 <select id="cgm-search-type" class="custom-select">
@@ -224,18 +225,96 @@ window.console.log("HERE..");
                     </ul>
                     <!-- pull-out -->
                 </div>
-            <!--            </div>-->
-
     </div>
+<!-- INSAR select -->
+    <div class="row control-container mt-1" id="cgm-insar-controls-container" style="display:;">
+            <div class="col-4 input-group filters mb-3">
+                <select id="cgm-insar-search-type" class="custom-select">
+                    <option value="">Search the InSAR</option>
+                    <option value="location">Location</option>
+                    <option value="latlon">Latitude &amp; Longitude</option>
+                </select>
+                <div class="input-group-append">
+                    <button id="refresh-insar-all-button" onclick="CGM_INSAR.reset();" class="btn btn-dark pl-4 pr-4"
+                            type="button">Reset</button>
+                </div>
+            </div>
+            <div class="col-8">
+                <ul>
+                    <li id='cgm-insar-location' class='navigationLi ' style="display:none">
+                        <div id='cgm-insar-locationMenu' class='menu'>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>Select a location on the map or enter latitude and longitude</p>
+                                </div>
+                                <div class="col-8">
+                                    <div class="form-inline latlon-input-boxes">
+                                        <input type="text"
+                                                placeholder="Latitude"
+                                                id="cgm-insar-LatTxt"
+                                                title="insar lat"
+                                                onfocus="this.value=''"
+                                                class="cgm-insar-search-item form-control">
+                                        <input type="text" 
+                                                placeholder='Longitude' 
+                                                id="cgm-insar-LonTxt" 
+                                                title="insar lon"
+                                                onfocus="this.value=''" 
+                                                class="cgm-insar-search-item form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id='cgm-insar-latlon' class='navigationLi ' style="display:none">
+                        <div id='cgm-insar-latlonMenu' class='menu'>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>Draw a rectangle on the map or enter latitudes and longitudes</p>
+                                </div>
+                                <div class="col-8">
+                                    <div class="form-inline latlon-input-boxes">
+                                        <input type="text"
+                                                placeholder="Latitude"
+                                                id="cgm-insar-firstLatTxt"
+                                                title="first lat"
+                                                onfocus="this.value=''"
+                                                class="cgm-insar-search-item form-control">
+                                        <input type="text" 
+                                                placeholder='Longitude' 
+                                                id="cgm-insar-firstLonTxt" 
+                                                title="first lon"
+                                                onfocus="this.value=''" 
+                                                class="cgm-insar-search-item form-control">
+                                        <input type="text"
+                                                id="cgm-insar-secondLatTxt"
+                                                title="second lat"
+                                                placeholder='2nd Latitude'
+                                                onfocus="this.value=''"
+                                                class="cgm-insar-search-item form-control">
+                                        <input type="text"
+                                                id="cgm-secondLonTxt"
+                                                title="second lon"
+                                                placeholder='2nd Longitude'
+                                                onfocus="this.value=''"
+                                                class="cgm-insar-search-item form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+    </div>
+<!-- -->
     <div class="row">
             <div class="col-12 text-right pr-0" style="border:0px solid green">
                         <div id='model-options' class="form-check-inline">
-<!---
                             <select id='data-download-select' class="custom-select custom-select-sm mr-4" style="width:150px;">
-                              <option selected value="cgm">CGM Data</option>
+                              <option selected value="gnss">GNSS Data</option>
+                              <option value="insar">InSAR Data</option>
                             </select>
--->
-                             <div class="form-check form-check-inline">
+                            <div class="form-check form-check-inline">
                                  <label class='form-check-label'
                                          for="cgm-model">
                                  <input class='form-check-inline mr-1'

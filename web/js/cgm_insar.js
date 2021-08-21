@@ -2,7 +2,7 @@
    cgm_insar.js
 ***/
 
-var CGM_GNSS = new function () {
+var CGM_INSAR = new function () {
 
     this.cgm_velocity_max = -1;
     this.cgm_velocity_min = 0;
@@ -97,7 +97,6 @@ var CGM_GNSS = new function () {
     };
 
     this.showProduct = function () {
-window.console.log("SHOW model");
         let $cgm_model_checkbox = $("#cgm-model-insar");
 
         if (this.searching) {
@@ -356,6 +355,9 @@ window.console.log("changeResultsTableBody..");
 
             this.activateData();
 
+            $("#cgm-controlers-container").css('display','none');
+            $("#cgm-insar-controlers-container").css('display','');
+
             $("div.mapData div.map-container").css('padding-left','30px');
             $("#CGM_plot").css('height','500px');
             viewermap.invalidateSize();
@@ -363,8 +365,8 @@ window.console.log("changeResultsTableBody..");
             $download_queue_table.floatThead('destroy');
 
             this.replaceResultsTable([]);
-            $download_queue_table.addClass('cgm');
-            $("#data-download-select").val("cgm");
+            $download_queue_table.addClass('insar');
+            $("#data-download-select").val("insar");
 
             $download_queue_table.floatThead({
                  // floatTableClass: 'cgm-metadata-header',
@@ -375,5 +377,5 @@ window.console.log("changeResultsTableBody..");
 
             $("#wait-spinner").hide();
         };
-    };
+   
 }
