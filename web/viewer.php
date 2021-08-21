@@ -308,59 +308,63 @@ window.console.log("HERE..");
 <!-- -->
     <div class="row">
             <div class="col-12 text-right pr-0" style="border:4px solid red">
-                        <div id='model-options' class="form-check-inline">
-                            <div class="form-check form-check-inline">
-                                 <label class='form-check-label'
-                                         for="cgm-model">
-                                 <input class='form-check-inline mr-1'
-                                         type="checkbox"
-                                         id="cgm-model"/>GNSS
-                                 </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                 <label class='form-check-label ml-1 mini-option'
-                                         for="cgm-model-vectors">
-                                 <input class='form-check-inline mr-1'
-                                         type="checkbox"
-                                         id="cgm-model-vectors" value="1" />GNSS vectors
-                                 </label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                 <label class='form-check-label ml-1 mini-option'
-                                         for="cgm-model-insar">
-                                 <input class='form-check-inline mr-1'
-                                         type="checkbox"
-                                         id="cgm-model-insar" value="1" />InSAR
-                                 </label>
-                             </div>
-                             <div class="form-check form-check-inline">
-                                 <label class='form-check-label ml-1 mini-option'
-                                         for="cgm-model-cfm">
-                                 <input class='form-check-inline mr-1'
-                                         type="checkbox"
-                                         id="cgm-model-cfm" value="1" />CFM faults
-                                 </label>
-                             </div>
-                             <select id='data-download-select' class="custom-select custom-select-sm mr-10" style="width:140px;">
-                                 <option selected value="gnss">GNSS Dataset</option>
-                                 <option value="insar">InSAR Dataset</option>
-                              </select>
+                <div id='model-options' class="form-check-inline" style="border:3px solid green">
+                    <div class="input-group input-group-sm custom-control-inline mr-0" id="map-controls">
+                         <div class="input-group-prepend">
+                                 <label style='border-bottom:1;' class="input-group-text" for="mapLayer">Select Dataset</label>
                          </div>
+                         <select id='data-download-select' class="custom-select custom-select-sm mr-10" style="width:40px;">
+                                 <option selected value="gnss">GNSS</option>
+                                 <option value="insar">InSAR</option>
+                         </select>
+                    </div>
+                    <div class="form-check form-check-inline">
+                         <label class='form-check-label'
+                                 for="cgm-model">
+                         <input class='form-check-inline mr-1'
+                                 type="checkbox"
+                                 id="cgm-model"/>GNSS
+                         </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                         <label class='form-check-label ml-1 mini-option'
+                                 for="cgm-model-vectors">
+                         <input class='form-check-inline mr-1'
+                                 type="checkbox"
+                                 id="cgm-model-vectors" value="1" />GNSS vectors
+                         </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                         <label class='form-check-label ml-1 mini-option'
+                                 for="cgm-model-insar">
+                         <input class='form-check-inline mr-1'
+                                 type="checkbox"
+                                 id="cgm-model-insar" value="1" />InSAR
+                         </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                         <label class='form-check-label ml-1 mini-option'
+                                 for="cgm-model-cfm">
+                         <input class='form-check-inline mr-1'
+                                 type="checkbox"
+                                 id="cgm-model-cfm" value="1" />CFM faults
+                         </label>
+                    </div>
                     <div class="input-group input-group-sm custom-control-inline mr-0" id="map-controls">
                         <div class="input-group-prepend">
                             <label style='border-bottom:1;' class="input-group-text" for="mapLayer">Select Map Type</label>
                         </div>
                         <select id="mapLayer" class="custom-select custom-select-sm"
                                 onchange="switchLayer(this.value);">
-                        <option selected value="esri topo">ESRI Topographic</option>
-                        <option value="esri NG">ESRI National Geographic</option>
-                        <option value="esri imagery">ESRI Imagery</option>
-                        <option value="otm topo">OTM Topographic</option>
-                        <option value="osm street">OSM Street</option>
-                        <option value="shaded relief">Shaded Relief</option>
+                            <option selected value="esri topo">ESRI Topographic</option>
+                            <option value="esri NG">ESRI National Geographic</option>
+                            <option value="esri imagery">ESRI Imagery</option>
+                            <option value="otm topo">OTM Topographic</option>
+                            <option value="osm street">OSM Street</option>
+                            <option value="shaded relief">Shaded Relief</option>
                         </select>
                     </div>
-
+                </div>
             </div>
     </div>
     <div class="row mapData">
