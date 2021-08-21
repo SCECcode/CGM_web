@@ -307,12 +307,8 @@ window.console.log("HERE..");
     </div>
 <!-- -->
     <div class="row">
-            <div class="col-12 text-right pr-0" style="border:0px solid green">
+            <div class="col-12 text-right pr-0" style="border:4px solid red">
                         <div id='model-options' class="form-check-inline">
-                            <select id='data-download-select' class="custom-select custom-select-sm mr-4" style="width:150px;">
-                              <option selected value="gnss">GNSS Data</option>
-                              <option value="insar">InSAR Data</option>
-                            </select>
                             <div class="form-check form-check-inline">
                                  <label class='form-check-label'
                                          for="cgm-model">
@@ -320,16 +316,16 @@ window.console.log("HERE..");
                                          type="checkbox"
                                          id="cgm-model"/>GNSS
                                  </label>
-                             </div>
-                             <div class="form-check form-check-inline">
+                            </div>
+                            <div class="form-check form-check-inline">
                                  <label class='form-check-label ml-1 mini-option'
                                          for="cgm-model-vectors">
                                  <input class='form-check-inline mr-1'
                                          type="checkbox"
                                          id="cgm-model-vectors" value="1" />GNSS vectors
                                  </label>
-                             </div>
-                             <div class="form-check form-check-inline">
+                            </div>
+                            <div class="form-check form-check-inline">
                                  <label class='form-check-label ml-1 mini-option'
                                          for="cgm-model-insar">
                                  <input class='form-check-inline mr-1'
@@ -345,6 +341,10 @@ window.console.log("HERE..");
                                          id="cgm-model-cfm" value="1" />CFM faults
                                  </label>
                              </div>
+                             <select id='data-download-select' class="custom-select custom-select-sm mr-10" style="width:100px;">
+                                 <option selected value="gnss">GNSS Data</option>
+                                 <option value="insar">InSAR Data</option>
+                              </select>
                          </div>
                     <div class="input-group input-group-sm custom-control-inline mr-0" id="map-controls">
                         <div class="input-group-prepend">

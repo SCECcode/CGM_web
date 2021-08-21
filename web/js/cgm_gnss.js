@@ -375,11 +375,6 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
     };
 
     //
-    this.generateInSARLayers = function () {
-        let tmp=cgm_insar_data;
-        window.console.log("HERE.. INSAR>>("+cgm_insar_data+")");
-    };
-
     this.toggleStationSelected = function(layer, clickFromMap=false) {
         if (typeof layer.scec_properties.selected === 'undefined') {
             layer.scec_properties.selected = true;
