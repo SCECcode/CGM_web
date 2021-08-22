@@ -307,17 +307,17 @@ window.console.log("HERE..");
     </div>
 <!-- -->
     <div class="row">
-            <div class="col-12 text-right pr-0" style="border:4px solid red">
-                <div id='model-options' class="form-check-inline" style="border:3px solid green">
-                    <div class="input-group input-group-sm custom-control-inline mr-0" id="map-controls">
+        <div class="col-12 text-right pr-0">
+                <div class="input-group input-group-sm custom-control-inline mr-0" id="dataset-controls">
                          <div class="input-group-prepend">
-                                 <label style='border-bottom:1;' class="input-group-text" for="mapLayer">Select Dataset</label>
+                                 <label style='border-bottom:1;' class="input-group-text" for="data-download-select">Select Dataset</label>
                          </div>
-                         <select id='data-download-select' class="custom-select custom-select-sm mr-10" style="width:40px;">
+                         <select id='data-download-select' class="custom-select custom-select-sm">
                                  <option selected value="gnss">GNSS</option>
                                  <option value="insar">InSAR</option>
                          </select>
-                    </div>
+                </div>
+                <div id='model-options' class="form-check-inline mr-0">
                     <div class="form-check form-check-inline">
                          <label class='form-check-label'
                                  for="cgm-model">
@@ -365,7 +365,7 @@ window.console.log("HERE..");
                         </select>
                     </div>
                 </div>
-            </div>
+        </div>
     </div>
     <div class="row mapData">
 <!-- NO NEED FOR THIS ??
