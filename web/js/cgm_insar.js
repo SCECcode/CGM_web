@@ -121,6 +121,218 @@ var CGM_INSAR = new function () {
         
     };
 
+// for InSAR
+// Station == Location
+// Gid == Label
+    this.toggleLocationSelected = function(layer, clickFromMap=false) {
+        if (typeof layer.scec_properties.selected === 'undefined') {
+            layer.scec_properties.selected = true;
+        } else {
+            layer.scec_properties.selected = !layer.scec_properties.selected;
+        }
+
+        if (layer.scec_properties.selected) {
+            this.selectLocationByLayer(layer, clickFromMap);
+            // if this locatin is not in search result, should add it in XXX
+            let i=this.search_result.getLayerId(layer);
+            if(!containsLayer(this.search_result,layer)) {
+                let tmp=this.search_result;
+                this.search_result.addLayer(layer);
+            }
+        } else {
+            this.unselectLocationByLayer(layer);
+        }
+
+       return layer.scec_properties.selected;
+    };
+
+    this.toggleLocationSelectedByGid = function(gid) {
+        let layer = this.getLayerByGid(gid);
+        return this.toggleLocationSelected(layer, false);
+    };
+
+    this.selectLocationByLayer = function (layer, moveTableRow=false) {
+        layer.scec_properties.selected = true;
+        layer.setStyle(cgm_marker_style.selected);
+        let gid = layer.scec_properties.gid;
+
+        let $row = $(`tr[data-point-gid='${gid}'`);
+        let rowHTML = "";
+        if ($row.length == 0) {
+           this.addToResultsTable(layer);
+        }
+
+        $row = $(`tr[data-point-gid='${gid}'`);
+        $row.addClass('row-selected');
+
+        let $glyphElem = $row.find('span.cgm-data-row');
+        $glyphElem.removeClass('glyphicon-unchecked').addClass('glyphicon-check');
+
+        this.upSelectCount(gid);
+
+        // move row to top
+        if (moveTableRow) {
+            let $rowHTML = $row.prop('outerHTML');
+            $row.remove();
+            $("#metadata-viewer.cgm tbody").prepend($rowHTML);
+        }
+    };
+
+    this.unselectLocationByLayer = function (layer) {
+        layer.scec_properties.selected = false;
+        layer.setStyle(cgm_marker_style.normal);
+
+        let gid = layer.scec_properties.gid;
+
+        let $row = $(`tr[data-point-gid='${gid}'`);
+        $row.removeClass('row-selected');
+        let $glyphElem = $row.find('span.cgm-data-row');
+        $glyphElem.addClass('glyphicon-unchecked').removeClass('glyphicon-check');
+
+        this.downSelectCount(gid);
+    };
+
+    this.showLocationsByLayers = function(layers) {
+        viewermap.addLayer(layers);
+        var cgm_object = this;
+/** ???
+        this.search_result.eachLayer(function(layer){
+            cgm_object.addToResultsTable(layer);
+        });
+**/
+    };
+
+
+    this.toggleSelectAll = function() {
+        var cgm_object = this;
+
+        let $selectAllButton = $("#cgm-allBtn span");
+        if (!$selectAllButton.hasClass('glyphicon-check')) {
+            this.search_result.eachLayer(function(layer){
+                cgm_object.selectLocationByLayer(layer);
+            });
+            $selectAllButton.addClass('glyphicon-check').removeClass('glyphicon-unchecked');
+        } else {
+            this.unselectAll();
+
+        }
+    };
+
+    this.unselectAll = function() {
+        var cgm_object = this;
+
+        let $selectAllButton = $("#cgm-allBtn span");
+        this.search_result.eachLayer(function(layer){
+            cgm_object.unselectLocationByLayer(layer);
+        });
+        $("#cgm-allBtn span").removeClass('glyphicon-check').addClass('glyphicon-unchecked');
+    };
+
+    // unselect every layer
+    this.clearAllSelections = function() {
+        var cgm_object = this;
+        this.cgm_layers.eachLayer(function(layer){
+            if (layer.scec_properties.selected) {
+                cgm_object.unselectLocationByLayer(layer);
+            }
+        });
+        $("#metadata-viewer.cgm tr.row-selected button span.glyphicon.glyphicon-check").removeClass('glyphicon-check').addClass('glyphicon-unchecked');
+        $("#metadata-viewer.cgm tr.row-selected").removeClass('row-selected');
+    };
+
+
+
+    this.getLayerByGid = function(gid) {
+        let foundLayer = false;
+        this.cgm_layers.eachLayer(function(layer){
+          if (layer.hasOwnProperty("scec_properties")) {
+             if (gid == layer.scec_properties.gid) {
+                 foundLayer = layer;
+             }
+          }
+       });
+       return foundLayer;
+    };
+
+
+
+    this.addToResultsTable = function(layer) {
+        let $table = $("#metadata-viewer.cgm tbody");
+        let gid = layer.scec_properties.gid;
+
+        if ($(`tr[data-point-gid='${gid}'`).length > 0) {
+            return;
+        }
+
+        let html = generateTableRow(layer);
+
+        $table.find("tr#placeholder-row").remove();
+        $table.prepend(html);
+    };
+
+    this.removeFromResultsTable = function (gid) {
+        $(`#metadata-viewer tbody tr[data-point-gid='${gid}']`).remove();
+    };
+
+// TODO, insar does not have fType
+    this.executePlotTS = function(downloadURL, fType) {
+      showTSview(downloadURL, fType);
+      showPlotTSWarning();
+    }
+
+    this.downloadURLsAsZip = function(ftype) {
+        var nzip=new JSZip();
+        var layers=CGM_INSAR.search_result.getLayers();
+        let timestamp=$.now();
+      
+        var cnt=layers.length;
+        for(var i=0; i<cnt; i++) {
+          let layer=layers[i];
+
+          if( !layer.scec_properties.selected ) {
+            continue;
+          }
+      
+// TODO
+          let downloadURL = getDataDownloadURL(layer.scec_properties.location);
+          let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
+          let promise = $.get(downloadURL);
+          nzip.file(dname,promise);
+        }
+      
+        var zipfname="CGM_INSAR_"+timestamp+".zip"; 
+        nzip.generateAsync({type:"blob"}).then(function (content) {
+          // see FileSaver.js
+          saveAs(content, zipfname);
+        })
+    }
+
+var generateTableRow = function(layer) {
+        let $table = $("#metadata-viewer");
+        let html = "";
+
+        let coordinates = layer.getLatLng();
+        coordinates = {lat: parseFloat(coordinates.lat).toFixed(2), lng: parseFloat(coordinates.lng).toFixed(2) };
+
+        let downloadURL = getDataDownloadURL(layer.scec_properties.location);
+        let label = layer.scec_properties.gid;
+
+        html += `<tr data-point-gid="${layer.scec_properties.gid}">`;
+        html += `<td style="width:25px" class="cgm-data-click button-container"> <button class="btn btn-sm cxm-small-btn" id="" title="highlight the station" onclick=''>
+            <span class="cgm-data-row glyphicon glyphicon-unchecked"></span>
+        </button></td>`;
+        html += `<td class="cgm-data-click">${layer.scec_properties.location}</td>`;
+        html += `<td class="cgm-data-click">${coordinates.lat}</td>`;
+        html += `<td class="cgm-data-click">${coordinates.lng}</td>`;
+        html += `<td class="cgm-data-click">${layer.scec_properties.type} </td>`;
+        html += `<td class="cgm-data-click">${layer.scec_properties.velocity}</td>`;
+        html += `<td class="text-center">`;
+        html += `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM_INSAR.executePlotTS([\"${downloadURL}\"],[\"${label}\"])>plotTS&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+        html += `</tr>`;
+
+        return html;
+    };
+
     this.showSearch = function (type) {
         const $all_search_controls = $("#cgm-insar-controls-container ul li");
         this.freshSearch();

@@ -99,6 +99,7 @@ window.console.log(">>>> causing a start of search..");
     });
 
     $("#cgm-insar-search-type").on('change', function () {
+window.console.log("HERE..");
         CGM_INSAR.showSearch($(this).val());
     });
 
@@ -106,7 +107,7 @@ window.console.log(">>>> causing a start of search..");
       $(this).on('blur mouseout', function () {
         $(this).off('mouseout');
         $(this).off('blur');
-window.console.log(">>>> causing a start of search..");
+window.console.log(">>>>XXX causing a start of search..");
 // these is where the change in latlon causes a new search..
 // 
           if( $(this).val() != '' ) {
