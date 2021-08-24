@@ -34,7 +34,7 @@ class CGM_INSAR extends SpatialData {
                                  'pixellist':[ {'label':'ref_p','lat':35.32064,'lon':-116.57164 }]}\"");
 
                                 exec($command, $output, $retval);
-                                $this->search_result = $command;
+                                $this->php_result = $command;
                                 return $this;
 				break;
 			case "velocity":
@@ -99,7 +99,7 @@ class CGM_INSAR extends SpatialData {
 			array_push($query_result, $item);
 		}
 
-		$this->search_result = $query_result;
+		$this->php_result = $query_result;
 		return $this;
 	}
 
@@ -109,6 +109,11 @@ class CGM_INSAR extends SpatialData {
 		$result = pg_query($this->connection, $query);
 		return pg_fetch_object($result);
 	}
+
+        public function hello() {
+          $this->php_result = 'hello from php';
+          return $this;
+        }
 
         // InSAR
         public function doPreTesting()
@@ -127,7 +132,7 @@ class CGM_INSAR extends SpatialData {
         //$command = escapeshellcmd("./py/test.py \"{'filelist':['myhost','shost']}\"");
 
         exec($command, $output, $retval);
-        $this->php_result = $output;
+        $this->php_result = $retval;
         return $this;
         }
 

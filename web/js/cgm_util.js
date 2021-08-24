@@ -5,6 +5,11 @@
 var cgm_latlon_area_list=[];
 var cgm_latlon_point_list=[];
 
+function isObject(objV) {
+  return objV && typeof objV === 'object' && objV.constructor === Object;
+}
+
+
 /* color from blue to red */
 function makeRGB(val, maxV, minV) {
     let v= (val-minV) / (maxV-minV);

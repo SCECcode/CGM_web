@@ -186,7 +186,7 @@ window.console.log("FOUND..."+val);
     });
 
     CGM_GNSS.generateLayers();
-//  CGM_INSAR.generateInSARLayers();
+    CGM_INSAR.generateInSARLayers();
 
     $.event.trigger({
         type: "page-ready",
