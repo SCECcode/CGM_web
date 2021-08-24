@@ -3,8 +3,6 @@
 require_once("php/navigation.php");
 require_once("php/CGM_GNSS.php");
 require_once("php/CGM_INSAR.php");
-require_once("php/search2.php");
-require_once("php/search.php");
 
 $header = getHeader("Viewer");
 $cgm_gnss = new CGM_GNSS();

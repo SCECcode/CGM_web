@@ -110,8 +110,9 @@ class CGM_INSAR extends SpatialData {
 		return pg_fetch_object($result);
 	}
 
-        public function hello() {
-          $this->php_result = 'hello from php';
+        public function hello()
+        {
+          $this->php_result = "hello from php";
           return $this;
         }
 
