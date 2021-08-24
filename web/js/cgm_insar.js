@@ -457,11 +457,11 @@ window.console.log("calling with the string.."+JSON_criteria);
             url: "php/search.php",
             data: {t: type, q: JSON_criteria},
         }).done(function(cgm_insar_data) {
-window.console.log(
-"TEST here..");
+/**
+window.console.log("TEST here..");
             if(cgm_insar_data === "[]") {
 window.console.log("BAD.., no cgm_insar_data");
-               return 0;
+               return [];
             }
             let tmp=cgm_insar_data[0];
             let jblob=JSON.parse(tmp.replace(/'/g,'"'));
@@ -504,6 +504,7 @@ window.console.log("BAD.., no cgm_insar_data");
               }
               return results;
             }
+***/
             return [];
         });
     }

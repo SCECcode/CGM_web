@@ -34,7 +34,6 @@ class CGM_INSAR extends SpatialData {
                                  'pixellist':[ {'label':'ref_p','lat':35.32064,'lon':-116.57164 }]}\"");
 
                                 exec($command, $output, $retval);
-XXX
                                 $this->search_result = $command;
                                 return $this;
 				break;
