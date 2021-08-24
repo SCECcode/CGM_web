@@ -450,11 +450,15 @@ window.console.log(">>> calling freshSearch..");
         }
 
         let JSON_criteria = JSON.stringify(criteria);
+window.console.log("calling with the type.."+type);
+window.console.log("calling with the string.."+JSON_criteria);
 
         $.ajax({
             url: "php/search.php",
             data: {t: type, q: JSON_criteria},
         }).done(function(cgm_insar_data) {
+window.console.log(
+"TEST here..");
             if(cgm_insar_data === "[]") {
 window.console.log("BAD.., no cgm_insar_data");
                return 0;
@@ -470,49 +474,54 @@ window.console.log("BAD.., no cgm_insar_data");
                   window.console.log(r);
               }
             }
-            return jblob.length;
-        });
-    }
-
-    this.search = function (type, criteria) {
-        window.console.log("insar  -->  calling search..");
-        let results = [];
-        let rc;
-        switch (type) {
-            case CGM_INSAR.searchType.location:
-                remove_marker_point_layer();
-                rc=this.searchPHP(type, criteria);
-                if(rc) {
-                    let layer=add_marker_point(criteria[0],criteria[1]);
-                    layer.scec_properties = {
-                        lat: criteria[0],
-                        lon: criteria[1],
-                        velocity: 99,
-                        type: type,
-                        gid: 'label',
-                        selected: false,
-                    };
-                    results.push(layer);
-                }
-                break;
+            if(jblob.length > 0) {
+              let result = [];  
+              switch (type) {
+                case CGM_INSAR.searchType.location:
+                  let layer=add_marker_point(criteria[0],criteria[1]);
+                  layer.scec_properties = {
+                            lat: criteria[0],
+                            lon: criteria[1],
+                            velocity: 99,
+                            type: type,
+                            gid: 'label',
+                            selected: false,
+                  };
+                  results.push(layer);
+                  break;
             case CGM_INSAR.searchType.latlon:
-                remove_bounding_rectangle_layer();
-                rc=this.searchPHP(type, criteria);
-                if(rc) {
-                    let layer=add_bounding_rectangle(criteria[0],criteria[1],criteria[2],criteria[3]);
-                    layer.scec_properties = {
+                  let layer=add_bounding_rectangle(criteria[0],criteria[1],criteria[2],criteria[3]);
+                  layer.scec_properties = {
                         lat: [ criteria[0],criteria[2] ],
                         lon: [ criteria[1],criteria[3] ],
                         velocity: 99,
                         type: type,
                         gid: 'label',
                         selected: false,
-                    };
-                    results.push(layer);
-                }
+                  };
+                  results.push(layer);
+                  break;
+              }
+              return results;
+            }
+            return [];
+        });
+    }
+
+    this.search = function (type, criteria) {
+        window.console.log("insar  -->  calling search..");
+        let rc;
+        switch (type) {
+            case CGM_INSAR.searchType.location:
+                remove_marker_point_layer();
+                rc=this.searchPHP(type, criteria);
+                break;
+            case CGM_INSAR.searchType.latlon:
+                remove_bounding_rectangle_layer();
+                rc=this.searchPHP(type, criteria);
                 break;
         }
-        return results;
+        return rc;
     };
 
     this.searchBox = function (type, criteria) {

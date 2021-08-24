@@ -10,7 +10,7 @@ class CGM_INSAR extends SpatialData {
 		if (!$this->connection) { die('Could not connect'); }
 	}
 
-	public function search($type, $criteria="") : CGM_INSAR
+	public function search($type, $criteria="") 
 	{
 		if (!is_array($criteria)) {
 			$criteria = array($criteria);
@@ -30,10 +30,12 @@ class CGM_INSAR extends SpatialData {
 
                                 $command = escapeshellcmd("./py/test.py \"
                                 {'filelist':['./cgm_data/insar/USGS_D071_InSAR_v0_0_1.hdf5'],
-                                'result':['./result'],
-                                'pixellist':[ {'label':'la_p','lat':$lat,'lon':$lon }]}\"");
+                                 'result':['./result'],
+                                 'pixellist':[ {'label':'ref_p','lat':35.32064,'lon':-116.57164 }]}\"");
+
                                 exec($command, $output, $retval);
-                                $this->search_result = $output;
+XXX
+                                $this->search_result = $command;
                                 return $this;
 				break;
 			case "velocity":
