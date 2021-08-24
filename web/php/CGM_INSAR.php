@@ -26,14 +26,23 @@ class CGM_INSAR extends SpatialData {
 					$error = true;
 				}
 				$criteria = array_map("floatVal", $criteria);
-				$query = "SELECT lat, lon, velocity FROM cgm_insar_velocities where lat=$1 and lon=$2";
+				list($lat, $lon) = $criteria;
+
+                                $command = escapeshellcmd("./py/test.py \"
+                                {'filelist':['./cgm_data/insar/USGS_D071_InSAR_v0_0_1.hdf5'],
+                                'result':['./result'],
+                                'pixellist':[ {'label':'la_p','lat':$lat,'lon':$lon }]}\"");
+                                exec($command, $output, $retval);
+                                $this->search_result = $output;
+                                return $this;
 				break;
 			case "velocity":
 				if (count($criteria) !== 2) {
 					$error = true;
 				}
 				$criteria = array_map("floatVal", $criteria);
-				$query = "SELECT lat, lon, velocity FROM cgm_insar_velocities WHERE velocity IS NOT NULL AND velocity > $1 AND velocity < $2";
+				list($minv, $maxv) = $criteria;
+				$query = "SELECT lat, lon, velocity FROM cgm_insar_velocities WHERE velocity IS NOT NULL AND velocity > $minv AND velocity < $maxv";
 				break;
 			case "latlon":
 				if (count($criteria) !== 4) {

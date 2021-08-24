@@ -3,7 +3,7 @@
 ***/
 
 var cgm_latlon_area_list=[];
-var cgm_latlon_marker_list=[];
+var cgm_latlon_point_list=[];
 
 /* color from blue to red */
 function makeRGB(val, maxV, minV) {
@@ -60,6 +60,7 @@ function add_bounding_rectangle(a,b,c,d) {
   var layer=addRectangleLayer(a,b,c,d);
   var tmp={"layer":layer, "latlngs":[{"lat":a,"lon":b},{"lat":c,"lon":d}]};
   cgm_latlon_area_list.push(tmp);
+  return layer;
 }
 
 function remove_bounding_rectangle_layer() {
@@ -84,6 +85,7 @@ function add_marker_point(a,b) {
   var layer=addMarkerLayer(a,b);
   var tmp={"layer":layer, "latlngs":[{"lat":a,"lon":b}]};
   cgm_latlon_point_list.push(tmp);
+  return layer;
 }
 
 function remove_marker_point_layer() {

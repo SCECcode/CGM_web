@@ -12,11 +12,16 @@ var rectangle_options = {
               clickable: false
          }
 };
+var pointDrawer;
+var point_icon = L.AwesomeMarkers.icon({ icon: 'record', markerColor: 'blue'});
+var point_options = { icon : point_icon };
+
 var rectangleDrawer;
 var mymap, baseLayers, layerControl, currentLayer, currentLayerName;
 var visibleFaults = new L.FeatureGroup();
 
 var drawing_rectangle=false;
+var drawing_point=false;
 
 function clear_popup()
 {
@@ -145,6 +150,9 @@ var scecAttribution ='<a href="https://www.scec.org">SCEC</a>';
   });
   mymap.addControl(drawControl);
 */
+// ==> point drawing control <==
+  pointDrawer = new L.Draw.Marker(mymap, point_options);
+
   rectangleDrawer = new L.Draw.Rectangle(mymap, rectangle_options);
   mymap.on(L.Draw.Event.CREATED, function (e) {
     var type = e.layerType,
@@ -159,12 +167,26 @@ var scecAttribution ='<a href="https://www.scec.org">SCEC</a>';
         var ne=loclist[2];
         add_bounding_rectangle_layer(layer,sw['lat'],sw['lng'],ne['lat'],ne['lng']);
         mymap.addLayer(layer);
-        if (activeProduct == Products.CGM) {
+        if (activeProduct == Products.GNSS) {
             $("div#wait-spinner").show(400, function(){
                 CGM_GNSS.searchBox(CGM_GNSS.searchType.latlon, [sw['lat'], sw['lng'], ne['lat'], ne['lng']]);
             });
         }
+        if (activeProduct == Products.INSAR) {
+            $("div#wait-spinner").show(400, function(){
+                CGM_INSAR.searchBox(CGM_INSAR.searchType.latlon, [sw['lat'], sw['lng'], ne['lat'], ne['lng']]);
+            });
+        }
+    } else if (type === 'marker') {  // can be a point 
+        var sw=layer.getLatLng();
+        add_marker_point_layer(layer,sw['lat'],sw['lng']);
+        if (activeProduct == Products.INSAR) {
+            $("div#wait-spinner").show(400, function(){
+                CGM_INSAR.searchBox(CGM_INSAR.searchType.location, [sw['lat'], sw['lng']]);
+            });
+        }
     }
+ 
   });
 
 
@@ -172,13 +194,19 @@ var scecAttribution ='<a href="https://www.scec.org">SCEC</a>';
   return mymap;
 }
 
+function drawPoint() {
+  pointDrawer.enable();
+}
+
+function skipPoint() {
+  pointDrawer.disable();
+}
+
 function drawRectangle(){
-  window.console.log("enable rectangle Drawer..");
   rectangleDrawer.enable();
 }
 
 function skipRectangle(){
-  window.console.log("disable rectangle Drawer..");
   rectangleDrawer.disable();
 }
 

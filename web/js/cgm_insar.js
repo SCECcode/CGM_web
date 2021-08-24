@@ -15,7 +15,8 @@ var CGM_INSAR = new function () {
     this.searching = false;
 
     var cgm_colors = {
-        normal: '#006E90',
+//        normal: '#006E90',
+        normal: '#FF6E90',
         selected: '#B02E0C',
         abnormal: '#00FFFF',
     };
@@ -174,7 +175,7 @@ var CGM_INSAR = new function () {
         if (moveTableRow) {
             let $rowHTML = $row.prop('outerHTML');
             $row.remove();
-            $("#metadata-viewer.cgm tbody").prepend($rowHTML);
+            $("#metadata-viewer.insar tbody").prepend($rowHTML);
         }
     };
 
@@ -236,8 +237,8 @@ var CGM_INSAR = new function () {
                 cgm_object.unselectLocationByLayer(layer);
             }
         });
-        $("#metadata-viewer.cgm tr.row-selected button span.glyphicon.glyphicon-check").removeClass('glyphicon-check').addClass('glyphicon-unchecked');
-        $("#metadata-viewer.cgm tr.row-selected").removeClass('row-selected');
+        $("#metadata-viewer.insar tr.row-selected button span.glyphicon.glyphicon-check").removeClass('glyphicon-check').addClass('glyphicon-unchecked');
+        $("#metadata-viewer.insar tr.row-selected").removeClass('row-selected');
     };
 
 
@@ -257,7 +258,7 @@ var CGM_INSAR = new function () {
 
 
     this.addToResultsTable = function(layer) {
-        let $table = $("#metadata-viewer.cgm tbody");
+        let $table = $("#metadata-viewer.insar tbody");
         let gid = layer.scec_properties.gid;
 
         if ($(`tr[data-point-gid='${gid}'`).length > 0) {
@@ -307,11 +308,11 @@ var CGM_INSAR = new function () {
         })
     }
 
+// XXX
 var generateTableRow = function(layer) {
         let $table = $("#metadata-viewer");
         let html = "";
 
-        let coordinates = layer.getLatLng();
         coordinates = {lat: parseFloat(coordinates.lat).toFixed(2), lng: parseFloat(coordinates.lng).toFixed(2) };
 
         let downloadURL = getDataDownloadURL(layer.scec_properties.location);
@@ -321,9 +322,9 @@ var generateTableRow = function(layer) {
         html += `<td style="width:25px" class="cgm-data-click button-container"> <button class="btn btn-sm cxm-small-btn" id="" title="highlight the station" onclick=''>
             <span class="cgm-data-row glyphicon glyphicon-unchecked"></span>
         </button></td>`;
-        html += `<td class="cgm-data-click">${layer.scec_properties.location}</td>`;
-        html += `<td class="cgm-data-click">${coordinates.lat}</td>`;
-        html += `<td class="cgm-data-click">${coordinates.lng}</td>`;
+        html += `<td class="cgm-data-click">${layer.scec_properties.gid}</td>`;
+        html += `<td class="cgm-data-click">${layer.scec_properties.lat}</td>`;
+        html += `<td class="cgm-data-click">${layer.scec_properties.lon}</td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.type} </td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.velocity}</td>`;
         html += `<td class="text-center">`;
@@ -340,6 +341,10 @@ var generateTableRow = function(layer) {
             case this.searchType.location:
                 $all_search_controls.hide();
                 $("#cgm-insar-location").show();
+                drawPoint();
+// XXX
+// 35.32064
+// -116.57164
                 break;
             case this.searchType.latlon:
                 $all_search_controls.hide();
@@ -382,17 +387,19 @@ window.console.log("Hide model/product");
     };
 
     this.reset = function() {
-        window.console.log("RESET>>> calling reset..");
+        window.console.log("insar calling -->>> reset");
+        this.zeroSelectCount()
         this.showSearch('none');
         this.searching = false;
         this.search_result.removeLayer();
         this.search_result = new L.FeatureGroup();
 
-        this.resetVelocitySlider();
-
         this.showProduct();
-        remove_bounding_rectangle_layer();
         skipRectangle();
+        skipPoint();
+        remove_bounding_rectangle_layer();
+        remove_marker_point_layer();
+        this.replaceResultsTableBody([]);
 
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
         $("#cgm-insar-controls-container input, #cgm-insar-controls-container select").val("");
@@ -401,21 +408,26 @@ window.console.log("Hide model/product");
     };
 
     this.resetSearch = function (){
-window.console.log("RESET>>> calling resetSearch..");
-        this.zeroSelectCount();
+window.console.log("gnss calling -->> resetSearch..");
         viewermap.removeLayer(this.search_result);
-        this.unselectAll();
         this.searching = false;
         this.search_result = new L.FeatureGroup();
 
         this.replaceResultsTableBody([]);
         skipRectangle();
+        skipPoint();
         remove_bounding_rectangle_layer();
+        remove_marker_point_layer();
+
+        viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
+        this.clearAllSelections();
     };
 
     this.freshSearch = function (){
 window.console.log(">>> calling freshSearch..");
+        $("#cgm-insar-controls-container input").val("");
         this.resetSearch();
+
         if ($("#cgm-insar-model").prop('checked')) {
           this.showProduct();
           } else {
@@ -428,46 +440,92 @@ window.console.log(">>> calling freshSearch..");
         }
     };
 
+    this.searchPHP = function(type, criteria) {
+        $searchResult = $("#searchResult");
+        if (!type || !criteria) {
+            $searchResult.html("");
+        }
+        if (!Array.isArray(criteria)) {
+            criteria = [criteria];
+        }
 
-        this.search = function (type, criteria) {
-            let results = [];
-            switch (type) {
-                case CGM_INSAR.searchType.location:
-                    $("#cgm-insar-LatTxt").val(criteria[0]);
-                    $("#cgm-insar-LonTxt").val(criteria[1]);
-                    remove_marker_point_layer();
-                    add_marker_point(criteria[0],criteria[1]);
-//XXX
-// TODO call the php to get the correct point right location  
-//                           create a layer
-//                           results.push(layer);
-   
-                    break;
-                case CGM_INSAR.searchType.latlon:
-                    $("#cgm-insar-firstLatTxt").val(criteria[0]);
-                    $("#cgm-insar-firstLonTxt").val(criteria[1]);
-                    $("#cgm-insar-secondLatTxt").val(criteria[2]);
-                    $("#cgm-insar-secondLonTxt").val(criteria[3]);
-                    remove_bounding_rectangle_layer();
-                    add_bounding_rectangle(criteria[0],criteria[1],criteria[2],criteria[3]);
-// TODO call the php to get the right location 
-//                           create many layers
-//                           results.push(layer);
-                    break;
+        let JSON_criteria = JSON.stringify(criteria);
+
+        $.ajax({
+            url: "php/search.php",
+            data: {t: type, q: JSON_criteria},
+        }).done(function(cgm_insar_data) {
+            if(cgm_insar_data === "[]") {
+window.console.log("BAD.., no cgm_insar_data");
+               return 0;
             }
-            return results;
-        };
+            let tmp=cgm_insar_data[0];
+            let jblob=JSON.parse(tmp.replace(/'/g,'"'));
 
-        this.searchBox = function (type, criteria) {
+            for(let i=0; i< jblob.length; i++) {
+              let item=jblob[i];
+              let rlist=item['result'];
+              for(let j=0; j< rlist.length; j++ ) {
+                  let r=rlist[j];
+                  window.console.log(r);
+              }
+            }
+            return jblob.length;
+        });
+    }
 
-window.console.log("SEARCH >> calling searchBox");
-            this.hideProduct();
-            this.resetSearch();
+    this.search = function (type, criteria) {
+        window.console.log("insar  -->  calling search..");
+        let results = [];
+        let rc;
+        switch (type) {
+            case CGM_INSAR.searchType.location:
+                remove_marker_point_layer();
+                rc=this.searchPHP(type, criteria);
+                if(rc) {
+                    let layer=add_marker_point(criteria[0],criteria[1]);
+                    layer.scec_properties = {
+                        lat: criteria[0],
+                        lon: criteria[1],
+                        velocity: 99,
+                        type: type,
+                        gid: 'label',
+                        selected: false,
+                    };
+                    results.push(layer);
+                }
+                break;
+            case CGM_INSAR.searchType.latlon:
+                remove_bounding_rectangle_layer();
+                rc=this.searchPHP(type, criteria);
+                if(rc) {
+                    let layer=add_bounding_rectangle(criteria[0],criteria[1],criteria[2],criteria[3]);
+                    layer.scec_properties = {
+                        lat: [ criteria[0],criteria[2] ],
+                        lon: [ criteria[1],criteria[3] ],
+                        velocity: 99,
+                        type: type,
+                        gid: 'label',
+                        selected: false,
+                    };
+                    results.push(layer);
+                }
+                break;
+        }
+        return results;
+    };
 
-            this.searching = true;
-            let results = this.search(type, criteria);
+    this.searchBox = function (type, criteria) {
+
+window.console.log("insar ---> searchBox ");
+        this.hideProduct();
+        this.resetSearch();
+
+        this.searching = true;
+        let results = this.search(type, criteria);
 
             if (results.length === 0) {
+window.console.log("insar -- did not find any RESULT");
                 viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
             } else {
                 let markerLocations = [];
@@ -475,47 +533,46 @@ window.console.log("SEARCH >> calling searchBox");
                 for (let i = 0; i < results.length; i++) {
                     markerLocations.push(results[i].getLatLng());
                     this.search_result.addLayer(results[i]);
-                }
-/*XXX TODO
-                this.showLocationsByLayers(this.search_result);
-*/
-
-                if( !modelVisible()) {
-                    this.showProduct();
-                }
-
-                if (type == this.searchType.latlon) {
-                    this.unselectAll();
-                    markerLocations.push(L.latLng(criteria[0],criteria[1]));
-                    markerLocations.push(L.latLng(criteria[2],criteria[3]));
-                    let bounds = L.latLngBounds(markerLocations);
-                    viewermap.fitBounds(bounds, {maxZoom: 12});
-                    setTimeout(skipRectangle, 500);
-
-                } else if (type == this.searchType.location) {
-                    let bounds = L.latLngBounds(markerLocations);
-                    viewermap.flyToBounds(bounds, {maxZoom: 12 });
-                }
             }
 
-            this.replaceResultsTableBody(results);
+            this.showLocationsByLayers(this.search_result);
+
+            if( !modelVisible()) {
+                this.showProduct();
+            }
+
+            if (type == this.searchType.latlon) {
+                this.unselectAll();
+                markerLocations.push(L.latLng(criteria[0],criteria[1]));
+                markerLocations.push(L.latLng(criteria[2],criteria[3]));
+                let bounds = L.latLngBounds(markerLocations);
+                viewermap.fitBounds(bounds, {maxZoom: 12});
+                setTimeout(skipRectangle, 500);
+
+            } else if (type == this.searchType.location) {
+                let bounds = L.latLngBounds(markerLocations);
+                viewermap.flyToBounds(bounds, {maxZoom: 12 });
+            }
+        }
+
+        //if(results.length > 0) {
+        this.replaceResultsTableBody(results);
+        //}
 window.console.log("DONE with BoxSearch..");
 
-            $("#wait-spinner").hide();
-        };
+        $("#wait-spinner").hide();
+    };
 
 
-        var modelVisible = function (){
-            return $("#cgm-insar-model").prop('checked');
-        };
+    var modelVisible = function (){
+        return $("#cgm-insar-model").prop('checked');
+    };
 
         // private function
-       var generateResultsTable = function (results) {
-
+    var generateResultsTable = function (results) {
 window.console.log("generateResultsTable..");
-
-            var html = "";
-            html+=`
+        var html = "";
+        html+=`
 <thead>
 <tr>
                          <th class="text-center button-container" style="width:2rem">
@@ -559,71 +616,72 @@ window.console.log("generateResultsTable..");
 </thead>
 <tbody>`;
 
-            for (let i = 0; i < results.length; i++) {
-                html += generateTableRow(results[i]);
-            }
-            if (results.length == 0) {
-                html += tablePlaceholderRow;
-            }
-            html=html+"</tbody>";
-            return html;
-        };
+        for (let i = 0; i < results.length; i++) {
+            html += generateTableRow(results[i]);
+        }
+        if (results.length == 0) {
+            html += tablePlaceholderRow;
+        }
+        html=html+"</tbody>";
+        return html;
+    };
 
-       var changeResultsTableBody = function (results) {
+    var changeResultsTableBody = function (results) {
 window.console.log("changeResultsTableBody..");
-            var html = "";
-            for (let i = 0; i < results.length; i++) {
-                html += generateTableRow(results[i]);
-            }
-            if (results.length == 0) {
-                html += tablePlaceholderRow;
-            }
-            return html;
-        };
+        var html = "";
+        for (let i = 0; i < results.length; i++) {
+            html += generateTableRow(results[i]);
+        }
+        if (results.length == 0) {
+            html += tablePlaceholderRow;
+        }
+        return html;
+    };
 
    
-        this.replaceResultsTableBody = function(results) {
-            window.console.log("calling replaceResultsTableBody");
-            $("#metadata-viewer tbody").html(changeResultsTableBody(results));
-        };
+    this.replaceResultsTableBody = function(results) {
+        window.console.log("calling replaceResultsTableBody");
+        $("#metadata-viewer tbody").html(changeResultsTableBody(results));
+    };
 
-        this.replaceResultsTable = function(results) {
-            window.console.log("calling replaceResultsTable");
-            $("#metadata-viewer").html(generateResultsTable(results));
-        };
+    this.replaceResultsTable = function(results) {
+        window.console.log("calling replaceResultsTable");
+        $("#metadata-viewer").html(generateResultsTable(results));
+    };
 
-        var getDataDownloadURL = function(fname, track)  {
-          let urlPrefix = "./result/";
-          let url=urlPrefix + fname;
-          return url;
-        } 
+    var getDataDownloadURL = function(fname, track)  {
+        let urlPrefix = "./result/";
+        let url=urlPrefix + fname;
+        return url;
+    } 
 
-        this.setupCGMInterface = function() {
-            var $download_queue_table = $('#metadata-viewer');
+    this.setupCGMInterface = function() {
+        var $download_queue_table = $('#metadata-viewer');
 
-            this.activateData();
+        this.activateData();
 
-            $("#cgm-controlers-container").css('display','none');
-            $("#cgm-insar-controlers-container").css('display','');
+        $("#cgm-controlers-container").css('display','none');
+        $("#cgm-insar-controlers-container").css('display','');
 
-            $("div.mapData div.map-container").css('padding-left','30px');
-            $("#CGM_plot").css('height','500px');
-            viewermap.invalidateSize();
-            viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
-            $download_queue_table.floatThead('destroy');
+        $("div.mapData div.map-container").css('padding-left','30px');
+        $("#CGM_plot").css('height','500px');
+        viewermap.invalidateSize();
+        viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
+        $download_queue_table.floatThead('destroy');
 
-            this.replaceResultsTable([]);
-            $download_queue_table.addClass('insar');
-            $("#data-download-select").val("insar");
+        this.replaceResultsTable([]);
+        $download_queue_table.addClass('insar');
+        $("#data-download-select").val("insar");
 
-            $download_queue_table.floatThead({
-                 // floatTableClass: 'cgm-metadata-header',
-                 scrollContainer: function ($table) {
-                     return $table.closest('div#metadata-viewer-container');
-                 },
-            });
+        $download_queue_table.floatThead({
+             // floatTableClass: 'cgm-metadata-header',
+             scrollContainer: function ($table) {
+                 return $table.closest('div#metadata-viewer-container');
+             },
+        });
 
-            $("#wait-spinner").hide();
-        };
+        $("#wait-spinner").hide();
+    };
+
    
 }

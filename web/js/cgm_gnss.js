@@ -427,7 +427,7 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
         if (moveTableRow) {
             let $rowHTML = $row.prop('outerHTML');
             $row.remove();
-            $("#metadata-viewer.cgm tbody").prepend($rowHTML);
+            $("#metadata-viewer.gnss tbody").prepend($rowHTML);
         }
     };
 
@@ -508,8 +508,8 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
                 cgm_object.unselectStationByLayer(layer);
             }
         });
-        $("#metadata-viewer.cgm tr.row-selected button span.glyphicon.glyphicon-check").removeClass('glyphicon-check').addClass('glyphicon-unchecked');
-        $("#metadata-viewer.cgm tr.row-selected").removeClass('row-selected');
+        $("#metadata-viewer.gnss tr.row-selected button span.glyphicon.glyphicon-check").removeClass('glyphicon-check').addClass('glyphicon-unchecked');
+        $("#metadata-viewer.gnss tr.row-selected").removeClass('row-selected');
     };
 
 
@@ -529,7 +529,7 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
 
 
     this.addToResultsTable = function(layer) {
-        let $table = $("#metadata-viewer.cgm tbody");
+        let $table = $("#metadata-viewer.gnss tbody");
         let gid = layer.scec_properties.gid;
 
         if ($(`tr[data-point-gid='${gid}'`).length > 0) {
@@ -632,7 +632,6 @@ var generateTableRow = function(layer) {
 
     this.showSearch = function (type) {
         const $all_search_controls = $("#cgm-controls-container ul li");
-        this.freshSearch();
         switch (type) {
             case this.searchType.vectorSlider:
                 $all_search_controls.hide();
@@ -685,48 +684,51 @@ window.console.log("Hide product, GNSS");
 
     };
 
+// reset everything
     this.reset = function() {
-        window.console.log("RESET>>> calling reset..");
+window.console.log("gnss calling --->> reset");
         this.zeroSelectCount();
         this.showSearch('none');
         this.searching = false;
         this.search_result.removeLayer();
         this.search_result = new L.FeatureGroup();
 
-        this.resetVectorSlider();
-
         this.hideVectors();
+
         this.showProduct();
         remove_bounding_rectangle_layer();
+        this.replaceResultsTableBody([]);
         skipRectangle();
-
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
         $("#cgm-controls-container input, #cgm-controls-container select").val("");
 
-        $("#cgm-model-vectors").prop('checked', false);
+        this.resetVectorSlider();
         this.clearAllSelections();
-
     };
 
+// reset just the search only
     this.resetSearch = function (){
-window.console.log("RESET>>> calling resetSearch..");
-        // this.hideVectors();
-        this.zeroSelectCount();
+window.console.log("gnss calling --->> resetSearch.");
         viewermap.removeLayer(this.search_result);
-        this.unselectAll();
         this.searching = false;
         this.search_result = new L.FeatureGroup();
-
-        // $("#cgm-controls-container ul input, #cgm-controls-container ul select").val("");
 
         this.replaceResultsTableBody([]);
         skipRectangle();
         remove_bounding_rectangle_layer();
+
+        viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
+        this.clearAllSelections();
     };
 
+// a complete fresh search
     this.freshSearch = function (){
+
 window.console.log(">>> calling freshSearch..");
+        $("#cgm-controls-container input").val("");
+        this.resetVectorSlider();
         this.resetSearch();
+
         if ($("#cgm-model-vectors").prop('checked')) {
           this.showVectors();
           } else {
@@ -842,6 +844,7 @@ window.console.log(">>> calling freshSearch..");
         }
 
         this.search = function (type, criteria) {
+window.console.log("gnss --->> calling search.. <<----");
             let results = [];
             switch (type) {
                 case CGM_GNSS.searchType.vectorSlider:
@@ -889,8 +892,7 @@ window.console.log(">>> calling freshSearch..");
         };
 
         this.searchBox = function (type, criteria) {
-
-window.console.log("SEARCH >> calling searchBox");
+window.console.log("gnss --->> calling searchBox");
             this.hideProduct();
             this.resetSearch();
 
@@ -1084,7 +1086,6 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
         this.resetVectorSlider = function () {
           $("#slider-vector-range").slider('values', 
                               [CGM_GNSS.cgm_vector_min, CGM_GNSS.cgm_vector_max]);
-          let tmp=CGM_GNSS.cgm_vector_min;
           $("#cgm-minVectorSliderTxt").val(CGM_GNSS.cgm_vector_min);
           $("#cgm-maxVectorSliderTxt").val(CGM_GNSS.cgm_vector_max);
         }

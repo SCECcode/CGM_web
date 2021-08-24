@@ -53,13 +53,17 @@ $(document).ready(function () {
 
 
     $("#cgm-search-type").on('change', function () {
-        CGM_GNSS.showSearch($(this).val());
+        let type=$(this).val();
+window.console.log("main(gnss) changing search type.."+type);
+        CGM_GNSS.freshSearch();
+        CGM_GNSS.showSearch(type);
     });
 
     $('.cgm-search-item').on('focus', function () {
       $(this).on('blur mouseout', function () {
-        $(this).off('mouseout');
-        $(this).off('blur');
+          $(this).off('mouseout');
+          $(this).off('blur');
+
 window.console.log(">>>> causing a start of search..");
 // these is where the change in latlon causes a new search..
 // 
@@ -92,9 +96,8 @@ window.console.log(">>>> causing a start of search..");
                   CGM_GNSS.searchBox(searchType, criteria);
               });
             }
-           } else {
-              $(this).blur();
-           }
+          }
+          $(this).blur();
        });
     });
 
@@ -119,8 +122,11 @@ window.console.log(">>>>XXX causing a start of search..");
             let skip = false;
 
             $criteria.each(function(){
-                if(!isNaN($(this).val()) && $(this).val() !='') {
-                  criteria.push($(this).val());
+               let val=$(this).val();
+window.console.log("FOUND..."+val);
+                let n=isNaN(val);
+                if(!isNaN(val) && val !='') {
+                  criteria.push(val);
                   } else {
                     skip=true;
                 }
@@ -135,9 +141,8 @@ window.console.log(">>>>XXX causing a start of search..");
                   CGM_INSAR.searchBox(searchType, criteria);
               });
             }
-           } else {
-              $(this).blur();
-           }
+          }
+          $(this).blur();
        });
     });
 
@@ -165,6 +170,13 @@ window.console.log(">>>>XXX causing a start of search..");
     });
 
     $("#data-download-select").on('change', function(){
+
+       if(activeProduct == Products.GNSS) {
+          CGM_GNSS.reset();
+       } else {
+          CGM_INSAR.reset();
+       }
+
        if ($(this).val() == 'gnss') {
            CGM_GNSS.setupCGMInterface();
        }
@@ -174,7 +186,7 @@ window.console.log(">>>>XXX causing a start of search..");
     });
 
     CGM_GNSS.generateLayers();
-    CGM_INSAR.generateInSARLayers();
+//  CGM_INSAR.generateInSARLayers();
 
     $.event.trigger({
         type: "page-ready",

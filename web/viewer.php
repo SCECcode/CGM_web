@@ -140,7 +140,7 @@ window.console.log("HERE..");
                     <option value="vectorslider">Vector</option>
                 </select>
                 <div class="input-group-append">
-                    <button id="refresh-all-button" onclick="CGM.reset();" class="btn btn-dark pl-4 pr-4"
+                    <button id="refresh-all-button" onclick="CGM_GNSS.reset();" class="btn btn-dark pl-4 pr-4"
                             type="button">Reset</button>
                 </div>
             </div>
@@ -249,7 +249,7 @@ window.console.log("HERE..");
                                 <div class="col-8">
                                     <div class="form-inline latlon-input-boxes">
                                         <input type="text"
-                                                placeholder="Latitude"
+                                                placeholder='Latitude'
                                                 id="cgm-insar-LatTxt"
                                                 title="insar lat"
                                                 onfocus="this.value=''"
@@ -292,7 +292,7 @@ window.console.log("HERE..");
                                                 onfocus="this.value=''"
                                                 class="cgm-insar-search-item form-control">
                                         <input type="text"
-                                                id="cgm-secondLonTxt"
+                                                id="cgm-insar-secondLonTxt"
                                                 title="second lon"
                                                 placeholder='2nd Longitude'
                                                 onfocus="this.value=''"
@@ -307,8 +307,8 @@ window.console.log("HERE..");
     </div>
 <!-- -->
     <div class="row">
-        <div class="col-12 text-right pr-0" style="border:1px solid red">
-                <div class="input-group input-group-sm custom-control-inline ml-0" style="border:1px solid green"  id="dataset-controls">
+        <div class="col-12 text-right pr-0">
+                <div class="input-group input-group-sm custom-control-inline ml-0" style="max-width:180px" id="dataset-controls">
                          <div class="input-group-prepend">
                                  <label style='border-bottom:1;' class="input-group-text" for="data-download-select">Select Dataset</label>
                          </div>
