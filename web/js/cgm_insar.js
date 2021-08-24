@@ -391,6 +391,7 @@ window.console.log("Hide model/product");
 
     this.reset = function() {
         window.console.log("insar calling -->>> reset");
+        $("#wait-spinner").hide();
         this.zeroSelectCount()
         this.showSearch('none');
         this.searching = false;
@@ -412,6 +413,7 @@ window.console.log("Hide model/product");
 
     this.resetSearch = function (){
 window.console.log("gnss calling -->> resetSearch..");
+        $("#wait-spinner").hide();
         viewermap.removeLayer(this.search_result);
         this.searching = false;
         this.search_result = new L.FeatureGroup();
@@ -443,7 +445,8 @@ window.console.log(">>> calling freshSearch..");
         }
     };
 
-    this.showPHP = function (results, criteria) {
+    this.showPHP = function(results, criteria) {
+
         if (results.length === 0) {
 window.console.log("insar -- did not find any RESULT");
             viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);

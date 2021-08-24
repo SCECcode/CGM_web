@@ -32,6 +32,7 @@ RUN cd /app && \
     git clone https://github.com/kmaterna/InSAR_CGM_readers_writers.git && \
     cd InSAR_CGM_readers_writers && \
     ./setup.py install && \ 
+    chmod og+rwx /app/result && \
     cd /app
 
 COPY ./doc/cgm.conf /etc/httpd/conf.d/

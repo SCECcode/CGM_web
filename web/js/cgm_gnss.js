@@ -687,6 +687,7 @@ window.console.log("Hide product, GNSS");
 // reset everything
     this.reset = function() {
 window.console.log("gnss calling --->> reset");
+        $("#wait-spinner").hide();
         this.zeroSelectCount();
         this.showSearch('none');
         this.searching = false;
@@ -709,6 +710,7 @@ window.console.log("gnss calling --->> reset");
 // reset just the search only
     this.resetSearch = function (){
 window.console.log("gnss calling --->> resetSearch.");
+        $("#wait-spinner").hide();
         viewermap.removeLayer(this.search_result);
         this.searching = false;
         this.search_result = new L.FeatureGroup();
