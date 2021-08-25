@@ -155,7 +155,7 @@ class CGM_INSAR extends SpatialData {
         //$cwd=getcwd();
 
         exec($e_command, $output, $retval);
-        $this->php_result = $retval;
+        $this->php_result = $e_command;
         return $this;
         }
 

@@ -515,15 +515,7 @@ window.console.log("HERE..");
 <!-- -->
     <script type="text/javascript">
             cgm_gnss_station_data = <?php print $cgm_gnss->getAllStationData()->outputJSON(); ?>;
-            cgm_insar_data = <?php print $cgm_insar->doPreTesting()->outputJSON(); ?>;
-/*** NO NEED FOR THIS
-            <?php if ($_REQUEST['model'] == 'cgm'):  ?>
-            $(document).on("page-ready", function () {
-window.console.log(" >>>> in viewer.php <<<<< ");
-                CGM_GNSS.setupCGMInterface();
-            });
-			<?php endif; ?>
-****/
+            //cgm_insar_data = <?php print $cgm_insar->doPreTesting()->outputJSON(); ?>;
     </script>
 </body>
 </html>
