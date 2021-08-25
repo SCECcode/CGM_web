@@ -6,9 +6,21 @@ import json
 import io
 from contextlib import redirect_stdout
 
-myarg=sys.argv[1].replace("'",'"').replace("\\","")
+#print(sys.argv[1])
+
+myarg=sys.argv[1].replace('"','$').replace("'",'"').replace("\\","").replace("$","")
+#print(myarg)
+
+mmy='{"filelist":["./cgm_data/insar/USGS_D071_InSAR_v0_0_1.hdf5","./cgm_data/insar/USGS_D071_InSAR_v0_0_2.hdf5"],"result":["./result"],"pixellist":[{"label":"ref_p","lat":35.32064,"lon":-116.57164},{"label":"la_p","lat":34.0522,"lon":-118.2437}]}'
+#print(mmy)
+
+#mmyy="\"\\{\\'filelist\\':\\[\\'..\/cgm_data\/insar\/USGS_D071_InSAR_v0_0_1.hdf5\\',\\'..\/cgm_data\/insar\/USGS_D071_InSAR_v0_0_2.hdf5\\'\\],\\'result\\':\\[\\'..\/result\\'\\],\\'pixellist\\':\\[\\{\\'label\\':\\'ref_p\\',\\'lat\\':35.32064,\\'lon\\':-116.57164\\},\\{\\'label\\':\\'la_p\\',\\'lat\\':34.0522,\\'lon\\':-118.2437\\}\\]\\}\""
+".\/py\/test.py \"\\{\\'filelist\\':\\[\\'.\/cgm_data\/insar\/USGS_D071_InSAR_v0_0_1.hdf5\\',\\'.\/cgm_data\/insar\/USGS_D071_InSAR_v0_0_2.hdf5\\'\\],\\'result\\':\\[\\'.\/result\\'\\],\\'pixellist\\':\\[\\{\\'label\\':\\'ref_p\\',\\'lat\\':35.32064,\\'lon\\':-116.57164\\},\\{\\'label\\':\\'la_p\\',\\'lat\\':34.0522,\\'lon\\':-118.2437\\}\\]\\}\""
+
+#nnmyarg=mmyy.replace('"','$').replace("'",'"').replace("\\","").replace("$","")
+#print(nnmyarg)
+
 json_data = json.loads(myarg)
-#print(str(json_data));
 
 flist=json_data["filelist"]
 rloc=json_data["result"]
@@ -62,4 +74,4 @@ for t in tokens :
 if(len(ocsvlist) != 0): 
   returnlist.append( {"fname":ofile,"track":otrack,"result":ocsvlist} );
 
-print(str(returnlist))
+#print(str(returnlist))

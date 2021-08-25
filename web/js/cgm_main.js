@@ -185,13 +185,13 @@ window.console.log("FOUND..."+val);
        }
     });
 
-    CGM_GNSS.generateLayers();
-    CGM_INSAR.generateInSARLayers();
-
     $.event.trigger({
         type: "page-ready",
         "message": "completed",
     });
+
+    CGM_GNSS.generateLayers();
+    CGM_INSAR.generateInSARLayers();
 
 
     CGM_GNSS.setupCGMInterface();

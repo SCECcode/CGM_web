@@ -345,9 +345,6 @@ var generateTableRow = function(layer) {
                 $all_search_controls.hide();
                 $("#cgm-insar-location").show();
                 drawPoint();
-// XXX
-// 35.32064
-// -116.57164
                 break;
             case this.searchType.latlon:
                 $all_search_controls.hide();
@@ -500,12 +497,12 @@ window.console.log("calling with the type.."+type);
 window.console.log("calling with the string.."+JSON_criteria);
 
         $.ajax({
-            url: "php/search2.php",
+            url: "php/search.php",
             data: {t: type, q: JSON_criteria},
         }).done(function(cgm_insar_data) {
 
             var results=[];
-
+window.console.log(cgm_insar_data);
             if(cgm_insar_data === "[]") {
 window.console.log("Did not find any result");
             } else {
@@ -549,7 +546,7 @@ window.console.log("Did not find any result");
                    }
                  }
             }
-            this.showPHP(results, criteria);
+            CGM_INSAR.showPHP(results, criteria);
         });
     };
 
