@@ -2,6 +2,15 @@
 
 require_once("SpatialData.php");
 
+function make_pixel($label, $lat, $lon)
+{
+    $pixel=new \stdClass();
+    $pixel->label = $label;
+    $pixel->lat = $lat;
+    $pixel->lon = $lon;
+    return $pixel;
+}
+
 class CGM_INSAR extends SpatialData {
 
 	function __construct()
@@ -110,30 +119,44 @@ class CGM_INSAR extends SpatialData {
 		return pg_fetch_object($result);
 	}
 
-
         // InSAR
         public function doPreTesting()
         {
         $output = null;
         $retval = null;
-        $args = "{'filelist':['./cgm_data/insar/USGS_D071_InSAR_v0_0_1.hdf5','./cgm_data/insar/USGS_D071_InSAR_v0_0_2.hdf5'],'result':['./result'],'pixellist':[{'label':'ref_p','lat':35.32064,'lon':-116.57164},{'label':'la_p','lat':34.0522,'lon':-118.2437}]}";
-        $args_e = escapeshellarg($args);
+        $command = escapeshellcmd("/app/web/py/test.py \"{'filelist':['/app/web/cgm_data/insar/USGS_D071_InSAR_v0_0_1.hdf5','/app/web/cgm_data/insar/USGS_D071_InSAR_v0_0_2.hdf5'],'result':['/app/web/result'],'pixellist':[{'label':'ref_p','lat':35.32064,'lon':-116.57164},{'label':'la_p','lat':34.0522,'lon':-118.2437}]}\"");
 
-//$command = escapeshellcmd("./py/test.py \"{'filelist':['./cgm_data/insar/USGS_D071_InSAR_v0_0_1.hdf5','./cgm_data/insar/USGS_D071_InSAR_v0_0_2.hdf5'],'result':['./result'],'pixellist':[{'label':'ref_p','lat':35.32064,'lon':-116.57164},{'label':'la_p','lat':34.0522,'lon':-118.2437}]}\"");
-//$command = escapeshellcmd("./py/test.py \"hostname\"");
-//$command = escapeshellcmd("./py/test.py \"{'filelist':['myhost','shost']}\"");
-//$command = sprintf("./py/test.py %s",$args);
-//$command = sprintf("./py/test.py %s",$args_e);
-//$command = "./py/test.py \"{'filelist':['./cgm_data/insar/USGS_D071_InSAR_v0_0_1.hdf5','./cgm_data/insar/USGS_D071_InSAR_v0_0_2.hdf5'],'result':['./result'],'pixellist':[{'label':'ref_p','lat':35.32064,'lon':-116.57164},{'label':'la_p','lat':34.0522,'lon':-118.2437}]}\"";
- 
-$command = escapeshellcmd("./py/hello.py");
-exec($command, $output, $retval);
+        exec($command, $output, $retval);
+        //$cwd=getcwd();
 
-        $cwd=getcwd();
-
-        $this->php_result = $cwd;
+        $this->php_result = $output;
         return $this;
         }
 
+        public function doTesting()
+        {
+        $output = null;
+        $retval = null;
+
+        $arg = new \stdClass();
+        $arg->filelist = array();
+          array_push($arg->filelist, "./cgm_data/insar/USGS_D071_InSAR_v0_0_1.hdf5");
+          array_push($arg->filelist, "./cgm_data/insar/USGS_D071_InSAR_v0_0_2.hdf5");
+        $arg->result = array();
+          array_push($arg->result,"./result");
+        $arg->pixellist = array();
+          array_push($arg->pixellist,make_pixel("ref_p",35.32064,-116.57164));
+          array_push($arg->pixellist,make_pixel("la_p",34.0522,-118.2437));
+
+        $command = "/app/web/py/pretest.py ". json_encode($arg);
+        $e_command = escapeshellcmd($command);
+     
+        //$command = "/app/web/py/hello.py";
+        //$cwd=getcwd();
+
+        exec($e_command, $output, $retval);
+        $this->php_result = $retval;
+        return $this;
+        }
 
 }

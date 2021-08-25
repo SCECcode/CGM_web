@@ -1094,7 +1094,10 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
 
         this.setupCGMInterface = function() {
             var $download_queue_table = $('#metadata-viewer');
-            var sz=cgm_gnss_station_data.length;
+            var sz=0;
+            if(cgm_gnss_station_data != null) {
+                sz=cgm_gnss_station_data.length;
+            }
 window.console.log("setupCGMInterface: retrieved stations "+sz);
 
             for (let i = 0; i < sz; i++) {

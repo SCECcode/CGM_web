@@ -6,8 +6,8 @@ import json
 import io
 from contextlib import redirect_stdout
 
-myarg=sys.argv[1].replace('"','$').replace("'",'"').replace("\\","").replace("$","")
-json_data = json.loads(myarg)
+#print(sys.argv[1])
+json_data = json.loads(sys.argv[1])
 
 flist=json_data["filelist"]
 rloc=json_data["result"]

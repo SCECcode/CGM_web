@@ -20,7 +20,7 @@ if (is_object($criteria[0])) {
 //print($cwd);exit;
 
 try {
-        print $cgm_insar->doPreTesting()->outputJSON();
+        print $cgm_insar->doTesting()->outputJSON();
 //      print $insar->search($type, $criteria)->outputJSON();
 } catch (BadFunctionCallException $e) {
 	print "error";
