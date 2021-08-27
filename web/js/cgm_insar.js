@@ -144,7 +144,7 @@ var CGM_INSAR = new function () {
               
                 let latlngs = [[lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4]];
                 let mypoly=polygon_options;
-                mypoly['color']=track_color;
+                mypoly['color']="#FF0000";
                 let track=L.polygon(latlngs, mypoly);
 
                 track.scec_properties = {
