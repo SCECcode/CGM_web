@@ -9,7 +9,7 @@ var CGM_INSAR = new function () {
     this.cgm_velocity_loc = 0;
 
     // show the perimeters of the tracks
-    this.cgm_track_layer = new L.FeatureGroup();
+    this.cgm_track_layers = new L.FeatureGroup();
 
     // label=unique id for a group of pixel or a single pixel
     this.cgm_select_label = [];
@@ -118,10 +118,7 @@ var CGM_INSAR = new function () {
         if(cgm_insar_track_data == null)
           return;
 
-        if(!isObject(cgm_insar_track_data)) {
-          return;
-        }
-        this.cgm_track_layer = new L.FeatureGroup();
+        this.cgm_track_layers = new L.FeatureGroup();
 
         for (const index in cgm_insar_track_data) {
             if (cgm_insar_track_data.hasOwnProperty(index)) {
@@ -145,19 +142,19 @@ var CGM_INSAR = new function () {
                 while (lon4 < -180) { lon4 += 360; }
                 while (lon4 > 180) { lon4 -= 360; }
               
-                let latlngs = [lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4]];
+                let latlngs = [[lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4]];
                 let mypoly=polygon_options;
                 mypoly['color']=track_color;
-                let bblayer= new L.polygon(latlngs, mypoly);
+                let track=L.polygon(latlngs, mypoly);
 
-                bblayer.scec_properties = {
+                track.scec_properties = {
                     track_name: track_name,
                 };
 
                 let bb_info = `track id: ${track_name}`;
-                bblayer.bindTooltip(bb_info).openTooltip();
-
-                this.cgm_track_layer.addLayer(bblayer);
+//                track.bindTooltip(bb_info).openTooltip();
+window.console.log("add a track");
+                this.cgm_track_layers.addLayer(track);
             }
         }
     };
@@ -405,9 +402,11 @@ var generateTableRow = function(layer) {
 */
         if (!$cgm_model_checkbox.prop('checked')) {
             $cgm_model_checkbox.prop('checked', true);
-        // and show the boundary layer
-            this.cgm_track_layer.addTo(viewermap);
         }
+
+        let tmp=this.cgm_track_layers;
+        // and show the boundary layer
+        this.cgm_track_layers.addTo(viewermap);
 
         if (currentLayerName != 'shaded relief') {
             switchLayer('shaded relief');
@@ -426,7 +425,7 @@ window.console.log("Hide model/product");
             this.cgm_layers.remove();
         }
 **/
-        this.cgm_track_layer.remove();
+        this.cgm_track_layers.remove();
     };
 
     this.reset = function() {
