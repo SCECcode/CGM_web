@@ -12,6 +12,7 @@ var CGM_GNSS = new function () {
     this.cgm_select_gid = [];
 
     // cgm_layers <= all marker layers for the stations/survey
+    //               this is setup once from viewer.php
     this.cgm_layers = new L.FeatureGroup();
 
     // cgm_vectors <= all all velocity vectors in polyline layer -- linked to cgm_layers
@@ -683,6 +684,10 @@ window.console.log("SHOW product");
 
     
     this.hideProduct = function () {
+        let $cgm_model_checkbox = $("#cgm-model");
+        if ($cgm_model_checkbox.prop('checked')) {
+            $cgm_model_checkbox.prop('checked', false);
+        }
 window.console.log("Hide product, GNSS");
         if (CGM_GNSS.searching) {
             CGM_GNSS.search_result.remove();
@@ -744,11 +749,21 @@ window.console.log(">>> calling freshSearch..");
           } else {
             this.hideVectors();
         }
+
+        // show GNSS product
         if ($("#cgm-model").prop('checked')) {
           this.showProduct();
           } else {
           this.hideProduct();
         }
+
+        // show InSAR product
+        if ($("#cgm-model-insar").prop('checked')) {
+          CGM_INSAR.showProduct();
+          } else {
+          CGM_INSAR.hideProduct();
+        }
+
         if ($("#cgm-model-cfm").prop('checked')) {
           CXM.showCFMFaults(viewermap);
           } else {
@@ -1112,8 +1127,9 @@ window.console.log("setupCGMInterface: retrieved stations "+sz);
                 let item=cgm_gnss_station_data[i];
                 if(item['station_type'] == "continuous") {
                     cont_site.push(item['station_id']);
-                    } else {
-                       surv_site.push(item['station_id']);
+                }
+                if(item['station_type'] == "surv") {
+                    surv_site.push(item['station_id']);
                 }
             }
 

@@ -9,18 +9,18 @@ var CGM_INSAR = new function () {
     this.cgm_velocity_loc = 0;
 
     // cgm_track_layers <== all polygon layers for each insar track
+    //                      setup once from viewer.php 
     this.cgm_track_layers = new L.FeatureGroup();
 
-    // label=unique id for a group of pixel or a single pixel
+    // label <= locally generated unique id for a search
     this.cgm_select_label = [];
 
-    // unique label for each insar search by location or by latlon area
-    // by location = marker layer
-    // by latlon area =  pixi layer 
-    // refresh from reset/freshSearch ??
-/XXX  
+    // for each session, collect all the searches in here
+    //   by location = marker layer
+    //   by latlon area = polygon layer 
     this.cgm_layers = new L.FeatureGroup();
 
+    // refresh from reset/freshSearch ??
     this.search_result = new L.FeatureGroup();
     this.searching = false;
 
@@ -79,7 +79,6 @@ var CGM_INSAR = new function () {
         $("#cgm-insar-controls-container").show();
 
     };
-
 
     this.upSelectCount = function(label) {
        let i=this.cgm_select_label.indexOf(label);
@@ -156,7 +155,7 @@ var CGM_INSAR = new function () {
                 };
 
                 let bb_info = `track: ${track_name}`;
-                track.bindTooltip(bb_info).openTooltip();
+//                track.bindTooltip(bb_info).openTooltip();
 window.console.log("add a track");
                 this.cgm_track_layers.addLayer(track);
             }
@@ -377,7 +376,6 @@ var generateTableRow = function(layer) {
 
     this.showSearch = function (type) {
         const $all_search_controls = $("#cgm-insar-controls-container ul li");
-        this.freshSearch();
         switch (type) {
             case this.searchType.location:
                 $all_search_controls.hide();
@@ -404,11 +402,10 @@ var generateTableRow = function(layer) {
             this.cgm_layers.addTo(viewermap);
         }
 */
+        // and show the boundary layer
         if (!$cgm_model_checkbox.prop('checked')) {
             $cgm_model_checkbox.prop('checked', true);
         }
-
-        // and show the boundary layer
         this.cgm_track_layers.addTo(viewermap);
 
         if (currentLayerName != 'shaded relief') {
@@ -428,6 +425,10 @@ window.console.log("Hide model/product");
             this.cgm_layers.remove();
         }
 **/
+        let $cgm_model_checkbox = $("#cgm-model-insar");
+        if ($cgm_model_checkbox.prop('checked')) {
+            $cgm_model_checkbox.prop('checked', false);
+        }
         this.cgm_track_layers.remove();
     };
 

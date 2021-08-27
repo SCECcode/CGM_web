@@ -192,7 +192,6 @@ window.console.log("==> set to INSAR..");
         "message": "completed",
     });
 
-    window.console.log("here..");
     CGM_GNSS.generateLayers();
     CGM_INSAR.generateLayers();
 
