@@ -25,7 +25,8 @@ CREATE TABLE cgm_gnss_sites(
 
 CREATE TABLE cgm_insar_tracks(
     gid serial PRIMARY KEY,
-    name VARCHAR(5) NOT NULL,
+    file VARCHAR(50) NOT NULL,
+    track VARCHAR(4) NOT NULL,
     color VARCHAR(10) NOT NULL,
     bb1_lat numeric NOT NULL,
     bb1_lon numeric NOT NULL,

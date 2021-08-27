@@ -56,5 +56,5 @@ WHERE NOT EXISTS
  WHERE t1.name = t2.station_id);
 
 -----------------------
-COPY cgm_insar_tracks(name,color,bb1_lat,bb1_lon,bb2_lat,bb2_lon,bb3_lat,bb3_lon,bb4_lat,bb4_lon,geocode_increment,geocode_range)
+COPY cgm_insar_tracks(file,track,color,bb1_lat,bb1_lon,bb2_lat,bb2_lon,bb3_lat,bb3_lon,bb4_lat,bb4_lon,geocode_increment,geocode_range)
    FROM '/home/postgres/CGM/CGM_data/insar_track.csv' DELIMITER ',' CSV HEADER;

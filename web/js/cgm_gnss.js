@@ -10,12 +10,15 @@ var CGM_GNSS = new function () {
     this.cgm_vector_loc = 0;
 
     this.cgm_select_gid = [];
-    // cgm_layers = all marker layers for the stations/survey
+
+    // cgm_layers <= all marker layers for the stations/survey
     this.cgm_layers = new L.FeatureGroup();
-    // all velocity vectors in polyline layer -- linked to cgm_layers
+
+    // cgm_vectors <= all all velocity vectors in polyline layer -- linked to cgm_layers
     this.cgm_vectors = new L.FeatureGroup();
     this.cgm_vector_scale = new L.FeatureGroup();
-    // selected ones in result table
+
+    // select_result <<= some of selected from cgm_layers
     this.search_result = new L.FeatureGroup();
     this.searching = false;
 

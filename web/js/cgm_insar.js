@@ -8,7 +8,7 @@ var CGM_INSAR = new function () {
     this.cgm_velocity_min = 0;
     this.cgm_velocity_loc = 0;
 
-    // show the perimeters of the tracks
+    // cgm_track_layers <== all polygon layers for each insar track
     this.cgm_track_layers = new L.FeatureGroup();
 
     // label=unique id for a group of pixel or a single pixel
@@ -18,6 +18,7 @@ var CGM_INSAR = new function () {
     // by location = marker layer
     // by latlon area =  pixi layer 
     // refresh from reset/freshSearch ??
+/XXX  
     this.cgm_layers = new L.FeatureGroup();
 
     this.search_result = new L.FeatureGroup();
@@ -130,8 +131,9 @@ var CGM_INSAR = new function () {
                 let lon3 = parseFloat(cgm_insar_track_data[index].bb3_lon);
                 let lat4 = parseFloat(cgm_insar_track_data[index].bb4_lat);
                 let lon4 = parseFloat(cgm_insar_track_data[index].bb4_lon);
-                let track_name = cgm_insar_track_data[index].name;
+                let track_name = cgm_insar_track_data[index].track;
                 let track_color = cgm_insar_track_data[index].color;
+                let track_file = cgm_insar_track_data[index].file;
 
                 while (lon1 < -180) { lon1 += 360; }
                 while (lon1 > 180) { lon1 -= 360; }
@@ -148,11 +150,13 @@ var CGM_INSAR = new function () {
                 let track=L.polygon(latlngs, mypoly);
 
                 track.scec_properties = {
-                    track_name: track_name,
+                    file: track_file,
+                    track:track_name,
+                    latlngs:latlngs
                 };
 
-                let bb_info = `track id: ${track_name}`;
-//                track.bindTooltip(bb_info).openTooltip();
+                let bb_info = `track: ${track_name}`;
+                track.bindTooltip(bb_info).openTooltip();
 window.console.log("add a track");
                 this.cgm_track_layers.addLayer(track);
             }
@@ -404,7 +408,6 @@ var generateTableRow = function(layer) {
             $cgm_model_checkbox.prop('checked', true);
         }
 
-        let tmp=this.cgm_track_layers;
         // and show the boundary layer
         this.cgm_track_layers.addTo(viewermap);
 
