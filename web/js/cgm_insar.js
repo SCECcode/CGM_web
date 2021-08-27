@@ -8,9 +8,18 @@ var CGM_INSAR = new function () {
     this.cgm_velocity_min = 0;
     this.cgm_velocity_loc = 0;
 
-    // unique label for each insar search by location or by latlon area
+    // show the perimeters of the tracks
+    this.cgm_track_layer = new L.FeatureGroup();
+
+    // label=unique id for a group of pixel or a single pixel
     this.cgm_select_label = [];
+
+    // unique label for each insar search by location or by latlon area
+    // by location = marker layer
+    // by latlon area =  pixi layer 
+    // refresh from reset/freshSearch ??
     this.cgm_layers = new L.FeatureGroup();
+
     this.search_result = new L.FeatureGroup();
     this.searching = false;
 
@@ -104,25 +113,49 @@ var CGM_INSAR = new function () {
         updateDownloadCounter(0);
     };
 
-    this.generateInSARLayers = function () {
-        if(cgm_insar_data == null)
+    // get make the track boundary layers
+    this.generateLayers = function () {
+        if(cgm_insar_track_data == null)
           return;
-        window.console.log(".....INSAR >> "+cgm_insar_data);
-        if(!isObject(cgm_insar_data)) {
+
+        if(!isObject(cgm_insar_track_data)) {
           return;
         }
-        let tmp=cgm_insar_data[0];
-        let jblob=JSON.parse(tmp.replace(/'/g,'"'));
- 
-        for(let i=0; i< jblob.length; i++) {
-          let item=jblob[i];
-          let rlist=item['result'];
-          for(let j=0; j< rlist.length; j++ ) {
-              let r=rlist[j];
-              window.console.log(r);
-          }
+        this.cgm_track_layer = new L.FeatureGroup();
+
+        for (const index in cgm_insar_track_data) {
+            if (cgm_insar_track_data.hasOwnProperty(index)) {
+                let lat1 = parseFloat(cgm_insar_track_data[index].bb1_lat);
+                let lon1 = parseFloat(cgm_insar_track_data[index].bb1_lon);
+                let lat2 = parseFloat(cgm_insar_track_data[index].bb2_lat);
+                let lon2 = parseFloat(cgm_insar_track_data[index].bb2_lon);
+                let lat3 = parseFloat(cgm_insar_track_data[index].bb3_lat);
+                let lon3 = parseFloat(cgm_insar_track_data[index].bb3_lon);
+                let lat4 = parseFloat(cgm_insar_track_data[index].bb4_lat);
+                let lon4 = parseFloat(cgm_insar_track_data[index].bb4_lon);
+                let track_name = cgm_insar_track_data[index].name;
+                let track_color = cgm_insar_track_data[index].color;
+
+                while (lon1 < -180) { lon1 += 360; }
+                while (lon1 > 180) { lon1 -= 360; }
+                while (lon2 < -180) { lon2 += 360; }
+                while (lon2 > 180) { lon2 -= 360; }
+                while (lon3 < -180) { lon3 += 360; }
+                while (lon3 > 180) { lon3 -= 360; }
+                while (lon4 < -180) { lon4 += 360; }
+                while (lon4 > 180) { lon4 -= 360; }
+              
+                let latlngs = [ [lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4]];
+                let mypoly=polygon_options;
+                mypoly['color']=track_color;
+                let bblayer= new L.polygon(latlngs, mypoly);
+
+                bblayer.scec_properties = {
+                    track_name: track_name,
+                };
+                this.cgm_track_layer.addLayer(layer);
+            }
         }
-        
     };
 
 // for InSAR
@@ -359,14 +392,17 @@ var generateTableRow = function(layer) {
     this.showProduct = function () {
         let $cgm_model_checkbox = $("#cgm-model-insar");
 
+/* This does not apply to INSAR
         if (this.searching) {
             this.search_result.addTo(viewermap);
         } else {
             this.cgm_layers.addTo(viewermap);
         }
-
+*/
         if (!$cgm_model_checkbox.prop('checked')) {
             $cgm_model_checkbox.prop('checked', true);
+        // and show the boundary layer
+            this.cgm_track_layer.addTo(viewermap);
         }
 
         if (currentLayerName != 'shaded relief') {
@@ -379,15 +415,19 @@ var generateTableRow = function(layer) {
 // XX CHECK
     this.hideProduct = function () {
 window.console.log("Hide model/product");
+/** 
         if (CGM_INSAR.searching) {
             CGM_INSAR.search_result.remove();
         } else {
             this.cgm_layers.remove();
         }
+**/
+        this.cgm_track_layer.remove();
     };
 
     this.reset = function() {
         window.console.log("insar calling -->>> reset");
+        window.console.log("hiding wait-spinner");
         $("#wait-spinner").hide();
         this.zeroSelectCount()
         this.showSearch('none');
@@ -410,6 +450,7 @@ window.console.log("Hide model/product");
 
     this.resetSearch = function (){
 window.console.log("gnss calling -->> resetSearch..");
+        window.console.log("hiding wait-spinner");
         $("#wait-spinner").hide();
         viewermap.removeLayer(this.search_result);
         this.searching = false;
@@ -442,7 +483,7 @@ window.console.log(">>> calling freshSearch..");
         }
     };
 
-    this.showPHP = function(results, criteria) {
+    this.showPHP = function(type, results, criteria) {
 
         if (results.length === 0) {
 window.console.log("insar -- did not find any RESULT");
@@ -477,6 +518,7 @@ window.console.log("insar -- did not find any RESULT");
 
         this.replaceResultsTableBody(results);
 
+        window.console.log("hiding wait-spinner");
         $("#wait-spinner").hide();
     };
 
@@ -495,7 +537,7 @@ window.console.log("insar -- did not find any RESULT");
         let JSON_criteria = JSON.stringify(criteria);
 window.console.log("calling with the type.."+type);
 window.console.log("calling with the string.."+JSON_criteria);
-
+        $("#wait-spinner").show();
         $.ajax({
             url: "php/search.php",
             data: {t: type, q: JSON_criteria},
@@ -506,8 +548,8 @@ window.console.log(cgm_insar_data);
             if(cgm_insar_data === "[]") {
 window.console.log("Did not find any result");
             } else {
-                 let tmp=cgm_insar_data[0];
-                 let jblob=JSON.parse(tmp.replace(/'/g,'"')); 
+                 let tmp=JSON.parse(cgm_insar_data); 
+                 let jblob=JSON.parse(tmp[0].replace(/'/g,'"'));
                  for(let i=0; i< jblob.length; i++) {
                      let item=jblob[i];
                      let rlist=item['result'];
@@ -546,7 +588,7 @@ window.console.log("Did not find any result");
                    }
                  }
             }
-            CGM_INSAR.showPHP(results, criteria);
+            CGM_INSAR.showPHP(type, results, criteria);
         });
     };
 
@@ -676,6 +718,7 @@ window.console.log("changeResultsTableBody..");
              },
         });
 
+        window.console.log("hiding wait-spinner");
         $("#wait-spinner").hide();
     };
 

@@ -6,12 +6,12 @@ import json
 import io
 from contextlib import redirect_stdout
 
-#print(sys.argv[1])
 json_data = json.loads(sys.argv[1])
 
 flist=json_data["filelist"]
 rloc=json_data["result"]
 plist=json_data["pixellist"]
+gid=json_data["gid"]
 
 result=rloc[0]
 pixel_list= []
@@ -47,7 +47,8 @@ for t in tokens :
 #           print("What to do..."+t);
            if ttype == 0:
                 if(len(ocsvlist) != 0): 
-                  returnlist.append( {"fname":ofile,"track":otrack,"result":ocsvlist} );
+                  returnlist.append( {"gid":gid,"fname":ofile,"track":otrack,"result":ocsvlist} );
+                gidlist=[]
                 ocsvlist=[]
                 ofile=t
            elif ttype == 1:
@@ -59,6 +60,6 @@ for t in tokens :
            ttype=99
 ## get the last one
 if(len(ocsvlist) != 0): 
-  returnlist.append( {"fname":ofile,"track":otrack,"result":ocsvlist} );
+  returnlist.append({"gid":gid,"fname":ofile,"track":otrack,"result":ocsvlist} );
 
 print(str(returnlist))

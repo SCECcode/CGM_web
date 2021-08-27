@@ -310,7 +310,7 @@ window.console.log("HERE..");
 <!-- -->
     <div class="row">
         <div class="col-12 text-right pr-0">
-                <div class="input-group input-group-sm custom-control-inline ml-0" style="max-width:180px" id="dataset-controls">
+                <div class="input-group input-group-sm custom-control-inline ml-0" id="dataset-controls" style="max-width:200px">
                          <div class="input-group-prepend">
                                  <label style='border-bottom:1;' class="input-group-text" for="data-download-select">Select Dataset</label>
                          </div>
@@ -515,7 +515,7 @@ window.console.log("HERE..");
 <!-- -->
     <script type="text/javascript">
             cgm_gnss_station_data = <?php print $cgm_gnss->getAllStationData()->outputJSON(); ?>;
-            //cgm_insar_data = <?php print $cgm_insar->doPreTesting()->outputJSON(); ?>;
+            cgm_insar_track_data = <?php print $cgm_insar->getAllTrackData()->outputJSON(); ?>;
     </script>
 </body>
 </html>

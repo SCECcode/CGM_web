@@ -22,3 +22,19 @@ CREATE TABLE cgm_gnss_sites(
     name VARCHAR(10) NOT NULL,
     type VARCHAR(10) DEFAULT 'SCEC'
 );
+
+CREATE TABLE cgm_insar_tracks(
+    gid serial PRIMARY KEY,
+    name VARCHAR(5) NOT NULL,
+    color VARCHAR(10) NOT NULL,
+    bb1_lat numeric NOT NULL,
+    bb1_lon numeric NOT NULL,
+    bb2_lat numeric NOT NULL,
+    bb2_lon numeric NOT NULL,
+    bb3_lat numeric NOT NULL,
+    bb3_lon numeric NOT NULL,
+    bb4_lat numeric NOT NULL,
+    bb4_lon numeric NOT NULL,
+    geocode_increment VARCHAR(100) NOT NULL,
+    geocode_range VARCHAR(100) NOT NULL,
+}

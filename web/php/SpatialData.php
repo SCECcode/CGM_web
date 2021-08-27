@@ -16,7 +16,7 @@ abstract class SpatialData
 
 	public function outputJSON()
 	{
-		return json_encode($this->php_result);
+		return json_encode($this->php_result,JSON_UNESCAPED_SLASHES);
 	}
 
 }

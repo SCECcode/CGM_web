@@ -172,8 +172,10 @@ window.console.log("FOUND..."+val);
     $("#data-download-select").on('change', function(){
 
        if(activeProduct == Products.GNSS) {
+window.console.log("==> set to GNSS..");
           CGM_GNSS.reset();
        } else {
+window.console.log("==> set to INSAR..");
           CGM_INSAR.reset();
        }
 
@@ -191,8 +193,7 @@ window.console.log("FOUND..."+val);
     });
 
     CGM_GNSS.generateLayers();
-    CGM_INSAR.generateInSARLayers();
-
+    CGM_INSAR.generateLayers();
 
     CGM_GNSS.setupCGMInterface();
 

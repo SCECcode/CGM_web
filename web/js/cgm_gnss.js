@@ -10,9 +10,12 @@ var CGM_GNSS = new function () {
     this.cgm_vector_loc = 0;
 
     this.cgm_select_gid = [];
+    // cgm_layers = all marker layers for the stations/survey
     this.cgm_layers = new L.FeatureGroup();
+    // all velocity vectors in polyline layer -- linked to cgm_layers
     this.cgm_vectors = new L.FeatureGroup();
     this.cgm_vector_scale = new L.FeatureGroup();
+    // selected ones in result table
     this.search_result = new L.FeatureGroup();
     this.searching = false;
 
@@ -345,8 +348,10 @@ window.console.log("MIN found is "+ CGM_GNSS.cgm_vector_min);
         this.generateVectorScale();
 
         this.cgm_layers.on('click', function(event) {
+            if(activeProduct == Products.GNSS) { 
 window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.station_id);
-            CGM_GNSS.toggleStationSelected(event.layer, true);
+               CGM_GNSS.toggleStationSelected(event.layer, true);
+            }
 
         });
 
@@ -384,7 +389,7 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
 
         if (layer.scec_properties.selected) {
             this.selectStationByLayer(layer, clickFromMap);
-            // if this station is not in search result, should add it in XXX
+            // if this station is not in search result, should add it in 
             let i=this.search_result.getLayerId(layer);
             if(!containsLayer(this.search_result,layer)) {
                 let tmp=this.search_result;

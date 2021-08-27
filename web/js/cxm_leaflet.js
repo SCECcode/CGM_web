@@ -16,6 +16,14 @@ var pointDrawer;
 var point_icon = L.AwesomeMarkers.icon({ icon: 'record', markerColor: 'blue'});
 var point_options = { icon : point_icon };
 
+var polygon_options = {
+    color:'red',
+    fillOpacity:0.04,
+    opacity:0.7,
+    weight:1,
+/* shapeOptions: { clickable: false } */
+};
+
 var rectangleDrawer;
 var mymap, baseLayers, layerControl, currentLayer, currentLayerName;
 var visibleFaults = new L.FeatureGroup();
