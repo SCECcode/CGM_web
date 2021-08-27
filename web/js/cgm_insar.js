@@ -145,7 +145,7 @@ var CGM_INSAR = new function () {
                 while (lon4 < -180) { lon4 += 360; }
                 while (lon4 > 180) { lon4 -= 360; }
               
-                let latlngs = [ [lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4]];
+                let latlngs = [lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4]];
                 let mypoly=polygon_options;
                 mypoly['color']=track_color;
                 let bblayer= new L.polygon(latlngs, mypoly);
