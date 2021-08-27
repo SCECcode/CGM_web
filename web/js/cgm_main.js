@@ -102,7 +102,6 @@ window.console.log(">>>> causing a start of search..");
     });
 
     $("#cgm-insar-search-type").on('change', function () {
-window.console.log("HERE..");
         CGM_INSAR.showSearch($(this).val());
     });
 

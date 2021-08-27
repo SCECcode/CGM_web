@@ -351,7 +351,8 @@ var CGM_INSAR = new function () {
 var generateTableRow = function(layer) {
         let $table = $("#metadata-viewer");
         let html = "";
-
+     
+        let coordinates = layer.getLatLng();
         coordinates = {lat: parseFloat(coordinates.lat).toFixed(2), lng: parseFloat(coordinates.lng).toFixed(2) };
 
         let downloadURL = getDataDownloadURL(layer.scec_properties.location);
@@ -433,7 +434,6 @@ window.console.log("Hide model/product");
 
     this.reset = function() {
         window.console.log("insar calling -->>> reset");
-        window.console.log("hiding wait-spinner");
         $("#wait-spinner").hide();
         this.zeroSelectCount()
         this.showSearch('none');
@@ -457,7 +457,6 @@ window.console.log("Hide model/product");
 
     this.resetSearch = function (){
 window.console.log("gnss calling -->> resetSearch..");
-        window.console.log("hiding wait-spinner");
         $("#wait-spinner").hide();
         viewermap.removeLayer(this.search_result);
         this.searching = false;
@@ -525,7 +524,6 @@ window.console.log("insar -- did not find any RESULT");
 
         this.replaceResultsTableBody(results);
 
-        window.console.log("hiding wait-spinner");
         $("#wait-spinner").hide();
     };
 
@@ -542,8 +540,8 @@ window.console.log("insar -- did not find any RESULT");
         }
 
         let JSON_criteria = JSON.stringify(criteria);
-window.console.log("calling with the type.."+type);
-window.console.log("calling with the string.."+JSON_criteria);
+window.console.log("calling search() with the type.."+type);
+window.console.log("calling search() with the string.."+JSON_criteria);
         $("#wait-spinner").show();
         $.ajax({
             url: "php/search.php",
@@ -565,6 +563,7 @@ window.console.log("Did not find any result");
                          window.console.log(r);
                      }
                  }
+window.console.log("  PHP insar results "+jblob.length);
                  if(jblob.length > 0) {
                    let result = [];  
                    switch (type) {
@@ -601,7 +600,6 @@ window.console.log("Did not find any result");
 
     this.searchBox = function (type, criteria) {
 
-window.console.log("insar ---> searchBox ");
         this.hideProduct();
         this.resetSearch();
 
@@ -725,7 +723,6 @@ window.console.log("changeResultsTableBody..");
              },
         });
 
-        window.console.log("hiding wait-spinner");
         $("#wait-spinner").hide();
     };
 
