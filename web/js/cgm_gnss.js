@@ -709,7 +709,8 @@ window.console.log("gnss calling --->> reset");
 
         this.hideVectors();
 
-        this.showProduct();
+        //?? this.showProduct();
+
         remove_bounding_rectangle_layer();
         this.replaceResultsTableBody([]);
         skipRectangle();

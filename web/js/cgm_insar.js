@@ -154,9 +154,8 @@ var CGM_INSAR = new function () {
                     latlngs:latlngs
                 };
 
-                let bb_info = `track: ${track_name}`;
-//                track.bindTooltip(bb_info).openTooltip();
-window.console.log("add a track");
+                let bb_info = `InSAR track name: ${track_name}`;
+                track.bindTooltip(bb_info);
                 this.cgm_track_layers.addLayer(track);
             }
         }
@@ -442,7 +441,8 @@ window.console.log("Hide model/product");
         this.search_result.removeLayer();
         this.search_result = new L.FeatureGroup();
 
-        this.showProduct();
+        //?? this.showProduct();
+
         skipRectangle();
         skipPoint();
         remove_bounding_rectangle_layer();

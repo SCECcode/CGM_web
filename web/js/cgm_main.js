@@ -172,13 +172,14 @@ window.console.log("FOUND..."+val);
     $("#data-download-select").on('change', function(){
 
        if(activeProduct == Products.GNSS) {
-window.console.log("==> set to GNSS..");
+window.console.log("==> reset what was there/GNSS");
           CGM_GNSS.reset();
        } else {
-window.console.log("==> set to INSAR..");
+window.console.log("==> reset what was there/INSAR");
           CGM_INSAR.reset();
        }
 
+// setto new interface
        if ($(this).val() == 'gnss') {
            CGM_GNSS.setupCGMInterface();
        }
