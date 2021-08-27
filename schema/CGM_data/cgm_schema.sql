@@ -36,5 +36,5 @@ CREATE TABLE cgm_insar_tracks(
     bb4_lat numeric NOT NULL,
     bb4_lon numeric NOT NULL,
     geocode_increment VARCHAR(100) NOT NULL,
-    geocode_range VARCHAR(100) NOT NULL,
-}
+    geocode_range VARCHAR(100) NOT NULL
+);
