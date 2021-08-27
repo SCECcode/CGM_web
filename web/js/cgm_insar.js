@@ -153,7 +153,11 @@ var CGM_INSAR = new function () {
                 bblayer.scec_properties = {
                     track_name: track_name,
                 };
-                this.cgm_track_layer.addLayer(layer);
+
+                let bb_info = `track id: ${track_name}`;
+                bblayer.bindTooltip(bb_info).openTooltip();
+
+                this.cgm_track_layer.addLayer(bblayer);
             }
         }
     };
