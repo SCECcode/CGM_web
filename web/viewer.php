@@ -233,7 +233,7 @@ window.console.log("HERE..");
                 <select id="cgm-insar-search-type" class="custom-select">
                     <option value="">Search the InSAR</option>
                     <option value="location">Location</option>
-                    <option value="latlon">Latitude &amp; Longitude</option>
+                    <option value="latlon" disabled>Latitude &amp; Longitude</option>
                 </select>
                 <div class="input-group-append">
                     <button id="refresh-insar-all-button" onclick="CGM_INSAR.reset()" class="btn btn-dark pl-4 pr-4"
@@ -310,11 +310,23 @@ window.console.log("HERE..");
 <!-- -->
     <div class="row">
         <div class="col-12 text-right pr-0">
-                <div class="input-group input-group-sm custom-control-inline ml-0" id="dataset-controls" style="max-width:200px">
+                <div class="input-group input-group-sm custom-control-inline ml-0" id="tract-controls" style="max-width:180px">
                          <div class="input-group-prepend">
-                                 <label style='border-bottom:1;' class="input-group-text" for="data-download-select">Select Dataset</label>
+                                 <label style='border-bottom:1;' class="input-group-text" for="inar-track-select">Select Track</label>
                          </div>
-                         <select id='data-download-select' class="custom-select custom-select-sm">
+                         <select id='insar-track-select' class="custom-select custom-select-sm">
+                                 <option selected value="all">ALL</option>
+                                 <option value="D071">D071</option>
+                                 <option value="D173">D173</option>
+                                 <option value="D064">D064</option>
+                                 <option value="D166">D166</option>
+                         </select>
+                </div>
+                <div class="input-group input-group-sm custom-control-inline ml-0" id="dataset-controls" style="max-width:180px">
+                         <div class="input-group-prepend">
+                                 <label style='border-bottom:1;' class="input-group-text" for="data-product-select">Select Dataset</label>
+                         </div>
+                         <select id='data-product-select' class="custom-select custom-select-sm">
                                  <option selected value="gnss">GNSS</option>
                                  <option value="insar">InSAR</option>
                          </select>

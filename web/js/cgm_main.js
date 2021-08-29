@@ -168,7 +168,7 @@ window.console.log("FOUND..."+val);
 
     });
 
-    $("#data-download-select").on('change', function(){
+    $("#data-product-select").on('change', function(){
 
        if(activeProduct == Products.GNSS) {
 window.console.log("==> reset what was there/GNSS");

@@ -69,7 +69,7 @@ var CGM_INSAR = new function () {
     };
 
     var tablePlaceholderRow = `<tr id="placeholder-row">
-                        <td colspan="7">Metadata for selected points will appear here.</td>
+                        <td colspan="6">Metadata for selected points will appear here.</td>
                     </tr>`;
 
     this.activateData = function() {
@@ -320,7 +320,8 @@ var CGM_INSAR = new function () {
       showPlotTSWarning();
     }
 
-    this.downloadURLsAsZip = function(ftype) {
+    this.downloadURLsAsZip = function(layer) {
+XXX
         var nzip=new JSZip();
         var layers=CGM_INSAR.search_result.getLayers();
         let timestamp=$.now();
@@ -347,7 +348,6 @@ var CGM_INSAR = new function () {
         })
     }
 
-// XXX
 var generateTableRow = function(layer) {
         let $table = $("#metadata-viewer");
         let html = "";
@@ -355,6 +355,7 @@ var generateTableRow = function(layer) {
         let coordinates = layer.getLatLng();
         coordinates = {lat: parseFloat(coordinates.lat).toFixed(2), lng: parseFloat(coordinates.lng).toFixed(2) };
 
+// XXX??
         let downloadURL = getDataDownloadURL(layer.scec_properties.location);
         let label = layer.scec_properties.gid;
 
@@ -362,10 +363,9 @@ var generateTableRow = function(layer) {
         html += `<td style="width:25px" class="cgm-data-click button-container"> <button class="btn btn-sm cxm-small-btn" id="" title="highlight the station" onclick=''>
             <span class="cgm-data-row glyphicon glyphicon-unchecked"></span>
         </button></td>`;
-        html += `<td class="cgm-data-click">${layer.scec_properties.gid}</td>`;
+        html += `<td class="cgm-data-click">${layer.scec_properties.track}</td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.lat}</td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.lon}</td>`;
-        html += `<td class="cgm-data-click">${layer.scec_properties.type} </td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.velocity}</td>`;
         html += `<td class="text-center">`;
         html += `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM_INSAR.executePlotTS([\"${downloadURL}\"],[\"${label}\"])>plotTS&nbsp<span class=\"far fa-chart-line\"></span></button>`;
@@ -489,10 +489,9 @@ window.console.log(">>> calling freshSearch..");
         }
     };
 
-    this.showPHP = function(type, results, criteria) {
+    this.showPHP = function(type, results, ncriteria) {
 
         if (results.length === 0) {
-window.console.log("insar -- did not find any RESULT");
             viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
         } else {
             let markerLocations = [];
@@ -510,8 +509,8 @@ window.console.log("insar -- did not find any RESULT");
 
             if (type == this.searchType.latlon) {
                 this.unselectAll();
-                markerLocations.push(L.latLng(criteria[0],criteria[1]));
-                markerLocations.push(L.latLng(criteria[2],criteria[3]));
+                markerLocations.push(L.latLng(ncriteria[0],ncriteria[1]));
+                markerLocations.push(L.latLng(ncriteria[2],ncriteria[3]));
                 let bounds = L.latLngBounds(markerLocations);
                 viewermap.fitBounds(bounds, {maxZoom: 12});
                 setTimeout(skipRectangle, 500);
@@ -519,6 +518,9 @@ window.console.log("insar -- did not find any RESULT");
             } else if (type == this.searchType.location) {
                 let bounds = L.latLngBounds(markerLocations);
                 viewermap.flyToBounds(bounds, {maxZoom: 12 });
+// make sure the search box is refilled with actual lat lon
+                $("#cgm-insar-LatTxt").val(ncriteria[0]);
+                $("#cgm-insar-LonTxt").val(ncriteria[1]);
             }
         }
 
@@ -548,60 +550,87 @@ window.console.log("calling search() with the string.."+JSON_criteria);
             data: {t: type, q: JSON_criteria},
         }).done(function(cgm_insar_data) {
 
-            var results=[];
+            let results=[];
+            let ncriteria=[];
 window.console.log(cgm_insar_data);
             if(cgm_insar_data === "[]") {
 window.console.log("Did not find any result");
             } else {
                  let tmp=JSON.parse(cgm_insar_data); 
                  let jblob=JSON.parse(tmp[0].replace(/'/g,'"'));
+/*****
+[{'gid':'label1', 
+'tslist':[{'lat':35.32064,'lon':-116.57164,'track':'D071','file':'../result/pixel_-116.57164_35.32064_D071.csv'}, 
+       {'lat':34.0522,'lon':-118.2437,'track':'D071','file':'../result/pixel_-118.2437_34.0522_D071.csv'}]},
+{'gid':'label1',
+ 'tslist':[{'lat':35.32064,'lon':-116.57164,'track':'D077','file':'../result/pixel_-116.57164_35.32064_D077.csv'},
+        {'lat':34.0522,'lon':-118.2437,'track':'D077','file':'../result/pixel_-118.2437_34.0522_D077.csv'}]}]
+****/
                  for(let i=0; i< jblob.length; i++) {
                      let item=jblob[i];
-                     let rlist=item['result'];
-                     for(let j=0; j< rlist.length; j++ ) {
-                         let r=rlist[j];
-                         window.console.log(r);
-                     }
-                 }
-window.console.log("  PHP insar results "+jblob.length);
-                 if(jblob.length > 0) {
-                   let result = [];  
-                   switch (type) {
-                     case CGM_INSAR.searchType.location:
-                       var layer=add_marker_point(criteria[0],criteria[1]);
-                       layer.scec_properties = {
-                                 lat: criteria[0],
-                                 lon: criteria[1],
+                     let ngid=item['gid']
+                     let tslist=item['tslist'];
+                     for(let j=0; j<tslist.length; j++) {
+                         let ts=tslist[i];
+                         if(type==CGM_INSAR.searchType.location) {
+                           let nlat=ts['lat'];
+                           let nlon=ts['lon'];
+                           let track_name=ts['track']
+                           let file=ts['file'];
+                           // create a ncriteria
+                           ncriteria.push(nlat);
+                           ncriteria.push(nlon);
+                           let marker_layer=add_marker_point(nlat,nlon);
+                           marker_layer.scec_properties = {
+                                 track: track_name,
+                                 lat: nlat,
+                                 lon: nlon,
+                                 file: file,
                                  velocity: 99,
                                  type: type,
-                                 gid: 'label',
+                                 gid: ngid,
                                  selected: false,
                                  };
-                       results.push(layer);
-                       break;
-                     case CGM_INSAR.searchType.latlon:
-                       var layer=add_bounding_rectangle(criteria[0],criteria[1],criteria[2],criteria[3]);
-                       layer.scec_properties = {
-                             lat: [ criteria[0],criteria[2] ],
-                             lon: [ criteria[1],criteria[3] ],
-                             velocity: 99,
-                             type: type,
-                             gid: 'label',
-                             selected: false,
+                           let bb_info = `track:${track_name}<br>lat:${nlat} lon:${nlon}`;
+                           marker_layer.bindTooltip(bb_info);
+                           results.push(marker_layer);
+                         }
+// XX this is not done.. yet, locations should be a bunch
+                         if(type==CGM_INSAR.searchType.latlon) {
+                             let latlon=latlonlist[j];
+                             let nlat1=latlon['lat1'];
+                             let nlon1=latlon['lon1'];
+                             let nlat2=latlon['lat2'];
+                             let nlon2=latlon['lon2'];
+                             // create a ncriteria
+                             ncriteria.push(nlat1);
+                             ncriteria.push(nlon1);
+                             ncriteria.push(nlat2);
+                             ncriteria.push(nlon2);
+                             let layer=add_bounding_rectangle(nlat1,nlon1,nlat2,nlon2);
+                             layer.scec_properties = {
+                                 lat: [ nlat1, nlon1 ],
+                                 lon: [ nlat2, nlon2 ],
+                                 velocity: 99,
+                                 type: type,
+                                 gid: ngid,
+                                 selected: false,
                              };
-                       results.push(layer);
-                       break;
+                             results.push(layer);
+                        }
                    }
                  }
             }
-            CGM_INSAR.showPHP(type, results, criteria);
+            CGM_INSAR.showPHP(type, results, ncriteria);
         });
     };
 
     this.searchBox = function (type, criteria) {
 
-        this.hideProduct();
-        this.resetSearch();
+        if(!this.searching) { // don't restart 
+          this.hideProduct();
+          this.resetSearch();
+        }
 
         this.searching = true;
         let results = this.search(type, criteria);
@@ -623,11 +652,10 @@ window.console.log("generateResultsTable..");
                              <span class="glyphicon glyphicon-unchecked"></span>
                              </button>
                          </th>
-                         <th class="hoverColor" onClick="sortMetadataTableByRow(1,'a')">Label&nbsp<span id='sortCol_1' class="fas fa-angle-down"></span></th>
+                         <th class="hoverColor" onClick="sortMetadataTableByRow(1,'a')">Track&nbsp<span id='sortCol_1' class="fas fa-angle-down"></span></th>
                         <th class="hoverColor" onClick="sortMetadataTableByRow(2,'n')">Lat&nbsp<span id='sortCol_2' class="fas fa-angle-down"></span></th>
                         <th class="hoverColor" onClick="sortMetadataTableByRow(3,'n')">Lon&nbsp<span id='sortCol_3' class="fas fa-angle-down"></span></th>
-                        <th style="width:6rem">Type</th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(4,'n')">Velocity&nbsp<span id='sortCol_4' class="fas fa-angle-down"></span>(units)</th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(3,'n')">Velocity&nbsp<span id='sortCol_4' class="fas fa-angle-down"></span>(units)</th>
 
                         <th style="width:20%;"><div class="col text-center">
 <!--download all -->
@@ -714,7 +742,7 @@ window.console.log("changeResultsTableBody..");
 
         this.replaceResultsTable([]);
         $download_queue_table.addClass('insar');
-        $("#data-download-select").val("insar");
+        $("#data-product-select").val("insar");
 
         $download_queue_table.floatThead({
              // floatTableClass: 'cgm-metadata-header',

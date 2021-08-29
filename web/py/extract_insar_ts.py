@@ -1,10 +1,24 @@
 #!/usr/bin/env python3
 
+### only 1 track at a time
+
 import cgm_library
 import sys
 import json
 import io
 from contextlib import redirect_stdout
+
+######################################
+##Writing ../result/pixel_-118.2437_34.0522_D071.csv 
+def parse_latlon(file):
+    fname=file.split("/")[-1]
+    item=fname.split("_")
+    lon=float(item[1])
+    lat=float(item[2])
+    track=item[3].split(".")[0]
+    return [lat, lon, track]
+    
+######################################
 
 json_data = json.loads(sys.argv[1])
 
@@ -29,10 +43,12 @@ s = f.getvalue()
 
 tokens=s.split()
 ttype=99 #file=0, track=1, csv=2 
-ofile=None
 otrack=None
+nlat=None
+nlon=None
 ocsvlist=[]
 returnlist=[]
+
 for t in tokens :
 #    print(t)
     if t == 'Reading':
@@ -47,19 +63,19 @@ for t in tokens :
 #           print("What to do..."+t);
            if ttype == 0:
                 if(len(ocsvlist) != 0): 
-                  returnlist.append( {"gid":gid,"fname":ofile,"track":otrack,"result":ocsvlist} );
+                  returnlist.append( {"gid":gid,"tslist":ocsvlist} );
                 gidlist=[]
                 ocsvlist=[]
-                ofile=t
            elif ttype == 1:
                 otrack=t[:-1]
            elif ttype == 2:
-                ocsvlist.append(t);
+                [nlat, nlon, ntrack]=parse_latlon(t)
+                ocsvlist.append({"lat":nlat,"lon":nlon,"track":ntrack,"file":t})
            else:
                 print("BAD..."+ttype);
            ttype=99
 ## get the last one
 if(len(ocsvlist) != 0): 
-  returnlist.append({"gid":gid,"fname":ofile,"track":otrack,"result":ocsvlist} );
+  returnlist.append({"gid":gid,"tslist":ocsvlist} );
 
 print(str(returnlist))

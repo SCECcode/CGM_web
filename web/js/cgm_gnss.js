@@ -20,8 +20,9 @@ var CGM_GNSS = new function () {
     this.cgm_vector_scale = new L.FeatureGroup();
 
     // select_result <<= some of selected from cgm_layers
-    this.search_result = new L.FeatureGroup();
     this.searching = false;
+    this.search_result.removeLayer();
+    this.search_result = new L.FeatureGroup();
 
     const cont_site=[];
     const surv_site=[];
@@ -692,6 +693,8 @@ window.console.log("Hide product, GNSS");
         if (CGM_GNSS.searching) {
             CGM_GNSS.search_result.remove();
         } else {
+//??? XX remove all the layers ??
+window.console.log("hideProduct.. BAD.. should not be here..");
             this.cgm_layers.remove();
         }
 
@@ -727,6 +730,7 @@ window.console.log("gnss calling --->> resetSearch.");
         $("#wait-spinner").hide();
         viewermap.removeLayer(this.search_result);
         this.searching = false;
+        this.search_result.removeLayer();
         this.search_result = new L.FeatureGroup();
 
         this.replaceResultsTableBody([]);
@@ -785,7 +789,6 @@ window.console.log(">>> calling freshSearch..");
 
 
     this.showVectors = function () {
-
         if (this.searching) {
             this.search_result.eachLayer(function (layer) {
                 viewermap.addLayer(layer.scec_properties.vector);
@@ -1149,7 +1152,7 @@ window.console.log("setupCGMInterface: retrieved stations "+sz);
 
             this.replaceResultsTable([]);
             $download_queue_table.addClass('gnss');
-            $("#data-download-select").val("gnss");
+            $("#data-product-select").val("gnss");
 
             $download_queue_table.floatThead({
                  // floatTableClass: 'cgm-metadata-header',
