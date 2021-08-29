@@ -318,9 +318,9 @@ window.console.log("calling.. addToResultsTable..");
         $(`#metadata-viewer tbody tr[data-point-gid='${gid}']`).remove();
     };
 
-// TODO, insar does not have fType
-    this.executePlotTS = function(downloadURL, fType) {
-      showTSview(downloadURL, fType);
+// tType = track type
+    this.executePlotTS = function(downloadURL,tType) {
+      showTSview(downloadURL,Products.INSAR,tType);
       showPlotTSWarning();
     }
 
@@ -372,7 +372,7 @@ var generateTableRow = function(layer) {
         html += `<td class="cgm-data-click">${layer.scec_properties.lon}</td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.velocity}</td>`;
         html += `<td class="text-center">`;
-        html += `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM_INSAR.executePlotTS([\"${downloadURL}\"],[\"${label}\"])>plotTS&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+        html += `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM_INSAR.executePlotTS([\"${downloadURL}\"],[\"${layer.scec_properties.track}\"])>plotTS&nbsp<span class=\"far fa-chart-line\"></span></button>`;
         html += `</tr>`;
 
         return html;

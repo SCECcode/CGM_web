@@ -556,8 +556,9 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
     };
 
     this.executePlotTS = function(downloadURL, fType) {
-      showTSview(downloadURL, fType);
-      showPlotTSWarning();
+      showTSview(downloadURL,Products.GNSS,fType);
+      showPlotTSWarning()
+
     }
 
     this.downloadURLsAsZip = function(ftype) {

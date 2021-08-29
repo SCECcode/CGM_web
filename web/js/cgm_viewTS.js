@@ -96,8 +96,9 @@ function get_PARAMS() {
 }
 
 // urls-> array
-// ftypes -> array 
-function showTSview(urls,ftypes) {
+// ptype -> product type: INSAR/GNSS
+// ftypes -> array/for GNSS 
+function showTSview(urls,ptype,ftypes) {
 
   setupTSviewSelection(urls,ftypes);
   [url,ftype] = getTSviewSelection();

@@ -18,11 +18,11 @@ def parse_latlon(file):
     track=item[3].split(".")[0]
     return [lat, lon, track]
 
-def get_velocity(hdf5file, lat, lon):
+def get_velocity(a_hdf5file, lat, lon):
     a_pixel = [lon, lat]
     a_pixel_list = [a_pixel]
     with redirect_stdout(io.StringIO()) as ff:
-        vout=cgm_library.hdf5_to_geocsv.hdf5_to_geocsv.extract_vel_from_file(hdf4file, a_pixel_list);
+        vout=cgm_library.hdf5_to_geocsv.extract_vel_from_file(a_hdf5file, a_pixel_list);
     rc = ff.getvalue()
 
 ##[[-22.201862, [0.6533136, -0.11445342, 0.7483859], 'D071']]
@@ -36,8 +36,6 @@ flist=json_data["filelist"]
 rloc=json_data["result"]
 plist=json_data["pixellist"]
 gid=json_data["gid"]
-
-
 
 result=rloc[0]
 pixel_list= []
@@ -55,6 +53,7 @@ s = f.getvalue()
 
 tokens=s.split()
 ttype=99 #file=0, track=1, csv=2 
+ofile=None
 otrack=None
 nlat=None
 nlon=None
@@ -79,12 +78,13 @@ for t in tokens :
                   returnlist.append( {"gid":ogid,"tslist":ocsvlist} )
                 gidlist=[]
                 ocsvlist=[]
+                ofile=t
            elif ttype == 1:
                 otrack=t[:-1]
                 ogid=gid+"_"+otrack
            elif ttype == 2:
                 [nlat, nlon, ntrack]=parse_latlon(t)
-                nvel=get_velocity(fname,nlat,nlon);
+                nvel=get_velocity(ofile,nlat,nlon);
                 ocsvlist.append({"lat":nlat,"lon":nlon,"velocity":nvel,"track":ntrack,"file":t})
 
            else:
