@@ -17,7 +17,17 @@ def parse_latlon(file):
     lat=float(item[2])
     track=item[3].split(".")[0]
     return [lat, lon, track]
-    
+
+def get_velocity(hdf5file, lat, lon):
+    a_pixel = [lon, lat]
+    a_pixel_list = [a_pixel]
+    with redirect_stdout(io.StringIO()) as ff:
+        vout=cgm_library.hdf5_to_geocsv.hdf5_to_geocsv.extract_vel_from_file(hdf4file, a_pixel_list);
+    rc = ff.getvalue()
+
+##[[-22.201862, [0.6533136, -0.11445342, 0.7483859], 'D071']]
+    velocity = vout[0][0]
+    return velocity
 ######################################
 
 json_data = json.loads(sys.argv[1])
@@ -26,6 +36,8 @@ flist=json_data["filelist"]
 rloc=json_data["result"]
 plist=json_data["pixellist"]
 gid=json_data["gid"]
+
+
 
 result=rloc[0]
 pixel_list= []
@@ -72,12 +84,19 @@ for t in tokens :
                 ogid=gid+"_"+otrack
            elif ttype == 2:
                 [nlat, nlon, ntrack]=parse_latlon(t)
-                ocsvlist.append({"lat":nlat,"lon":nlon,"track":ntrack,"file":t})
+                nvel=get_velocity(fname,nlat,nlon);
+                ocsvlist.append({"lat":nlat,"lon":nlon,"velocity":nvel,"track":ntrack,"file":t})
+
            else:
-                print("BAD..."+ttype);
+                print("BAD...",ttype);
            ttype=99
 ## get the last one
 if(len(ocsvlist) != 0): 
   returnlist.append({"gid":ogid,"tslist":ocsvlist} );
+
+with redirect_stdout(io.StringIO()) as ff:
+    cgm_library.hdf5_to_geocsv.extract_csv_wrapper(flist, pixel_list, result);
+ss = ff.getvalue()
+
 
 print(str(returnlist))

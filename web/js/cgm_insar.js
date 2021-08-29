@@ -572,11 +572,11 @@ window.console.log("Did not find any result");
                  let jblob=JSON.parse(tmp[0].replace(/'/g,'"'));
 /*****
 [{'gid':'label1', 
-'tslist':[{'lat':35.32064,'lon':-116.57164,'track':'D071','file':'../result/pixel_-116.57164_35.32064_D071.csv'}, 
-       {'lat':34.0522,'lon':-118.2437,'track':'D071','file':'../result/pixel_-118.2437_34.0522_D071.csv'}]},
+'tslist':[{'lat':35.32064,'lon':-116.57164,'velocity':XX,'track':'D071','file':'../result/pixel_-116.57164_35.32064_D071.csv'}, 
+       {'lat':34.0522,'lon':-118.2437,'velocity':XX,'track':'D071','file':'../result/pixel_-118.2437_34.0522_D071.csv'}]},
 {'gid':'label1',
- 'tslist':[{'lat':35.32064,'lon':-116.57164,'track':'D077','file':'../result/pixel_-116.57164_35.32064_D077.csv'},
-        {'lat':34.0522,'lon':-118.2437,'track':'D077','file':'../result/pixel_-118.2437_34.0522_D077.csv'}]}]
+ 'tslist':[{'lat':35.32064,'lon':-116.57164,'velocity':XX,'track':'D077','file':'../result/pixel_-116.57164_35.32064_D077.csv'},
+        {'lat':34.0522,'lon':-118.2437,'velocity':XX,'track':'D077','file':'../result/pixel_-118.2437_34.0522_D077.csv'}]}]
 ****/
                  for(let i=0; i< jblob.length; i++) {
                      let item=jblob[i];
@@ -587,6 +587,7 @@ window.console.log("Did not find any result");
                          if(type==CGM_INSAR.searchType.location) {
                            let nlat=ts['lat'];
                            let nlon=ts['lon'];
+                           let nvelocity=ts['velocity'];
                            let track_name=ts['track']
                            let file=ts['file'];
                            // create a ncriteria
@@ -598,7 +599,7 @@ window.console.log("Did not find any result");
                                  lat: nlat,
                                  lon: nlon,
                                  file: file,
-                                 velocity: 99,
+                                 velocity: nvelocity,
                                  type: type,
                                  gid: ngid,
                                  selected: false,
