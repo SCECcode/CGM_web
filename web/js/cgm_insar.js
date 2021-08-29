@@ -69,7 +69,7 @@ var CGM_INSAR = new function () {
     };
 
     var tablePlaceholderRow = `<tr id="placeholder-row">
-                        <td colspan="6">Metadata for selected points will appear here.</td>
+                        <td colspan="7">Metadata for selected points will appear here.</td>
                     </tr>`;
 
     this.activateData = function() {
@@ -156,6 +156,8 @@ var CGM_INSAR = new function () {
 
                 let bb_info = `InSAR track name: ${track_name}`;
                 track.bindTooltip(bb_info);
+                //var popup=L.popup().setContent("InSAR track name: "+track_name);
+                //track.bindPopup(popup);
                 this.cgm_track_layers.addLayer(track);
             }
         }
@@ -295,11 +297,13 @@ var CGM_INSAR = new function () {
     };
 
 
-
     this.addToResultsTable = function(layer) {
-        let $table = $("#metadata-viewer.insar tbody");
-        let gid = layer.scec_properties.gid;
 
+window.console.log("calling.. addToResultsTable..");
+
+        let $table = $("#metadata-viewer.insar tbody");
+
+        let gid = layer.scec_properties.gid;
         if ($(`tr[data-point-gid='${gid}'`).length > 0) {
             return;
         }
@@ -321,7 +325,6 @@ var CGM_INSAR = new function () {
     }
 
     this.downloadURLsAsZip = function(layer) {
-XXX
         var nzip=new JSZip();
         var layers=CGM_INSAR.search_result.getLayers();
         let timestamp=$.now();
@@ -363,6 +366,7 @@ var generateTableRow = function(layer) {
         html += `<td style="width:25px" class="cgm-data-click button-container"> <button class="btn btn-sm cxm-small-btn" id="" title="highlight the station" onclick=''>
             <span class="cgm-data-row glyphicon glyphicon-unchecked"></span>
         </button></td>`;
+        html += `<td class="cgm-data-click" style="display:none">${layer.scec_properties.gid}</td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.track}</td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.lat}</td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.lon}</td>`;
@@ -389,6 +393,8 @@ var generateTableRow = function(layer) {
                 break;
             default:
                 $all_search_controls.hide();
+                skipPoint();
+                skipRectangle();
         }
     };
 
@@ -445,8 +451,8 @@ window.console.log("Hide model/product");
 
         skipRectangle();
         skipPoint();
-        remove_bounding_rectangle_layer();
-        remove_marker_point_layer();
+//XX        remove_bounding_rectangle_layer();
+//XX        remove_marker_point_layer();
         this.replaceResultsTableBody([]);
 
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
@@ -456,7 +462,7 @@ window.console.log("Hide model/product");
     };
 
     this.resetSearch = function (){
-window.console.log("gnss calling -->> resetSearch..");
+window.console.log("insar calling -->> resetSearch..");
         $("#wait-spinner").hide();
         viewermap.removeLayer(this.search_result);
         this.searching = false;
@@ -465,8 +471,8 @@ window.console.log("gnss calling -->> resetSearch..");
         this.replaceResultsTableBody([]);
         skipRectangle();
         skipPoint();
-        remove_bounding_rectangle_layer();
-        remove_marker_point_layer();
+//XX        remove_bounding_rectangle_layer();
+//XX        remove_marker_point_layer();
 
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
         this.clearAllSelections();
@@ -524,9 +530,15 @@ window.console.log(">>> calling freshSearch..");
             }
         }
 
-        this.replaceResultsTableBody(results);
+window.console.log("HERE..");
+// NEED to append instead of replace ????
+//        this.replaceResultsTableBody(results);
+        this.replaceResultsTableBodyByLayers(this.search_result);
 
         $("#wait-spinner").hide();
+
+// restart the with showSearch()
+        this.showSearch(type);
     };
 
 
@@ -580,7 +592,7 @@ window.console.log("Did not find any result");
                            // create a ncriteria
                            ncriteria.push(nlat);
                            ncriteria.push(nlon);
-                           let marker_layer=add_marker_point(nlat,nlon);
+                           let marker_layer=addMarkerLayer(nlat,nlon);
                            marker_layer.scec_properties = {
                                  track: track_name,
                                  lat: nlat,
@@ -627,10 +639,12 @@ window.console.log("Did not find any result");
 
     this.searchBox = function (type, criteria) {
 
+/*** what if these are done in the search part ???
         if(!this.searching) { // don't restart 
           this.hideProduct();
           this.resetSearch();
         }
+****/
 
         this.searching = true;
         let results = this.search(type, criteria);
@@ -652,10 +666,11 @@ window.console.log("generateResultsTable..");
                              <span class="glyphicon glyphicon-unchecked"></span>
                              </button>
                          </th>
-                         <th class="hoverColor" onClick="sortMetadataTableByRow(1,'a')">Track&nbsp<span id='sortCol_1' class="fas fa-angle-down"></span></th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(2,'n')">Lat&nbsp<span id='sortCol_2' class="fas fa-angle-down"></span></th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(3,'n')">Lon&nbsp<span id='sortCol_3' class="fas fa-angle-down"></span></th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(3,'n')">Velocity&nbsp<span id='sortCol_4' class="fas fa-angle-down"></span>(units)</th>
+                         <th class="hoverColor" style="display:none" onClick="sortMetadataTableByRow(1,'a')">ID&nbsp<span id='sortCol_1' class="fas fa-angle-down"></span></th>
+                         <th class="hoverColor" onClick="sortMetadataTableByRow(2,'a')">Track&nbsp<span id='sortCol_1' class="fas fa-angle-down"></span></th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(3,'n')">Lat&nbsp<span id='sortCol_2' class="fas fa-angle-down"></span></th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(4,'n')">Lon&nbsp<span id='sortCol_3' class="fas fa-angle-down"></span></th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(5,'n')">Velocity&nbsp<span id='sortCol_4' class="fas fa-angle-down"></span>(units)</th>
 
                         <th style="width:20%;"><div class="col text-center">
 <!--download all -->
@@ -697,6 +712,13 @@ window.console.log("generateResultsTable..");
         return html;
     };
 
+    var changeResultsTableBodyByLayers = function (layers) {
+        var cgm_object = CGM_INSAR;
+        layers.eachLayer(function(layer){
+            cgm_object.addToResultsTable(layer);
+        });
+    };
+
     var changeResultsTableBody = function (results) {
 window.console.log("changeResultsTableBody..");
         var html = "";
@@ -710,6 +732,10 @@ window.console.log("changeResultsTableBody..");
     };
 
    
+    this.replaceResultsTableBodyByLayers = function(layers) {
+        $("#metadata-viewer tbody").html(changeResultsTableBodyByLayers(layers));
+    }
+
     this.replaceResultsTableBody = function(results) {
         window.console.log("calling replaceResultsTableBody");
         $("#metadata-viewer tbody").html(changeResultsTableBody(results));

@@ -21,7 +21,6 @@ var CGM_GNSS = new function () {
 
     // select_result <<= some of selected from cgm_layers
     this.searching = false;
-    this.search_result.removeLayer();
     this.search_result = new L.FeatureGroup();
 
     const cont_site=[];

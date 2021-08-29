@@ -48,6 +48,7 @@ nlat=None
 nlon=None
 ocsvlist=[]
 returnlist=[]
+ogid=gid
 
 for t in tokens :
 #    print(t)
@@ -63,11 +64,12 @@ for t in tokens :
 #           print("What to do..."+t);
            if ttype == 0:
                 if(len(ocsvlist) != 0): 
-                  returnlist.append( {"gid":gid,"tslist":ocsvlist} );
+                  returnlist.append( {"gid":ogid,"tslist":ocsvlist} )
                 gidlist=[]
                 ocsvlist=[]
            elif ttype == 1:
                 otrack=t[:-1]
+                ogid=gid+"_"+otrack
            elif ttype == 2:
                 [nlat, nlon, ntrack]=parse_latlon(t)
                 ocsvlist.append({"lat":nlat,"lon":nlon,"track":ntrack,"file":t})
@@ -76,6 +78,6 @@ for t in tokens :
            ttype=99
 ## get the last one
 if(len(ocsvlist) != 0): 
-  returnlist.append({"gid":gid,"tslist":ocsvlist} );
+  returnlist.append({"gid":ogid,"tslist":ocsvlist} );
 
 print(str(returnlist))

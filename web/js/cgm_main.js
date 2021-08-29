@@ -64,7 +64,7 @@ window.console.log("main(gnss) changing search type.."+type);
           $(this).off('mouseout');
           $(this).off('blur');
 
-window.console.log(">>>> causing a start of search..");
+window.console.log(">>>> causing a start of gnss search..");
 // these is where the change in latlon causes a new search..
 // 
           if( $(this).val() != '' ) {
@@ -109,7 +109,7 @@ window.console.log(">>>> causing a start of search..");
       $(this).on('blur mouseout', function () {
         $(this).off('mouseout');
         $(this).off('blur');
-window.console.log(">>>>XXX causing a start of search..");
+window.console.log(">>>>XXX causing a start of inar search..");
 // these is where the change in latlon causes a new search..
 // 
           if( $(this).val() != '' ) {
@@ -125,7 +125,7 @@ window.console.log(">>>>XXX causing a start of search..");
 window.console.log("FOUND..."+val);
                 let n=isNaN(val);
                 if(!isNaN(val) && val !='') {
-                  criteria.push(val);
+                  criteria.push(parseFloat(val));
                   } else {
                     skip=true;
                 }
@@ -140,6 +140,8 @@ window.console.log("FOUND..."+val);
                   CGM_INSAR.searchBox(searchType, criteria);
               });
             }
+            } else {
+               CGM_INSAR.showSearch();
           }
           $(this).blur();
        });
