@@ -94,7 +94,7 @@ function processCSV(data) {
                    color:'blue',
 // 'yrange':[-300,400],
 //xrange:[xrange_start,xrange_end],
-                  });
+                  }});
 
    window.console.log("loading csv DONE...");
    return csv_plot_data;

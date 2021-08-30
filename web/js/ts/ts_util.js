@@ -52,10 +52,11 @@ function loadAndProcessFromPOS(ulist,tlist) {
 }
 
 function loadAndProcessFromCSV(ulist,tlist) {
+window.console.log("HERE.. for csv");
    let url = ulist[0];
    let ttype = tlist[0];
    let data = ckExist(url);
-   let plot_data=processCSV(data);
+   let plot_data = processCSV(data);
     
    plotly_plot_csv({'type':ttype,'csv':plot_data});
 }
