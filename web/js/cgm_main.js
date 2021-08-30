@@ -148,17 +148,39 @@ window.console.log("FOUND..."+val);
     });
 
 
-// CHECK NOT SURE IF INSAR needs this
     $("#metadata-viewer-container").on('click','td.cgm-data-click', function(){
         if ($(this).find('button[id="cgm-allBtn"]').length != 0) {
             return;
         }
 
-        let $glyphElem = $(this).find('span.cgm-data-row'); 
+        let $glyphElem = $(this).find('span.cgm-data-row');
         let parent = $(this).parent();
 
         let gid = $(parent).data('point-gid');
         let isElemSelected = CGM_GNSS.toggleStationSelectedByGid(gid);
+
+        if (isElemSelected) {
+            $(parent).addClass('row-selected');
+            $glyphElem.removeClass('glyphicon-unchecked').addClass('glyphicon-check');
+        } else {
+            $(parent).removeClass('row-selected');
+            $glyphElem.addClass('glyphicon-unchecked').removeClass('glyphicon-check');
+        }
+
+    });
+
+
+    $("#metadata-viewer-container").on('click','td.cgm-insar-data-click', function(){
+window.console.log("HERE..");
+        if ($(this).find('button[id="cgm-allBtn"]').length != 0) {
+            return;
+        }
+
+        let $glyphElem = $(this).find('span.cgm-insar-data-row'); 
+        let parent = $(this).parent();
+
+        let gid = $(parent).data('point-gid');
+        let isElemSelected = CGM_INSAR.toggleLocationSelectedByGid(gid);
 
         if (isElemSelected) {
             $(parent).addClass('row-selected');

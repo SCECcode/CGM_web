@@ -26,7 +26,7 @@ var CGM_INSAR = new function () {
 
     var cgm_colors = {
 //        normal: '#006E90',
-        normal: '#FF6E90',
+        normal: '#902200',//--red
         selected: '#B02E0C',
         abnormal: '#00FFFF',
     };
@@ -35,7 +35,7 @@ var CGM_INSAR = new function () {
         normal: {
             color: cgm_colors.normal,
             fillColor: cgm_colors.normal,
-            fillOpacity: 0.5,
+            fillOpacity: 0.4,
             radius: 3,
             riseOnHover: true,
             weight: 1,
@@ -46,7 +46,7 @@ var CGM_INSAR = new function () {
             fillOpacity: 1,
             radius: 3,
             riseOnHover: true,
-            weight: 1,
+            weight: 2,
         },
         hover: {
             // color: cgm_colors.selected,
@@ -154,10 +154,10 @@ var CGM_INSAR = new function () {
                     latlngs:latlngs
                 };
 
-                let bb_info = `InSAR track name: ${track_name}`;
-                track.bindTooltip(bb_info);
-                //var popup=L.popup().setContent("InSAR track name: "+track_name);
-                //track.bindPopup(popup);
+                //let bb_info = `InSAR track name: ${track_name}`;
+                //track.bindTooltip(bb_info);
+                var popup=L.popup().setContent("InSAR track name: "+track_name);
+                track.bindPopup(popup);
                 this.cgm_track_layers.addLayer(track);
             }
         }
@@ -207,7 +207,7 @@ var CGM_INSAR = new function () {
         $row = $(`tr[data-point-gid='${gid}'`);
         $row.addClass('row-selected');
 
-        let $glyphElem = $row.find('span.cgm-data-row');
+        let $glyphElem = $row.find('span.cgm-insar-data-row');
         $glyphElem.removeClass('glyphicon-unchecked').addClass('glyphicon-check');
 
         this.upSelectCount(gid);
@@ -228,7 +228,7 @@ var CGM_INSAR = new function () {
 
         let $row = $(`tr[data-point-gid='${gid}'`);
         $row.removeClass('row-selected');
-        let $glyphElem = $row.find('span.cgm-data-row');
+        let $glyphElem = $row.find('span.cgm-insar-data-row');
         $glyphElem.addClass('glyphicon-unchecked').removeClass('glyphicon-check');
 
         this.downSelectCount(gid);
@@ -363,14 +363,14 @@ var generateTableRow = function(layer) {
         let label = layer.scec_properties.gid;
 
         html += `<tr data-point-gid="${layer.scec_properties.gid}">`;
-        html += `<td style="width:25px" class="cgm-data-click button-container"> <button class="btn btn-sm cxm-small-btn" id="" title="highlight the station" onclick=''>
-            <span class="cgm-data-row glyphicon glyphicon-unchecked"></span>
+        html += `<td style="width:25px;text-align:center" class="cgm-insar-data-click button-container"> <button class="btn btn-sm cxm-small-btn" id="" title="highlight the location" onclick=''>
+            <span class="cgm-insar-data-row glyphicon glyphicon-unchecked"></span>
         </button></td>`;
-        html += `<td class="cgm-data-click" style="display:none">${layer.scec_properties.gid}</td>`;
-        html += `<td class="cgm-data-click">${layer.scec_properties.track}</td>`;
-        html += `<td class="cgm-data-click">${layer.scec_properties.lat}</td>`;
-        html += `<td class="cgm-data-click">${layer.scec_properties.lon}</td>`;
-        html += `<td class="cgm-data-click">${layer.scec_properties.velocity}</td>`;
+        html += `<td class="cgm-insar-data-click" style="display:none">${layer.scec_properties.gid}</td>`;
+        html += `<td class="cgm-insar-data-click">${layer.scec_properties.track}</td>`;
+        html += `<td class="cgm-insar-data-click">${layer.scec_properties.lat}</td>`;
+        html += `<td class="cgm-insar-data-click">${layer.scec_properties.lon}</td>`;
+        html += `<td class="cgm-insar-data-click">${layer.scec_properties.velocity}</td>`;
         html += `<td class="text-center">`;
         html += `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM_INSAR.executePlotTS([\"${downloadURL}\"],[\"${layer.scec_properties.track}\"])>plotTS&nbsp<span class=\"far fa-chart-line\"></span></button>`;
         html += `</tr>`;
@@ -495,6 +495,8 @@ window.console.log(">>> calling freshSearch..");
         }
     };
 
+// showing php result on the map and also saving it to
+// search_result, results could be 1 marker layer, or a layer with many marker layers
     this.showPHP = function(type, results, ncriteria) {
 
         if (results.length === 0) {
@@ -502,9 +504,11 @@ window.console.log(">>> calling freshSearch..");
         } else {
             let markerLocations = [];
 
+window.console.log("STASHING "+results.length+" layers from PHP calls");
             for (let i = 0; i < results.length; i++) {
                 markerLocations.push(results[i].getLatLng());
                 this.search_result.addLayer(results[i]);
+                this.cgm_layers.addLayer(results[i]);
             }
 
             this.showLocationsByLayers(this.search_result);
@@ -518,19 +522,18 @@ window.console.log(">>> calling freshSearch..");
                 markerLocations.push(L.latLng(ncriteria[0],ncriteria[1]));
                 markerLocations.push(L.latLng(ncriteria[2],ncriteria[3]));
                 let bounds = L.latLngBounds(markerLocations);
-                viewermap.fitBounds(bounds, {maxZoom: 12});
+                viewermap.fitBounds(bounds, {maxZoom: 10});
                 setTimeout(skipRectangle, 500);
 
             } else if (type == this.searchType.location) {
                 let bounds = L.latLngBounds(markerLocations);
-                viewermap.flyToBounds(bounds, {maxZoom: 12 });
+                viewermap.flyToBounds(bounds, {maxZoom: 10 });
 // make sure the search box is refilled with actual lat lon
                 $("#cgm-insar-LatTxt").val(ncriteria[0]);
                 $("#cgm-insar-LonTxt").val(ncriteria[1]);
             }
         }
 
-window.console.log("HERE..");
 // NEED to append instead of replace ????
 //        this.replaceResultsTableBody(results);
         this.replaceResultsTableBodyByLayers(this.search_result);
@@ -593,7 +596,7 @@ window.console.log("Did not find any result");
                            // create a ncriteria
                            ncriteria.push(nlat);
                            ncriteria.push(nlon);
-                           let marker_layer=addMarkerLayer(nlat,nlon);
+                           let marker_layer=L.circleMarker([nlat,nlon],cgm_marker_style.normal);
                            marker_layer.scec_properties = {
                                  track: track_name,
                                  lat: nlat,

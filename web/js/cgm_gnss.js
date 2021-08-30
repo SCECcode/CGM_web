@@ -412,6 +412,7 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
     };
 
     this.selectStationByLayer = function (layer, moveTableRow=false) {
+window.console.log("HERE.. selectStationByLayer..");
         layer.scec_properties.selected = true;
         layer.setStyle(cgm_marker_style.selected);
         layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.selected);
@@ -693,8 +694,6 @@ window.console.log("Hide product, GNSS");
         if (CGM_GNSS.searching) {
             CGM_GNSS.search_result.remove();
         } else {
-//??? XX remove all the layers ??
-window.console.log("hideProduct.. BAD.. should not be here..");
             this.cgm_layers.remove();
         }
 
