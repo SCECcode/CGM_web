@@ -17,7 +17,7 @@ function setIframHeight(id) {
 var TS_track_view = 0;
 var TS_urllist=[];
 var TS_ftypelist=[]; 
-var TS_ptype=None; 
+var TS_ptype= 0; 
 
 function skipUpdateTS(nx) {
   if(TS_track_view == nx) { 

@@ -324,10 +324,12 @@ window.console.log("calling.. addToResultsTable..");
       showPlotTSWarning();
     }
 
-    this.downloadURLsAsZip = function(layer) {
+// could be D071,A064,D173,A166
+    this.downloadURLsAsZip = function(track_target) {
         var nzip=new JSZip();
         var layers=CGM_INSAR.search_result.getLayers();
         let timestamp=$.now();
+        let zcnt=0;
       
         var cnt=layers.length;
         for(var i=0; i<cnt; i++) {
@@ -336,19 +338,26 @@ window.console.log("calling.. addToResultsTable..");
           if( !layer.scec_properties.selected ) {
             continue;
           }
-      
-// TODO
-          let downloadURL = getDataDownloadURL(layer.scec_properties.file);
-          let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
-          let promise = $.get(downloadURL);
-          nzip.file(dname,promise);
+
+          let ttype=layer.scec_properties.track;
+          if(ttype=="all" || ttype==track_target) {
+              let downloadURL = getDataDownloadURL(layer.scec_properties.file);
+              let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
+              let promise = $.get(downloadURL);
+              nzip.file(dname,promise);
+              zcnt=zcnt+1;
+          }
         }
-      
-        var zipfname="CGM_INSAR_"+timestamp+".zip"; 
-        nzip.generateAsync({type:"blob"}).then(function (content) {
+
+        if(zcnt > 0) {
+          var zipfname="CGM_INSAR_"+timestamp+".zip"; 
+          nzip.generateAsync({type:"blob"}).then(function (content) {
           // see FileSaver.js
-          saveAs(content, zipfname);
-        })
+            saveAs(content, zipfname);
+          })
+        } else {
+window.console.log("CGM_INSAR: no matching ts to download..");
+        }
     }
 
 var generateTableRow = function(layer) {
@@ -684,17 +693,17 @@ window.console.log("generateResultsTable..");
                                     DOWNLOAD&nbsp<span id="download-counter"></span>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <button class="dropdown-item" type="button" value="track1"
-                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);">track1
+                                    <button class="dropdown-item" type="button" value="D071"
+                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);">D071
                                     </button>
-                                    <button class="dropdown-item" type="button" value="track2"
-                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);">track2
+                                    <button class="dropdown-item" type="button" value="D173"
+                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);">D173
                                     </button>
-                                    <button class="dropdown-item" type="button" value="track3"
-                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);">track3
+                                    <button class="dropdown-item" type="button" value="A064"
+                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);">A064
                                     </button>
-                                    <button class="dropdown-item" type="button" value="track4"
-                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);">track4
+                                    <button class="dropdown-item" type="button" value="A166"
+                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);">A166
                                     </button>
                                     <button class="dropdown-item" type="button" value="all"
                                           onclick="CGM_INSAR.downloadURLsAsZip(this.value);">All of the Above

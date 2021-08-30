@@ -107,8 +107,9 @@ function showTSview(urls,ptype,ftypes) {
 
   let ublob=JSON.stringify(url);
   let fblob=JSON.stringify(ftype);
+  let pblob=JSON.stringify(ptype);
 
-  let params= "urls="+ublob+"&ptype="+ptype+"&ftypes="+fblob;
+  let params= "urls="+ublob+"&ptype="+pblob+"&ftypes="+fblob;
   set_PARAMS(params);
 
   $('#viewTSIfram').attr('src',"cgm_ts.html?"+params);
@@ -118,8 +119,9 @@ function _replotTSview(url,ptype,ftype) {
    // send url/ftype to the 
   let ublob=JSON.stringify(url);
   let fblob=JSON.stringify(ftype);
+  let pblob=JSON.stringify(ptype);
 
-  let params= "urls="+ublob+"&ptype="+ptype+"&ftypes="+fblob;
+  let params= "urls="+ublob+"&ptype="+pblob+"&ftypes="+fblob;
   set_PARAMS(params);
 
   let childw=document.getElementById('viewTSIfram');
