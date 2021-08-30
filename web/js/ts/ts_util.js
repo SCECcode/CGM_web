@@ -4,6 +4,7 @@
 // tracking parsed pos data
 
 var TS_pos_data=[];
+var TS_csv_data=[];
 
 // should be a very small file and used for testing and so can ignore
 // >>Synchronous XMLHttpRequest on the main thread is deprecated
@@ -25,9 +26,9 @@ function ckExist(url) {
 };
 
 //always the first one.
-function loadAndProcessFromFile(ulist,tlist) {
+function loadAndProcessFromPOS(ulist,tlist) {
 
-  let sz=TS_pos_data.length;
+  let sz=TS_pos_data.length; // to be reused
   let ftype=tlist[0];
   let url=ulist[0];
   let i;
@@ -47,8 +48,16 @@ function loadAndProcessFromFile(ulist,tlist) {
      pos={'type':ftype,'pos':plot_data};
      TS_pos_data.push(pos);
    }
-
    plotly_plot_pos(pos);
+}
+
+function loadAndProcessFromCSV(ulist,tlist) {
+   let url = ulist[0];
+   let ttype = tlist[0];
+   let data = ckExist(url);
+   let plot_data=processCSV(data);
+    
+   plotly_plot_csv({'type':ttype,'csv':plot_data});
 }
 
 function changeTSview(params) {
@@ -56,17 +65,17 @@ function changeTSview(params) {
   plotly_plot_clear();
 
   // grab new params,
-  [urls, ftypes]=getParams(params);
-  window.console.log("changeTSview.."+urls[0]+" "+ftypes[0]);
+  [urls, ptype, ftypes]=getParams(params);
+  window.console.log("changeTSview.."+urls[0]+" "+ptype+" "+ftypes[0]);
 
-  loadAndProcessFromFile(urls,ftypes);
+  loadAndProcessFromFile(urls,ptype, ftypes);
 }
 
 // https://stackoverflow.com/questions/28295870/how-to-pass-parameters-through-iframe-from-parent-html
 function getParams(param) {
 
   if(param == "") {
-    // expecting  "urls=...&ftypes=...""
+    // expecting  "urls=...&ptype=..&ftypes=...""
     param = window.location.search.substring(1);
   }
   window.console.log("param string is .."+param);
@@ -75,6 +84,7 @@ function getParams(param) {
   }
 
   let myURL;
+  let myPtype;
   let myFtype;
 
   let qArray = param.split('&'); //get key-value pairs
@@ -87,6 +97,9 @@ function getParams(param) {
         case "urls":
              myURL=JSON.parse(dd);
              break;
+        case "ptype":
+             myPtype=JSON.parse(dd);
+             break;
         case "ftypes":
              myFtype=JSON.parse(dd);
              break;
@@ -96,9 +109,10 @@ function getParams(param) {
      }
   }
 window.console.log("myURL "+ myURL);
+window.console.log("myPtype "+ myPtype);
 window.console.log("myFtype "+ myFtype);
 
-  return [myURL, myFtype];
+  return [myURL, myPtype, myFtype];
 }
 
 

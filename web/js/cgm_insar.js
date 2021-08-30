@@ -338,7 +338,7 @@ window.console.log("calling.. addToResultsTable..");
           }
       
 // TODO
-          let downloadURL = getDataDownloadURL(layer.scec_properties.location);
+          let downloadURL = getDataDownloadURL(layer.scec_properties.file);
           let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
           let promise = $.get(downloadURL);
           nzip.file(dname,promise);
@@ -359,7 +359,7 @@ var generateTableRow = function(layer) {
         coordinates = {lat: parseFloat(coordinates.lat).toFixed(2), lng: parseFloat(coordinates.lng).toFixed(2) };
 
 // XXX??
-        let downloadURL = getDataDownloadURL(layer.scec_properties.location);
+        let downloadURL = getDataDownloadURL(layer.scec_properties.file);
         let label = layer.scec_properties.gid;
 
         html += `<tr data-point-gid="${layer.scec_properties.gid}">`;
@@ -575,11 +575,11 @@ window.console.log("Did not find any result");
                  let jblob=JSON.parse(tmp[0].replace(/'/g,'"'));
 /*****
 [{'gid':'label1', 
-'tslist':[{'lat':35.32064,'lon':-116.57164,'velocity':XX,'track':'D071','file':'../result/pixel_-116.57164_35.32064_D071.csv'}, 
-       {'lat':34.0522,'lon':-118.2437,'velocity':XX,'track':'D071','file':'../result/pixel_-118.2437_34.0522_D071.csv'}]},
+'tslist':[{'lat':35.32064,'lon':-116.57164,'velocity':XX,'track':'D071','file':'pixel_-116.57164_35.32064_D071.csv'}, 
+       {'lat':34.0522,'lon':-118.2437,'velocity':XX,'track':'D071','file':'pixel_-118.2437_34.0522_D071.csv'}]},
 {'gid':'label1',
- 'tslist':[{'lat':35.32064,'lon':-116.57164,'velocity':XX,'track':'D077','file':'../result/pixel_-116.57164_35.32064_D077.csv'},
-        {'lat':34.0522,'lon':-118.2437,'velocity':XX,'track':'D077','file':'../result/pixel_-118.2437_34.0522_D077.csv'}]}]
+ 'tslist':[{'lat':35.32064,'lon':-116.57164,'velocity':XX,'track':'D077','file':'pixel_-116.57164_35.32064_D077.csv'},
+        {'lat':34.0522,'lon':-118.2437,'velocity':XX,'track':'D077','file':'pixel_-118.2437_34.0522_D077.csv'}]}]
 ****/
                  for(let i=0; i< jblob.length; i++) {
                      let item=jblob[i];

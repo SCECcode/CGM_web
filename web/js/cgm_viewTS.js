@@ -100,26 +100,26 @@ function get_PARAMS() {
 // ftypes -> array/for GNSS 
 function showTSview(urls,ptype,ftypes) {
 
-  setupTSviewSelection(urls,ftypes);
-  [url,ftype] = getTSviewSelection();
+  setupTSviewSelection(urls,ptype,ftypes);
+  [url,ptype,ftype] = getTSviewSelection();
 
   $('#modalTS').modal('show');
 
   let ublob=JSON.stringify(url);
   let fblob=JSON.stringify(ftype);
 
-  let params= "urls="+ublob+"&ftypes="+fblob;
+  let params= "urls="+ublob+"&ptype="+ptype+"&ftypes="+fblob;
   set_PARAMS(params);
 
   $('#viewTSIfram').attr('src',"cgm_ts.html?"+params);
 }
 
-function _replotTSview(url,ftype) {
+function _replotTSview(url,ptype,ftype) {
    // send url/ftype to the 
   let ublob=JSON.stringify(url);
   let fblob=JSON.stringify(ftype);
 
-  let params= "urls="+ublob+"&ftypes="+fblob;
+  let params= "urls="+ublob+"&ptype="+ptype+"&ftypes="+fblob;
   set_PARAMS(params);
 
   let childw=document.getElementById('viewTSIfram');
@@ -172,8 +172,8 @@ window.addEventListener("DOMContentLoaded", function () {
 function refreshTSview() {
   let rc=resetTSviewSelection();
   if(rc) { // need to replot
-    [url,ftype] = getTSviewSelection();
-    _replotTSview(url,ftype);
+    [url,ptype,ftype] = getTSviewSelection();
+    _replotTSview(url,ptype,ftype);
   }
 }
 
@@ -206,10 +206,10 @@ function toggleTSview() {
     window.console.log("skip frame type toggling ..."+nx);
     } else {
       updateTSviewSelection(nx);
-      [url,ftype]=getTSviewSelection(); 
+      [url,ptype,ftype]=getTSviewSelection(); 
 window.console.log("server,need to toggle to "+url[0]);
 window.console.log("server,need to toggle to "+ftype[0]);
-      _replotTSview(url,ftype);
+      _replotTSview(url,ptype,ftype);
   }
 }
 

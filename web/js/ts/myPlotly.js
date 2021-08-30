@@ -10,13 +10,19 @@ jQuery(document).ready(function() {
   let frameHeight=window.innerHeight;
   let frameWidth=window.innerWidth;
 
-  [urls, ftypes]=getParams("");
+  [urls, ptype, ftypes]=getParams("");
+
+window.console.log("from myPlotly.js.."+ftypes);
 
 //  let myURL=['cgm_data/ANA1.cgm.wmrss_igb14.pos'];
 //  let myFtypes=[ 'igb14' ];
 //  loadAndProcessFromFile(myURL, myFtypes);
 
-  loadAndProcessFromFile(urls,ftypes);
+  if(ptype == "gnss") {
+    loadAndProcessFromPOS(urls,ptype,ftypes);
+    } else {
+      loadAndProcessFromCSV(urls,ptype,ftypes);
+  }
 
 }) // end of MAIN
 

@@ -17,6 +17,7 @@ function setIframHeight(id) {
 var TS_track_view = 0;
 var TS_urllist=[];
 var TS_ftypelist=[]; 
+var TS_ptype=None; 
 
 function skipUpdateTS(nx) {
   if(TS_track_view == nx) { 
@@ -29,8 +30,9 @@ function updateTSviewSelection(nx) {
   TS_track_view=nx;
 }
 
-function setupTSviewSelection(urllist, ftypelist) {
+function setupTSviewSelection(urllist, ptype, ftypelist) {
   TS_urllist=urllist;
+  TS_ptype=ptype;
   TS_ftypelist=ftypelist;
   if(TS_ftypelist.length == 1) {
     window.console.log("HERE.. no need for type toggle");
@@ -41,7 +43,7 @@ function setupTSviewSelection(urllist, ftypelist) {
 }
 
 function getTSviewSelection(){
-  return [ [TS_urllist[TS_track_view]], [TS_ftypelist[TS_track_view]]];
+  return [ [TS_urllist[TS_track_view]],TS_ptype,[TS_ftypelist[TS_track_view]]];
 }
 
 function resetTSviewSelection(){

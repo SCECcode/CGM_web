@@ -16,7 +16,7 @@ def parse_latlon(file):
     lon=float(item[1])
     lat=float(item[2])
     track=item[3].split(".")[0]
-    return [lat, lon, track]
+    return [lat, lon, fname, track]
 
 def get_velocity(a_hdf5file, lat, lon):
     a_pixel = [lon, lat]
@@ -83,10 +83,9 @@ for t in tokens :
                 otrack=t[:-1]
                 ogid=gid+"_"+otrack
            elif ttype == 2:
-                [nlat, nlon, ntrack]=parse_latlon(t)
+                [nlat, nlon, nfile, ntrack]=parse_latlon(t)
                 nvel=get_velocity(ofile,nlat,nlon);
-                ocsvlist.append({"lat":nlat,"lon":nlon,"velocity":nvel,"track":ntrack,"file":t})
-
+                ocsvlist.append({"lat":nlat,"lon":nlon,"velocity":nvel,"track":ntrack,"file":nfile})
            else:
                 print("BAD...",ttype);
            ttype=99

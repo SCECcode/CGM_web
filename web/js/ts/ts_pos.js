@@ -1,5 +1,7 @@
 /*** 
    ts_pos.js
+
+For GNSS
 ***/
 //
 // parsing pos file content and extract information for plotting
