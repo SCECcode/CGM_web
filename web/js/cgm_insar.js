@@ -410,13 +410,6 @@ var generateTableRow = function(layer) {
     this.showProduct = function () {
         let $cgm_model_checkbox = $("#cgm-model-insar");
 
-/* This does not apply to INSAR
-        if (this.searching) {
-            this.search_result.addTo(viewermap);
-        } else {
-            this.cgm_layers.addTo(viewermap);
-        }
-*/
         // and show the boundary layer
         if (!$cgm_model_checkbox.prop('checked')) {
             $cgm_model_checkbox.prop('checked', true);
@@ -433,13 +426,6 @@ var generateTableRow = function(layer) {
 // XX CHECK
     this.hideProduct = function () {
 window.console.log("Hide model/product");
-/** 
-        if (CGM_INSAR.searching) {
-            CGM_INSAR.search_result.remove();
-        } else {
-            this.cgm_layers.remove();
-        }
-**/
         let $cgm_model_checkbox = $("#cgm-model-insar");
         if ($cgm_model_checkbox.prop('checked')) {
             $cgm_model_checkbox.prop('checked', false);
@@ -455,6 +441,8 @@ window.console.log("Hide model/product");
         this.searching = false;
         this.search_result.removeLayer();
         this.search_result = new L.FeatureGroup();
+// also clear out this.cgm_layers
+        this.cgm_layers = new L.FeatureGroup();
 
         //?? this.showProduct();
 
@@ -683,7 +671,7 @@ window.console.log("generateResultsTable..");
                          <th class="hoverColor" onClick="sortMetadataTableByRow(2,'a')">Track&nbsp<span id='sortCol_1' class="fas fa-angle-down"></span></th>
                         <th class="hoverColor" onClick="sortMetadataTableByRow(3,'n')">Lat&nbsp<span id='sortCol_2' class="fas fa-angle-down"></span></th>
                         <th class="hoverColor" onClick="sortMetadataTableByRow(4,'n')">Lon&nbsp<span id='sortCol_3' class="fas fa-angle-down"></span></th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(5,'n')">Velocity&nbsp<span id='sortCol_4' class="fas fa-angle-down"></span>(units)</th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(5,'n')">Velocity&nbsp<span id='sortCol_4' class="fas fa-angle-down"></span>(units??)</th>
 
                         <th style="width:20%;"><div class="col text-center">
 <!--download all -->

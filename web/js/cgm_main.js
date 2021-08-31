@@ -202,7 +202,7 @@ window.console.log("==> reset what was there/INSAR");
           CGM_INSAR.reset();
        }
 
-// setto new interface
+// set to new interface
        if ($(this).val() == 'gnss') {
            CGM_GNSS.setupCGMInterface();
        }

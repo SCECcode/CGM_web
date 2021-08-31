@@ -31,7 +31,7 @@ Datetime, LOS, Std Dev LOS
 *******************/
 // has 1 plot
 // {id:idx, track: [ { cgm_id:'SOMETHING',
-//                       cgm_name:'D071' }],
+//                     cgm_track:'D071' }],
 //          plot:[{xlabel:'time',
 //                ylabel:'East(mm)',
 //                x:[...],
@@ -41,14 +41,23 @@ Datetime, LOS, Std Dev LOS
 //                xrange:[-300,400],
 //                yrange:[2000,2022]}, ...] }
 
+//to '2013-10-04 22:23:00'
+function toTime(dstr) {
+   let newdstr=dstr.replace('T',' ').replace('Z,','');
+window.console.log("new time.."+newdstr);
+   return newdstr;
+}
+
 function processCSV(data) {
    var csv_plot_data = [];
    var data_start=0;
    let dlines=data.split("\n");
    let sz=dlines.length;
-   let i;
-   let cgm_id='SOMETHING';
-   let cgm_name;
+   let cgm_id='';
+   let cgm_track='';
+   let cgm_lat=0;
+   let cgm_lon=0;
+   let cgm_hgt=0;
    let xrange_start,xrange_end;
    let yrange_start,yrange_end;
    let Xtime=[];
@@ -59,7 +68,7 @@ function processCSV(data) {
 
    let data_count=0;
 
-   for(i=0; i<sz; i++) {
+   for(let i=0; i<sz; i++) {
      let line=dlines[i];
 
      if(line == "") { // there is an empty line at the very end
@@ -69,7 +78,7 @@ function processCSV(data) {
      if(data_start) {
          data_count=data_count+1;
          let vals=(line.trim().replace(/ +/g," ")).split(" ");
-         let xtime=vals[0];
+         let xtime=toTime(vals[0]);
          let ynorth=parseFloat(vals[1]);
          let ynorth_e=parseFloat(vals[2]);
 
@@ -78,12 +87,40 @@ function processCSV(data) {
          Ynorth_e.push(ynorth_e);
          continue;
      }
+
+     let pair=line.split(":");
+     let terms=pair[0].split(" ");
+
+     if(terms[0]=="Datetime,") {
+         data_start=1;
+         continue;
+     }
+
+     if(terms[1]=="SAR" && terms[2]=="mission") {
+         cgm_id=pair[1].trim();
+         continue;
+     }
+     if(terms[1]=="SAR" && terms[2]=="track") {
+         cgm_track=pair[1].trim();
+         continue;
+     }
+
+//# LLH Pixel: Lon: -118.152466; Lat: 34.011689; Hgt: 19.595402
+     if(terms[1]=="LLH" && terms[2]=="Pixel") {
+         terms=pair[2].split(";");
+         cgm_lon=terms[0].trim();
+         terms=pair[3].split(";");
+         cgm_lat=terms[0].trim();
+         cgm_hgt=pair[4].trim();
+         cgm_id=cgm_id+"("+cgm_lon+","+cgm_lat+")";
+         continue;
+     }
    }
 
    csv_plot_data.push({
             station: { cgm_id:cgm_id,
-                       cgm_name:cgm_name,
-                       cgm_frame:cgm_frame},
+                       cgm_track:cgm_track
+                     },
             plot:[
                   {xlabel:'time',
                    ylabel:'North(mm)',
@@ -91,10 +128,10 @@ function processCSV(data) {
                    x:Xtime,
                    y:Ynorth,
                    yError:Ynorth_e,
-                   color:'blue',
+                   color:'blue'
+                  }]});
 // 'yrange':[-300,400],
 //xrange:[xrange_start,xrange_end],
-                  }});
 
    window.console.log("loading csv DONE...");
    return csv_plot_data;

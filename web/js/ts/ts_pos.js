@@ -87,7 +87,6 @@ function processPOS(data) {
    var data_start=0;
    let dlines=data.split("\n");
    let sz=dlines.length;
-   let i;
    let cgm_id;
    let cgm_name;
    let cgm_frame;
@@ -119,7 +118,7 @@ raw time series, as we are here)
    let wrms_bottom_up=0;
    let data_count=0;
 
-   for(i=0; i<sz; i++) {
+   for(let i=0; i<sz; i++) {
      let line=dlines[i];
 
      if(line == "") { // there is an empty line at the very end

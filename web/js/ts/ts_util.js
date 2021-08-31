@@ -52,7 +52,6 @@ function loadAndProcessFromPOS(ulist,tlist) {
 }
 
 function loadAndProcessFromCSV(ulist,tlist) {
-window.console.log("HERE.. for csv");
    let url = ulist[0];
    let ttype = tlist[0];
    let data = ckExist(url);

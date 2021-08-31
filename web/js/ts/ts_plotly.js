@@ -309,8 +309,10 @@ function plotly_plot_csv(cdata) {
 
   window.console.log("nw "+nw+" nh "+nh);
 
-  let pUp=csv_data.plot;   
-  let info=csv_data.station;
+  let plot=csv_data[0].plot;   
+  let info=csv_data[0].station;
+
+  let pUp=plot[0];   
 
   let scec_image=[{
         source: "img/SCEC_Traditional_Logo_Red.png",
@@ -332,11 +334,12 @@ function plotly_plot_csv(cdata) {
                         type: 'data',
                         array: pUp.yError,
                         visible: true,
-    color: '#000000',
-    thickness: 1,
-    width: 1.5,
-    opacity: 0.8 
+                        color: '#000000',
+                        thickness: 1,
+                        width: 1.5,
+                        opacity: 0.8 
                   },
+                  mode: 'markers',
                   type: 'scatter' };
 
   let data = [traceUp ];
@@ -344,14 +347,14 @@ function plotly_plot_csv(cdata) {
   let layout = { 
 paper_bgcolor: '#f1fff1',
 plot_bgcolr: '#f1fff1',
-title: info.cgm_name+" ("+info.cgm_frame+")",
+title: info.cgm_id+" ("+info.cgm_track+")",
 width: nw,
 height: nh,
 margin: { l:margin_left, t:margin_top, r:margin_right },
 colorway: [ '#1f77b4','#1f77b4','#1f77b4'],
 images: scec_image,
 yaxis: {
-    title: {text: 'Up(mm)', font: { size:18,color:'#000000'}},
+    title: {text: 'LOS(mm)', font: { size:18,color:'#000000'}},
     showgrid: true,
     zeroline: true,
     showline: true,
@@ -366,8 +369,8 @@ yaxis: {
     linewidth: 2 },
 xaxis: {
     tickmode: "linear",
-    tick0: '2000-01-01',
-    dtick: 'M24', // number of months
+    tick0: '2015-01-01',
+    dtick: 'M4', // number of months
     matches: 'x',
     showgrid: true,
     zeroline: true,
