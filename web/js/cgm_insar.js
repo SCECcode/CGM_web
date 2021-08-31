@@ -439,18 +439,16 @@ window.console.log("Hide model/product");
         this.zeroSelectCount()
         this.showSearch('none');
         this.searching = false;
+//XX
+window.console.log("HERe...should be removing all INSAR marker layers here..
         this.cgm_layers.removeLayer();
         this.search_result.removeLayer();
         this.search_result = new L.FeatureGroup();
 // also clear out this.cgm_layers
         this.cgm_layers = new L.FeatureGroup();
 
-        //?? this.showProduct();
-
         skipRectangle();
         skipPoint();
-//XX        remove_bounding_rectangle_layer();
-//XX        remove_marker_point_layer();
         this.replaceResultsTableBody([]);
 
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
