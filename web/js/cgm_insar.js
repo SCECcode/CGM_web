@@ -439,6 +439,7 @@ window.console.log("Hide model/product");
         this.zeroSelectCount()
         this.showSearch('none');
         this.searching = false;
+        this.cgm_layers.removeLayer();
         this.search_result.removeLayer();
         this.search_result = new L.FeatureGroup();
 // also clear out this.cgm_layers
