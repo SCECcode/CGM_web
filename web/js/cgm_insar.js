@@ -4,8 +4,10 @@
 
 var CGM_INSAR = new function () {
 
-    this.cgm_velocity_max = -1;
-    this.cgm_velocity_min = 0;
+    // useful range 
+    this.cgm_velocity_max = 30;
+    this.cgm_velocity_min = -30;
+
     this.cgm_velocity_loc = 0;
 
     // cgm_track_layers <== all polygon layers for each insar track
@@ -439,12 +441,9 @@ window.console.log("Hide model/product");
         this.zeroSelectCount()
         this.showSearch('none');
         this.searching = false;
-//XX
-window.console.log("HERe...should be removing all INSAR marker layers here..
-        this.cgm_layers.removeLayer();
-        this.search_result.removeLayer();
+        this.cgm_layers.remove();
+        this.search_result.remove();
         this.search_result = new L.FeatureGroup();
-// also clear out this.cgm_layers
         this.cgm_layers = new L.FeatureGroup();
 
         skipRectangle();
@@ -467,9 +466,6 @@ window.console.log("insar calling -->> resetSearch..");
         this.replaceResultsTableBody([]);
         skipRectangle();
         skipPoint();
-//XX        remove_bounding_rectangle_layer();
-//XX        remove_marker_point_layer();
-
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
         this.clearAllSelections();
     };
