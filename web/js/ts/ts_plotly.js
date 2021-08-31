@@ -371,6 +371,8 @@ xaxis: {
     tickmode: "linear",
     tick0: '2015-01-01',
     dtick: 'M4', // number of months
+    tickformat:'%b %Y',
+    tickangle: 45,
     matches: 'x',
     showgrid: true,
     zeroline: true,
