@@ -1,0 +1,4 @@
+
+./extract_insar_ts.py '{"filelist":["../cgm_data/insar/USGS_D071_InSAR_v0_0_1.hdf5","../cgm_data/insar/USGS_D072_InSAR_v0_0_1.hdf5"],"gid":"CGM_123","result":["../result"],"pixellist":[{"label":"ref_p","lat":35.32065,"lon":-116.57164},{"label":"la_p","lat":34.0522,"lon":-118.2437}]}'
+
+
