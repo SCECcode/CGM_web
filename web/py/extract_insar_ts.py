@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
 ### only 1 track at a time
-
 import cgm_library
 import sys
 import json
 import io
 from contextlib import redirect_stdout
+import pdb
 
 ######################################
 ##Writing ../result/pixel_-118.2437_34.0522_D071.csv 
@@ -43,8 +43,9 @@ for term in plist :
   pixel_list.append( [ term['lon'], term['lat'] ] )
 
 with redirect_stdout(io.StringIO()) as f:
-    cgm_library.hdf5_to_geocsv.extract_csv_wrapper(flist, pixel_list, result);
+    rout=cgm_library.hdf5_to_geocsv.extract_csv_wrapper(flist, pixel_list, result);
 s = f.getvalue()
+
 
 ##Reading file ../cgm_data/insar/USGS_D071_InSAR_v0_0_1.hdf5 
 ##Reading track D071: 
@@ -60,6 +61,7 @@ nlon=None
 ocsvlist=[]
 returnlist=[]
 ogid=gid
+idx=0
 
 for t in tokens :
 ##    print(t)
@@ -84,8 +86,9 @@ for t in tokens :
                 ogid=gid+"_"+otrack
            elif ttype == 2:
                 [nlat, nlon, nfile, ntrack]=parse_latlon(t)
-                nvel=get_velocity(ofile,nlat,nlon);
+                nvel=rout[idx][2]
                 ocsvlist.append({"lat":nlat,"lon":nlon,"velocity":nvel,"track":ntrack,"file":nfile})
+                idx=idx+1
            else:
                 print("BAD...",ttype);
            ttype=99
