@@ -5,7 +5,7 @@ var rectangle_options = {
               stroke: true,
               color: "blue",
               weight: 2,
-              opacity: 0.5,
+              opacity: 0.2,
               fill: true,
               fillColor: null, //same as color by default
               fillOpacity: 0.08,
@@ -162,10 +162,11 @@ var scecAttribution ='<a href="https://www.scec.org">SCEC</a>';
   pointDrawer = new L.Draw.Marker(mymap, point_options);
 
   rectangleDrawer = new L.Draw.Rectangle(mymap, rectangle_options);
+
   mymap.on(L.Draw.Event.CREATED, function (e) {
     var type = e.layerType,
         layer = e.layer;
-    if (type === 'rectangle') {  // only tracks retangles
+    if (type === 'rectangle') {  // tracks retangles
         // get the boundary of the rectangle
         var latlngs=layer.getLatLngs();
         // first one is always the south-west,

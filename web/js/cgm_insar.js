@@ -177,7 +177,7 @@ var CGM_INSAR = new function () {
 
         if (layer.scec_properties.selected) {
             this.selectLocationByLayer(layer, clickFromMap);
-            // if this locatin is not in search result, should add it in XXX
+            // if this locatin is not in search result, should add it in XX
             let i=this.search_result.getLayerId(layer);
             if(!containsLayer(this.search_result,layer)) {
                 let tmp=this.search_result;
@@ -345,6 +345,7 @@ window.console.log("calling.. addToResultsTable..");
           if(ttype=="all" || ttype==track_target) {
               let downloadURL = getDataDownloadURL(layer.scec_properties.file);
               let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
+
               let promise = $.get(downloadURL);
               nzip.file(dname,promise);
               zcnt=zcnt+1;
@@ -366,10 +367,6 @@ var generateTableRow = function(layer) {
         let $table = $("#metadata-viewer");
         let html = "";
      
-        let coordinates = layer.getLatLng();
-        coordinates = {lat: parseFloat(coordinates.lat).toFixed(2), lng: parseFloat(coordinates.lng).toFixed(2) };
-
-// XXX??
         let downloadURL = getDataDownloadURL(layer.scec_properties.file);
         let label = layer.scec_properties.gid;
 
@@ -379,11 +376,25 @@ var generateTableRow = function(layer) {
         </button></td>`;
         html += `<td class="cgm-insar-data-click" style="display:none">${layer.scec_properties.gid}</td>`;
         html += `<td class="cgm-insar-data-click">${layer.scec_properties.track}</td>`;
-        html += `<td class="cgm-insar-data-click">${layer.scec_properties.lat}</td>`;
-        html += `<td class="cgm-insar-data-click">${layer.scec_properties.lon}</td>`;
-        html += `<td class="cgm-insar-data-click">${layer.scec_properties.velocity}</td>`;
-        html += `<td class="text-center">`;
-        html += `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM_INSAR.executePlotTS([\"${downloadURL}\"],[\"${layer.scec_properties.track}\"])>plotTS&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+
+        if(layer.scec_properties.type == CGM_INSAR.searchType.location) {
+          html += `<td class="cgm-insar-data-click">${layer.scec_properties.lat}</td>`;
+          html += `<td class="cgm-insar-data-click">${layer.scec_properties.lon}</td>`;
+          html += `<td class="cgm-insar-data-click">${layer.scec_properties.velocity}</td>`;
+          html += `<td class="text-center">`;
+          html += `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM_INSAR.executePlotTS([\"${downloadURL}\"],[\"${layer.scec_properties.track}\"])>plotTS&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+          } else {
+              llat= layer.scec_properties.lat;
+              llon= layer.scec_properties.lon;
+              astring=+" "+llat[0]+"<br>"+llat[1];
+              ostring=+" "+llon[0]+"<br>"+llon[1];
+              html += `<td class="cgm-insar-data-click">${astring}</td>`;
+              html += `<td class="cgm-insar-data-click">${ostring}</td>`;
+              html += `<td class="cgm-insar-data-click"></td>`;
+              html += `<td class="text-center">`;
+              html += `<button class=\"btn btn-xs\" title=\"show velocity layer\" onclick=CGM_INSAR.executePlotVS([\"${downloadURL}\"],[\"${layer.scec_properties.track}\"])>plotVS&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+        } 
+
         html += `</tr>`;
 
         return html;
@@ -396,11 +407,13 @@ var generateTableRow = function(layer) {
                 $all_search_controls.hide();
                 $("#cgm-insar-location").show();
                 drawPoint();
+                skipRectangle();
                 break;
             case this.searchType.latlon:
                 $all_search_controls.hide();
                 $("#cgm-insar-latlon").show();
                 drawRectangle();
+                skipPoint();
                 break;
             default:
                 $all_search_controls.hide();
@@ -496,9 +509,15 @@ window.console.log(">>> calling freshSearch..");
         } else {
             let markerLocations = [];
 
+//should only 1 results for latlon search
+            if(results.length != 1) {
 window.console.log("STASHING "+results.length+" layers from PHP calls");
+            }
+
             for (let i = 0; i < results.length; i++) {
-                markerLocations.push(results[i].getLatLng());
+                if (type != this.searchType.latlon) {
+                  markerLocations.push(results[i].getLatLng());
+                }
                 this.search_result.addLayer(results[i]);
                 this.cgm_layers.addLayer(results[i]);
             }
@@ -515,6 +534,10 @@ window.console.log("STASHING "+results.length+" layers from PHP calls");
                 markerLocations.push(L.latLng(ncriteria[2],ncriteria[3]));
                 let bounds = L.latLngBounds(markerLocations);
                 viewermap.fitBounds(bounds, {maxZoom: 10});
+                $("#cgm-insar-firstLatTxt").val(ncriteria[0]);
+                $("#cgm-insar-firstLonTxt").val(ncriteria[1]);
+                $("#cgm-insar-secondLatTxt").val(ncriteria[2]);
+                $("#cgm-insar-secondLonTxt").val(ncriteria[3]);
                 setTimeout(skipRectangle, 500);
 
             } else if (type == this.searchType.location) {
@@ -561,7 +584,7 @@ window.console.log("calling search() with the string.."+JSON_criteria);
             let ncriteria=[];
 window.console.log(cgm_insar_data);
             if(cgm_insar_data === "[]") {
-window.console.log("Did not find any result");
+window.console.log("Did not find any PHP result");
             } else {
                  let tmp=JSON.parse(cgm_insar_data); 
                  let jblob=JSON.parse(tmp[0].replace(/'/g,'"'));
@@ -576,40 +599,48 @@ window.console.log("Did not find any result");
                  for(let i=0; i< jblob.length; i++) {
                      let item=jblob[i];
                      let ngid=item['gid']
-                     let tslist=item['tslist'];
-                     for(let j=0; j<tslist.length; j++) {
-                         let ts=tslist[i];
-                         if(type==CGM_INSAR.searchType.location) {
-                           let nlat=ts['lat'];
-                           let nlon=ts['lon'];
-                           let nvelocity=ts['velocity'];
-                           let track_name=ts['track']
-                           let file=ts['file'];
-                           // create a ncriteria
-                           ncriteria.push(nlat);
-                           ncriteria.push(nlon);
-                           let marker_layer=L.circleMarker([nlat,nlon],cgm_marker_style.normal);
-                           marker_layer.scec_properties = {
-                                 track: track_name,
-                                 lat: nlat,
-                                 lon: nlon,
-                                 file: file,
-                                 velocity: nvelocity,
-                                 type: type,
-                                 gid: ngid,
-                                 selected: false,
-                                 };
-                           let bb_info = `track:${track_name}<br>lat:${nlat} lon:${nlon}`;
-                           marker_layer.bindTooltip(bb_info);
-                           results.push(marker_layer);
+                     if(type==CGM_INSAR.searchType.location) {
+                         let tslist=item['tslist'];
+                         for(let j=0; j<tslist.length; j++) {
+                             let ts=tslist[j];
+                             let nlat=ts['lat'];
+                             let nlon=ts['lon'];
+                             let nvelocity=ts['velocity'];
+                             let track_name=ts['track']
+                             let file=ts['file'];
+                               // create a ncriteria
+                              ncriteria.push(nlat);
+                              ncriteria.push(nlon);
+                              let marker_layer=L.circleMarker([nlat,nlon],cgm_marker_style.normal);
+                              marker_layer.scec_properties = {
+                                    track: track_name,
+                                    lat: nlat,
+                                    lon: nlon,
+                                    file: file,
+                                    velocity: nvelocity,
+                                    type: type,
+                                    gid: ngid,
+                                    selected: false,
+                                    };
+                              let bb_info = `track:${track_name}<br>lat:${nlat} lon:${nlon}`;
+                              marker_layer.bindTooltip(bb_info);
+                              results.push(marker_layer);
                          }
-// XX this is not done.. yet, locations should be a bunch
-                         if(type==CGM_INSAR.searchType.latlon) {
-                             let latlon=latlonlist[j];
-                             let nlat1=latlon['lat1'];
-                             let nlon1=latlon['lon1'];
-                             let nlat2=latlon['lat2'];
-                             let nlon2=latlon['lon2'];
+                     } else if(type==CGM_INSAR.searchType.latlon) {
+/*
+["[{'gid': 'insar_612e946b8f597', 'vlist': 
+[{'bb': [[-118.3172607421875, 33.84290273847109], [-118.20739746093751, 33.961443911623384]], 'track': 'D071', 'file': '/app/web/result/insar_612e946b8f597_D071/velocity_list.json'}]}]"]
+*/
+                         let vlist=item['vlist'];
+                         for(let j=0; j<vlist.length; j++) {
+                             let v=vlist[j];
+                             let bb=v['bb'];
+                             let nlon1=bb[0][0];
+                             let nlat1=bb[0][1];
+                             let nlon2=bb[1][0];
+                             let nlat2=bb[1][1];
+                             let file=v['file'];
+                             let track_name=v['track'];
                              // create a ncriteria
                              ncriteria.push(nlat1);
                              ncriteria.push(nlon1);
@@ -617,16 +648,19 @@ window.console.log("Did not find any result");
                              ncriteria.push(nlon2);
                              let layer=add_bounding_rectangle(nlat1,nlon1,nlat2,nlon2);
                              layer.scec_properties = {
-                                 lat: [ nlat1, nlon1 ],
-                                 lon: [ nlat2, nlon2 ],
-                                 velocity: 99,
+                                 track: track_name,
+                                 lat: [ nlat1, nlat2 ],
+                                 lon: [ nlon1, nlon2 ],
+                                 file: file,
                                  type: type,
                                  gid: ngid,
                                  selected: false,
                              };
+                             let bb_info = `track:${track_name}<br>sw:${nlat1},${nlon1}<br>ne:${nlat2},${nlon2}`;
+                             layer.bindTooltip(bb_info);
                              results.push(layer);
                         }
-                   }
+                     }
                  }
             }
             CGM_INSAR.showPHP(type, results, ncriteria);

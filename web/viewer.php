@@ -233,7 +233,7 @@ window.console.log("HERE..");
                 <select id="cgm-insar-search-type" class="custom-select">
                     <option value="">Search the InSAR</option>
                     <option value="location">Location</option>
-                    <option value="latlon" disabled>Latitude &amp; Longitude</option>
+                    <option value="latlon">Latitude &amp; Longitude</option>
                 </select>
                 <div class="input-group-append">
                     <button id="refresh-insar-all-button" onclick="CGM_INSAR.reset()" class="btn btn-dark pl-4 pr-4"

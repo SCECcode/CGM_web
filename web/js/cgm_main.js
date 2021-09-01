@@ -171,7 +171,6 @@ window.console.log("FOUND..."+val);
 
 
     $("#metadata-viewer-container").on('click','td.cgm-insar-data-click', function(){
-window.console.log("HERE..");
         if ($(this).find('button[id="cgm-allBtn"]').length != 0) {
             return;
         }
