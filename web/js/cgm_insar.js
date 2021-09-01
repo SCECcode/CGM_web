@@ -37,7 +37,7 @@ var CGM_INSAR = new function () {
         normal: {
             color: cgm_colors.normal,
             fillColor: cgm_colors.normal,
-            fillOpacity: 0.4,
+            fillOpacity: 0.05,
             radius: 3,
             riseOnHover: true,
             weight: 1,
@@ -45,7 +45,7 @@ var CGM_INSAR = new function () {
         selected: {
             color: cgm_colors.selected,
             fillColor: cgm_colors.selected,
-            fillOpacity: 1,
+            fillOpacity: 0.2,
             radius: 3,
             riseOnHover: true,
             weight: 2,
@@ -325,6 +325,10 @@ window.console.log("calling.. addToResultsTable..");
       showTSview(downloadURL,Products.INSAR,tType);
       showPlotTSWarning();
     }
+// downloadURL is a single local file,  [url][track]
+    this.executePlotVS = function(downloadURL,tType) {
+      showVSview(downloadURL,Products.INSAR,tType);
+    }
 
 // could be D071,A064,D173,A166
     this.downloadURLsAsZip = function(track_target) {
@@ -386,8 +390,8 @@ var generateTableRow = function(layer) {
           } else {
               llat= layer.scec_properties.lat;
               llon= layer.scec_properties.lon;
-              astring=+" "+llat[0]+"<br>"+llat[1];
-              ostring=+" "+llon[0]+"<br>"+llon[1];
+              astring= "sw:"+llat[0]+"<br>ne:"+llat[1];
+              ostring= "sw:"+llon[0]+"<br>ne:"+llon[1];
               html += `<td class="cgm-insar-data-click">${astring}</td>`;
               html += `<td class="cgm-insar-data-click">${ostring}</td>`;
               html += `<td class="cgm-insar-data-click"></td>`;
@@ -624,6 +628,7 @@ window.console.log("Did not find any PHP result");
                                     };
                               let bb_info = `track:${track_name}<br>lat:${nlat} lon:${nlon}`;
                               marker_layer.bindTooltip(bb_info);
+
                               results.push(marker_layer);
                          }
                      } else if(type==CGM_INSAR.searchType.latlon) {
@@ -633,6 +638,7 @@ window.console.log("Did not find any PHP result");
 */
                          let vlist=item['vlist'];
                          for(let j=0; j<vlist.length; j++) {
+
                              let v=vlist[j];
                              let bb=v['bb'];
                              let nlon1=bb[0][0];
@@ -641,13 +647,18 @@ window.console.log("Did not find any PHP result");
                              let nlat2=bb[1][1];
                              let file=v['file'];
                              let track_name=v['track'];
+
                              // create a ncriteria
                              ncriteria.push(nlat1);
                              ncriteria.push(nlon1);
                              ncriteria.push(nlat2);
                              ncriteria.push(nlon2);
+
+                             let pixilayer = makeOnePixiLayer(ngid,file);
                              let layer=add_bounding_rectangle(nlat1,nlon1,nlat2,nlon2);
+
                              layer.scec_properties = {
+                                 velocity_plot : pixilayer, 
                                  track: track_name,
                                  lat: [ nlat1, nlat2 ],
                                  lon: [ nlon1, nlon2 ],

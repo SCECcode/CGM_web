@@ -484,7 +484,6 @@ window.console.log("HERE.. selectStationByLayer..");
     // };
 
 
-
     this.toggleSelectAll = function() {
         var cgm_object = this;
 
@@ -710,8 +709,7 @@ window.console.log("gnss calling --->> reset");
         this.search_result = new L.FeatureGroup();
 
         this.hideVectors();
-
-        //?? this.showProduct();
+        this.showProduct();
 
         remove_bounding_rectangle_layer();
         this.replaceResultsTableBody([]);

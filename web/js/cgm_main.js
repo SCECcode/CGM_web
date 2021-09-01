@@ -223,6 +223,8 @@ window.console.log("==> reset what was there/INSAR");
     setup_infoTSTable();
     setup_warnTSTable();
 
+    setup_pixi();
+
     $("#wait-spinner").hide();
 
 });

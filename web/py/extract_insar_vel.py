@@ -40,8 +40,9 @@ for filename in flist:
   dirpath=rloc+"/"+gid+"_"+tt
   os.makedirs(dirpath, exist_ok=True)
   with redirect_stdout(io.StringIO()) as f:
-    cgm_library.hdf5_to_geocsv.velocities_to_csv(filename, bounding_box, dirpath);
+    rout=cgm_library.hdf5_to_geocsv.velocities_to_csv(filename, bounding_box, dirpath);
   s = f.getvalue()
+  print(rout)
 
   vel_file=dirpath+"/velocity_list.csv"
   fname=gid+"_"+tt+"_velocity_list.csv"
