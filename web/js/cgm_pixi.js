@@ -17,8 +17,12 @@ var vs_zoom_threshold=7;
 const DATA_SEGMENT_COUNT= 20; // 0 to 19 -- to matching marker names
 
 /* set are predefined by user, real is from the backend search */
-var insar_min_v = -30;
-var insar_max_v = 30;
+var INSAR_min_v = -30;
+var INSAR_max_v = 30;
+
+var DATA_max_v=INSAR_min_v;
+var DATA_min_v=INSAR_max_v;
+var DATA_count=0;
 
 /********************************************/
 const INSAR_D071=0;
@@ -95,9 +99,14 @@ function getMarkerLatlngs(latlonlist,idx) {
 
 function getRangeIdx(target) {
 
-  let vs_min=insar_min_v;
-  let vs_max=insar_max_v;
+  let vs_min=INSAR_min_v;
+  let vs_max=INSAR_max_v;
   let vs_target=target;
+
+  if(target > DATA_max_v)
+     DATA_max_v = target;
+  if(target < DATA_min_v)
+     DATA_min_v = target;
 
   if(vs_target <= vs_min) {
     return 0;  
@@ -107,6 +116,7 @@ function getRangeIdx(target) {
   }
   var step = (vs_max - vs_min)/DATA_SEGMENT_COUNT;
   var offset= Math.floor((vs_target-vs_min)/step);
+  DATA_count=DATA_count+1;
 
   return offset;
 }
@@ -200,9 +210,13 @@ function toggleMarkerContainer(pixi,target_segment) {
   }
 }
 
-function _loadup_data(gid,url) {
 // break up data into buckets (one per segment)
 /* {"gid":gid,"data":[ [{"lat":lat,"lng":lng},...], ...] } */
+function _loadup_data(gid,url) {
+
+   DATA_max_v=INSAR_min_v;
+   DATA_min_v=INSAR_max_v;
+   DATA_count=0;
 
    let pixiLatlngList;
    let datalist=[];
@@ -235,6 +249,7 @@ function _loadup_data(gid,url) {
    }
    pixiLatlngList= {"gid":gid,"data":datalist} ; 
 
+   window.console.log("FILE:"+url+" total data:"+DATA_count+"("+DATA_min_v+","+DATA_max_v+")");
    return pixiLatlngList;
 }
 
@@ -350,7 +365,7 @@ function makePixiOverlayLayer(gid,file) {
       destroyInteractionManager: true
     }).addTo(viewermap);
 
-    pixiOverlayList.push({"gid":gid,"vis":1,"overlay":overlay,"top":pixiContainer,"inner":pContainers,"latlnglist":pixiLatlngList});
+    pixiOverlayList.push({"gid":gid,"vis":1,"overlay":overlay,"top":pixiContainer,"inner":pContainers,"latlnglist":pixiLatlngList,"mapcenter":mapcenter,"mapzoom":mapzoom});
     return overlay;
 }
 
@@ -369,15 +384,20 @@ function clearAllPixiOverlay() {
 
 function togglePixiOverlay(gid) {
   let tmp;
+  
   for(let i=0; i<pixiOverlayList.length; i++) {
      let pixi=pixiOverlayList[i];
      if(pixi["gid"] == gid) {
+       let mapcenter=pixi["mapcenter"];
+       let mapzoom=pixi["mapzoom"];
        let v=pixi["vis"];
        let layer=pixi["overlay"];
        if(v==1) {
          viewermap.removeLayer(layer);
          pixi["vis"]=0;
          } else {
+// move to right map location first
+           viewermap.setView(mapcenter, mapzoom);
            viewermap.addLayer(layer);
            pixi["vis"]=1;
        }

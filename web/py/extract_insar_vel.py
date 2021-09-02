@@ -40,7 +40,6 @@ for filename in flist:
   with redirect_stdout(io.StringIO()) as f:
     rout=cgm_library.hdf5_to_geocsv.velocities_to_csv(filename, bounding_box, dirpath);
   s = f.getvalue()
-  print(rout)
 
   latlon=[[rout[0],rout[2]],[rout[1],rout[3]]]
   vel_file=dirpath+"/velocity_list.csv"
