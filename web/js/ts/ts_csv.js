@@ -41,6 +41,16 @@ Datetime, LOS, Std Dev LOS
 //                xrange:[-300,400],
 //                yrange:[2000,2022]}, ...] }
 
+//https://stackoverflow.com/questions/4912788/truncate-not-round-off-decimal-numbers-in-javascript
+function truncate(numstr, digits) {
+    let tmp = numstr;
+    if (tmp.indexOf('.') > -1) {
+        return tmp.substr(0 , tmp.indexOf('.') + digits+1 );
+    } else {
+        return numstr;
+    }
+ }
+
 //to '2013-10-04 22:23:00'
 function toTime(dstr) {
    let newdstr=dstr.replace('T',' ').replace('Z,','');
@@ -108,9 +118,11 @@ function processCSV(data) {
 //# LLH Pixel: Lon: -118.152466; Lat: 34.011689; Hgt: 19.595402
      if(terms[1]=="LLH" && terms[2]=="Pixel") {
          terms=pair[2].split(";");
-         cgm_lon=terms[0].trim();
+         let tmp=terms[0].trim();
+         cgm_lon=truncate(tmp,3);
          terms=pair[3].split(";");
-         cgm_lat=terms[0].trim();
+         tmp=terms[0].trim();
+         cgm_lat=truncate(tmp,3);
          cgm_hgt=pair[4].trim();
          cgm_id=cgm_id+"("+cgm_lon+","+cgm_lat+")";
          continue;

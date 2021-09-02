@@ -325,9 +325,9 @@ window.console.log("calling.. addToResultsTable..");
       showTSview(downloadURL,Products.INSAR,tType);
       showPlotTSWarning();
     }
-// downloadURL is a single local file,  [url][track]
-    this.executePlotVS = function(downloadURL,tType) {
-      showVSview(downloadURL,Products.INSAR,tType);
+// downloadURL is a single local file,  [url][gid][track]
+    this.executeShowVS = function(gid) {
+      togglePixiOverlay(gid);
     }
 
 // could be D071,A064,D173,A166
@@ -396,7 +396,7 @@ var generateTableRow = function(layer) {
               html += `<td class="cgm-insar-data-click">${ostring}</td>`;
               html += `<td class="cgm-insar-data-click"></td>`;
               html += `<td class="text-center">`;
-              html += `<button class=\"btn btn-xs\" title=\"show velocity layer\" onclick=CGM_INSAR.executePlotVS([\"${downloadURL}\"],[\"${layer.scec_properties.track}\"])>plotVS&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+              html += `<button class=\"btn btn-xs\" title=\"show velocity layer\" onclick=CGM_INSAR.executeShowVS(\"${layer.scec_properties.gid}\")>showVS&nbsp<span class=\"far fa-chart-line\"></span></button>`;
         } 
 
         html += `</tr>`;

@@ -9,6 +9,9 @@ try {
     abort();
 }
 
+/* marker's resizing size's zoom threshold */
+var vs_zoom_threshold=7;
+
 // pixi, Leafle.overlayLayer.js
 /* data sections, to matching marker name markerN_icon.png */
 const DATA_SEGMENT_COUNT= 20; // 0 to 19 -- to matching marker names
@@ -67,7 +70,7 @@ function printMarkerLatlngInfo(plist) {
   let sum=0;
   window.console.log("For: "+plist.gid);
   for(let i=0; i<DATA_SEGMENT_COUNT; i++) {
-    let dlist=plist.data[i];
+    let dlist=plist[i];
     sum=sum+data.length;
     window.console.log("    i: "+i+" count: "+ dlist.length);
   }
@@ -75,18 +78,18 @@ function printMarkerLatlngInfo(plist) {
 }
 
 function updateMarkerLatlng(plist,idx,lat,lng) {
-  let dlist=plist.data[idx];
+  let dlist=plist[idx];
   dlist.push({'lat':lat,"lng":lng});
 }
 
-function getMarkerCount(plist,idx) {
-  let dlist=plist.data[idx];
+function getMarkerCount(latlonlist,idx) {
+  let dlist=latlonlist.data[idx];
   let sz=dlist.length;
   return sz;
 }
 
-function getMarkerLatlngs(plist,idx) {
-  let dlist=plist.data[idx];
+function getMarkerLatlngs(latlonlist,idx) {
+  let dlist=latlonlist.data[idx];
   return dlist;
 }
 
@@ -202,9 +205,8 @@ function _loadup_data(gid,url) {
 /* {"gid":gid,"data":[ [{"lat":lat,"lng":lng},...], ...] } */
 
    let pixiLatlngList;
-   let datalist=[]
+   let datalist=[];
    
-   pixiLatlngList.push({"gid":gid, "data":[]});
    for(var i=0; i<DATA_SEGMENT_COUNT; i++) {
       datalist.push([]);
    }
@@ -212,13 +214,19 @@ function _loadup_data(gid,url) {
    let blob=ckExist(url);
    let tmp=blob.split("\n");
    let sz=tmp.length;
+   window.console.log("size of tmp is "+sz);
 
    for(let i=0; i<sz; i++) {
       let token=tmp[i].split(",");
+      if(token.length != 7) {
+         window.console.log("invalid data in this line "+i+" >>"+token.length);
+         
+         continue;
+      }
       let lon=parseFloat(token[0].trim());
       let lat=parseFloat(token[1].trim());
       let vel=token[2].trim();
-      if(vel == "NaN") {
+      if(Number.isNaN(vel) || vel == "nan") {
           continue;
       }
       vel=parseFloat(vel);
@@ -304,9 +312,9 @@ function makePixiOverlayLayer(gid,file) {
       // change size of the marker after zoomin and zoomout
      if (event.type === 'zoomanim') {
         var targetZoom = event.zoom;
-        if (targetZoom >= eq_zoom_threshold || zoom >= eq_zoom_threshold) {
+        if (targetZoom >= vs_zoom_threshold || zoom >= vs_zoom_threshold) {
           zoomChangeTs = 0;
-          var targetScale = targetZoom >= eq_zoom_threshold ? (1 / getScale(event.zoom))/10  : initialScale;
+          var targetScale = targetZoom >= vs_zoom_threshold ? (1 / getScale(event.zoom))/10  : initialScale;
 
 //window.console.log(" ZOOManim.. new targetScale "+targetScale);
 
@@ -340,8 +348,42 @@ function makePixiOverlayLayer(gid,file) {
     }, pixiContainer, {
       doubleBuffering: doubleBuffering,
       destroyInteractionManager: true
-    }).addTo(viewermap);
+    });
+// don't add it yet
+// .addTo(viewermap);
 
     pixiOverlayList.push({"gid":gid,"vis":0,"overlay":overlay,"top":pixiContainer,"inner":pContainers,"latlnglist":pixiLatlngList});
     return overlay;
+}
+
+
+function clearAllPixiOverlay() {
+  pixiOverlayList.forEach(function(pixi) {
+    if(pixi !=null || pixi.length !=0) {
+      if(pixi["vis"]==1) {
+        var layer=pixi["overlay"];
+        viewermap.removeLayer(layer);
+        pixi["vis"]=0;
+      }
+    }
+  });
+}
+
+function togglePixiOverlay(gid) {
+  let tmp;
+  for(let i=0; i<pixiOverlayList.length; i++) {
+     let pixi=pixiOverlayList[i];
+     if(pixi["gid"] == gid) {
+       let v=pixi["vis"];
+       let layer=pixi["overlay"];
+       if(v==1) {
+         viewermap.removeLayer(layer);
+         pixi["vis"]=0;
+         } else {
+           viewermap.addLayer(layer);
+           pixi["vis"]=1;
+       }
+       return;
+     }
+  }
 }
