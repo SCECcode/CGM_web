@@ -24,12 +24,10 @@ track=json_data["track"]
 gid=json_data["gid"]
 plist=json_data["pixellist"]
 rlocs=json_data["result"]
-
-
 sw=plist['sw']
 ne=plist['ne']
 bounding_box=[sw[0],ne[0],sw[1],ne[1]]
-latlon=[[sw[0],sw[1]],[ne[0],ne[1]]]
+#olatlon=[[sw[0],sw[1]],[ne[0],ne[1]]]
 idx=0;
 returnlist=[]
 vlist=[]
@@ -42,8 +40,8 @@ for filename in flist:
   with redirect_stdout(io.StringIO()) as f:
     rout=cgm_library.hdf5_to_geocsv.velocities_to_csv(filename, bounding_box, dirpath);
   s = f.getvalue()
-  print(rout)
 
+  latlon=[[rout[0],rout[2]],[rout[1],rout[3]]]
   vel_file=dirpath+"/velocity_list.csv"
   fname=gid+"_"+tt+"_velocity_list.csv"
   n_vel_file=rloc+"/"+fname;

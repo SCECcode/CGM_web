@@ -654,7 +654,8 @@ window.console.log("Did not find any PHP result");
                              ncriteria.push(nlat2);
                              ncriteria.push(nlon2);
 
-                             let pixilayer = makeOnePixiLayer(ngid,file);
+                             let url = getDataDownloadURL(file);
+                             let pixilayer = makeOnePixiLayer(ngid,url);
                              let layer=add_bounding_rectangle(nlat1,nlon1,nlat2,nlon2);
 
                              layer.scec_properties = {

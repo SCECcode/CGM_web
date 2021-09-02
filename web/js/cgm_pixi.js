@@ -1,5 +1,5 @@
 /***
-   cfm_pixi.js
+   cgm_pixi.js
 ***/
 
 try {
@@ -65,35 +65,36 @@ function initMarkerTextures(resources) {
 
 function printMarkerLatlngInfo(plist) {
   let sum=0;
+  window.console.log("For: "+plist.gid);
   for(let i=0; i<DATA_SEGMENT_COUNT; i++) {
-    var data=plist.data[i];
+    let dlist=plist.data[i];
     sum=sum+data.length;
-    window.console.log("    i: "+i+" count: "+ data.length);
+    window.console.log("    i: "+i+" count: "+ dlist.length);
   }
   window.console.log("  sum up :"+sum);
 }
 
 function updateMarkerLatlng(plist,idx,lat,lng) {
-  let item=plist.data;
-  item[idx].push({'lat':lat,"lng":lng});
+  let dlist=plist.data[idx];
+  dlist.push({'lat':lat,"lng":lng});
 }
 
 function getMarkerCount(plist,idx) {
-  let item=plist.data;
-  let sz=item[idx].length;
+  let dlist=plist.data[idx];
+  let sz=dlist.length;
   return sz;
 }
 
 function getMarkerLatlngs(plist,idx) {
-  let item=plist.data;
-  return item[idx];
+  let dlist=plist.data[idx];
+  return dlist;
 }
 
 function getRangeIdx(target) {
 
-  var vs_min=insar_min_v;
-  var vs_max=insar_max_v;
-  var vs_target=target;
+  let vs_min=insar_min_v;
+  let vs_max=insar_max_v;
+  let vs_target=target;
 
   if(vs_target <= vs_min) {
     return 0;  
@@ -196,33 +197,35 @@ function toggleMarkerContainer(pixi,target_segment) {
   }
 }
 
-function _loadup_data(gid,file) {
+function _loadup_data(gid,url) {
 // break up data into buckets (one per segment)
-/* [{"gid":gid,"data":[ [{"lat":lat,"lng":lng},...], ...] }] */
+/* {"gid":gid,"data":[ [{"lat":lat,"lng":lng},...], ...] } */
 
-   let pixiLatlngList=[];
-
+   let pixiLatlngList;
+   let datalist=[]
+   
    pixiLatlngList.push({"gid":gid, "data":[]});
    for(var i=0; i<DATA_SEGMENT_COUNT; i++) {
-      pixiLatlngList[0].data.push([]);
+      datalist.push([]);
    }
 
-   fetch(file)
-        .then(
-          function(response) {
-            if (response.status !== 200) {
-               window.console.log('Fetching, Looks like there was a problem. Status Code: ' +
-                         response.status);
-               return;
-            }
-            response.arrayBuffer().then(function(data) {
-window.console.log("HERE..finish loading");
-                let tmp=data;
-                let ttmp=data.split();
-// XXX load into buckets
-            });
-         }
-   ).catch(function(err) { window.console.log("Fetch Error :-S"+err); });
+   let blob=ckExist(url);
+   let tmp=blob.split("\n");
+   let sz=tmp.length;
+
+   for(let i=0; i<sz; i++) {
+      let token=tmp[i].split(",");
+      let lon=parseFloat(token[0].trim());
+      let lat=parseFloat(token[1].trim());
+      let vel=token[2].trim();
+      if(vel == "NaN") {
+          continue;
+      }
+      vel=parseFloat(vel);
+      let idx=getRangeIdx(vel);
+      updateMarkerLatlng(datalist,idx,lat,lon);
+   }
+   pixiLatlngList= {"gid":gid,"data":datalist} ; 
 
    return pixiLatlngList;
 }
@@ -274,7 +277,7 @@ function makePixiOverlayLayer(gid,file) {
            a.y = origin.y;
            a.localScale = initialScale;
 
-           var latlngs=getMarkerLatlngs(quake_type,i);
+           var latlngs=getMarkerLatlngs(pixiLatlngList,i);
            var len=latlngs.length;
            for (var j = 0; j < len; j++) {
               var latlng=latlngs[j];
@@ -339,6 +342,6 @@ function makePixiOverlayLayer(gid,file) {
       destroyInteractionManager: true
     }).addTo(viewermap);
 
-    pixiOverlayList.push({"gid":gid,"vis":0,"overlay":overlay,"top":pixiContainer,"inner":pContainers});
+    pixiOverlayList.push({"gid":gid,"vis":0,"overlay":overlay,"top":pixiContainer,"inner":pContainers,"latlnglist":pixiLatlngList});
     return overlay;
 }
