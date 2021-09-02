@@ -327,6 +327,7 @@ window.console.log("calling.. addToResultsTable..");
     }
 // downloadURL is a single local file,  [url][gid][track]
     this.executeShowVS = function(gid,downloadURL) {
+      window.console.log("executeShowVS..");
       togglePixiOverlay(gid);
     }
 
@@ -388,13 +389,14 @@ var generateTableRow = function(layer) {
           html += `<td class="text-center">`;
           html += `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM_INSAR.executePlotTS([\"${downloadURL}\"],[\"${layer.scec_properties.track}\"])>plotTS&nbsp<span class=\"far fa-chart-line\"></span></button>`;
           } else {
-              llat= layer.scec_properties.lat;
-              llon= layer.scec_properties.lon;
-              astring= "sw:"+llat[0]+"<br>ne:"+llat[1];
-              ostring= "sw:"+llon[0]+"<br>ne:"+llon[1];
+              let llat= layer.scec_properties.lat;
+              let llon= layer.scec_properties.lon;
+              let vstring="max:"+layer.scec_properties.max_velocity + " min:"+ layer.scec_properties.min_velocity+"<br>" + "count:"+ layer.scec_properties.count_velocity;
+              let astring= "sw:"+llat[0]+"<br>ne:"+llat[1];
+              let ostring= "sw:"+llon[0]+"<br>ne:"+llon[1];
               html += `<td class="cgm-insar-data-click">${astring}</td>`;
               html += `<td class="cgm-insar-data-click">${ostring}</td>`;
-              html += `<td class="cgm-insar-data-click"></td>`;
+              html += `<td class="cgm-insar-data-click">${vstring}</td>`;
               html += `<td class="text-center">`;
               html += `<button class=\"btn btn-xs\" title=\"show velocity layer\" onclick=CGM_INSAR.executeShowVS(\"${layer.scec_properties.gid}\",\"${layer.scec_properties.file}\")>showVS&nbsp<span class=\"far fa-chart-area\"></span></button>`;
         } 
@@ -641,10 +643,11 @@ window.console.log("Did not find any PHP result");
 
                              let v=vlist[j];
                              let bb=v['bb'];
-                             let nlon1=bb[0][0];
-                             let nlat1=bb[0][1];
-                             let nlon2=bb[1][0];
-                             let nlat2=bb[1][1];
+// XXX should not be chopping here..
+                             let nlon1=truncateNumber(bb[0][0],4);
+                             let nlat1=truncateNumber(bb[0][1],4);
+                             let nlon2=truncateNumber(bb[1][0],4);
+                             let nlat2=truncateNumber(bb[1][1],4);
                              let file=v['file'];
                              let track_name=v['track'];
 
@@ -655,11 +658,20 @@ window.console.log("Did not find any PHP result");
                              ncriteria.push(nlon2);
 
                              let url = getDataDownloadURL(file);
-                             let pixilayer = makeOnePixiLayer(ngid,url);
+
+                             let rc = makeOnePixiLayer(ngid,url);
+                             let pixilayer = rc["pixiLayer"];
+                             let max_v = rc["max_v"];
+                             let min_v = rc["min_v"];
+                             let count_v = rc["count_v"];
+        
                              let layer=add_bounding_rectangle(nlat1,nlon1,nlat2,nlon2);
 
                              layer.scec_properties = {
                                  velocity_plot : pixilayer, 
+                                 max_velocity: max_v,
+                                 min_velocity: min_v,
+                                 count_velocity: count_v,
                                  track: track_name,
                                  lat: [ nlat1, nlat2 ],
                                  lon: [ nlon1, nlon2 ],

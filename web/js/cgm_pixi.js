@@ -181,7 +181,7 @@ function makeOnePixiLayer(gid,file) {
   viewermap.on('zoomend', function() { ticker.stop(); });
   viewermap.on('zoomanim', pixiLayer.redraw, pixiLayer);
 
-  return pixiLayer;
+  return {"pixiLayer":pixiLayer,"max_v":DATA_max_v,"min_v":DATA_min_v,"count_v":DATA_count };
 }
 
 // toggle off a child container from an overlay layer
@@ -285,10 +285,15 @@ function makePixiOverlayLayer(gid,file) {
 
 //window.console.log("in L.pixiOverlay layer, auto zoom at "+zoom+" scale at>"+getScale()+" invScale"+invScale);
 
-      var mapcenter=viewermap.getCenter();
-      var mapzoom=viewermap.getZoom();
-
       if (event.type === 'add') {
+
+// only add it first time
+        if (foundOverlay(gid)) {
+          return;
+        }
+
+        let mapcenter=viewermap.getCenter();
+        let mapzoom=viewermap.getZoom();
         var origin = pixi_project([mapcenter['lat'], mapcenter['lng']]);
         initialScale = invScale / 16; // initial size of the marker
 //initialScale = invScale / 2; // initial size of the marker
@@ -365,10 +370,19 @@ function makePixiOverlayLayer(gid,file) {
       destroyInteractionManager: true
     }).addTo(viewermap);
 
-    pixiOverlayList.push({"gid":gid,"vis":1,"overlay":overlay,"top":pixiContainer,"inner":pContainers,"latlnglist":pixiLatlngList,"mapcenter":mapcenter,"mapzoom":mapzoom});
+pixiOverlayList.push({"gid":gid,"vis":1,"overlay":overlay,"top":pixiContainer,"inner":pContainers,"latlnglist":pixiLatlngList});
     return overlay;
 }
 
+function foundOverlay(gid) {
+  for(let i=0; i<pixiOverlayList.length; i++) {
+     let pixi=pixiOverlayList[i];
+     if(pixi["gid"] == gid) {
+       return 1;
+     }
+  }
+  return 0;
+}
 
 function clearAllPixiOverlay() {
   pixiOverlayList.forEach(function(pixi) {
@@ -383,21 +397,15 @@ function clearAllPixiOverlay() {
 }
 
 function togglePixiOverlay(gid) {
-  let tmp;
-  
   for(let i=0; i<pixiOverlayList.length; i++) {
      let pixi=pixiOverlayList[i];
      if(pixi["gid"] == gid) {
-       let mapcenter=pixi["mapcenter"];
-       let mapzoom=pixi["mapzoom"];
        let v=pixi["vis"];
        let layer=pixi["overlay"];
        if(v==1) {
-         viewermap.removeLayer(layer);
          pixi["vis"]=0;
+         viewermap.removeLayer(layer);
          } else {
-// move to right map location first
-           viewermap.setView(mapcenter, mapzoom);
            viewermap.addLayer(layer);
            pixi["vis"]=1;
        }

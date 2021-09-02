@@ -5,6 +5,16 @@
 var cgm_latlon_area_list=[];
 var cgm_latlon_point_list=[];
 
+function truncateNumber(num, digits) {
+    let numstr = num.toString();
+    if (numstr.indexOf('.') > -1) {
+        return numstr.substr(0 , numstr.indexOf('.') + digits+1 );
+    } else {
+        return numstr;
+    }
+ }
+
+
 function isObject(objV) {
   return objV && typeof objV === 'object' && objV.constructor === Object;
 }
