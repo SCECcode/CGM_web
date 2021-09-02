@@ -545,7 +545,7 @@ window.console.log("STASHING "+results.length+" layers from PHP calls");
                 $("#cgm-insar-secondLatTxt").val(ncriteria[2]);
                 $("#cgm-insar-secondLonTxt").val(ncriteria[3]);
                 skipRectangle();
-                setTimeout(drawRectangle, 5000); // restart drawing in 5 seconds
+                setTimeout(drawRectangle, 3000); // restart drawing in 3 seconds
             } else if (type == this.searchType.location) {
                 let bounds = L.latLngBounds(markerLocations);
                 viewermap.flyToBounds(bounds, {maxZoom: 10 });
