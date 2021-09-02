@@ -326,7 +326,7 @@ window.console.log("calling.. addToResultsTable..");
       showPlotTSWarning();
     }
 // downloadURL is a single local file,  [url][gid][track]
-    this.executeShowVS = function(gid) {
+    this.executeShowVS = function(gid,downloadURL) {
       togglePixiOverlay(gid);
     }
 
@@ -396,7 +396,7 @@ var generateTableRow = function(layer) {
               html += `<td class="cgm-insar-data-click">${ostring}</td>`;
               html += `<td class="cgm-insar-data-click"></td>`;
               html += `<td class="text-center">`;
-              html += `<button class=\"btn btn-xs\" title=\"show velocity layer\" onclick=CGM_INSAR.executeShowVS(\"${layer.scec_properties.gid}\")>showVS&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+              html += `<button class=\"btn btn-xs\" title=\"show velocity layer\" onclick=CGM_INSAR.executeShowVS(\"${layer.scec_properties.gid}\",\"${layer.scec_properties.file}\")>showVS&nbsp<span class=\"far fa-chart-area\"></span></button>`;
         } 
 
         html += `</tr>`;

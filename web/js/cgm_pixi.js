@@ -348,11 +348,9 @@ function makePixiOverlayLayer(gid,file) {
     }, pixiContainer, {
       doubleBuffering: doubleBuffering,
       destroyInteractionManager: true
-    });
-// don't add it yet
-// .addTo(viewermap);
+    }).addTo(viewermap);
 
-    pixiOverlayList.push({"gid":gid,"vis":0,"overlay":overlay,"top":pixiContainer,"inner":pContainers,"latlnglist":pixiLatlngList});
+    pixiOverlayList.push({"gid":gid,"vis":1,"overlay":overlay,"top":pixiContainer,"inner":pContainers,"latlnglist":pixiLatlngList});
     return overlay;
 }
 
