@@ -391,7 +391,7 @@ var generateTableRow = function(layer) {
           } else {
               let llat= layer.scec_properties.lat;
               let llon= layer.scec_properties.lon;
-              let vstring="max:"+layer.scec_properties.max_velocity + " min:"+ layer.scec_properties.min_velocity+"<br>" + "count:"+ layer.scec_properties.count_velocity;
+              let vstring="max:"+layer.scec_properties.max_velocity + "<br>min:"+ layer.scec_properties.min_velocity+"<br>" + "count:"+ layer.scec_properties.count_velocity;
               let astring= "sw:"+llat[0]+"<br>ne:"+llat[1];
               let ostring= "sw:"+llon[0]+"<br>ne:"+llon[1];
               html += `<td class="cgm-insar-data-click">${astring}</td>`;
@@ -544,8 +544,8 @@ window.console.log("STASHING "+results.length+" layers from PHP calls");
                 $("#cgm-insar-firstLonTxt").val(ncriteria[1]);
                 $("#cgm-insar-secondLatTxt").val(ncriteria[2]);
                 $("#cgm-insar-secondLonTxt").val(ncriteria[3]);
-                setTimeout(skipRectangle, 500);
-
+                skipRectangle();
+                setTimeout(drawRectangle, 5000); // restart drawing in 5 seconds
             } else if (type == this.searchType.location) {
                 let bounds = L.latLngBounds(markerLocations);
                 viewermap.flyToBounds(bounds, {maxZoom: 10 });
@@ -561,8 +561,8 @@ window.console.log("STASHING "+results.length+" layers from PHP calls");
 
         $("#wait-spinner").hide();
 
-// restart the with showSearch()
-        this.showSearch(type);
+//no need restart the with showSearch()
+//        this.showSearch(type);
     };
 
 
@@ -665,7 +665,8 @@ window.console.log("Did not find any PHP result");
                              let min_v = rc["min_v"];
                              let count_v = rc["count_v"];
         
-                             let layer=add_bounding_rectangle(nlat1,nlon1,nlat2,nlon2);
+ //XXX not tracking it or else only 1 can be made and left on the map
+                             let layer=addRectangleLayer(nlat1,nlon1,nlat2,nlon2);
 
                              layer.scec_properties = {
                                  velocity_plot : pixilayer, 
