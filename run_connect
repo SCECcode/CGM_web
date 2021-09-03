@@ -1,0 +1,4 @@
+docker container exec -it cgm_web_web /bin/bash
+
+
+

@@ -103,11 +103,6 @@ function getRangeIdx(target) {
   let vs_max=INSAR_max_v;
   let vs_target=target;
 
-  if(target > DATA_max_v)
-     DATA_max_v = target;
-  if(target < DATA_min_v)
-     DATA_min_v = target;
-
   if(vs_target <= vs_min) {
     return 0;  
   }
@@ -116,7 +111,6 @@ function getRangeIdx(target) {
   }
   var step = (vs_max - vs_min)/DATA_SEGMENT_COUNT;
   var offset= Math.floor((vs_target-vs_min)/step);
-  DATA_count=DATA_count+1;
 
   return offset;
 }
@@ -210,6 +204,7 @@ function toggleMarkerContainer(pixi,target_segment) {
   }
 }
 
+// order everything into a sorted array
 // break up data into buckets (one per segment)
 /* {"gid":gid,"data":[ [{"lat":lat,"lng":lng},...], ...] } */
 function _loadup_data(gid,url) {
@@ -218,6 +213,7 @@ function _loadup_data(gid,url) {
    DATA_min_v=INSAR_max_v;
    DATA_count=0;
 
+   let rawlist=[];
    let pixiLatlngList;
    let datalist=[];
    
@@ -244,6 +240,24 @@ function _loadup_data(gid,url) {
           continue;
       }
       vel=parseFloat(vel);
+      rawlist.push([vel,lat,lon]);
+      if(vel > DATA_max_v)
+        DATA_max_v=vel;
+      if(vel < DATA_min_v)
+        DATA_min_v=vel
+   }
+   // sort datalist
+   let sorted_rawlist = rawlist.sort((a,b) => {
+          return b[0] - a[0];
+   });
+   let sorted_vlist=sorted_rawlist.map(function(value,index){ return value[0]; });
+
+   DATA_count=sorted_rawlist.length;
+   for(let i=0; i<DATA_count; i++ ) {
+      let item=sorted_rawlist[i];
+      let lon=item[2];
+      let lat=item[1];
+      let vel=item[0];
       let idx=getRangeIdx(vel);
       updateMarkerLatlng(datalist,idx,lat,lon);
    }
