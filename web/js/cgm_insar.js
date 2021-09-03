@@ -37,7 +37,7 @@ var CGM_INSAR = new function () {
         normal: {
             color: cgm_colors.normal,
             fillColor: cgm_colors.normal,
-            fillOpacity: 0.05,
+            fillOpacity: 0.01,
             radius: 3,
             riseOnHover: true,
             weight: 1,
@@ -45,7 +45,7 @@ var CGM_INSAR = new function () {
         selected: {
             color: cgm_colors.selected,
             fillColor: cgm_colors.selected,
-            fillOpacity: 0.2,
+            fillOpacity: 0.05,
             radius: 3,
             riseOnHover: true,
             weight: 2,
