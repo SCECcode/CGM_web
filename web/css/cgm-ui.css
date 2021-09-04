@@ -624,6 +624,10 @@ div.guide ul {
     height: calc(2.25rem + 2px);
 }
 
+#refresh-insar-all-button {
+    height: calc(2.25rem + 2px);
+}
+
 #mapLayer {
     border-bottom: 1;
 }
