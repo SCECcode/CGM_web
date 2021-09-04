@@ -621,7 +621,7 @@ div.guide ul {
 }
 
 #refresh-all-button {
-    max-height: 32px;
+    height: calc(2.25rem + 2px);
 }
 
 #mapLayer {
