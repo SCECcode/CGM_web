@@ -40,12 +40,12 @@ var CGM_INSAR = new function () {
             fillOpacity: 0.01,
             radius: 3,
             riseOnHover: true,
-            weight: 1,
+            weight: 2,
         },
         selected: {
             color: cgm_colors.selected,
             fillColor: cgm_colors.selected,
-            fillOpacity: 0.05,
+            fillOpacity: 0.5,
             radius: 3,
             riseOnHover: true,
             weight: 2,
@@ -322,23 +322,23 @@ window.console.log("calling.. addToResultsTable..");
 
 // data type >> { "data":"TS", "track": tType }
     this.executePlotTS = function(downloadURL,tType,gid) {
-      let item= { "dtype":"TS", "track": tType, "gid":gid };
-      showTSview(downloadURL,Products.INSAR, JSON.stringify(item));
+      let item= [ { "dtype":"TS", "track": tType, "gid":gid } ];
+      showTSview(downloadURL,Products.INSAR,item);
       showPlotTSWarning();
     }
 
-XX
 // downloadURL is a single local file, [url][gid][track]
-    this.executePlotVS = function(downloadURL,tType,gid) {
-      let item= { "dtype":"VS", "track": tType, "gid":gid };
-      showTSview(downloadURL,Products.INSAR, JSON.stringify(item));
+    this.executePlotVS = function(downloadURL,tType,gid,nx,ny) {
+      let item= [ { "dtype":"VS", "track": tType, "gid":gid, "nx":nx,"ny":ny } ];
+      showTSview(downloadURL,Products.INSAR,item);
     }
     this.executeShowVS = function(gid,downloadURL) {
       togglePixiOverlay(gid);
+      // XX -- might need to refocus because it seems to be off for a sec and need a refresh
     }
 
 // could be D071,A064,D173,A166
-    his.downloadURLsAsZip = function(track_target) {
+    this.downloadURLsAsZip = function(track_target) {
         var nzip=new JSZip();
         var layers=CGM_INSAR.search_result.getLayers();
         let timestamp=$.now();
@@ -393,7 +393,7 @@ var generateTableRow = function(layer) {
           html += `<td class="cgm-insar-data-click">${layer.scec_properties.lon}</td>`;
           html += `<td class="cgm-insar-data-click">${layer.scec_properties.velocity}</td>`;
           html += `<td class="text-center">`;
-          html += `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM_INSAR.executePlotTS([\"${downloadURL}\"],[\"${layer.scec_properties.track}\"])>plotTS&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+          html += `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM_INSAR.executePlotTS([\"${downloadURL}\"],\"${layer.scec_properties.track}\",\"${layer.scec_properties.gid}\")>plotTS&nbsp<span class=\"far fa-chart-line\"></span></button>`;
           } else {
               let llat= layer.scec_properties.lat;
               let llon= layer.scec_properties.lon;
@@ -406,7 +406,7 @@ var generateTableRow = function(layer) {
               html += `<td class="text-center">`;
 
               html += `<button class=\"btn btn-xs\" title=\"show velocity layer\" onclick=CGM_INSAR.executeShowVS(\"${layer.scec_properties.gid}\",\"${layer.scec_properties.file}\")>showVS&nbsp<span class=\"far fa-image\"></span></button>`;
-              html += `<br><button class=\"btn btn-xs\" title=\"plot velocity layer\" onclick=CGM_INSAR.executePlotVS(\"${layer.scec_properties.gid}\",\"${layer.scec_properties.file}\")>plotVS&nbsp<span class=\"far fa-chart-area\"></span></button>`;
+              html += `<br><button class=\"btn btn-xs\" title=\"plot velocity layer\" onclick=CGM_INSAR.executePlotVS([\"${downloadURL}\"],\"${layer.scec_properties.track}\",\"${layer.scec_properties.gid}\",\"${layer.scec_properties.nx}\",\"${layer.scec_properties.ny}\")>plotVS&nbsp<span class=\"far fa-chart-area\"></span></button>`;
         } 
 
         html += `</tr>`;
@@ -433,6 +433,7 @@ var generateTableRow = function(layer) {
                 $all_search_controls.hide();
                 skipPoint();
                 skipRectangle();
+                window.console.log("showSearch:skip to default mode..");
         }
     };
 
@@ -677,6 +678,8 @@ window.console.log("Did not find any PHP result");
         
  //XXX not tracking it or else only 1 can be made and left on the map
                              let layer=addRectangleLayer(nlat1,nlon1,nlat2,nlon2);
+
+window.console.log("nx is "+nx+" and ny "+ny);
 
                              layer.scec_properties = {
                                  velocity_plot : pixilayer, 

@@ -467,8 +467,7 @@ function plotly_plot_insar_vs(cdata) {
   window.console.log("nw "+nw+" nh "+nh);
 
   let plot=csv_data[0].plot;   
-
-  let pUp=plot[0];   
+  let pdata=plot[0];   
 
   let scec_image=[{
         source: "img/SCEC_Traditional_Logo_Red.png",
@@ -483,7 +482,7 @@ function plotly_plot_insar_vs(cdata) {
   }];
 
   let data = [{
-    z: plot['z'],
+    z: pdata['z'],
     type: 'surface',
     contours: {
       z: {
@@ -495,6 +494,7 @@ function plotly_plot_insar_vs(cdata) {
     }
   }];
 
+window.console.log("aspect ration is "+pdata['aspect']);
 
   let layout = { 
     paper_bgcolor: '#f1fff1',
@@ -502,7 +502,9 @@ function plotly_plot_insar_vs(cdata) {
     title: "SOMETHING",
     width: nw,
     height: nh,
-    scene: {camera: {eye: {x: 1.87, y: 0.88, z: -0.64}}},
+    autorange : false,
+    aspectmode : 'manual',
+    scene: { aspectratio : {x:1,y:pdata['aspect'],z:0.5},camera: {eye: {x: 1.87, y: 0.88, z: -0.64}}},
     margin: { l:margin_left, t:margin_top, r:margin_right },
     images: scec_image,
   };

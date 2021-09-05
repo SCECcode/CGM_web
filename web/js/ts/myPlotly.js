@@ -10,19 +10,18 @@ jQuery(document).ready(function() {
   let frameHeight=window.innerHeight;
   let frameWidth=window.innerWidth;
 
+//  let myURL="./result/insar_61347a51be8ba_D071_velocity_list.csv";
+//  let myParams={dtype:"VS",gid:"insar_61347a51be8ba",track:"D071"};
+//  load_INSAR_ProcessVSFromCSV([myURL],myParams);
+//  return;
+
   [urls, ptype, ftypes]=getParams("");
-
-window.console.log("from myPlotly.js.."+ftypes);
-
-//  let myURL=['cgm_data/ANA1.cgm.wmrss_igb14.pos'];
-//  let myFtypes=[ 'igb14' ];
-//  loadAndProcessFromFile(myURL, myFtypes);
 
   if(ptype == "gnss") {
     load_GNSS_ProcessTSFromPOS(urls,ftypes);
     } else {
       params=ftypes[0]; // { "dtype":"TS", "track": tType, "gid":gid };    
-      if(ftypes == params['dtype'] == "TS" ) {
+      if(params['dtype'] == "TS" ) {
         load_INSAR_ProcessTSFromCSV(urls,params);
         } else {
           load_INSAR_ProcessVSFromCSV(urls,params);

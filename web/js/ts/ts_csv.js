@@ -75,6 +75,7 @@ function processCSV(data) {
        continue;
      }
      //vals[0] vals[1] vals[2]
+window.console.log("HERE");
      if(data_start) {
          data_count=data_count+1;
          let vals=(line.trim().replace(/ +/g," ")).split(" ");

@@ -75,9 +75,11 @@ function load_INSAR_ProcessTSFromCSV(ulist,params) {
 function load_INSAR_ProcessVSFromCSV(ulist,params) {
    let url = ulist[0];
    let ttype = params['track'];
+   let nx = parseInt(params['nx']);
+   let ny = parseInt(params['ny']);
    let data = ckExist(url);
 
-   let vs_plot_data = processCSV4VS(data);
+   let vs_plot_data = processCSV4VS(data,nx,ny);
     
    plotly_plot_insar_vs({'type':ttype,'csv':vs_plot_data});
 }
@@ -91,7 +93,16 @@ function changeTSview(params) {
   [urls, ptype, ftypes]=getParams(params);
   window.console.log("changeTSview.."+urls[0]+" "+ptype+" "+ftypes[0]);
 
-  loadAndProcessFromFile(urls,ptype, ftypes);
+  if(ptype == "gnss") {
+  load_GNSS_ProcessTSFromPOS(urls,ftypes);
+  } else {
+    params=ftypes[0]; // { "dtype":"TS", "track": tType, "gid":gid };
+    if(ftypes == params['dtype'] == "TS" ) {
+      load_INSAR_ProcessTSFromCSV(urls,params);
+      } else {
+        load_INSAR_ProcessVSFromCSV(urls,params);
+    }
+  }
 }
 
 // for GNSS,  [url..url],GNSS,[ftype..ftype]
