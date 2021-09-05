@@ -38,8 +38,9 @@ function plotly_plot_image() {
   }
 }
 
+// for GNSS ts data
 // [ { type:ftype, pos:plot_data }]
-function plotly_plot_pos(pdata) {
+function plotly_plot_gnss_ts(pdata) {
 
   let pos_data=pdata['pos'];
   let pos_type=pdata['type'];
@@ -269,8 +270,9 @@ annotations: [
 
 
 /******/
+// for INSAR ts data
 // [ { type:ttype, csv:plot_data }]
-function plotly_plot_csv(cdata) {
+function plotly_plot_insar_ts(cdata) {
 
   let csv_data=cdata['csv'];
   let csv_type=cdata['type'];
@@ -392,7 +394,122 @@ annotations: [ ]
   var config = {displayModeBar:true,responsive:true}
 
   Plotly.newPlot('myDiv', data, layout, config);
-  _savePlotly(info.cgm_name,data,layout,config);
+
+// no need to track this unless there are more to select from
+//  _savePlotly(info.cgm_name,data,layout,config);
+
+  window.top.postMessage({'call':'fromTSviewer', value:'done with loading'}, '*');
+}
+
+/******/
+/* surface plot with countours
+var data = [{
+  z: z_data,
+  type: 'surface',
+  contours: {
+    z: {
+      show:true,
+      usecolormap: true,
+      highlightcolor:"#42f462",
+      project:{z: true}
+    }
+  }
+}];
+
+var layout = {
+  title: 'velocity plot with projected contour',
+  scene: {camera: {eye: {x: 1.87, y: 0.88, z: -0.64}}},
+  autosize: false,
+  width: 500,
+  height: 500,
+  margin: { l: 65, r: 50, b: 65, t: 90, }
+};
+*/
+
+// for INSAR ts data
+// [ { type:ttype, csv:plot_data }]
+function plotly_plot_insar_vs(cdata) {
+
+  let csv_data=cdata['csv'];
+  let csv_type=cdata['type'];
+
+  let margin_offset=60;
+
+  let frameHeight=window.innerHeight;                                    
+  let frameWidth=window.innerWidth-margin_offset-margin_offset;
+
+  let margin_left_default=80;
+  let margin_right_default=80;
+  let margin_top_default=100;
+
+//window.console.log("frame width "+frameWidth+" frame height "+frameHeight);
+
+  let frameWidth_min=800;
+
+  let nh=frameHeight;
+  let nw=frameWidth;
+  if(frameWidth < frameWidth_min) {
+     window.console.log("plotting screen width is too small, should be at least "+frameWidth_min);
+     nw=frameWidth_min;
+  }
+  nw=nw+margin_offset+margin_offset;
+
+// adjust if need to
+  let nnl=Math.floor((frameWidth - nw)/2);
+  window.console.log("nnl is "+nnl);
+  if(nnl < margin_offset)
+     nnl=margin_offset;
+
+  let margin_top=margin_top_default+Math.floor((frameHeight-nh)/2);
+  let margin_left=margin_left_default+nnl;
+  let margin_right=margin_right_default+nnl;
+
+  window.console.log("nw "+nw+" nh "+nh);
+
+  let plot=csv_data[0].plot;   
+
+  let pUp=plot[0];   
+
+  let scec_image=[{
+        source: "img/SCEC_Traditional_Logo_Red.png",
+        xref: "paper",
+        yref: "paper",
+        x:1,
+        y:0,
+        sizex: 0.1,
+        sizey: 0.1,
+        'xanchor':'left',
+        'yanchor':'top'
+  }];
+
+  let data = [{
+    z: plot['z'],
+    type: 'surface',
+    contours: {
+      z: {
+        show:true,
+        usecolormap: true,
+        highlightcolor:"#42f462",
+        project:{z: true}
+      }
+    }
+  }];
+
+
+  let layout = { 
+    paper_bgcolor: '#f1fff1',
+    plot_bgcolr: '#f1fff1',
+    title: "SOMETHING",
+    width: nw,
+    height: nh,
+    scene: {camera: {eye: {x: 1.87, y: 0.88, z: -0.64}}},
+    margin: { l:margin_left, t:margin_top, r:margin_right },
+    images: scec_image,
+  };
+
+  var config = {displayModeBar:true,responsive:true}
+
+  Plotly.newPlot('myDiv', data, layout, config);
 
   window.top.postMessage({'call':'fromTSviewer', value:'done with loading'}, '*');
 }

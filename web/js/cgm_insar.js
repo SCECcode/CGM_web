@@ -320,19 +320,25 @@ window.console.log("calling.. addToResultsTable..");
         $(`#metadata-viewer tbody tr[data-point-gid='${gid}']`).remove();
     };
 
-// tType = track type
-    this.executePlotTS = function(downloadURL,tType) {
-      showTSview(downloadURL,Products.INSAR,tType);
+// data type >> { "data":"TS", "track": tType }
+    this.executePlotTS = function(downloadURL,tType,gid) {
+      let item= { "dtype":"TS", "track": tType, "gid":gid };
+      showTSview(downloadURL,Products.INSAR, JSON.stringify(item));
       showPlotTSWarning();
     }
-// downloadURL is a single local file,  [url][gid][track]
+
+XX
+// downloadURL is a single local file, [url][gid][track]
+    this.executePlotVS = function(downloadURL,tType,gid) {
+      let item= { "dtype":"VS", "track": tType, "gid":gid };
+      showTSview(downloadURL,Products.INSAR, JSON.stringify(item));
+    }
     this.executeShowVS = function(gid,downloadURL) {
-      window.console.log("executeShowVS..");
       togglePixiOverlay(gid);
     }
 
 // could be D071,A064,D173,A166
-    this.downloadURLsAsZip = function(track_target) {
+    his.downloadURLsAsZip = function(track_target) {
         var nzip=new JSZip();
         var layers=CGM_INSAR.search_result.getLayers();
         let timestamp=$.now();
@@ -398,7 +404,9 @@ var generateTableRow = function(layer) {
               html += `<td class="cgm-insar-data-click">${ostring}</td>`;
               html += `<td class="cgm-insar-data-click">${vstring}</td>`;
               html += `<td class="text-center">`;
-              html += `<button class=\"btn btn-xs\" title=\"show velocity layer\" onclick=CGM_INSAR.executeShowVS(\"${layer.scec_properties.gid}\",\"${layer.scec_properties.file}\")>showVS&nbsp<span class=\"far fa-chart-area\"></span></button>`;
+
+              html += `<button class=\"btn btn-xs\" title=\"show velocity layer\" onclick=CGM_INSAR.executeShowVS(\"${layer.scec_properties.gid}\",\"${layer.scec_properties.file}\")>showVS&nbsp<span class=\"far fa-image\"></span></button>`;
+              html += `<br><button class=\"btn btn-xs\" title=\"plot velocity layer\" onclick=CGM_INSAR.executePlotVS(\"${layer.scec_properties.gid}\",\"${layer.scec_properties.file}\")>plotVS&nbsp<span class=\"far fa-chart-area\"></span></button>`;
         } 
 
         html += `</tr>`;
@@ -650,6 +658,8 @@ window.console.log("Did not find any PHP result");
                              let nlat2=truncateNumber(bb[1][1],4);
                              let file=v['file'];
                              let track_name=v['track'];
+                             let nx=v['nx'];
+                             let ny=v['ny'];
 
                              // create a ncriteria
                              ncriteria.push(nlat1);
@@ -678,6 +688,8 @@ window.console.log("Did not find any PHP result");
                                  lon: [ nlon1, nlon2 ],
                                  file: file,
                                  type: type,
+                                 nx: nx,
+                                 ny: ny,
                                  gid: ngid,
                                  selected: false,
                              };

@@ -25,8 +25,17 @@ function ckExist(url) {
   }
 };
 
+//https://stackoverflow.com/questions/4912788/truncate-not-round-off-decimal-numbers-in-javascript
+function truncate(numstr, digits) {
+    if (numstr.indexOf('.') > -1) {
+        return numstr.substr(0 , numstr.indexOf('.') + digits+1 );
+    } else {
+        return numstr;
+    }
+}
+
 //always the first one.
-function loadAndProcessFromPOS(ulist,tlist) {
+function load_GNSS_ProcessTSFromPOS(ulist,tlist) {
 
   let sz=TS_pos_data.length; // to be reused
   let ftype=tlist[0];
@@ -48,17 +57,31 @@ function loadAndProcessFromPOS(ulist,tlist) {
      pos={'type':ftype,'pos':plot_data};
      TS_pos_data.push(pos);
    }
-   plotly_plot_pos(pos);
+   plotly_plot_gnss_ts(pos);
 }
 
-function loadAndProcessFromCSV(ulist,tlist) {
+// { "dtype":"TS", "track": tType, "gid":gid };
+function load_INSAR_ProcessTSFromCSV(ulist,params) {
    let url = ulist[0];
-   let ttype = tlist[0];
+   let ttype = params['track'];
    let data = ckExist(url);
-   let plot_data = processCSV(data);
+
+   let ts_plot_data = processCSV(data);
     
-   plotly_plot_csv({'type':ttype,'csv':plot_data});
+   plotly_plot_insar_ts({'type':ttype,'csv':ts_plot_data});
 }
+
+// { "dtype":"VS", "track": tType, "gid":gid };
+function load_INSAR_ProcessVSFromCSV(ulist,params) {
+   let url = ulist[0];
+   let ttype = params['track'];
+   let data = ckExist(url);
+
+   let vs_plot_data = processCSV4VS(data);
+    
+   plotly_plot_insar_vs({'type':ttype,'csv':vs_plot_data});
+}
+
 
 function changeTSview(params) {
   window.top.postMessage({'call':'fromTSviewer', value:'start loading'}, '*');
@@ -71,6 +94,8 @@ function changeTSview(params) {
   loadAndProcessFromFile(urls,ptype, ftypes);
 }
 
+// for GNSS,  [url..url],GNSS,[ftype..ftype]
+// for INSAR, [url],INSAR,[{...}]
 // https://stackoverflow.com/questions/28295870/how-to-pass-parameters-through-iframe-from-parent-html
 function getParams(param) {
 

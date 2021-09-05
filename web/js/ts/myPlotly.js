@@ -19,9 +19,14 @@ window.console.log("from myPlotly.js.."+ftypes);
 //  loadAndProcessFromFile(myURL, myFtypes);
 
   if(ptype == "gnss") {
-    loadAndProcessFromPOS(urls,ptype,ftypes);
+    load_GNSS_ProcessTSFromPOS(urls,ftypes);
     } else {
-      loadAndProcessFromCSV(urls,ptype,ftypes);
+      params=ftypes[0]; // { "dtype":"TS", "track": tType, "gid":gid };    
+      if(ftypes == params['dtype'] == "TS" ) {
+        load_INSAR_ProcessTSFromCSV(urls,params);
+        } else {
+          load_INSAR_ProcessVSFromCSV(urls,params);
+      }
   }
 
 }) // end of MAIN

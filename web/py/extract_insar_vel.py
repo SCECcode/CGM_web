@@ -42,6 +42,8 @@ for filename in flist:
   s = f.getvalue()
 
   latlon=[[rout[0],rout[2]],[rout[1],rout[3]]]
+  nx=rout[4]
+  ny=rout[5]
   vel_file=dirpath+"/velocity_list.csv"
   fname=gid+"_"+tt+"_velocity_list.csv"
   n_vel_file=rloc+"/"+fname;
@@ -49,7 +51,7 @@ for filename in flist:
 #  fname="velocity_list.csv"
   if os.path.isfile(vel_file): 
      shutil.copyfile(vel_file, n_vel_file)
-     vlist.append({"bb":latlon,"track":tt,"file":fname})
+     vlist.append({"bb":latlon,"track":tt,"file":fname,"nx":nx,"ny":ny})
   idx=idx+1
 
 if(len(vlist) != 0): 

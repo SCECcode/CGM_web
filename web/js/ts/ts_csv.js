@@ -41,15 +41,6 @@ Datetime, LOS, Std Dev LOS
 //                xrange:[-300,400],
 //                yrange:[2000,2022]}, ...] }
 
-//https://stackoverflow.com/questions/4912788/truncate-not-round-off-decimal-numbers-in-javascript
-function truncate(numstr, digits) {
-    if (numstr.indexOf('.') > -1) {
-        return numstr.substr(0 , numstr.indexOf('.') + digits+1 );
-    } else {
-        return numstr;
-    }
-}
-
 //to '2013-10-04 22:23:00'
 function toTime(dstr) {
    let newdstr=dstr.replace('T',' ').replace('Z,','');
