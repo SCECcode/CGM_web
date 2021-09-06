@@ -69,21 +69,21 @@ function load_INSAR_ProcessTSFromCSV(ulist,params) {
 
    let ts_plot_data = processCSV(data,gid,track);
     
-   plotly_plot_insar_ts({'type':ttype,'csv':ts_plot_data});
+   plotly_plot_insar_ts({'type':track,'csv':ts_plot_data});
 }
 
 // { "dtype":"VS", "track": tType, "gid":gid };
 function load_INSAR_ProcessVSFromCSV(ulist,params) {
    let url = ulist[0];
-   let ttype = params['track'];
+   let track = params['track'];
    let gid = params['gid'];
    let nx = parseInt(params['nx']);
    let ny = parseInt(params['ny']);
    let data = ckExist(url);
 
-   let vs_plot_data = processCSV4VS(data,gid,ttype,nx,ny);
+   let vs_plot_data = processCSV4VS(data,gid,track,nx,ny);
     
-   plotly_plot_insar_vs({'type':ttype,'csv':vs_plot_data});
+   plotly_plot_insar_vs({'type':track,'csv':vs_plot_data});
 }
 
 

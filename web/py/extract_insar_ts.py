@@ -36,6 +36,10 @@ with redirect_stdout(io.StringIO()) as f:
     rout=cgm_library.hdf5_to_geocsv.extract_csv_wrapper(flist, pixel_list, result);
 s = f.getvalue()
 
+#print(rout)
+#print(rout[0][2])
+
+
 ##Reading file ../cgm_data/insar/USGS_D071_InSAR_v0_0_1.hdf5 
 ##Reading track D071: 
 ##Writing ../result/pixel_-116.57164_35.32064_D071.csv 

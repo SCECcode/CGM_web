@@ -100,6 +100,7 @@ function get_PARAMS() {
 // ftypes -> array/for GNSS 
 //           [{}]/for INSAR
 function showTSview(urls,ptype,ftypes) {
+window.console.log("calling showTSview..");
 
   window.console.log("HERE");
 

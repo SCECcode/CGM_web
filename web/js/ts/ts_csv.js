@@ -58,6 +58,7 @@ function processCSV(data,gid,track) {
    let cgm_lat=0;
    let cgm_lon=0;
    let cgm_hgt=0;
+   let cgm_title=0;
    let xrange_start,xrange_end;
    let yrange_start,yrange_end;
    let Xtime=[];
@@ -115,11 +116,12 @@ window.console.log("HERE");
          tmp=terms[0].trim();
          cgm_lat=truncate(tmp,3);
          cgm_hgt=pair[4].trim();
-         cgm_title=cgm_mission+"("+cgm_lon+","+cgm_lat+")";
+         //??? cgm_title=cgm_mission+"("+cgm_lon+","+cgm_lat+")";
          continue;
      }
    }
 
+   cgm_title=cgm_gid+"("+cgm_lon+","+cgm_lat+")";
    csv_plot_data.push({
             info: { cgm_title:cgm_title,
                     cgm_name: cgm_gid,
