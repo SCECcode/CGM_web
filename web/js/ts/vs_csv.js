@@ -15,11 +15,12 @@ function _getV(line) {
    return v;
 }
 
-function processCSV4VS(data,nx,ny) {
+function processCSV4VS(data,gid,track,nx,ny) {
    let dlines=data.split("\n");
    let sz=dlines.length;
    let zvlist=[];
    let vs_plot_data=[];
+   let cgm_title=gid+"("+track+")";
 
    let idx=0;
    let data_count=0;
@@ -34,7 +35,11 @@ function processCSV4VS(data,nx,ny) {
 
    let yratio=ny/nx;
 
-   vs_plot_data.push({plot:[{xlabel:'x', ylabel:'y', z:zvlist, aspect:yratio}]});
+   vs_plot_data.push(
+           {
+            info: { cgm_title:cgm_title, cgm_frame:track },
+            plot:[{xlabel:'x', ylabel:'y', z:zvlist, aspect:yratio}]
+           });
 
    window.console.log("loading vs DONE...");
    return vs_plot_data;

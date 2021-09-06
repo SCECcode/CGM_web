@@ -98,7 +98,7 @@ window.console.log("HERE");
      }
 
      if(terms[1]=="SAR" && terms[2]=="mission") {
-         cgm_id=pair[1].trim();
+         cgm_mission=pair[1].trim();
          continue;
      }
      if(terms[1]=="SAR" && terms[2]=="track") {
@@ -115,15 +115,13 @@ window.console.log("HERE");
          tmp=terms[0].trim();
          cgm_lat=truncate(tmp,3);
          cgm_hgt=pair[4].trim();
-         cgm_id=cgm_id+"("+cgm_lon+","+cgm_lat+")";
+         cgm_title=cgm_mission+"("+cgm_lon+","+cgm_lat+")";
          continue;
      }
    }
 
    csv_plot_data.push({
-            station: { cgm_id:cgm_id,
-                       cgm_track:cgm_track
-                     },
+            info: { cgm_title:cgm_title, cgm_track:cgm_track },
             plot:[
                   {xlabel:'time',
                    ylabel:'North(mm)',

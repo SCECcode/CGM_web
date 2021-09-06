@@ -75,11 +75,12 @@ function load_INSAR_ProcessTSFromCSV(ulist,params) {
 function load_INSAR_ProcessVSFromCSV(ulist,params) {
    let url = ulist[0];
    let ttype = params['track'];
+   let gid = params['gid'];
    let nx = parseInt(params['nx']);
    let ny = parseInt(params['ny']);
    let data = ckExist(url);
 
-   let vs_plot_data = processCSV4VS(data,nx,ny);
+   let vs_plot_data = processCSV4VS(data,gid,ttype,nx,ny);
     
    plotly_plot_insar_vs({'type':ttype,'csv':vs_plot_data});
 }

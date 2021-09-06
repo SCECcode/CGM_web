@@ -80,7 +80,7 @@ function plotly_plot_gnss_ts(pdata) {
   window.console.log("nw "+nw+" nh "+nh);
 
   let plot=pos_data[0].plot;   
-  let info=pos_data[0].station;
+  let info=pos_data[0].info;
 
   let pNorth=plot[0]; 
   let pEast=plot[1];
@@ -152,113 +152,113 @@ function plotly_plot_gnss_ts(pdata) {
   let data = [traceEast, traceNorth, traceUp ];
 
   let layout = { 
-paper_bgcolor: '#f1fff1',
-plot_bgcolr: '#f1fff1',
-title: info.cgm_name+" ("+info.cgm_frame+")",
-width: nw,
-height: nh,
-margin: { l:margin_left, t:margin_top, r:margin_right },
-colorway: [ '#1f77b4','#1f77b4','#1f77b4'],
-images: scec_image,
-yaxis: {
-    title: {text: 'East(mm)', font: { size:18,color:'#000000'}},
-    showgrid: true,
-    zeroline: true,
-    showline: true,
-    mirror: 'allticks',
-    tickes: 'inside',
-    nticks: 8,
-    gridcolor: '#f1f1f1',
-    gridwidth: 1,
-    zerolinecolor: '#969696',
-    zerolinewidth: 1,
-    linecolor: '#636363',
-    linewidth: 2, },
-yaxis2: {
-    title: {text: 'North(mm)', font: { size:18,color:'#000000'}},
-    showgrid: true,
-    zeroline: true,
-    showline: true,
-    mirror: 'allticks',
-    tickes: 'inside',
-    nticks: 8,
-    gridcolor: '#f1f1f1',
-    gridwidth: 1,
-    zerolinecolor: '#969696',
-    zerolinewidth: 1,
-    linecolor: '#636363',
-    linewidth: 2 },
-yaxis3: {
-    title: {text: 'Up(mm)', font: { size:18,color:'#000000'}},
-    showgrid: true,
-    zeroline: true,
-    showline: true,
-    mirror: 'allticks',
-    tickes: 'inside',
-    nticks: 8,
-    gridcolor: '#f1f1f1',
-    gridwidth: 1,
-    zerolinecolor: '#969696',
-    zerolinewidth: 1,
-    linecolor: '#636363',
-    linewidth: 2 },
-xaxis: {
-    tickmode: "linear",
-    tick0: '2000-01-01',
-    dtick: 'M24', // number of months
-    showgrid: true,
-    zeroline: true,
-    showline: true,
-    mirror: 'allticks',
-    tickes: 'inside',
-    gridcolor: '#f1f1f1',
-    gridwidth: 1,
-    zerolinecolor: '#969696',
-    zerolinewidth: 1,
-    linecolor: '#636363',
-    linewidth: 2 },
-xaxis2: {
-    tickmode: "linear",
-    tick0: '2000-01-01',
-    dtick: 'M24', // number of months
-    matches: 'x',
-    showgrid: true,
-    zeroline: true,
-    showline: true,
-    mirror: 'allticks',
-    tickes: 'inside',
-    gridcolor: '#f1f1f1',
-    gridwidth: 1,
-    zerolinecolor: '#969696',
-    zerolinewidth: 1,
-    linecolor: '#636363',
-    linewidth: 2 },
-xaxis3: {
-    tickmode: "linear",
-    tick0: '2000-01-01',
-    dtick: 'M24', // number of months
-    matches: 'x',
-    showgrid: true,
-    zeroline: true,
-    showline: true,
-    mirror: 'allticks',
-    tickes: 'inside',
-    gridcolor: '#f1f1f1',
-    gridwidth: 1,
-    zerolinecolor: '#969696',
-    zerolinewidth: 2,
-    linecolor: '#636363',
-    linewidth: 2 },
-grid: { rows: 3, columns: 1, pattern: 'independent' },
-annotations: [
-    { text: pEast.topLeft, showarrow:false, x:0, xref:"x domain",y:1.18, yref:"y domain"},
-    { text: pNorth.topLeft, showarrow:false, x:0, xref:"x domain",y:1.18, yref:"y2 domain"},
-    { text: pUp.topLeft, showarrow:false, x:0, xref:"x domain",y:1.18, yref:"y3 domain"},
-    { text: pEast.topRight, showarrow:false, x:1, xref:"x domain",y:1.18, yref:"y domain"},
-    { text: pNorth.topRight, showarrow:false, x:1, xref:"x domain",y:1.18, yref:"y2 domain"},
-    { text: pUp.topRight, showarrow:false, x:1, xref:"x domain",y:1.18, yref:"y3 domain"}
-    ]
-};
+    paper_bgcolor: '#f1fff1',
+    plot_bgcolr: '#f1fff1',
+    title: info.cgm_title,
+    width: nw,
+    height: nh,
+    margin: { l:margin_left, t:margin_top, r:margin_right },
+    colorway: [ '#1f77b4','#1f77b4','#1f77b4'],
+    images: scec_image,
+    yaxis: {
+        title: {text: 'East(mm)', font: { size:18,color:'#000000'}},
+        showgrid: true,
+        zeroline: true,
+        showline: true,
+        mirror: 'allticks',
+        tickes: 'inside',
+        nticks: 8,
+        gridcolor: '#f1f1f1',
+        gridwidth: 1,
+        zerolinecolor: '#969696',
+        zerolinewidth: 1,
+        linecolor: '#636363',
+        linewidth: 2, },
+    yaxis2: {
+        title: {text: 'North(mm)', font: { size:18,color:'#000000'}},
+        showgrid: true,
+        zeroline: true,
+        showline: true,
+        mirror: 'allticks',
+        tickes: 'inside',
+        nticks: 8,
+        gridcolor: '#f1f1f1',
+        gridwidth: 1,
+        zerolinecolor: '#969696',
+        zerolinewidth: 1,
+        linecolor: '#636363',
+        linewidth: 2 },
+    yaxis3: {
+        title: {text: 'Up(mm)', font: { size:18,color:'#000000'}},
+        showgrid: true,
+        zeroline: true,
+        showline: true,
+        mirror: 'allticks',
+        tickes: 'inside',
+        nticks: 8,
+        gridcolor: '#f1f1f1',
+        gridwidth: 1,
+        zerolinecolor: '#969696',
+        zerolinewidth: 1,
+        linecolor: '#636363',
+        linewidth: 2 },
+    xaxis: {
+        tickmode: "linear",
+        tick0: '2000-01-01',
+        dtick: 'M24', // number of months
+        showgrid: true,
+        zeroline: true,
+        showline: true,
+        mirror: 'allticks',
+        tickes: 'inside',
+        gridcolor: '#f1f1f1',
+        gridwidth: 1,
+        zerolinecolor: '#969696',
+        zerolinewidth: 1,
+        linecolor: '#636363',
+        linewidth: 2 },
+    xaxis2: {
+        tickmode: "linear",
+        tick0: '2000-01-01',
+        dtick: 'M24', // number of months
+        matches: 'x',
+        showgrid: true,
+        zeroline: true,
+        showline: true,
+        mirror: 'allticks',
+        tickes: 'inside',
+        gridcolor: '#f1f1f1',
+        gridwidth: 1,
+        zerolinecolor: '#969696',
+        zerolinewidth: 1,
+        linecolor: '#636363',
+        linewidth: 2 },
+    xaxis3: {
+        tickmode: "linear",
+        tick0: '2000-01-01',
+        dtick: 'M24', // number of months
+        matches: 'x',
+        showgrid: true,
+        zeroline: true,
+        showline: true,
+        mirror: 'allticks',
+        tickes: 'inside',
+        gridcolor: '#f1f1f1',
+        gridwidth: 1,
+        zerolinecolor: '#969696',
+        zerolinewidth: 2,
+        linecolor: '#636363',
+        linewidth: 2 },
+    grid: { rows: 3, columns: 1, pattern: 'independent' },
+    annotations: [
+        { text: pEast.topLeft, showarrow:false, x:0, xref:"x domain",y:1.18, yref:"y domain"},
+        { text: pNorth.topLeft, showarrow:false, x:0, xref:"x domain",y:1.18, yref:"y2 domain"},
+        { text: pUp.topLeft, showarrow:false, x:0, xref:"x domain",y:1.18, yref:"y3 domain"},
+        { text: pEast.topRight, showarrow:false, x:1, xref:"x domain",y:1.18, yref:"y domain"},
+        { text: pNorth.topRight, showarrow:false, x:1, xref:"x domain",y:1.18, yref:"y2 domain"},
+        { text: pUp.topRight, showarrow:false, x:1, xref:"x domain",y:1.18, yref:"y3 domain"}
+        ]
+    };
 
   var config = {displayModeBar:true,responsive:true}
 
@@ -312,7 +312,7 @@ function plotly_plot_insar_ts(cdata) {
   window.console.log("nw "+nw+" nh "+nh);
 
   let plot=csv_data[0].plot;   
-  let info=csv_data[0].station;
+  let info=csv_data[0].info;
 
   let pUp=plot[0];   
 
@@ -349,7 +349,7 @@ function plotly_plot_insar_ts(cdata) {
   let layout = { 
 paper_bgcolor: '#f1fff1',
 plot_bgcolr: '#f1fff1',
-title: info.cgm_id+" ("+info.cgm_track+")",
+title: info.cgm_title,
 width: nw,
 height: nh,
 margin: { l:margin_left, t:margin_top, r:margin_right },
@@ -467,6 +467,7 @@ function plotly_plot_insar_vs(cdata) {
   window.console.log("nw "+nw+" nh "+nh);
 
   let plot=csv_data[0].plot;   
+  let info=csv_data[0].info;
   let pdata=plot[0];   
 
   let scec_image=[{
@@ -499,12 +500,12 @@ window.console.log("aspect ration is "+pdata['aspect']);
   let layout = { 
     paper_bgcolor: '#f1fff1',
     plot_bgcolr: '#f1fff1',
-    title: "SOMETHING",
+    title: info.cgm_title,
     width: nw,
     height: nh,
     autorange : false,
     aspectmode : 'manual',
-    scene: { aspectratio : {x:1,y:pdata['aspect'],z:0.5},camera: {eye: {x: 1.87, y: 0.88, z: -0.64}}},
+    scene: { aspectratio : {x:1,y:pdata['aspect'],z:0.5},camera: {eye: {x: 0, y: -1, z: 0.50}}},
     margin: { l:margin_left, t:margin_top, r:margin_right },
     images: scec_image,
   };

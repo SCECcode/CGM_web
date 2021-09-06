@@ -466,6 +466,7 @@ window.console.log("Hide model/product");
     this.reset = function() {
         window.console.log("insar calling -->>> reset");
         $("#wait-spinner").hide();
+        clearAllPixiOverlay();
         this.zeroSelectCount()
         this.showSearch('none');
         this.searching = false;

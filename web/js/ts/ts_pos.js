@@ -52,9 +52,10 @@ Se       Su Rne    Rnu    Reu  Soln
 *******************/
 
 // each frame has 3 plots, one for North, East, and Up
-// {id:idx, station: [ { cgm_id:'ANA1',
-//                       cgm_name:'ANA1_SCGN_CS2002',
-//                       cgm_frame:'IGb14'}],
+// {id:idx, info: [ { cgm_title: 'SOMETHING',
+/                     cgm_id:'ANA1',
+//                    cgm_name:'ANA1_SCGN_CS2002',
+//                    cgm_frame:'IGb14'}],
 //          plot:[{xlabel:'time',
 //                ylabel:'East(mm)',
 //                topRight:'WRMS=222.70mm;NRMS=141.08',
@@ -201,10 +202,12 @@ raw time series, as we are here)
    let nrms_east = Math.floor((Math.sqrt(wrms_top_east /data_count)*1000))/1000;
    let nrms_up = Math.floor((Math.sqrt(wrms_top_up /data_count)*1000))/1000;
 
+   let cgm_title= cgm_name+" ("+cgm_frame+")";
    pos_plot_data.push({
-            station: { cgm_id:cgm_id,
-                       cgm_name:cgm_name,
-                       cgm_frame:cgm_frame},
+            info: { cgm_title: cgm_title,
+                    cgm_id:cgm_id,
+                    cgm_name:cgm_name,
+                    cgm_frame:cgm_frame},
             plot:[
                   {xlabel:'time',
                    ylabel:'North(mm)',
