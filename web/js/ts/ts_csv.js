@@ -30,7 +30,8 @@ Datetime, LOS, Std Dev LOS
 2015-07-01T13:51:59Z, -3.069258, 0.000000
 *******************/
 // has 1 plot
-// {id:idx, track: [ { cgm_id:'SOMETHING',
+// {id:idx, track: [ { cgm_title:cgm_gid,
+//                     cgm_name:cgm_gid,
 //                     cgm_track:'D071' }],
 //          plot:[{xlabel:'time',
 //                ylabel:'East(mm)',
@@ -42,19 +43,18 @@ Datetime, LOS, Std Dev LOS
 //                yrange:[2000,2022]}, ...] }
 
 //to '2013-10-04 22:23:00'
-function toTime(dstr) {
+function insarTime(dstr) {
    let newdstr=dstr.replace('T',' ').replace('Z,','');
-window.console.log("new time.."+newdstr);
    return newdstr;
 }
 
-function processCSV(data) {
+function processCSV(data,gid,track) {
    var csv_plot_data = [];
    var data_start=0;
    let dlines=data.split("\n");
    let sz=dlines.length;
-   let cgm_id='';
-   let cgm_track='';
+   let cgm_gid=gid;
+   let cgm_track=track;
    let cgm_lat=0;
    let cgm_lon=0;
    let cgm_hgt=0;
@@ -79,7 +79,7 @@ window.console.log("HERE");
      if(data_start) {
          data_count=data_count+1;
          let vals=(line.trim().replace(/ +/g," ")).split(" ");
-         let xtime=toTime(vals[0]);
+         let xtime=insarTime(vals[0]);
          let ynorth=parseFloat(vals[1]);
          let ynorth_e=parseFloat(vals[2]);
 
@@ -121,7 +121,9 @@ window.console.log("HERE");
    }
 
    csv_plot_data.push({
-            info: { cgm_title:cgm_title, cgm_track:cgm_track },
+            info: { cgm_title:cgm_title,
+                    cgm_name: cgm_gid,
+                    cgm_track:cgm_track },
             plot:[
                   {xlabel:'time',
                    ylabel:'North(mm)',

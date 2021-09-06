@@ -52,8 +52,8 @@ Se       Su Rne    Rnu    Reu  Soln
 *******************/
 
 // each frame has 3 plots, one for North, East, and Up
-// {id:idx, info: [ { cgm_title: 'SOMETHING',
-/                     cgm_id:'ANA1',
+// {id:idx, info: [ { cgm_title:cgm_name+" ("+cgm_frame+")",
+//                    cgm_id:'ANA1',
 //                    cgm_name:'ANA1_SCGN_CS2002',
 //                    cgm_frame:'IGb14'}],
 //          plot:[{xlabel:'time',
@@ -72,7 +72,7 @@ Se       Su Rne    Rnu    Reu  Soln
 //                yrange:[2000,2022]}, ...] }
 
 //'2013-10-04 22:23:00'
-function toTime(dstr,tstr) {
+function gnssTime(dstr,tstr) {
    let d=dstr.split("");
    d.splice(6,0,"-");
    d.splice(4,0,"-");
@@ -128,7 +128,7 @@ raw time series, as we are here)
      if(data_start) {
          data_count=data_count+1;
          let vals=(line.trim().replace(/ +/g," ")).split(" ");
-         let xtime= toTime(vals[0],vals[1]); 
+         let xtime= gnssTime(vals[0],vals[1]); 
 
          let ynorth=parseFloat(vals[15])*1000;
          let ynorth_e=parseFloat(vals[18])*1000;
@@ -177,13 +177,13 @@ raw time series, as we are here)
      if(terms[0]=="First" && terms[1]=="Epoch") {
          let tmp=pair[1].trim().split(" ");
          start_epoch=tmp[0];
-         xrange_start=toTime(tmp[0],tmp[1]);
+         xrange_start=gnssTime(tmp[0],tmp[1]);
          continue;
      }
      if(terms[0]=="Last" && terms[1]=="Epoch") {
          let tmp=pair[1].trim().split(" ");
          end_epoch=tmp[0];
-         xrange_end=toTime(tmp[0],tmp[1]);
+         xrange_end=gnssTime(tmp[0],tmp[1]);
          continue;
      }
      if(terms[0]=="NEU" && terms[1]=="Reference") {

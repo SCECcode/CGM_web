@@ -63,10 +63,11 @@ function load_GNSS_ProcessTSFromPOS(ulist,tlist) {
 // { "dtype":"TS", "track": tType, "gid":gid };
 function load_INSAR_ProcessTSFromCSV(ulist,params) {
    let url = ulist[0];
-   let ttype = params['track'];
+   let track = params['track'];
+   let gid = params['gid'];
    let data = ckExist(url);
 
-   let ts_plot_data = processCSV(data);
+   let ts_plot_data = processCSV(data,gid,track);
     
    plotly_plot_insar_ts({'type':ttype,'csv':ts_plot_data});
 }
