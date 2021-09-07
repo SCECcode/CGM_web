@@ -207,6 +207,8 @@ window.console.log("==> reset what was there/INSAR");
        }
        if ($(this).val() == 'insar') {
            CGM_INSAR.setupCGMInterface();
+// and also always go to the location search.. cgm-insar-search-type/"location"
+//           $("#cgm-insar-search-type").val('location').trigger('change');
        }
     });
 

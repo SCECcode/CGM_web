@@ -1,10 +1,74 @@
 /***
    ts_util.js
 ***/
-// tracking parsed pos data
-
+// tracking parsed data
 var TS_pos_data=[];
 var TS_csv_data=[];
+
+const TS_PLOTLY_TYPE_GNSS_TS=0;
+const TS_PLOTLY_TYPE_INSAR_TS=1;
+const TS_PLOTLY_TYPE_INSAR_VS=2;
+
+// tracking current plotly objects
+var TS_plotly_name;
+var TS_plotly_data;
+var TS_plotly_layout;
+var TS_plotly_config;
+var TS_plotly_type;
+
+function _savePlotly(name,data,layout,config,ptype) {
+   TS_plotly_name=name;
+   TS_plotly_data=data;
+   TS_plotly_layout=layout;
+   TS_plotly_config=config;
+   TS_plotly_type=ptype;
+}
+
+function gnss_plot_size() {
+   if(TS_plotly_layout) {
+      return [TS_plotly_layout.width, TS_plotly_layout.height];
+   }
+   return [ 0, 0 ]; 
+}
+
+function plotly_plot_clear() {
+  Plotly.purge('myDiv');
+}
+
+
+// Plotly.downloadImage('myDiv', {format: 'png', width: 800, height: 600, filename: fname});
+// on safari, always store into Unknown_X.png
+function plotly_plot_image_unknown() {
+  let myfname=TS_plotly_name;
+  window.console.log("fname used.."+myfname);
+  if(TS_plotly_layout) {
+      Plotly.downloadImage('myDiv', {format: 'png', width: TS_plotly_layout.width, height: TS_plotly_layout.height, filename: myfname});
+  }
+  window.console.log("called plotly_plot_image");
+}
+
+// this one does not work for surface-contour plot
+function plotly_plot_image() {
+  if(TS_plotly_layout) {
+
+/* -- this does not work..
+     if(TS_plotly_type == TS_PLOTLY_TYPE_INSAR_VS) {
+         plotly_plot_image_unknown();
+         return;
+     }
+*/
+
+     let fname=TS_plotly_name;
+     var gd = document.getElementById('myDiv');
+     Plotly.toImage(gd,{format: 'png', width: TS_plotly_layout.width, height: TS_plotly_layout.height}).
+       then(function(dataURL) {
+window.console.log("calling toImage, "+TS_plotly_layout.width+" "+TS_plotly_layout.height);
+          let image=dataURL;
+          savePNG(fname,dataURL);
+     });
+  }
+}
+
 
 // should be a very small file and used for testing and so can ignore
 // >>Synchronous XMLHttpRequest on the main thread is deprecated
@@ -154,13 +218,20 @@ window.console.log("myFtype "+ myFtype);
 }
 
 
-// plotly's have funny file name
-function savePNG(fname,image) {
+// unique name
+function makeUname(n) {
     let d=new Date();
     let timestamp = d.getTime();
+    let nfname=n+'_'+timestamp;
+    return nfname;
+}
+
+// plotly's have funny file name
+function savePNG(fname,image) {
+    let nfname=makeUname(fname);
     let a = document.createElement('a');
     a.href = image;
-    a.download = fname+'_'+timestamp+'.png';
+    a.download = nfname+".png";
     a.style.display = 'none';
     document.body.appendChild(a);
     a.click();
@@ -169,13 +240,12 @@ function savePNG(fname,image) {
 
 // working around plotly's toImage not working for some of the plots
 //
-//function plotly2canvas() {
-function plotly_plot_image() {
+function plotly_plot_image3() {
     let fname=TS_plotly_name;
-    $('#myDiv').html2canvas({
-        onrendered : function(canvas) {
+    let elt=document.getElementById('myDiv');
+    html2canvas(elt).then(function(canvas) {
            let img = canvas.toDataURL();
            savePNG(fname,img);
-        }});
+    });
 }
 

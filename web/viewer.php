@@ -35,7 +35,9 @@ $cgm_insar = new CGM_INSAR();
     <script type='text/javascript' src='js/vendor/FileSaver.js'></script>
     <script type='text/javascript' src='js/vendor/jszip.js'></script>
     <script type='text/javascript' src='js/vendor/jquery.floatThead.min.js'></script>
-    <script type='text/javascript' src='js/vendor/html2canas.js'></script>
+<!--
+    <script type='text/javascript' src='js/vendor/html2canvas.js'></script>
+-->
 
     <!--
     https://leaflet.github.io/Leaflet.draw/docs/Leaflet.draw-latest.html#l-draw
@@ -477,16 +479,13 @@ window.console.log("HERE..");
       </div>
 
       <div class="modal-footer justify-content-center" id="modalTSFooter">
-
-        <div class="spinDialog" style="position:absolute;top:40%;left:50%; z-index:9999;">
-          <div id="spinIconForTS" align="center" style="display:none;"><i class="glyphicon glyphicon-cog fa-spin" style="color:red"></i></div>
-        </div>
-
         <button id="viewTSClosebtn" class="btn btn-outline-primary btn-sm" data-dismiss="modal">Close</button>
         <button id="viewTSRefreshbtn" class="btn btn-outline-primary btn-sm" type="button" onclick="refreshTSview()">Reset</button>
         <button id="viewTSMovebtn" class="btn btn-outline-primary btn-sm" type="button" onclick="moveTSview()">New Window</button>
         <button id="viewTSWarnbtn" class="btn btn-outline-primary btn-sm" style="display:none" data-toggle="modal" data-target="#modalwarnTS"></button>
+<!-- Plotly's toImage does not work for surface-contour plot
         <button id="viewTSSavebtn" class="btn btn-outline-primary btn-sm" type="button" onclick="saveTSview()">Save Image</button>
+-->
         <button id="viewTSHelpbtn" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modalinfoTS" onclick="$('#modalTS').modal('hide');">Help</button>
       </div> <!-- footer -->
 

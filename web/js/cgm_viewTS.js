@@ -155,11 +155,11 @@ window.addEventListener("DOMContentLoaded", function () {
         }
         if(event.data.value == "done with loading") {
           window.console.log(" SERVER, turn off load spinner");
-          document.getElementById('spinIconForTS').style.display = "none";
+          $("#wait-spinner").hide();
           return;
         }
         if(event.data.value == "start loading") {
-          document.getElementById('spinIconForTS').style.display = "block";
+          $("#wait-spinner").show();
           window.console.log(" SERVER, turn on loading spinner");
           return;
         }

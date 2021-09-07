@@ -3,54 +3,6 @@
    plotting GNSS triplet time series (triplet)
 ***/
 
-// tracking current plotly objects
-var TS_plotly_name;
-var TS_plotly_data;
-var TS_plotly_layout;
-var TS_plotly_config;
-
-function _savePlotly(name,data,layout,config) {
-   TS_plotly_name=name;
-   TS_plotly_data=data;
-   TS_plotly_layout=layout;
-   TS_plotly_config=config;
-}
-
-function gnss_plot_size() {
-   if(TS_plotly_layout) {
-      return [TS_plotly_layout.width, TS_plotly_layout.height];
-   }
-   return [ 0, 0 ]; 
-}
-
-function plotly_plot_clear() {
-  Plotly.purge('myDiv');
-}
-
-
-//Plotly.downloadImage('myDiv', {format: 'png', width: 800, height: 600, filename: fname});
-// does not seem to work with right name
-function plotly_plot_image2() {
-  let myfname=TS_plotly_name;
-  window.console.log("fname used.."+myfname);
-  if(TS_plotly_layout) {
-      Plotly.downloadImage('myDiv', {format: 'png', width: TS_plotly_layout.width, height: TS_plotly_layout.height, filename: myfname});
-  }
-  window.console.log("called plotly_plot_image2");
-}
-
-function plotly_plot_image0() {
-  let fname=TS_plotly_name;
-  if(TS_plotly_layout) {
-     Plotly.toImage('myDiv',{format: 'png', width: TS_plotly_layout.width, height: TS_plotly_layout.height}).
-       then(function(dataURL) {
-window.console.log("calling toImage, "+TS_plotly_layout.width+" "+TS_plotly_layout.height);
-          let image=dataURL;
-          setTimeout(savePNG(fname,dataURL),5000);
-     });
-  }
-}
-
 // for GNSS ts data
 // [ { type:ftype, pos:plot_data }]
 function plotly_plot_gnss_ts(pdata) {
@@ -273,10 +225,10 @@ function plotly_plot_gnss_ts(pdata) {
         ]
     };
 
-  var config = {displayModeBar:true,responsive:true}
+  var config = {displayModeBar:true, toImageButtonOptions: {filename:makeUname(info.cgm_name)}};
 
   Plotly.newPlot('myDiv', data, layout, config);
-  _savePlotly(info.cgm_name,data,layout,config);
+  _savePlotly(info.cgm_name,data,layout,config, TS_PLOTLY_TYPE_GNSS_TS);
 
   window.top.postMessage({'call':'fromTSviewer', value:'done with loading'}, '*');
 }

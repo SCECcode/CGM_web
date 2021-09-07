@@ -124,15 +124,10 @@ grid: { rows: 3, columns: 1, pattern: 'independent' },
 annotations: [ ]
 };
 
-  var config = { toImageButtonOptions: { filename: 'BAH',
-                                         width: 800,
-                                         height: 600, 
-                                         format: 'png'},
-                  displayModeBar:true,
-                  responsive:true};
+  let config = {displayModeBar:true, toImageButtonOptions: {filename:makeUname(info.cgm_name)}};
 
   Plotly.newPlot('myDiv', data, layout, config);
-  _savePlotly(info.cgm_name,data,layout,config);
+  _savePlotly(info.cgm_name,data,layout,config,TS_PLOTLY_TYPE_INSAR_TS);
 
   window.top.postMessage({'call':'fromTSviewer', value:'done with loading'}, '*');
 }
@@ -246,10 +241,10 @@ window.console.log("aspect ration is "+pdata['aspect']);
     images: scec_image,
   };
 
-  var config = {displayModeBar:true,responsive:true}
+  let config = {displayModeBar:true, toImageButtonOptions: {filename:makeUname(info.cgm_name)}};
 
   Plotly.newPlot('myDiv', data, layout, config);
-  _savePlotly(info.cgm_name,data,layout,config);
+  _savePlotly(info.cgm_name,data,layout,config,TS_PLOTLY_TYPE_INSAR_VS);
 
   window.top.postMessage({'call':'fromTSviewer', value:'done with loading'}, '*');
 }
