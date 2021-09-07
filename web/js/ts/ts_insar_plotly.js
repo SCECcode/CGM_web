@@ -124,7 +124,12 @@ grid: { rows: 3, columns: 1, pattern: 'independent' },
 annotations: [ ]
 };
 
-  var config = {displayModeBar:true,responsive:true}
+  var config = { toImageButtonOptions: { filename: 'BAH',
+                                         width: 800,
+                                         height: 600, 
+                                         format: 'png'},
+                  displayModeBar:true,
+                  responsive:true};
 
   Plotly.newPlot('myDiv', data, layout, config);
   _savePlotly(info.cgm_name,data,layout,config);

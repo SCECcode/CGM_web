@@ -167,3 +167,15 @@ function savePNG(fname,image) {
     a.remove()
 }
 
+// working around plotly's toImage not working for some of the plots
+//
+//function plotly2canvas() {
+function plotly_plot_image() {
+    let fname=TS_plotly_name;
+    $('#myDiv').html2canvas({
+        onrendered : function(canvas) {
+           let img = canvas.toDataURL();
+           savePNG(fname,img);
+        }});
+}
+
