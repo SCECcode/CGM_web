@@ -244,6 +244,7 @@ window.console.log("aspect ration is "+pdata['aspect']);
   var config = {displayModeBar:true,responsive:true}
 
   Plotly.newPlot('myDiv', data, layout, config);
+  _savePlotly(info.cgm_name,data,layout,config);
 
   window.top.postMessage({'call':'fromTSviewer', value:'done with loading'}, '*');
 }
