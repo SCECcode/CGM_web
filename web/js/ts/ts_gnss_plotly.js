@@ -27,12 +27,22 @@ function plotly_plot_clear() {
   Plotly.purge('myDiv');
 }
 
+
+function_plot_image() {
+  let myfname=TS_plotly_name;
+  if(TS_plotly_layout) {
+      Plotly.downloadImage('myDiv', {format: 'png', width: TS_plotly_layout.width, height: TS_plotly_layout.height, filename: myfname});
+  }
+  window.console.log("called plotly_plot_image2");
+}
+
 //Plotly.downloadImage('myDiv', {format: 'png', width: 800, height: 600, filename: fname});
-function plotly_plot_image() {
+function plotly_plot_image2() {
   let fname=TS_plotly_name;
   if(TS_plotly_layout) {
      Plotly.toImage('myDiv',{format: 'png', width: TS_plotly_layout.width, height: TS_plotly_layout.height}).
        then(function(dataURL) {
+window.console.log("calling toImage, "+TS_plotly_layout.width+" "+TS_plotly_layout.height);
           savePNG(fname,dataURL);
      });
   }
