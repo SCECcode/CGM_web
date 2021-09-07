@@ -38,7 +38,7 @@ function processCSV4VS(data,gid,track,nx,ny) {
    vs_plot_data.push(
            {
             info: { cgm_title:cgm_title,
-                    cgm_name:gid.
+                    cgm_name:gid,
                     cgm_frame:track },
             plot:[{xlabel:'x', ylabel:'y', z:zvlist, aspect:yratio}]
            });
