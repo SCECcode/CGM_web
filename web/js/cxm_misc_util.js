@@ -414,7 +414,6 @@ function makeRawLatlonGroup(fdataList) {
      }
 
 const myCustomColour = '#583470'
-
 const markerHtmlStyles = `
   background-color: ${color};
   width: 0.2rem;

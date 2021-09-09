@@ -115,7 +115,7 @@ class CGM_INSAR extends SpatialData {
 
     public function getAllTrackData()
     {
-        $query = "select file,track,color,bb1_lat,bb1_lon,bb2_lat,bb2_lon,bb3_lat,bb3_lon,bb4_lat,bb4_lon from cgm_insar_tracks";
+        $query = "select file,track,color,bb1_lat,bb1_lon,bb2_lat,bb2_lon,bb3_lat,bb3_lon,bb4_lat,bb4_lon,ref_lat,ref_lon from cgm_insar_tracks";
 
         $result = pg_query($this->connection, $query);
         $bb_data = array();

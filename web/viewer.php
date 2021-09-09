@@ -146,7 +146,7 @@ window.console.log("HERE..");
                 <select id="cgm-search-type" class="custom-select">
                     <option value="">Search the GNSS ...</option>
                     <option value="stationname">Station Name</option>
-                    <option value="latlon">Latitude &amp; Longitude</option>
+                    <option value="latlon">Latitude &amp; Longitude Box</option>
                     <option value="vectorslider">Vector</option>
                 </select>
                 <div class="input-group-append">
@@ -240,8 +240,8 @@ window.console.log("HERE..");
             <div class="col-4 input-group filters mb-3">
                 <select id="cgm-insar-search-type" class="custom-select">
                     <option value="">Search the InSAR</option>
-                    <option value="location">Location</option>
-                    <option value="latlon">Latitude &amp; Longitude</option>
+                    <option value="location">Point Location</option>
+                    <option value="latlon">Latitude &amp; Longitude Box</option>
                 </select>
                 <div class="input-group-append">
                     <button id="refresh-insar-all-button" onclick="CGM_INSAR.reset()" class="btn btn-dark pl-4 pr-4"

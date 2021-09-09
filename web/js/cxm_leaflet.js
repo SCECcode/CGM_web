@@ -26,6 +26,7 @@ var polygon_options = {
 
 var rectangleDrawer;
 var mymap, baseLayers, layerControl, currentLayer, currentLayerName;
+var mylegend;
 var visibleFaults = new L.FeatureGroup();
 
 var drawing_rectangle=false;
@@ -128,6 +129,24 @@ var scecAttribution ='<a href="https://www.scec.org">SCEC</a>';
   }
 */
 
+  mylegend=L.control( {position:'bottomleft'});
+
+  mylegend.onAdd = function (map) {
+    this._div = L.DomUtil.create('div');
+    this.update();
+    return this._div;
+  };
+
+  mylegend.update = function (props, param=null) {
+     if(param == null) {
+       this._div.innerHTML="";
+       return;
+     }
+     this._div.innerHTML='<img src="./img/'+param+'" style="width:200px; margin-left:-5px;" >';
+  }
+
+  mylegend.addTo(mymap);
+
 // ==> mouse location popup <==
 //   var popup = L.popup();
   // function onMapClick(e) {
@@ -202,6 +221,14 @@ var scecAttribution ='<a href="https://www.scec.org">SCEC</a>';
 // finally,
   return mymap;
 }
+
+function removeColorLegend() {
+  mylegend.update();
+}
+function showColorLegend(param) {
+  mylegend.update({}, param);
+}
+
 
 function drawPoint() {
   pointDrawer.enable();

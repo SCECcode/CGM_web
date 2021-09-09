@@ -117,6 +117,7 @@ var CGM_INSAR = new function () {
 
     // get make the track boundary layers
     this.generateLayers = function () {
+window.console.log(">>> generateLayers..");
         if(cgm_insar_track_data == null)
           return;
 
@@ -132,6 +133,8 @@ var CGM_INSAR = new function () {
                 let lon3 = parseFloat(cgm_insar_track_data[index].bb3_lon);
                 let lat4 = parseFloat(cgm_insar_track_data[index].bb4_lat);
                 let lon4 = parseFloat(cgm_insar_track_data[index].bb4_lon);
+                let latr = parseFloat(cgm_insar_track_data[index].ref_lat);
+                let lonr = parseFloat(cgm_insar_track_data[index].ref_lon);
                 let track_name = cgm_insar_track_data[index].track;
                 let track_color = cgm_insar_track_data[index].color;
                 let track_file = cgm_insar_track_data[index].file;
@@ -145,15 +148,46 @@ var CGM_INSAR = new function () {
                 while (lon4 < -180) { lon4 += 360; }
                 while (lon4 > 180) { lon4 -= 360; }
               
+                let track = new L.FeatureGroup();
+
                 let latlngs = [[lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4]];
                 let mypoly=polygon_options;
                 mypoly['color']=track_color;
-                let track=L.polygon(latlngs, mypoly);
+                let track_polygon=L.polygon(latlngs, mypoly);
+window.console.log("HERE..");
 
+/*
+       const markerHtmlStyles = `
+                           background-color: '#FF0000';
+                           width: 0.2rem;
+                           height: 0.2rem;
+                           display: block;
+                           opacity: 80%;
+                           position: relative;
+                           border-radius: 50%;
+                           border: 1px solid '#00FF00';
+                           transform: rotate(45deg)`;
+
+       const newIcon = L.divIcon({
+           className: '',
+           html: `<span style="${markerHtmlStyles}" />`});
+
+       let track_ref=L.marker([latr,lonr]);
+       let icon = track_ref.options.icon;
+       icon.options.iconSize = [5, 5];
+       track_ref.setIcon(newIcon);
+            
+                track_ref.setIcon(myicon);
+                track.addLayer(track_ref);
+
+*/
+                track.addLayer(track_polygon);
+               
                 track.scec_properties = {
-                    file: track_file,
+                    file:track_file,
                     track:track_name,
-                    latlngs:latlngs
+                    latlngs:latlngs,
+                    ref_latlong:[latr,lonr]
                 };
 
                 //let bb_info = `InSAR track name: ${track_name}`;
@@ -420,17 +454,20 @@ var generateTableRow = function(layer) {
             case this.searchType.location:
                 $all_search_controls.hide();
                 $("#cgm-insar-location").show();
+                removeColorLegend();
                 drawPoint();
                 skipRectangle();
                 break;
             case this.searchType.latlon:
                 $all_search_controls.hide();
                 $("#cgm-insar-latlon").show();
+                showColorLegend("insar_colorbar.png");
                 drawRectangle();
                 skipPoint();
                 break;
             default:
                 $all_search_controls.hide();
+                removeColorLegend();
                 skipPoint();
                 skipRectangle();
                 window.console.log("showSearch:skip to default mode..");
@@ -467,6 +504,7 @@ window.console.log("Hide model/product");
         window.console.log("insar calling -->>> reset");
         $("#wait-spinner").hide();
         clearAllPixiOverlay();
+        removeColorLegend();
         this.zeroSelectCount()
         this.showSearch('none');
         this.searching = false;
