@@ -48,7 +48,7 @@ function plotly_plot_image_unknown() {
 }
 
 // this one does not work for surface-contour plot
-function plotly_plot_image() {
+function plotly_plot_image2() {
   if(TS_plotly_layout) {
 
 /* -- this does not work..
@@ -240,11 +240,11 @@ function savePNG(fname,image) {
 
 // working around plotly's toImage not working for some of the plots
 //
-function plotly_plot_image3() {
+function plotly_plot_image() {
     let fname=TS_plotly_name;
     let elt=document.getElementById('myDiv');
     html2canvas(elt).then(function(canvas) {
-           let img = canvas.toDataURL();
+           let img = canvas.toDataURL("image/png");
            savePNG(fname,img);
     });
 }
