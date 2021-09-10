@@ -154,33 +154,18 @@ window.console.log(">>> generateLayers..");
                 let mypoly=polygon_options;
                 mypoly['color']=track_color;
                 let track_polygon=L.polygon(latlngs, mypoly);
-window.console.log("HERE..");
 
-/*
-       const markerHtmlStyles = `
-                           background-color: '#FF0000';
-                           width: 0.2rem;
-                           height: 0.2rem;
-                           display: block;
-                           opacity: 80%;
-                           position: relative;
-                           border-radius: 50%;
-                           border: 1px solid '#00FF00';
-                           transform: rotate(45deg)`;
+                let myicon=L.divIcon({ 
+//                                     iconUrl:'some_icon.png',
+                                       iconSize: [10, 10],
+                                       iconAnchor: [5, 10],
+                                       popupAnchor: [0, -10],
+                html: `<span style="opacity:80%; background-color:${track_color};"/>`});
+//                html: `<span style="border:2px solid green; opacity:80%; color:${track_color};" class="fas fa-caret-down"></span>`});
 
-       const newIcon = L.divIcon({
-           className: '',
-           html: `<span style="${markerHtmlStyles}" />`});
-
-       let track_ref=L.marker([latr,lonr]);
-       let icon = track_ref.options.icon;
-       icon.options.iconSize = [5, 5];
-       track_ref.setIcon(newIcon);
-            
-                track_ref.setIcon(myicon);
+                let track_ref=L.marker([latr,lonr], {icon:myicon});
                 track.addLayer(track_ref);
 
-*/
                 track.addLayer(track_polygon);
                
                 track.scec_properties = {
@@ -316,6 +301,7 @@ window.console.log("HERE..");
         });
         $("#metadata-viewer.insar tr.row-selected button span.glyphicon.glyphicon-check").removeClass('glyphicon-check').addClass('glyphicon-unchecked');
         $("#metadata-viewer.insar tr.row-selected").removeClass('row-selected');
+        removeColorLegend();
     };
 
 
@@ -454,7 +440,6 @@ var generateTableRow = function(layer) {
             case this.searchType.location:
                 $all_search_controls.hide();
                 $("#cgm-insar-location").show();
-                removeColorLegend();
                 drawPoint();
                 skipRectangle();
                 break;
@@ -467,7 +452,7 @@ var generateTableRow = function(layer) {
                 break;
             default:
                 $all_search_controls.hide();
-                removeColorLegend();
+   //             removeColorLegend();
                 skipPoint();
                 skipRectangle();
                 window.console.log("showSearch:skip to default mode..");
@@ -504,7 +489,6 @@ window.console.log("Hide model/product");
         window.console.log("insar calling -->>> reset");
         $("#wait-spinner").hide();
         clearAllPixiOverlay();
-        removeColorLegend();
         this.zeroSelectCount()
         this.showSearch('none');
         this.searching = false;
