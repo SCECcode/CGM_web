@@ -227,7 +227,11 @@ function _loadup_data(gid,url) {
    window.console.log("size of tmp is "+sz);
 
    for(let i=0; i<sz; i++) {
-      let token=tmp[i].split(",");
+      let ll=tmp[i];
+      if(ll[0]=='#') { // comment line
+        continue;
+      }	      
+      let token=ll.split(",");
       if(token.length != 7) {
          window.console.log("invalid data in this line "+i+" >>"+token.length);
          
