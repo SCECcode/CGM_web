@@ -373,7 +373,7 @@ window.console.log("calling.. addToResultsTable..");
           }
 
           let ttype=layer.scec_properties.track;
-          if(tract_target=="all" || ttype==track_target) {
+          if(track_target=="all" || ttype==track_target) {
               let downloadURL = getDataDownloadURL(layer.scec_properties.file);
               let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
 
