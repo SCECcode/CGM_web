@@ -39,11 +39,11 @@ class CGM_INSAR extends SpatialData {
                 $arg = new \stdClass();
                 $arg->gid = $gid;
                 $arg->filelist = array();
-                array_push($arg->filelist, "/app/web/cgm_data/insar/USGS_D071_InSAR_v0_0_1.hdf5");
+                  array_push($arg->filelist, "/app/web/cgm_data/insar/D071_COMB_CGM_InSAR_v0_0_1_1Gb.hdf5");
                 $arg->result = array();
-                array_push($arg->result,"/app/web/result");
+                  array_push($arg->result,"/app/web/result");
                 $arg->pixellist = array();
-                    array_push($arg->pixellist,make_pixel($lat,$lon));
+                  array_push($arg->pixellist,make_pixel($lat,$lon));
 
                 $jarg=json_encode($arg,JSON_UNESCAPED_SLASHES);
                 $command = "/app/web/py/extract_insar_ts.py '".$jarg."'";
@@ -78,11 +78,11 @@ class CGM_INSAR extends SpatialData {
                 $arg = new \stdClass();
                 $arg->gid = $gid;
                 $arg->filelist = array();
-                array_push($arg->filelist, "/app/web/cgm_data/insar/USGS_D071_InSAR_v0_0_1.hdf5");
+                  array_push($arg->filelist, "/app/web/cgm_data/insar/D071_COMB_CGM_InSAR_v0_0_1_1Gb.hdf5");
                 $arg->result = array();
-                array_push($arg->result,"/app/web/result");
+                  array_push($arg->result,"/app/web/result");
                 $arg->track = array();
-                array_push($arg->track,"D071");
+                  array_push($arg->track,"D071");
                 $plist = new \stdClass();
                 $plist->sw= array();
                 array_push($plist->sw,$minlon);
@@ -136,8 +136,7 @@ class CGM_INSAR extends SpatialData {
         $arg = new \stdClass();
         $arg->gid = $gid;
         $arg->filelist = array();
-          array_push($arg->filelist, "/app/web/cgm_data/insar/USGS_D071_InSAR_v0_0_1.hdf5");
-          array_push($arg->filelist, "/app/web/cgm_data/insar/USGS_D071_InSAR_v0_0_2.hdf5");
+          array_push($arg->filelist, "/app/web/cgm_data/insar/D071_COMB_CGM_InSAR_v0_0_1_1Gb.hdf5");
         $arg->result = array();
           array_push($arg->result,"/app/web/result");
         $arg->pixellist = array();

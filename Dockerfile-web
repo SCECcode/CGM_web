@@ -11,7 +11,6 @@ RUN yum install -y httpd && \
 
 ## python/hdf5
 
-
 RUN yum install -y tar mkdir sudo which git wget openblas yum-utils gcc make 
 RUN yum install -y zlib-devel openssl11-devel libffi-devel
 
@@ -27,6 +26,12 @@ RUN yum-config-manager --enable epel
 RUN yum install -y hdf5-devel
 
 RUN python3 -m pip install h5py
+
+## bring in the insar track data
+RUN cd /app/web/cgm_data && \
+    mkdir insar && \
+    cd insar && \
+    wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/viewer/cgm/insar/D071_COMB_CGM_InSAR_v0_0_1_1Gb.hdf5
 
 RUN cd /app && \
     git clone https://github.com/kmaterna/InSAR_CGM_readers_writers.git && \

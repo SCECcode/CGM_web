@@ -15,6 +15,7 @@ jQuery(document).ready(function() {
 //  load_INSAR_ProcessVSFromCSV([myURL],myParams);
 //  return;
 
+window.console.log("HERE.. in plotly..");
   [urls, ptype, ftypes]=getParams("");
 
   if(ptype == "gnss") {
