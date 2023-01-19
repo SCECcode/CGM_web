@@ -39,9 +39,9 @@ class CGM_INSAR extends SpatialData {
                 $arg = new \stdClass();
                 $arg->gid = $gid;
                 $arg->filelist = array();
-                array_push($arg->filelist,"/app/web/cgm_data/insar/A166_COMB_CGM_InSAR_v0_0_1.hdf5");
-                array_push($arg->filelist,"/app/web/cgm_data/insar/A064_COMB_CGM_InSAR_v0_0_1.hdf5");
-                array_push($arg->filelist,"/app/web/cgm_data/insar/D173_COMB_CGM_InSAR_v0_0_1.hdf5");
+//                array_push($arg->filelist,"/app/web/cgm_data/insar/A166_COMB_CGM_InSAR_v0_0_1.hdf5");
+//                array_push($arg->filelist,"/app/web/cgm_data/insar/A064_COMB_CGM_InSAR_v0_0_1.hdf5");
+//                array_push($arg->filelist,"/app/web/cgm_data/insar/D173_COMB_CGM_InSAR_v0_0_1.hdf5");
                 array_push($arg->filelist,"/app/web/cgm_data/insar/D071_COMB_CGM_InSAR_v0_0_1.hdf5");
                 $arg->result = array();
                 array_push($arg->result,"/app/web/result");
@@ -81,9 +81,9 @@ class CGM_INSAR extends SpatialData {
                 $arg = new \stdClass();
                 $arg->gid = $gid;
                 $arg->filelist = array();
-                array_push($arg->filelist,"/app/web/cgm_data/insar/A166_COMB_CGM_InSAR_v0_0_1.hdf5");
-                array_push($arg->filelist,"/app/web/cgm_data/insar/A064_COMB_CGM_InSAR_v0_0_1.hdf5");
-                array_push($arg->filelist,"/app/web/cgm_data/insar/D173_COMB_CGM_InSAR_v0_0_1.hdf5");
+//                array_push($arg->filelist,"/app/web/cgm_data/insar/A166_COMB_CGM_InSAR_v0_0_1.hdf5");
+//                array_push($arg->filelist,"/app/web/cgm_data/insar/A064_COMB_CGM_InSAR_v0_0_1.hdf5");
+//                array_push($arg->filelist,"/app/web/cgm_data/insar/D173_COMB_CGM_InSAR_v0_0_1.hdf5");
                 array_push($arg->filelist,"/app/web/cgm_data/insar/D071_COMB_CGM_InSAR_v0_0_1.hdf5");
                 $arg->result = array();
                 array_push($arg->result,"/app/web/result");
@@ -143,9 +143,9 @@ class CGM_INSAR extends SpatialData {
         $arg->gid = $gid;
         $arg->filelist = array();
 
-        array_push($arg->filelist,"/app/web/cgm_data/insar/A166_COMB_CGM_InSAR_v0_0_1.hdf5");
-        array_push($arg->filelist,"/app/web/cgm_data/insar/A064_COMB_CGM_InSAR_v0_0_1.hdf5");
-        array_push($arg->filelist,"/app/web/cgm_data/insar/D173_COMB_CGM_InSAR_v0_0_1.hdf5");
+//        array_push($arg->filelist,"/app/web/cgm_data/insar/A166_COMB_CGM_InSAR_v0_0_1.hdf5");
+//        array_push($arg->filelist,"/app/web/cgm_data/insar/A064_COMB_CGM_InSAR_v0_0_1.hdf5");
+//        array_push($arg->filelist,"/app/web/cgm_data/insar/D173_COMB_CGM_InSAR_v0_0_1.hdf5");
         array_push($arg->filelist,"/app/web/cgm_data/insar/D071_COMB_CGM_InSAR_v0_0_1.hdf5");
 
         $arg->result = array();
