@@ -136,7 +136,8 @@ class CGM_INSAR extends SpatialData {
         $arg = new \stdClass();
         $arg->gid = $gid;
         $arg->filelist = array();
-          array_push($arg->filelist, "/app/web/cgm_data/insar/D071_COMB_CGM_InSAR_v0_0_1_1Gb.hdf5");
+        array_push($arg->filelist, "/app/web/cgm_data/insar/USGS_D072_InSAR_v0_0_1.hdf5");
+        array_push($arg->filelist, "/app/web/cgm_data/insar/USGS_D071_InSAR_v0_0_2.hdf5");
         $arg->result = array();
           array_push($arg->result,"/app/web/result");
         $arg->pixellist = array();
