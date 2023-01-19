@@ -326,9 +326,9 @@ window.console.log("HERE..");
                          <select id='insar-track-select' class="custom-select custom-select-sm">
                                  <option selected value="all">ALL</option>
                                  <option value="D071">D071</option>
-                                 <option value="D173" disabled>D173</option>
-                                 <option value="D064" disabled>D064</option>
-                                 <option value="D166" disabled>D166</option>
+                                 <option value="D173">D173</option>
+                                 <option value="D064">D064</option>
+                                 <option value="D166">D166</option>
                          </select>
                 </div>
 --->

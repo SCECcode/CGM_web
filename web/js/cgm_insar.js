@@ -776,17 +776,15 @@ window.console.log("generateResultsTable..");
                                     <button class="dropdown-item" type="button" value="D071"
                                             onclick="CGM_INSAR.downloadURLsAsZip(this.value);">D071
                                     </button>
-<!--
                                     <button class="dropdown-item" type="button" value="D173"
-                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);" disabled>D173
+                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);">D173
                                     </button>
                                     <button class="dropdown-item" type="button" value="A064"
-                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);" disabled>A064
+                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);">A064
                                     </button>
                                     <button class="dropdown-item" type="button" value="A166"
-                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);" disabled>A166
+                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);">A166
                                     </button>
--->
                                     <button class="dropdown-item" type="button" value="all"
                                           onclick="CGM_INSAR.downloadURLsAsZip(this.value);">All of the Above
                                     </button>
