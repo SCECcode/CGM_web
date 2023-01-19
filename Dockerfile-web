@@ -29,11 +29,11 @@ RUN python3 -m pip install h5py
 
 ## bring in the insar track data
 RUN cd /app/web/cgm_data && \
-    mkdir insar && \
+    mkdir -p insar && \
     cd insar && \
-    wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/viewer/cgm/insar/D071_COMB_CGM_InSAR_v0_0_1.hdf5 \
-    wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/viewer/cgm/insar/A166_COMB_CGM_InSAR_v0_0_1.hdf5 \
-    wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/viewer/cgm/insar/A064_COMB_CGM_InSAR_v0_0_1.hdf5 \
+    wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/viewer/cgm/insar/D071_COMB_CGM_InSAR_v0_0_1.hdf5 && \
+    wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/viewer/cgm/insar/A166_COMB_CGM_InSAR_v0_0_1.hdf5 && \
+    wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/viewer/cgm/insar/A064_COMB_CGM_InSAR_v0_0_1.hdf5 && \
     wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/viewer/cgm/insar/D173_COMB_CGM_InSAR_v0_0_1.hdf5
 
 RUN cd /app && \
