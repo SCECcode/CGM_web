@@ -343,18 +343,18 @@ window.console.log("HERE..");
                 <div id='model-options' class="form-check-inline mr-0">
                     <div class="form-check form-check-inline">
                          <label class='form-check-label'
-                                 for="cgm-model">
+                                 for="cgm-model-gnss">
                          <input class='form-check-inline mr-1'
                                  type="checkbox"
-                                 id="cgm-model"/>GNSS
+                                 id="cgm-model-gnss"/>GNSS
                          </label>
                     </div>
                     <div class="form-check form-check-inline">
                          <label class='form-check-label ml-1 mini-option'
-                                 for="cgm-model-vectors">
+                                 for="cgm-model-gnss-vectors">
                          <input class='form-check-inline mr-1'
                                  type="checkbox"
-                                 id="cgm-model-vectors" value="1" />GNSS vectors
+                                 id="cgm-model-gnss-vectors" value="1" />GNSS vectors
                          </label>
                     </div>
                     <div class="form-check form-check-inline">
