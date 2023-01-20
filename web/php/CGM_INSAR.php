@@ -10,6 +10,29 @@ function make_pixel($lat, $lon)
     return $pixel;
 }
 
+function track_info($track)
+{
+    switch ($track)
+    {
+      case "A166":
+        $loc="/app/web/cgm_data/insar/A166_COMB_CGM_InSAR_v0_0_1.hdf5";
+        break;
+      case "A064":
+        $loc= "/app/web/cgm_data/insar/A064_COMB_CGM_InSAR_v0_0_1.hdf5";
+        break;
+      case "D173":
+        $loc= "/app/web/cgm_data/insar/D173_COMB_CGM_InSAR_v0_0_1.hdf5";
+        break;
+      case "D071":
+        $loc="/app/web/cgm_data/insar/D071_COMB_CGM_InSAR_v0_0_1.hdf5";
+        break;
+      default:
+        print "eek\n";
+     }
+     return $loc;
+}
+
+
 class CGM_INSAR extends SpatialData {
 
     function __construct()
@@ -18,39 +41,18 @@ class CGM_INSAR extends SpatialData {
         if (!$this->connection) { die('Could not connect'); }
     }
 
-    function _track_info($track) 
-    {
-        switch ($track)
-        {
-          case "A166":
-            $loc="/app/web/cgm_data/insar/A166_COMB_CGM_InSAR_v0_0_1.hdf5";
-            break;
-          case "A064":
-            $loc= "/app/web/cgm_data/insar/A064_COMB_CGM_InSAR_v0_0_1.hdf5";
-            break;
-          case "D173":
-            $loc= "/app/web/cgm_data/insar/D173_COMB_CGM_InSAR_v0_0_1.hdf5";
-            break;
-          case "D071":
-            $loc="/app/web/cgm_data/insar/D071_COMB_CGM_InSAR_v0_0_1.hdf5";
-            break;
-         }
-         return $loc;
-    }
-
     // criteria is an JSON array,
     // type ==> "location","latlon"
     // track ==> "DO74"...
     // { criteria=[lat1,lat,lon,lon] }
     public function search($type, $track, $criteria="") 
     {
-//
         if (!is_array($criteria)) {
             $criteria = array($criteria);
         }
         $query = "";
         $error = false;
-        $track_loc = _track_info($track);
+        $track_loc = track_info($track);
 
         switch ($type)
         {
@@ -158,7 +160,7 @@ class CGM_INSAR extends SpatialData {
         $output = null;
         $retval = null;
 	$track="D071";
-	$track_loc=_track_info($track);
+	$track_loc=track_info($track);
 
         $gid=uniqid("insar_");
         $arg = new \stdClass();
