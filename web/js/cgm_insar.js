@@ -26,6 +26,8 @@ var CGM_INSAR = new function () {
     this.search_result = new L.FeatureGroup();
     this.searching = false;
 
+    this.track_name = "D071";
+
     var cgm_colors = {
 //        normal: '#006E90',
         normal: '#902200',//--red
@@ -73,6 +75,10 @@ var CGM_INSAR = new function () {
     var tablePlaceholderRow = `<tr id="placeholder-row">
                         <td colspan="7">Metadata for selected points will appear here.</td>
                     </tr>`;
+
+    this.setTrackName = function(name) {
+        this.track_name=name;
+    };
 
     this.activateData = function() {
         activeProduct = Products.INSAR;
@@ -538,6 +544,10 @@ window.console.log(">>> calling freshSearch..");
         }
     };
 
+    this.resetTrackView = function (tracks){
+        viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
+    };
+
 // showing php result on the map and also saving it to
 // search_result, results could be 1 marker layer, or a layer with many marker layers
     this.showPHP = function(type, results, ncriteria) {
@@ -600,6 +610,7 @@ window.console.log("STASHING "+results.length+" layers from PHP calls");
 
     this.search = function(type, criteria) {
         window.console.log("insar  -->  calling search..");
+        var track_name="D071";
 
         $searchResult = $("#searchResult");
         if (!type || !criteria) {
@@ -615,13 +626,13 @@ window.console.log("calling search() with the string.."+JSON_criteria);
         $("#wait-spinner").show();
         $.ajax({
             url: "php/search.php",
-            data: {t: type, q: JSON_criteria},
+            data: {t: type, k: this.track_name, q: JSON_criteria},
         }).done(function(cgm_insar_data) {
 
             let results=[];
             let ncriteria=[];
 window.console.log(cgm_insar_data);
-            if(cgm_insar_data === "[]") {
+            if(cgm_insar_data === "[\"[]\"]") {
 window.console.log("Did not find any PHP result");
             } else {
                  let tmp=JSON.parse(cgm_insar_data); 
@@ -776,17 +787,15 @@ window.console.log("generateResultsTable..");
                                     <button class="dropdown-item" type="button" value="D071"
                                             onclick="CGM_INSAR.downloadURLsAsZip(this.value);">D071
                                     </button>
-<!--
                                     <button class="dropdown-item" type="button" value="D173"
-                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);" disabled>D173
+                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);">D173
                                     </button>
                                     <button class="dropdown-item" type="button" value="A064"
-                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);" disabled>A064
+                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);">A064
                                     </button>
                                     <button class="dropdown-item" type="button" value="A166"
-                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);" disabled>A166
+                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);">A166
                                     </button>
--->
                                     <button class="dropdown-item" type="button" value="all"
                                           onclick="CGM_INSAR.downloadURLsAsZip(this.value);">All of the Above
                                     </button>
@@ -854,6 +863,8 @@ window.console.log("changeResultsTableBody..");
 
         $("#cgm-controlers-container").css('display','none');
         $("#cgm-insar-controlers-container").css('display','');
+        $("#insar-track-controls").css('display','');
+        $("#cgm-controlers-container").css('display','none');
 
         $("div.mapData div.map-container").css('padding-left','30px');
         $("#CGM_plot").css('height','500px');

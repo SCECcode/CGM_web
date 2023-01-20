@@ -10,6 +10,29 @@ function make_pixel($lat, $lon)
     return $pixel;
 }
 
+function track_info($track)
+{
+    switch ($track)
+    {
+      case "A166":
+        $loc="/app/web/cgm_data/insar/A166_COMB_CGM_InSAR_v0_0_1.hdf5";
+        break;
+      case "A064":
+        $loc= "/app/web/cgm_data/insar/A064_COMB_CGM_InSAR_v0_0_1.hdf5";
+        break;
+      case "D173":
+        $loc= "/app/web/cgm_data/insar/D173_COMB_CGM_InSAR_v0_0_1.hdf5";
+        break;
+      case "D071":
+        $loc="/app/web/cgm_data/insar/D071_COMB_CGM_InSAR_v0_0_1.hdf5";
+        break;
+      default:
+        print "eek\n";
+     }
+     return $loc;
+}
+
+
 class CGM_INSAR extends SpatialData {
 
     function __construct()
@@ -18,13 +41,18 @@ class CGM_INSAR extends SpatialData {
         if (!$this->connection) { die('Could not connect'); }
     }
 
-    public function search($type, $criteria="") 
+    // criteria is an JSON array,
+    // type ==> "location","latlon"
+    // track ==> "DO74"...
+    // { criteria=[lat1,lat,lon,lon] }
+    public function search($type, $track, $criteria="") 
     {
         if (!is_array($criteria)) {
             $criteria = array($criteria);
         }
         $query = "";
         $error = false;
+        $track_loc = track_info($track);
 
         switch ($type)
         {
@@ -39,11 +67,11 @@ class CGM_INSAR extends SpatialData {
                 $arg = new \stdClass();
                 $arg->gid = $gid;
                 $arg->filelist = array();
-                  array_push($arg->filelist, "/app/web/cgm_data/insar/D071_COMB_CGM_InSAR_v0_0_1_1Gb.hdf5");
+                array_push($arg->filelist,$track_loc);
                 $arg->result = array();
                   array_push($arg->result,"/app/web/result");
                 $arg->pixellist = array();
-                  array_push($arg->pixellist,make_pixel($lat,$lon));
+                array_push($arg->pixellist,make_pixel($lat,$lon));
 
                 $jarg=json_encode($arg,JSON_UNESCAPED_SLASHES);
                 $command = "/app/web/py/extract_insar_ts.py '".$jarg."'";
@@ -78,11 +106,11 @@ class CGM_INSAR extends SpatialData {
                 $arg = new \stdClass();
                 $arg->gid = $gid;
                 $arg->filelist = array();
-                  array_push($arg->filelist, "/app/web/cgm_data/insar/D071_COMB_CGM_InSAR_v0_0_1_1Gb.hdf5");
+                array_push($arg->filelist,$track_loc);
                 $arg->result = array();
                   array_push($arg->result,"/app/web/result");
                 $arg->track = array();
-                  array_push($arg->track,"D071");
+                array_push($arg->track,$track);
                 $plist = new \stdClass();
                 $plist->sw= array();
                 array_push($plist->sw,$minlon);
@@ -131,18 +159,19 @@ class CGM_INSAR extends SpatialData {
         {
         $output = null;
         $retval = null;
+	$track="D071";
+	$track_loc=track_info($track);
 
         $gid=uniqid("insar_");
         $arg = new \stdClass();
         $arg->gid = $gid;
         $arg->filelist = array();
-        array_push($arg->filelist, "/app/web/cgm_data/insar/USGS_D072_InSAR_v0_0_1.hdf5");
-        array_push($arg->filelist, "/app/web/cgm_data/insar/USGS_D071_InSAR_v0_0_2.hdf5");
+	array_push($arg->filelist,$track_loc);
         $arg->result = array();
-          array_push($arg->result,"/app/web/result");
+        array_push($arg->result,"/app/web/result");
         $arg->pixellist = array();
-          array_push($arg->pixellist,make_pixel(35.32064,-116.57164));
-          array_push($arg->pixellist,make_pixel(34.0522,-118.2437));
+        array_push($arg->pixellist,make_pixel(35.32064,-116.57164));
+        array_push($arg->pixellist,make_pixel(34.0522,-118.2437));
 
         $jarg=json_encode($arg,JSON_UNESCAPED_SLASHES);
         $command = "/app/web/py/extract_insar_ts.py '".$jarg."'";

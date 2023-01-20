@@ -105,6 +105,11 @@ window.console.log(">>>> causing a start of gnss search..");
         CGM_INSAR.showSearch($(this).val());
     });
 
+    $("#insar-track-select").on('change', function () {
+        CGM_INSAR.setTrackName($(this).val());
+	CGM_INSAR.resetTrackView($(this).val());
+    });
+
     $('.cgm-insar-search-item').on('focus', function () {
       $(this).on('blur mouseout', function () {
         $(this).off('mouseout');

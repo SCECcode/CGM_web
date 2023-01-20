@@ -4,6 +4,7 @@ require_once("CGM_INSAR.php");
 $cgm_insar = new CGM_INSAR();
 
 $type = $_REQUEST["t"];
+$track = $_REQUEST["k"];
 $criteria = json_decode($_REQUEST["q"]);
 
 //$type = 'location';
@@ -18,7 +19,7 @@ if (is_object($criteria[0])) {
 
 try {
 //        print $cgm_insar->doTesting()->outputJSON();
-    print $cgm_insar->search($type, $criteria)->outputJSON();
+    print $cgm_insar->search($type, $track, $criteria)->outputJSON();
 } catch (BadFunctionCallException $e) {
     print "error";
 }
