@@ -196,7 +196,7 @@ var CGM_GNSS = new function () {
         });
 
         // if checked, add to the map
-        if ($("#cgm-model-vectors").prop('checked')) {
+        if ($("#cgm-model-gnss-vectors").prop('checked')) {
             polyline.addTo(viewermap);
             arrowHeadDecorator.addTo(viewermap);
             mylabel.addTo(viewermap);
@@ -664,7 +664,7 @@ var generateTableRow = function(layer) {
     this.showProduct = function () {
 
 window.console.log("SHOW product");
-        let $cgm_model_checkbox = $("#cgm-model");
+        let $cgm_model_checkbox = $("#cgm-model-gnss");
 
         if (this.searching) {
             this.search_result.addTo(viewermap);
@@ -685,7 +685,7 @@ window.console.log("SHOW product");
 
     
     this.hideProduct = function () {
-        let $cgm_model_checkbox = $("#cgm-model");
+        let $cgm_model_checkbox = $("#cgm-model-gnss");
         if ($cgm_model_checkbox.prop('checked')) {
             $cgm_model_checkbox.prop('checked', false);
         }
@@ -746,14 +746,14 @@ window.console.log(">>> calling freshSearch..");
         this.resetVectorSlider();
         this.resetSearch();
 
-        if ($("#cgm-model-vectors").prop('checked')) {
+        if ($("#cgm-model-gnss-vectors").prop('checked')) {
           this.showVectors();
           } else {
             this.hideVectors();
         }
 
         // show GNSS product
-        if ($("#cgm-model").prop('checked')) {
+        if ($("#cgm-model-gnss").prop('checked')) {
           this.showProduct();
           } else {
           this.hideProduct();
@@ -825,8 +825,8 @@ window.console.log(">>> calling freshSearch..");
             viewermap.removeLayer(layer);
         });
 
-        if ($("#cgm-model-vectors").prop('checked')) {
-            $("#cgm-model-vectors").prop('checked', false);
+        if ($("#cgm-model-gnss-vectors").prop('checked')) {
+            $("#cgm-model-gnss-vectors").prop('checked', false);
         }
     };
 
@@ -969,11 +969,11 @@ window.console.log("DONE with BoxSearch..");
         };
 
         var vectorVisible = function (){
-            return $("#cgm-model-vectors").prop('checked');
+            return $("#cgm-model-gnss-vectors").prop('checked');
         };
 
         var modelVisible = function (){
-            return $("#cgm-model").prop('checked');
+            return $("#cgm-model-gnss").prop('checked');
         };
 
         // private function

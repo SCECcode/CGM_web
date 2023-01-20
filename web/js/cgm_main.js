@@ -17,7 +17,7 @@ $(document).ready(function () {
 
     viewermap=setup_viewer();
 
-    $("#cgm-model").on('click', function () {
+    $("#cgm-model-gnss").on('click', function () {
 //??        if (viewermap.hasLayer(CGM_GNSS.cgm_layers) ||  CGM_GNSS.searching) {
         if ($(this).prop('checked')) {
             CGM_GNSS.showProduct();
@@ -26,7 +26,7 @@ $(document).ready(function () {
         }
     });
 
-    $("#cgm-model-vectors").on('click', function () {
+    $("#cgm-model-gnss-vectors").on('click', function () {
         if ($(this).prop('checked')) {
             CGM_GNSS.showVectors();
         } else {
