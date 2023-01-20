@@ -26,6 +26,8 @@ var CGM_INSAR = new function () {
     this.search_result = new L.FeatureGroup();
     this.searching = false;
 
+    this.track_name = "D071";
+
     var cgm_colors = {
 //        normal: '#006E90',
         normal: '#902200',//--red
@@ -73,6 +75,10 @@ var CGM_INSAR = new function () {
     var tablePlaceholderRow = `<tr id="placeholder-row">
                         <td colspan="7">Metadata for selected points will appear here.</td>
                     </tr>`;
+
+    this.setTrackName = function(name) {
+        this.track_name=name;
+    };
 
     this.activateData = function() {
         activeProduct = Products.INSAR;
@@ -616,8 +622,7 @@ window.console.log("calling search() with the string.."+JSON_criteria);
         $("#wait-spinner").show();
         $.ajax({
             url: "php/search.php",
-// XXX
-            data: {t: type, k: track_name, q: JSON_criteria},
+            data: {t: type, k: this.track_name, q: JSON_criteria},
         }).done(function(cgm_insar_data) {
 
             let results=[];
@@ -854,6 +859,8 @@ window.console.log("changeResultsTableBody..");
 
         $("#cgm-controlers-container").css('display','none');
         $("#cgm-insar-controlers-container").css('display','');
+        $("#insar-track-controls").css('display','');
+        $("#cgm-controlers-container").css('display','none');
 
         $("div.mapData div.map-container").css('padding-left','30px');
         $("#CGM_plot").css('height','500px');

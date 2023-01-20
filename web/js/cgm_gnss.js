@@ -1138,6 +1138,7 @@ window.console.log("setupCGMInterface: retrieved stations "+sz);
 
             $("#cgm-controlers-container").css('display','');
             $("#cgm-insar-controlers-container").css('display','none');
+            $("#insar-track-controls").css('display','none');
 
 //$("div.mapData div.map-container").removeClass("col-7 pr-0 pl-2").addClass("col-12").css('padding-left','30px');
 

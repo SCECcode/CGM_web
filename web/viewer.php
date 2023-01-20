@@ -319,13 +319,12 @@ window.console.log("HERE..");
     <div class="row">
         <div class="col-12 text-right pr-0">
 <!--- no need for this right now -->
-                <div class="input-group input-group-sm custom-control-inline ml-0" id="insar-track-controls" style="max-width:180px">
+                <div id="insar-track-controls" class="input-group input-group-sm custom-control-inline ml-0" style="max-width:180px;display:none">
                          <div class="input-group-prepend">
                                  <label style='border-bottom:1;' class="input-group-text" for="insar-track-select">Select Track</label>
                          </div>
                          <select id='insar-track-select' class="custom-select custom-select-sm">
-                                 <option selected value="all">ALL</option>
-                                 <option value="D071">D071</option>
+                                 <option selected value="D071">D071</option>
                                  <option value="D173">D173</option>
                                  <option value="D064">D064</option>
                                  <option value="D166">D166</option>

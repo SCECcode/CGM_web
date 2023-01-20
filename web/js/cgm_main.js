@@ -105,6 +105,10 @@ window.console.log(">>>> causing a start of gnss search..");
         CGM_INSAR.showSearch($(this).val());
     });
 
+    $("#insar-track-select").on('change', function () {
+        CGM_INSAR.setTrackName($(this).val());
+    });
+
     $('.cgm-insar-search-item').on('focus', function () {
       $(this).on('blur mouseout', function () {
         $(this).off('mouseout');
@@ -209,8 +213,6 @@ window.console.log("==> reset what was there/INSAR");
            CGM_INSAR.setupCGMInterface();
 // and also always go to the location search.. cgm-insar-search-type/"location"
 //           $("#cgm-insar-search-type").val('location').trigger('change');
-//
-// XXX -- turn on the track selection
        }
     });
 
