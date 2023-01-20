@@ -12,7 +12,7 @@ abstract class SpatialData
 //		if (!$this->connection) { die('Could not connect'); }
 //	}
 
-	abstract public function search($type, $criteria);
+	abstract public function search($type, $extra, $criteria);
 
 	public function outputJSON()
 	{

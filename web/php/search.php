@@ -18,7 +18,7 @@ if (is_object($criteria[0])) {
 
 try {
 //        print $cgm_insar->doTesting()->outputJSON();
-    print $cgm_insar->search($type, $criteria)->outputJSON();
+    print $cgm_insar->search($type, "D071", $criteria)->outputJSON();
 } catch (BadFunctionCallException $e) {
     print "error";
 }

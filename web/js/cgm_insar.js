@@ -600,6 +600,7 @@ window.console.log("STASHING "+results.length+" layers from PHP calls");
 
     this.search = function(type, criteria) {
         window.console.log("insar  -->  calling search..");
+        var track_name="D071";
 
         $searchResult = $("#searchResult");
         if (!type || !criteria) {
@@ -615,7 +616,8 @@ window.console.log("calling search() with the string.."+JSON_criteria);
         $("#wait-spinner").show();
         $.ajax({
             url: "php/search.php",
-            data: {t: type, q: JSON_criteria},
+// XXX
+            data: {t: type, k: track_name, q: JSON_criteria},
         }).done(function(cgm_insar_data) {
 
             let results=[];

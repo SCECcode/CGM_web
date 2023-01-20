@@ -11,7 +11,7 @@ class CGM_GNSS extends SpatialData
 		if (!$this->connection) { die('Could not connect'); }
 	}
 
-	public function search($type, $criteria)
+	public function search($type, $extra, $criteria)
 	{
 		// TODO: Implement search() method.
 	}

@@ -318,10 +318,10 @@ window.console.log("HERE..");
 <!-- -->
     <div class="row">
         <div class="col-12 text-right pr-0">
-<!--- no need for this right now
-                <div class="input-group input-group-sm custom-control-inline ml-0" id="tract-controls" style="max-width:180px">
+<!--- no need for this right now -->
+                <div class="input-group input-group-sm custom-control-inline ml-0" id="insar-track-controls" style="max-width:180px">
                          <div class="input-group-prepend">
-                                 <label style='border-bottom:1;' class="input-group-text" for="inar-track-select">Select Track</label>
+                                 <label style='border-bottom:1;' class="input-group-text" for="insar-track-select">Select Track</label>
                          </div>
                          <select id='insar-track-select' class="custom-select custom-select-sm">
                                  <option selected value="all">ALL</option>
@@ -331,7 +331,7 @@ window.console.log("HERE..");
                                  <option value="D166">D166</option>
                          </select>
                 </div>
---->
+<!-- -->
                 <div class="input-group input-group-sm custom-control-inline ml-0" id="dataset-controls" style="max-width:180px">
                          <div class="input-group-prepend">
                                  <label style='border-bottom:1;' class="input-group-text" for="data-product-select">Select Dataset</label>
