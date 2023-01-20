@@ -544,6 +544,10 @@ window.console.log(">>> calling freshSearch..");
         }
     };
 
+    this.resetTrackView = function (tracks){
+        viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
+    };
+
 // showing php result on the map and also saving it to
 // search_result, results could be 1 marker layer, or a layer with many marker layers
     this.showPHP = function(type, results, ncriteria) {
@@ -628,7 +632,7 @@ window.console.log("calling search() with the string.."+JSON_criteria);
             let results=[];
             let ncriteria=[];
 window.console.log(cgm_insar_data);
-            if(cgm_insar_data === "[]") {
+            if(cgm_insar_data === "[\"[]\"]") {
 window.console.log("Did not find any PHP result");
             } else {
                  let tmp=JSON.parse(cgm_insar_data); 
