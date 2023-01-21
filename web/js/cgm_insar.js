@@ -736,8 +736,8 @@ window.console.log("nx is "+nx+" and ny "+ny);
                         }
                      }
                  }
-                 CGM_INSAR.showPHP(type, results, ncriteria);
             }
+            CGM_INSAR.showPHP(type, results, ncriteria);
         });
     };
 
