@@ -1,3 +1,4 @@
+###### NOT USED #####
 #!/usr/bin/env sh
 
 ## convert from shp file content to sql import script 
