@@ -106,7 +106,7 @@ var CGM_INSAR = new function () {
                for(let i=0; i<len; i++) {
                  let layer=layers[i];             
                  if(layer.options.type == 'polygon') {             
-                    layer.options.fillOpacity=0.01;
+                    layer.options.fillOpacity=0.02;
                  }
                }
             }

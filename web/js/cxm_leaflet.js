@@ -19,7 +19,7 @@ var point_options = { icon : point_icon };
 var polygon_options = {
     type: 'polygon',
     color:'red',
-    fillOpacity:0.01,
+    fillOpacity:0.02,
     opacity:0.7,
     weight:1,
 /* shapeOptions: { clickable: false } */
