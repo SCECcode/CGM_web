@@ -1,5 +1,5 @@
 /*** 
-   vs_pos.js
+   vs_csv.js
 
 For INSAR velocity file
 ***/
@@ -11,7 +11,8 @@ For INSAR velocity file
 //
 function _getV(line) {
    let vals=line.split(",")
-   let v=parseFloat(vals[2].trim());
+   let t= vals[2].trim(); 
+   let v=parseFloat(t);
    return v;
 }
 
@@ -28,6 +29,15 @@ function processCSV4VS(data,gid,track,nx,ny) {
      let row=[];
      for(let xx=0; xx<nx; xx++) {
         idx=xx+(yy * nx); 
+	// skip if a comment line     
+        if(dlines[idx].length == 0) { 
+window.console.log("  BAD-- empty string",idx);
+          continue;
+        }
+        if(dlines[idx][0] == "#") {
+window.console.log("  skip-comment line",idx);
+          continue;
+        }
         row.push(_getV(dlines[idx])); 
      }
      zvlist.push(row);
