@@ -78,6 +78,63 @@ var CGM_INSAR = new function () {
 
     this.setTrackName = function(name) {
         this.track_name=name;
+        this.highlightTrack(name);
+    };
+
+    this.highlightTrack =function(name) {
+// search through cgm_track_layers 
+      this.cgm_track_layers.remove();
+      this.cgm_track_layers.eachLayer(function(track){
+        if (track.scec_properties.track==name ) {
+                track.scec_properties.selected = true;
+                // has a polygon and a marker layers
+          let layers=track.getLayers();
+          let len=layers.length;
+          for(let i=0; i<len; i++) {
+            let layer=layers[i];             
+            if(layer.options.type == 'polygon') {             
+              layer.options.fillOpacity=0.1;
+            }
+          }
+          } else {
+            // clear all else           
+            if(track.scec_properties.selected) {
+                track.scec_properties.selected = false;
+                // has a polygon and a marker layers
+               let layers=track.getLayers();
+               let len=layers.length;
+               for(let i=0; i<len; i++) {
+                 let layer=layers[i];             
+                 if(layer.options.type == 'polygon') {             
+                    layer.options.fillOpacity=0.01;
+                 }
+               }
+            }
+          }
+      });
+      this.cgm_track_layers.addTo(viewermap);
+    };
+
+
+    this.unhighlightTrack =function() {
+window.console.log("2HERE");
+      this.cgm_track_layers.remove();
+      this.cgm_track_layers.eachLayer(function(track){
+        if ( track.scec_properties.selected) {
+        //do something
+          track.scec_properties.selected = false;
+          let layers=track.getLayers();
+          let len=layers.length;
+          for(let i=0; i<len; i++) {
+            let layer=layers[i];             
+            if(layer.options.type == 'polygon') {             
+              layer.options.fillOpacity=0.01;
+            }
+          }
+        }
+      });
+// refresh tracks
+      this.cgm_track_layers.addTo(viewermap);
     };
 
     this.activateData = function() {
@@ -169,7 +226,7 @@ window.console.log(">>> generateLayers..");
                 html: `<span style="opacity:80%; background-color:${track_color};"/>`});
 //                html: `<span style="border:2px solid green; opacity:80%; color:${track_color};" class="fas fa-caret-down"></span>`});
 
-                let track_ref=L.marker([latr,lonr], {icon:myicon});
+                let track_ref=L.marker([latr,lonr], {type:"ref",icon:myicon});
                 track.addLayer(track_ref);
 
                 track.addLayer(track_polygon);
@@ -178,7 +235,8 @@ window.console.log(">>> generateLayers..");
                     file:track_file,
                     track:track_name,
                     latlngs:latlngs,
-                    ref_latlong:[latr,lonr]
+                    ref_latlong:[latr,lonr],
+                    selected:false,
                 };
 
                 //let bb_info = `InSAR track name: ${track_name}`;
@@ -494,6 +552,9 @@ window.console.log("Hide model/product");
     this.reset = function() {
         window.console.log("insar calling -->>> reset");
         $("#wait-spinner").hide();
+
+        this.unhighlightTrack();
+
         clearAllPixiOverlay();
         this.zeroSelectCount()
         this.showSearch('none');
@@ -859,6 +920,8 @@ window.console.log("changeResultsTableBody..");
     this.setupCGMInterface = function() {
         var $download_queue_table = $('#metadata-viewer');
 
+        this.highlightTrack(this.track_name);
+
         this.activateData();
 
         $("#cgm-controlers-container").css('display','none');
@@ -886,5 +949,4 @@ window.console.log("changeResultsTableBody..");
         $("#wait-spinner").hide();
     };
 
-   
 }

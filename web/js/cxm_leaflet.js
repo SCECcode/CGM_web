@@ -17,8 +17,9 @@ var point_icon = L.AwesomeMarkers.icon({ icon: 'record', markerColor: 'blue'});
 var point_options = { icon : point_icon };
 
 var polygon_options = {
+    type: 'polygon',
     color:'red',
-    fillOpacity:0.04,
+    fillOpacity:0.01,
     opacity:0.7,
     weight:1,
 /* shapeOptions: { clickable: false } */
