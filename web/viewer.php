@@ -107,7 +107,6 @@ $cgm_insar = new CGM_INSAR();
         gtag('config', 'UA-495056-12');
 
         $(document).on("tableLoadCompleted", function () {
-window.console.log("HERE..");
             tableLoadCompleted = true;
 
             var $download_queue_table = $('#metadata-viewer');
