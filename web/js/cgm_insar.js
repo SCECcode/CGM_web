@@ -917,7 +917,7 @@ window.console.log("changeResultsTableBody..");
         return url;
     } 
 
-    this.setupCGMInterface = function() {
+    this.setupInterface = function() {
         var $download_queue_table = $('#metadata-viewer');
 
         this.highlightTrack(this.track_name);

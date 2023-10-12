@@ -217,21 +217,17 @@ window.console.log("==> reset what was there/INSAR");
        }
     });
 
-    $.event.trigger({
-        type: "page-ready",
-        "message": "completed",
-    });
 
-    CGM_GNSS.generateLayers();
-    CGM_INSAR.generateLayers();
-
-    CGM_GNSS.setupCGMInterface();
-
+// MAIN SETUP
     setup_infoTSTable();
     setup_warnTSTable();
-
     setup_pixi();
 
+    CGM.setupCGMInterface();
+
     $("#wait-spinner").hide();
+
+window.console.log("DONE initialize from  Main");
+    $.event.trigger({ type: "page-ready", "message": "completed", });
 
 });

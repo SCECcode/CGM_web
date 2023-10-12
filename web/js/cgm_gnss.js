@@ -1116,13 +1116,13 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
           $("#cgm-maxVectorSliderTxt").val(CGM_GNSS.cgm_vector_max);
         }
 
-        this.setupCGMInterface = function() {
+        this.setupInterface = function() {
             var $download_queue_table = $('#metadata-viewer');
             var sz=0;
             if(cgm_gnss_station_data != null) {
                 sz=cgm_gnss_station_data.length;
             }
-window.console.log("setupCGMInterface: retrieved stations "+sz);
+window.console.log("setupInterface: retrieved stations "+sz);
 
             for (let i = 0; i < sz; i++) {
                 let item=cgm_gnss_station_data[i];

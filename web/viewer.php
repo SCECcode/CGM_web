@@ -75,6 +75,7 @@ $cgm_insar = new CGM_INSAR();
 
     <!-- cgm js -->
     <script type="text/javascript" src="js/debug.js?v=1"></script>
+    <script type="text/javascript" src="js/cgm.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_main.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_gnss.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_insar.js?v=1"></script>
