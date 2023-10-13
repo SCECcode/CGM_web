@@ -1,20 +1,25 @@
 <?php
+require_once("CGM_INSAR.php");
 
-require_once("CFM.php");
-
-$search = "";
-
-$search = new CFM;
+$cgm_insar = new CGM_INSAR();
 
 $type = $_REQUEST["t"];
+$track = $_REQUEST["k"];
 $criteria = json_decode($_REQUEST["q"]);
 
-//if (is_object($criteria[0])) {
-//	$criteria = (array)$criteria[0];
-//}
+//$type = 'location';
+//$criteria = array();
+//array_push($criteria, 35.0522);
+//array_push($criteria, -118.2437);
+
+if (is_object($criteria[0])) {
+     $criteria = (array)$criteria[0];
+}
 //print_r($criteria);exit;
+
 try {
-	print $search->search($type, $criteria)->outputJSON();
+//        print $cgm_insar->doTesting()->outputJSON();
+    print $cgm_insar->search($type, $track, $criteria)->outputJSON();
 } catch (BadFunctionCallException $e) {
-	print "error";
+    print "error";
 }

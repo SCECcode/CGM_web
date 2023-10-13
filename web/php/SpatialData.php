@@ -4,7 +4,7 @@
 abstract class SpatialData
 {
 	protected $connection;
-	protected $search_result = [];
+	protected $php_result = [];
 
 //	function __construct()
 //	{
@@ -12,11 +12,11 @@ abstract class SpatialData
 //		if (!$this->connection) { die('Could not connect'); }
 //	}
 
-	abstract public function search($type, $criteria);
+	abstract public function search($type, $extra, $criteria);
 
 	public function outputJSON()
 	{
-		return json_encode($this->search_result);
+		return json_encode($this->php_result,JSON_UNESCAPED_SLASHES);
 	}
 
 }

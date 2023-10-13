@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>cgm TS Viewer (Beta)</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="css/vendor/jquery-ui.css">
+<link rel="stylesheet" href="css/vendor/bootstrap.min.css">
+<link rel="stylesheet" href="css/vendor/bootstrap-grid.min.css">
+<link rel="stylesheet" href="css/vendor/glyphicons.css">
+<link rel="stylesheet" href="css/cgm-ui.css">
+
+<script type='text/javascript' src='js/vendor/plotly.min.js'></script>
+<script type='text/javascript' src='js/vendor/jquery.min.js'></script>
+<script type='text/javascript' src='js/vendor/jquery-ui.js'></script>
+<script type='text/javascript' src='js/vendor/jquery.csv.js'></script>
+<script type='text/javascript' src='js/vendor/bootstrap.min.js'></script>
+<script type='text/javascript' src='js/vendor/popper.min.js'></script>
+<script type='text/javascript' src='js/vendor/html2canvas.js'></script>
+
+
+<script type="text/javascript" src="js/ts/myPlotly.js"></script>
+<script type="text/javascript" src="js/ts/ts_pos.js"></script>
+<script type="text/javascript" src="js/ts/ts_csv.js"></script>
+<script type="text/javascript" src="js/ts/vs_csv.js"></script>
+<script type="text/javascript" src="js/ts/ts_util.js"></script>
+<script type="text/javascript" src="js/ts/ts_gnss_plotly.js"></script>
+<script type="text/javascript" src="js/ts/ts_insar_plotly.js"></script>
+</head>
+<body style="background-color:#f1fff1">
+<!--- MAIN PLOT -->
+<div id="myDiv" style="display:inline;"></div>
+<div style="display:none">
+    <button id="Downloadbtn" class="btn cfm-small-btn"  onClick="plotly_plot_image()">
+                <span class="glyphicon glyphicon-star"></span> Export plotly image</button>
+</div>
+</body>
+</html>

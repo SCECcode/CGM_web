@@ -1,7 +1,7 @@
 <?php
 require_once("SpatialData.php");
 
-class CGM extends SpatialData
+class CGN extends SpatialData
 {
 
 	// TODO: once we're in a separate database
@@ -18,7 +18,7 @@ class CGM extends SpatialData
 
 	public function getAllStationData()
 	{
-		$query = "select gid, station_id, ref_north_latitude, ref_east_longitude, ref_velocity_north, ref_velocity_east, station_type from cgm_station_velocities -- tablesample system(30) -- where station_id = 'P255'--  -- LIMIT 100";
+		$query = "select gid, station_id, ref_north_latitude, ref_east_longitude, ref_velocity_north, ref_velocity_east, ref_velocity_up, station_type from cgm_station_velocities -- tablesample system(30) -- where station_id = 'P255'--  -- LIMIT 100";
 
 
 		//where station_id = 'P213'
@@ -30,7 +30,7 @@ class CGM extends SpatialData
 			$velocity_data[] = $row;
 		}
 
-			$this->search_result = $velocity_data;
+			$this->php_result = $velocity_data;
 
 			return $this;
 
