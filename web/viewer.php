@@ -31,9 +31,13 @@ $cgm_insar = new CGM_INSAR();
     <script type='text/javascript' src='js/vendor/jquery.min.js'></script>
     <script type='text/javascript' src='js/vendor/bootstrap.min.js'></script>
     <script type='text/javascript' src='js/vendor/jquery-ui.js'></script>
-    <script type='text/javascript' src='js/vendor/ersi-leaflet.js'></script>
+    <script type='text/javascript' src='js/vendor/esri-leaflet.js'></script>
+    <script type='text/javascript' src='js/vendor/esri-leaflet-vector.js' crossorigin=""></script>
+
     <script type='text/javascript' src='js/vendor/FileSaver.js'></script>
     <script type='text/javascript' src='js/vendor/jszip.js'></script>
+    <script type='text/javascript' src='js/vendor/togeojson.js'></script>
+    <script type='text/javascript' src='js/vendor/leaflet-kmz-src.js'></script>
     <script type='text/javascript' src='js/vendor/jquery.floatThead.min.js'></script>
     <script type='text/javascript' src='js/vendor/html2canvas.js'></script>
 
@@ -82,7 +86,7 @@ $cgm_insar = new CGM_INSAR();
     <script type="text/javascript" src="js/cgm_util.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_viewTS_util.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_viewTS.js?v=1"></script>
-    <script type="text/javascript" src="js/cxm_leaflet.js?v=1"></script>
+    <script type="text/javascript" src="js/cgm_leaflet.js?v=1"></script>
     <script type="text/javascript" src="js/cxm_misc_util.js?v=1"></script>
 
    <!-- pixi pixiOverlay -->
@@ -378,13 +382,15 @@ $cgm_insar = new CGM_INSAR();
                             <label style='border-bottom:1;' class="input-group-text" for="mapLayer">Select Map Type</label>
                         </div>
                         <select id="mapLayer" class="custom-select custom-select-sm"
-                                onchange="switchLayer(this.value);">
+                                               onchange="switchLayer(this.value);">
                             <option selected value="esri topo">ESRI Topographic</option>
-                            <option value="esri NG">ESRI National Geographic</option>
                             <option value="esri imagery">ESRI Imagery</option>
+                            <option value="jawg light">Jawg Light</option>
+                            <option value="jawg dark">Jawg Dark</option>
+                            <option value="osm streets relief">OSM Streets Relief</option>
                             <option value="otm topo">OTM Topographic</option>
                             <option value="osm street">OSM Street</option>
-                            <option value="shaded relief">Shaded Relief</option>
+                            <option value="esri terrain">ESRI Terrain</option>
                         </select>
                     </div>
                 </div>

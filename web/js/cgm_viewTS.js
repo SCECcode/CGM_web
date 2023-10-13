@@ -1,5 +1,7 @@
 /***
    cgm_viewTS.js
+
+   processing time series view
 ***/
 
 // sample pos data

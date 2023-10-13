@@ -1,4 +1,12 @@
-// This is leaflet specific utilities
+/***
+   cgm_leaflet.js
+
+This is leaflet specific utilities for CGM
+***/
+
+var init_map_zoom_level = 7;
+var init_map_coordinates = [34.3, -118.4];
+
 var rectangle_options = {
        showArea: false,
          shapeOptions: {
@@ -33,6 +41,10 @@ var visibleFaults = new L.FeatureGroup();
 var drawing_rectangle=false;
 var drawing_point=false;
 
+
+// scec
+var scecAttribution ='<a href="https://www.scec.org">SCEC</a>';
+
 function clear_popup()
 {
   viewermap.closePopup();
@@ -43,50 +55,67 @@ function refresh_map()
   if (viewermap == undefined) {
     window.console.log("refresh_map: BAD BAD BAD");
     } else {
-      viewermap.setView([34.3, -118.4], 7);
+      viewermap.setView(init_map_coordinates,init_map_zoom_level);
   }
 }
 
 function setup_viewer()
 {
 // esri
-  var esri_topographic = L.esri.basemapLayer("Topographic");
-  var esri_imagery = L.esri.basemapLayer("Imagery");
-  var esri_ng = L.esri.basemapLayer("NationalGeographic");
+// web@scec.org  - ArcGIS apiKey, https://leaflet-extras.github.io/leaflet-providers/preview/
+// https://www.esri.com/arcgis-blog/products/developers/developers/open-source-developers-time-to-upgrade-to-the-new-arcgis-basemap-layer-service/
 
-// scec 
-var scecAttribution ='<a href="https://www.scec.org">SCEC</a>';
+  var esri_apiKey = "AAPK2ee0c01ab6d24308b9e833c6b6752e69Vo4_5Uhi_bMaLmlYedIB7N-3yuFv-QBkdyjXZZridaef1A823FMPeLXqVJ-ePKNy";
+  var esri_topographic = L.esri.Vector.vectorBasemapLayer("ArcGIS:Topographic", {apikey: esri_apiKey});
+  var esri_imagery = L.esri.Vector.vectorBasemapLayer("ArcGIS:Imagery", {apikey: esri_apiKey});
+  var osm_streets_relief= L.esri.Vector.vectorBasemapLayer("OSM:StreetsRelief", {apikey: esri_apiKey});
+  var esri_terrain = L.esri.Vector.vectorBasemapLayer("ArcGIS:Terrain", {apikey: esri_apiKey});
 
 // otm topo
   var topoURL='https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
   var topoAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreeMap</a> contributors,<a href=http://viewfinderpanoramas.org"> SRTM</a> | &copy; <a href="https://www.opentopomap.org/copyright">OpenTopoMap</a>(CC-BY-SA)';
- L.tileLayer(topoURL, { detectRetina: true, attribution: topoAttribution})
+  L.tileLayer(topoURL, { detectRetina: true, attribution: topoAttribution, maxZoom:16 })
 
-  var otm_topographic = L.tileLayer(topoURL, { detectRetina: true, attribution: topoAttribution});
+  var otm_topographic = L.tileLayer(topoURL, { detectRetina: true, attribution: topoAttribution, maxZoom:16});
+
+  var jawg_dark = L.tileLayer('https://{s}.tile.jawg.io/jawg-dark/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
+	attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	minZoom: 0,
+	maxZoom: 16,
+	accessToken: 'hv01XLPeyXg9OUGzUzaH4R0yA108K1Y4MWmkxidYRe5ThWqv2ZSJbADyrhCZtE4l'});
+
+  var jawg_light = L.tileLayer('https://{s}.tile.jawg.io/jawg-light/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
+	attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	minZoom: 0,
+	maxZoom: 16,
+	accessToken: 'hv01XLPeyXg9OUGzUzaH4R0yA108K1Y4MWmkxidYRe5ThWqv2ZSJbADyrhCZtE4l' });
 
 // osm street
   var openURL='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   var openAttribution ='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-  var osm_street=L.tileLayer(openURL, {attribution: openAttribution});
-  var shadedRelief =  L.esri.basemapLayer("ShadedRelief");
+  var osm_street=L.tileLayer(openURL, {attribution: openAttribution, maxZoom:16});
 
   baseLayers = {
     "esri topo" : esri_topographic,
-    "esri NG" : esri_ng,
     "esri imagery" : esri_imagery,
+    "jawg light" : jawg_light,
+    "jawg dark" : jawg_dark,
+    "osm streets relief" : osm_streets_relief,
     "otm topo": otm_topographic,
     "osm street" : osm_street,
-    "shaded relief": shadedRelief
+    "esri terrain": esri_terrain
   };
+
   var overLayer = {};
   var basemap = L.layerGroup();
   currentLayer = esri_topographic;
-  currentLayerName = 'esri topo';
 
 // ==> mymap <==
-  mymap = L.map('CGM_plot', { drawControl:false, layers: [esri_topographic, basemap], zoomControl:true} );
-  mymap.setView([34.3, -118.4], 7);
+  mymap = L.map('CGM_plot', { zoomSnap: 0.25, drawControl:false, zoomControl:true} );
+  mymap.setView(init_map_coordinates,init_map_zoom_level);
   mymap.attributionControl.addAttribution(scecAttribution);
+
+  esri_topographic.addTo(mymap);
 
 // basemap selection
   var ctrl_div=document.getElementById('external_leaflet_control');
@@ -111,24 +140,6 @@ var scecAttribution ='<a href="https://www.scec.org">SCEC</a>';
 
 // ==> scalebar <==
   L.control.scale({metric: 'false', imperial:'false', position: 'bottomleft'}).addTo(mymap);
-
-/* TODO
- watermark XXX
-  L.Control.Watermark = L.control.extend({
-    onAdd: function (map) {
-      var img=L.DomUtil.create('img');
-      img.src = './css/images/logo.png';
-      img.style.width ='200px';
-      return img;
-    },
-    onRemove: function(map) {
-       // no-op
-    }
-  });
-  L.control.watermark= function(opts) {
-     return new L.Control.Watermark(opts);
-  }
-*/
 
   mylegend=L.control( {position:'bottomleft'});
 
