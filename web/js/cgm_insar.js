@@ -532,9 +532,9 @@ var generateTableRow = function(layer) {
         }
         this.cgm_track_layers.addTo(viewermap);
 
-        if (currentLayerName != 'shaded relief') {
-            switchLayer('shaded relief');
-            $("#mapLayer").val('shaded relief');
+        if (currentLayerName != 'esri topo') {
+            switchLayer('esri topo');
+            $("#mapLayer").val('esri topo');
         }
 
     };
@@ -552,6 +552,10 @@ window.console.log("Hide model/product");
     this.reset = function() {
         window.console.log("insar calling -->>> reset");
         $("#wait-spinner").hide();
+
+        viewermap.removeLayer(this.search_result);
+        this.searching = false;
+        this.search_result = new L.FeatureGroup();
 
         this.unhighlightTrack();
 

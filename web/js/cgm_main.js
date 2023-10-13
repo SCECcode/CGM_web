@@ -208,10 +208,10 @@ window.console.log("==> reset what was there/INSAR");
 
 // set to new interface
        if ($(this).val() == 'gnss') {
-           CGM_GNSS.setupCGMInterface();
+           CGM_GNSS.setupInterface();
        }
        if ($(this).val() == 'insar') {
-           CGM_INSAR.setupCGMInterface();
+           CGM_INSAR.setupInterface();
 // and also always go to the location search.. cgm-insar-search-type/"location"
 //           $("#cgm-insar-search-type").val('location').trigger('change');
        }

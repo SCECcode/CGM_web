@@ -676,9 +676,9 @@ window.console.log("SHOW product");
             $cgm_model_checkbox.prop('checked', true);
         }
 
-        if (currentLayerName != 'shaded relief') {
-            switchLayer('shaded relief');
-            $("#mapLayer").val('shaded relief');
+        if (currentLayerName != 'esri topo') {
+            switchLayer('esri topo');
+            $("#mapLayer").val('esri topo');
         }
 
     };
@@ -705,7 +705,8 @@ window.console.log("gnss calling --->> reset");
         this.zeroSelectCount();
         this.showSearch('none');
         this.searching = false;
-        this.search_result.removeLayer();
+
+        viewermap.removeLayer(this.search_result);
         this.search_result = new L.FeatureGroup();
 
         this.hideVectors();
@@ -725,9 +726,9 @@ window.console.log("gnss calling --->> reset");
     this.resetSearch = function (){
 window.console.log("gnss calling --->> resetSearch.");
         $("#wait-spinner").hide();
-        viewermap.removeLayer(this.search_result);
+
         this.searching = false;
-        this.search_result.removeLayer();
+        viewermap.removeLayer(this.search_result);
         this.search_result = new L.FeatureGroup();
 
         this.replaceResultsTableBody([]);
