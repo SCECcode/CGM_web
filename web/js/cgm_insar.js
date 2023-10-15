@@ -36,7 +36,7 @@ var CGM_INSAR = new function () {
         abnormal: '#00FFFF',
     };
 
-    var cgm_ref_marker_style = {
+    var insar_ref_marker_style = {
         type: "ref",
         color: "red",
         fillOpacity: 1,
@@ -44,7 +44,7 @@ var CGM_INSAR = new function () {
         riseOnHover: true,
     }
 
-    var cgm_marker_style = {
+    var insar_marker_style = {
         normal: {
             color: cgm_colors.normal,
             fillColor: cgm_colors.normal,
@@ -235,8 +235,8 @@ window.console.log(">>> generateLayers..");
                 track_lines.on('mouseover',function() { this.setStyle({weight:5}); });                    
                 track_lines.on('mouseout',function() { this.setStyle({weight:2}); });                    
 		    
-//                let track_ref=makeLeafletCircleMarker([latr,lonr], cgm_ref_marker_style);
-//                let track_ref=makeLeafletCircleMarker([latr,lonr], cgm_ref_marker_style);
+//                let track_ref=makeLeafletCircleMarker([latr,lonr], insar_ref_marker_style);
+//                let track_ref=makeLeafletCircleMarker([latr,lonr], insar_ref_marker_style);
 		var icon=L.divIcon( { background: 'red', iconSize: L.point(10,10) });
                 let track_ref=L.marker([latr,lonr], { type:"ref", icon:icon });
 
@@ -296,7 +296,7 @@ window.console.log(">>> generateLayers..");
 
     this.selectLocationByLayer = function (layer, moveTableRow=false) {
         layer.scec_properties.selected = true;
-        layer.setStyle(cgm_marker_style.selected);
+        layer.setStyle(insar_marker_style.selected);
         let gid = layer.scec_properties.gid;
 
         let $row = $(`tr[data-point-gid='${gid}'`);
@@ -323,7 +323,7 @@ window.console.log(">>> generateLayers..");
 
     this.unselectLocationByLayer = function (layer) {
         layer.scec_properties.selected = false;
-        layer.setStyle(cgm_marker_style.normal);
+        layer.setStyle(insar_marker_style.normal);
 
         let gid = layer.scec_properties.gid;
 
@@ -748,7 +748,7 @@ window.console.log("Did not find any PHP result");
                                // create a ncriteria
                               ncriteria.push(nlat);
                               ncriteria.push(nlon);
-                              let marker_layer=L.circleMarker([nlat,nlon],cgm_marker_style.normal);
+                              let marker_layer=L.circleMarker([nlat,nlon],insar_marker_style.normal);
                               marker_layer.scec_properties = {
                                     track: track_name,
                                     lat: nlat,
