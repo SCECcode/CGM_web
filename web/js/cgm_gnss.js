@@ -47,9 +47,9 @@ var CGM_GNSS = new function () {
 
     var cgm_marker_style = {
         normal: {
-            color: cgm_colors.normal,
+            color: "white",
             fillColor: cgm_colors.normal,
-            fillOpacity: 0.5,
+            fillOpacity: 1,
             radius: 3,
             riseOnHover: true,
             weight: 1,

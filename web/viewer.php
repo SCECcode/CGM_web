@@ -38,6 +38,7 @@ $cgm_insar = new CGM_INSAR();
     <script type='text/javascript' src='js/vendor/jszip.js'></script>
     <script type='text/javascript' src='js/vendor/togeojson.js'></script>
     <script type='text/javascript' src='js/vendor/leaflet-kmz-src.js'></script>
+    <script type='text/javascript' src='js/vendor/leaflet.markercluster-src.js'></script>
     <script type='text/javascript' src='js/vendor/jquery.floatThead.min.js'></script>
     <script type='text/javascript' src='js/vendor/html2canvas.js'></script>
 
@@ -409,14 +410,11 @@ $cgm_insar = new CGM_INSAR();
 
                 <div class="col" id='CGM_plot'
                         style="position:relative;border:solid 1px #ced4da; height:500px;">
-                    <div  id='wait-spinner' style="">
-                        <div class="d-flex justify-content-center" >
-                          <div class="spinner-border text-light" role="status">
-                            <span class="sr-only">Loading...</span>
-                          </div>
-                        </div>
-                    </div>
                 </div>
+                <div class="spinDialog" style="position:absolute;top:40%;left:50%; z-index:9999;">
+                    <div id="wait-spinner" align="center" style="display:;"><i class="glyphicon glyphicon-cog fa-spin" style="color:red"></i></div>
+               </div>
+
             </div>
 
 

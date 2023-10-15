@@ -12,7 +12,8 @@ var CGM_INSAR = new function () {
 
     // cgm_track_layers <== all polygon layers for each insar track
     //                      setup once from viewer.php 
-    this.cgm_track_layers = new L.FeatureGroup();
+    this.cgm_track_layers;
+    this.cgm_track_ref_layers;
 
     // label <= locally generated unique id for a search
     this.cgm_select_label = [];
@@ -34,6 +35,14 @@ var CGM_INSAR = new function () {
         selected: '#B02E0C',
         abnormal: '#00FFFF',
     };
+
+    var cgm_ref_marker_style = {
+        type: "ref",
+        color: "red",
+        fillOpacity: 1,
+        radius: 4,
+        riseOnHover: true,
+    }
 
     var cgm_marker_style = {
         normal: {
@@ -185,6 +194,7 @@ window.console.log(">>> generateLayers..");
           return;
 
         this.cgm_track_layers = new L.FeatureGroup();
+        this.cgm_track_ref_layers = make_markerGroup();
 
         for (const index in cgm_insar_track_data) {
             if (cgm_insar_track_data.hasOwnProperty(index)) {
@@ -216,19 +226,28 @@ window.console.log(">>> generateLayers..");
                 let latlngs = [[lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4]];
                 let mypoly=polygon_options;
                 mypoly['color']=track_color;
-                let track_polygon=L.polygon(latlngs, mypoly);
+                let track_polygon=L.polygon(latlngs,mypoly);
 
-                let myicon=L.divIcon({ 
-//                                     iconUrl:'some_icon.png',
-                                       iconSize: [10, 10],
-                                       iconAnchor: [5, 10],
-                                       popupAnchor: [0, -10],
-                html: `<span style="opacity:80%; background-color:${track_color};"/>`});
-//                html: `<span style="border:2px solid green; opacity:80%; color:${track_color};" class="fas fa-caret-down"></span>`});
+                let latlngs2 = [[lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4],[lat1,lon1]];
+                let poptrack="<strong>Track name: </strong>"+track_name+"<br><strong>Info: </strong>track info<br>";
+		let track_lines=L.polyline(latlngs2,{color:track_color,weight:2,riseOnHover:true}).bindPopup(poptrack,{maxWidth: 500});
 
-                let track_ref=L.marker([latr,lonr], {type:"ref",icon:myicon});
-                track.addLayer(track_ref);
+                track_lines.on('mouseover',function() { this.setStyle({weight:5}); });                    
+                track_lines.on('mouseout',function() { this.setStyle({weight:2}); });                    
+		    
+//                let track_ref=makeLeafletCircleMarker([latr,lonr], cgm_ref_marker_style);
+//                let track_ref=makeLeafletCircleMarker([latr,lonr], cgm_ref_marker_style);
+		var icon=L.divIcon( { background: 'red', iconSize: L.point(10,10) });
+                let track_ref=L.marker([latr,lonr], { type:"ref", icon:icon });
 
+//                let ref_info = "foo | oh";
+//                track_ref.bindTooltip(ref_info).openTooltip();
+		    
+		let popref="<strong>Track name: </strong>"+track_name+"<br><strong>References: </strong>abc<br><strong>Lat: </strong>"+latr+"<br><strong>Lon: </strong>"+lonr+"<br>";
+		track_ref.bindPopup(popref, {maxWidth: 500});
+
+                //track.addLayer(track_ref);
+                track.addLayer(track_lines);
                 track.addLayer(track_polygon);
                
                 track.scec_properties = {
@@ -239,11 +258,8 @@ window.console.log(">>> generateLayers..");
                     selected:false,
                 };
 
-                //let bb_info = `InSAR track name: ${track_name}`;
-                //track.bindTooltip(bb_info);
-                var popup=L.popup().setContent("InSAR track name: "+track_name);
-                track.bindPopup(popup);
                 this.cgm_track_layers.addLayer(track);
+                this.cgm_track_ref_layers.addLayer(track_ref);
             }
         }
     };
@@ -530,7 +546,13 @@ var generateTableRow = function(layer) {
         if (!$cgm_model_checkbox.prop('checked')) {
             $cgm_model_checkbox.prop('checked', true);
         }
-        this.cgm_track_layers.addTo(viewermap);
+
+        let layer=this.cgm_track_layers.addTo(viewermap);
+        layer.bringToBack();
+
+window.console.log("HERE");
+        this.cgm_track_ref_layers.addTo(viewermap);
+        
 
         if (currentLayerName != 'esri topo') {
             switchLayer('esri topo');
@@ -547,6 +569,7 @@ window.console.log("Hide model/product");
             $cgm_model_checkbox.prop('checked', false);
         }
         this.cgm_track_layers.remove();
+        this.cgm_track_ref_layers.remove();
     };
 
     this.reset = function() {
