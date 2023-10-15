@@ -19,5 +19,10 @@ var CGM = new function () {
       $("#cgm-model-insar").click();
     };
 
+    this.gotZoomed = function(zoom) {
+      if(CGM_GNSS.visibleGNSS()) {
+        CGM_GNSS.gotZoomed(zoom); 
+      }
+    };
 };
 

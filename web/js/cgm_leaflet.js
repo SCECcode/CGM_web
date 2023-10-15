@@ -141,6 +141,13 @@ function setup_viewer()
 // ==> scalebar <==
   L.control.scale({metric: 'false', imperial:'false', position: 'bottomleft'}).addTo(mymap);
 
+  function onMapZoom(e) { 
+    var zoom=mymap.getZoom();
+window.console.log("map got zoomed..>>",zoom);
+    CGM.gotZoomed(zoom);
+  }          
+  mymap.on('zoomend dragend', onMapZoom);
+
   mylegend=L.control( {position:'bottomleft'});
 
   mylegend.onAdd = function (map) {

@@ -45,7 +45,7 @@ var CGM_GNSS = new function () {
         abnormal: '#00FFFF',
     };
 
-    var cgm_marker_style = {
+    var gnss_marker_style = {
         normal: {
             color: "white",
             fillColor: cgm_colors.normal,
@@ -181,8 +181,8 @@ var CGM_GNSS = new function () {
         let mylabel=L.marker(start_latlng, {icon: labelIcon});
 
         // 20mm 
-        let end_latlng = calculateEndVectorLatLng(start_latlng, 0.02, 0, 1000000);
-        let dist = calculateDistanceMeter(start_latlng, {'lat':end_latlng[0], 'lng':end_latlng[1]} );
+        let end_latlng = _calculateEndVectorLatLng(start_latlng, 0.02, 0, 1000000);
+        let dist = _calculateDistanceMeter(start_latlng, {'lat':end_latlng[0], 'lng':end_latlng[1]} );
 
         //addMarkerLayer(start_latlng.lat, start_latlng.lng);
         //addMarkerLayer(end_latlng[0],end_latlng[1]);
@@ -236,13 +236,13 @@ var CGM_GNSS = new function () {
                     lon -= 360;
                 }
 
-                let marker = L.circleMarker([lat, lon], cgm_marker_style.normal);
+                let marker = makeLeafletCircleMarker([lat, lon], gnss_marker_style.normal);
 
                 // generate vectors
                 let start_latlng = marker.getLatLng();
                 // in meter
-                let end_latlng = calculateEndVectorLatLng(start_latlng, vel_north, vel_east, 1000000);
-                let dist_m = calculateDistanceMeter(start_latlng, {'lat':end_latlng[0], 'lng':end_latlng[1]} );
+                let end_latlng = _calculateEndVectorLatLng(start_latlng, vel_north, vel_east, 1000000);
+                let dist_m = _calculateDistanceMeter(start_latlng, {'lat':end_latlng[0], 'lng':end_latlng[1]} );
                 let dist = dist_m/1000;
 
                 if (CGM_GNSS.cgm_vector_max == -1) {
@@ -361,7 +361,7 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
 
         this.cgm_layers.on('mouseover', function(event) {
             let layer = event.layer;
-            layer.setRadius(cgm_marker_style.hover.radius);
+            layer.setRadius(gnss_marker_style.hover.radius);
             layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.hover);
             layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.hover]);
         });
@@ -369,7 +369,7 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
 
         this.cgm_layers.on('mouseout', function(event) {
             let layer = event.layer;
-            layer.setRadius(cgm_marker_style.normal.radius);
+            layer.setRadius(gnss_marker_style.normal.radius);
 
             if (layer.scec_properties.selected) {
                 layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.selected);
@@ -414,7 +414,7 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
     this.selectStationByLayer = function (layer, moveTableRow=false) {
 window.console.log("HERE.. selectStationByLayer..");
         layer.scec_properties.selected = true;
-        layer.setStyle(cgm_marker_style.selected);
+        layer.setStyle(gnss_marker_style.selected);
         layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.selected);
         layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.selected]);
         let gid = layer.scec_properties.gid;
@@ -443,7 +443,7 @@ window.console.log("HERE.. selectStationByLayer..");
 
     this.unselectStationByLayer = function (layer) {
         layer.scec_properties.selected = false;
-        layer.setStyle(cgm_marker_style.normal);
+        layer.setStyle(gnss_marker_style.normal);
 
         layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.normal);
         layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.normal]);
@@ -545,7 +545,7 @@ window.console.log("HERE.. selectStationByLayer..");
             return;
         }
 
-        let html = generateTableRow(layer);
+        let html = _generateTableRow(layer);
 
         $table.find("tr#placeholder-row").remove();
         $table.prepend(html);
@@ -608,7 +608,7 @@ window.console.log("HERE.. selectStationByLayer..");
         })
     }
 
-var generateTableRow = function(layer) {
+    var _generateTableRow = function(layer) {
         let $table = $("#metadata-viewer");
         let html = "";
 
@@ -640,6 +640,27 @@ var generateTableRow = function(layer) {
         return html;
     };
 
+    this.gotZoomed = function (zoom) {
+
+        let normal=3;
+        let target = normal;
+        if(zoom > 6)  {
+           target = (zoom > 9) ? 7 : (zoom - 7)+target;
+        }
+        if(gnss_marker_style.normal.radius == target) { // no changes..
+           return;
+        }
+        gnss_marker_style.normal.radius=target;
+        gnss_marker_style.selected.radius=target;
+        gnss_marker_style.hover.radius = (target *2) ;
+
+//window.console.log(" RESIZE: marker zoom("+zoom+") radius "+target);
+        this.cgm_layers.eachLayer(function(layer){
+          layer.setRadius(target);
+        });
+
+    };
+
     this.showSearch = function (type) {
         const $all_search_controls = $("#cgm-controls-container ul li");
         switch (type) {
@@ -661,8 +682,15 @@ var generateTableRow = function(layer) {
         }
     };
 
-    this.showProduct = function () {
+    this.visibleGNSS = function () {
+        let $cgm_model_checkbox = $("#cgm-model-gnss");
+        if ($cgm_model_checkbox.prop('checked')) {
+          return 1;
+        }
+        return 0;
+    }
 
+    this.showProduct = function () {
 window.console.log("SHOW product");
         let $cgm_model_checkbox = $("#cgm-model-gnss");
 
@@ -831,46 +859,46 @@ window.console.log(">>> calling freshSearch..");
         }
     };
 
-        var calculateEndVectorLatLng = function (start_latlng, vel_north, vel_east, scaling_factor) {
-            // see https://stackoverflow.com/questions/7477003/calculating-new-longitude-latitude-from-old-n-meters
-            let dy = vel_north * scaling_factor;
-            let dx = vel_east * scaling_factor;
-            let r_earth = 6371e3; // metres
-            let pi = Math.PI;
+    var _calculateEndVectorLatLng = function (start_latlng, vel_north, vel_east, scaling_factor) {
+// see https://stackoverflow.com/questions/7477003/calculating-new-longitude-latitude-from-old-n-meters
+        let dy = vel_north * scaling_factor;
+        let dx = vel_east * scaling_factor;
+        let r_earth = 6371e3; // metres
+        let pi = Math.PI;
 
-            let start_lat = start_latlng.lat;
-            let start_lng = start_latlng.lng;
-            let end_lat = start_lat + (dy / r_earth) * (180 / pi);
-            let end_lng = start_lng + (dx / r_earth) * (180 / pi) / Math.cos(start_lat * pi / 180);
+        let start_lat = start_latlng.lat;
+        let start_lng = start_latlng.lng;
+        let end_lat = start_lat + (dy / r_earth) * (180 / pi);
+        let end_lng = start_lng + (dx / r_earth) * (180 / pi) / Math.cos(start_lat * pi / 180);
 
-//calculateDistanceMeter({'lat':50.03, 'lng':-5.5 }, {'lat':58.5, 'lng':-3.04} );
-//let d= calculateDistanceMeter({'lat':start_lat,'lng':start_lng}, {'lat':end_lat, 'lng':end_lng} );
+//_calculateDistanceMeter({'lat':50.03, 'lng':-5.5 }, {'lat':58.5, 'lng':-3.04} );
+//let d= _calculateDistanceMeter({'lat':start_lat,'lng':start_lng}, {'lat':end_lat, 'lng':end_lng} );
 
-            return [end_lat, end_lng];
-        };
+        return [end_lat, end_lng];
+    };
 
-        var calculateDistanceMeter = function (start_latlng, end_latlng) {
-             let start_lat = start_latlng.lat;
-             let start_lng = start_latlng.lng;
-             let end_lat = end_latlng.lat;
-             let end_lng = end_latlng.lng;
+    var _calculateDistanceMeter = function (start_latlng, end_latlng) {
+        let start_lat = start_latlng.lat;
+        let start_lng = start_latlng.lng;
+        let end_lat = end_latlng.lat;
+        let end_lng = end_latlng.lng;
 
-             // from http://www.movable-type.co.uk/scripts/latlong.html
-             const R = 6371e3; // metres
-             const theta1 = start_lat * Math.PI/180; // φ, λ in radians
-             const theta2 = end_lat * Math.PI/180;   
-             const deltaTheta = (end_lat-start_lat) * Math.PI/180;
-             const deltaLamda = (end_lng-start_lng) * Math.PI/180;
+        // from http://www.movable-type.co.uk/scripts/latlong.html
+        const R = 6371e3; // metres
+        const theta1 = start_lat * Math.PI/180; // φ, λ in radians
+        const theta2 = end_lat * Math.PI/180;   
+        const deltaTheta = (end_lat-start_lat) * Math.PI/180;
+        const deltaLamda = (end_lng-start_lng) * Math.PI/180;
 
-             const a = Math.sin(deltaTheta/2) * Math.sin(deltaTheta/2) +
+        const a = Math.sin(deltaTheta/2) * Math.sin(deltaTheta/2) +
                        Math.cos(theta1) * Math.cos(theta2) *
                        Math.sin(deltaLamda/2) * Math.sin(deltaLamda/2);
-             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-             var d = R * c; // in metres
-             return d;
-        }
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        var d = R * c; // in metres
+        return d;
+   }
 
-        this.search = function (type, criteria) {
+   this.search = function (type, criteria) {
 window.console.log("gnss --->> calling search.. <<----");
             let results = [];
             switch (type) {
@@ -1036,7 +1064,7 @@ window.console.log("generateResultsTable..");
 <tbody>`;
 
             for (let i = 0; i < results.length; i++) {
-                html += generateTableRow(results[i]);
+                html += _generateTableRow(results[i]);
                 // CGM_GNSS.selectStationByLayer(results[i]);
             }
             if (results.length == 0) {
@@ -1050,7 +1078,7 @@ window.console.log("generateResultsTable..");
 window.console.log("changeResultsTableBody..");
             var html = "";
             for (let i = 0; i < results.length; i++) {
-                html += generateTableRow(results[i]);
+                html += _generateTableRow(results[i]);
                 // CGM_GNSS.selectStationByLayer(results[i]);
             }
             if (results.length == 0) {
