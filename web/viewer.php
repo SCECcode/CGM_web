@@ -93,9 +93,14 @@ $cgm_insar = new CGM_INSAR();
    <!-- pixi pixiOverlay -->
     <script type="text/javascript" src="js/vendor/pixi.js"></script>
     <script type="text/javascript" src="js/vendor/pixiOverlay/L.PixiOverlay.js"></script>
+<!--
+    <script type="text/javascript" src="js/vendor/pixi.js"></script>
+    <script type="text/javascript" src="js/vendor/pixiOverlay/L.PixiOverlay.js"></script>
     <script type="text/javascript" src="js/vendor/pixiOverlay/MarkerContainer.js"></script>
     <script type="text/javascript" src="js/vendor/pixiOverlay/bezier-easing.js"></script>
-    <script type="text/javascript" src="js/cgm_pixi.js"></script>
+-->
+    <script type="text/javascript" src="js/cxm_pixi.js"></script>
+    <script type="text/javascript" src="js/cgm_pixi_util.js"></script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-495056-12"></script>

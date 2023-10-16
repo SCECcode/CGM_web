@@ -126,7 +126,6 @@ var CGM_INSAR = new function () {
 
 
     this.unhighlightTrack =function() {
-window.console.log("2HERE");
       this.cgm_track_layers.remove();
       this.cgm_track_layers.eachLayer(function(track){
         if ( track.scec_properties.selected) {
