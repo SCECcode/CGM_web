@@ -39,7 +39,7 @@ var CGM_GNSS = new function () {
         GRID: 'grid',
     };
 
-    var cgm_colors = {
+    var gnss_colors = {
         normal: '#006E90',
         selected: '#B02E0C',
         abnormal: '#00FFFF',
@@ -48,23 +48,23 @@ var CGM_GNSS = new function () {
     var gnss_marker_style = {
         normal: {
             color: "white",
-            fillColor: cgm_colors.normal,
+            fillColor: gnss_colors.normal,
             fillOpacity: 1,
             radius: 3,
             riseOnHover: true,
             weight: 1,
         },
         selected: {
-            color: cgm_colors.selected,
-            fillColor: cgm_colors.selected,
+            color: gnss_colors.selected,
+            fillColor: gnss_colors.selected,
             fillOpacity: 1,
             radius: 3,
             riseOnHover: true,
             weight: 1,
         },
         hover: {
-            // color: cgm_colors.selected,
-            // fillColor: cgm_colors.selected,
+            // color: gnss_colors.selected,
+            // fillColor: gnss_colors.selected,
             fillOpacity: 1,
             radius: 10,
             weight: 2,
@@ -259,7 +259,7 @@ var CGM_GNSS = new function () {
                 // save the dist into cgm_gnss_station_data
                 cgm_gnss_station_data[index].vector_dist=dist;
 
-                let station_info = `station id: ${station_id}, vel: ${horizontalVelocity} mm/yr`;
+                let station_info = `GNSS<br>station id: ${station_id}<br>vel: ${horizontalVelocity} mm/yr`;
                 marker.bindTooltip(station_info).openTooltip();
 
                 let line_latlons = [
@@ -272,8 +272,8 @@ var CGM_GNSS = new function () {
                 // vector's polyline
                 cgm_line_path_style = {
                     normal: {weight: 1, color: new_color },
-                    hover:  {weight: 1, color: cgm_colors.selected },
-                    selected: {weight: 1, color: cgm_colors.selected }
+                    hover:  {weight: 1, color: gnss_colors.selected },
+                    selected: {weight: 1, color: gnss_colors.selected }
                                       };
                 // vector's arrowhead
                 cgm_line_head_pattern = {
@@ -296,7 +296,7 @@ var CGM_GNSS = new function () {
                                  polygon: false,
                                  pathOptions: {
                                     stroke: true,
-                                    color: cgm_colors.selected,
+                                    color: gnss_colors.selected,
                                     weight: 1
                                  }
                              })
@@ -308,7 +308,7 @@ var CGM_GNSS = new function () {
                                  polygon: false,
                                  pathOptions: {
                                     stroke: true,
-                                    color: cgm_colors.selected,
+                                    color: gnss_colors.selected,
                                     weight: 1
                                  }
                              })

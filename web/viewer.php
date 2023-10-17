@@ -427,7 +427,8 @@ $cgm_insar = new CGM_INSAR();
                     <div class="legend ml-2 mt-2" id="pixi-legend-color"></div>
                     <div class="legend" id="pixi-legend-label"></div>
                   </div>
-                  <div id="pixi-legend-title" align="center" class="legend content mt-1" style="border-top:2px solid grey">Degrees</div>
+                  <div id="pixi-legend-title" align="center" class="legend content mt-1" style="border-top:2px solid grey"></div>
+
                </div>
              </div> <!-- legend -->
 

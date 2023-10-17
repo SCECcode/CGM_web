@@ -29,10 +29,9 @@ var CGM_INSAR = new function () {
 
     this.track_name = "D071";
 
-    var cgm_colors = {
-//        normal: '#006E90',
-        normal: '#902200',//--red
-        selected: '#B02E0C',
+    var insar_colors = {
+        normal: '#902200',
+        selected: '#2E0CB0', // blue
         abnormal: '#00FFFF',
     };
 
@@ -46,24 +45,24 @@ var CGM_INSAR = new function () {
 
     var insar_marker_style = {
         normal: {
-            color: cgm_colors.normal,
-            fillColor: cgm_colors.normal,
+            color: insar_colors.normal,
+            fillColor: insar_colors.normal,
             fillOpacity: 0.01,
             radius: 3,
             riseOnHover: true,
             weight: 2,
         },
         selected: {
-            color: cgm_colors.selected,
-            fillColor: cgm_colors.selected,
-            fillOpacity: 0.5,
+            color: insar_colors.selected,
+            fillColor: insar_colors.selected,
+            fillOpacity: 0.01,
             radius: 3,
             riseOnHover: true,
-            weight: 2,
+            weight: 1,
         },
         hover: {
-            // color: cgm_colors.selected,
-            // fillColor: cgm_colors.selected,
+            // color: insar_colors.selected,
+            // fillColor: insar_colors.selected,
             fillOpacity: 1,
             radius: 10,
             weight: 2,
@@ -517,13 +516,18 @@ var generateTableRow = function(layer) {
         if(insar_marker_style.normal.radius == target) { // no changes..
            return;
         }
-        insar_marker_style.normal.radius=target;
-        insar_marker_style.selected.radius=target;
-        insar_marker_style.hover.radius = (target *2) ;
+
+        //insar_marker_style.normal.radius=target;
+        //insar_marker_style.selected.radius=target;
+        //insar_marker_style.hover.radius = (target *2) ;
 
 //window.console.log(" RESIZE: marker zoom("+zoom+") radius "+target);
         this.cgm_layers.eachLayer(function(layer){
-          layer.setRadius(target);
+          let p=layer.scec_properties;		  
+          //if layer is markerLayer
+          if (p.type == "location") {
+              layer.setRadius(target);
+          }
         });
 
     };
@@ -771,7 +775,7 @@ window.console.log("Did not find any PHP result");
                                     gid: ngid,
                                     selected: false,
                                     };
-                              let bb_info = `track:${track_name}<br>lat:${nlat} lon:${nlon}`;
+                              let bb_info = `INSAR<br>track: ${track_name}<br>lat: ${nlat}<br>lon: ${nlon}`;
                               marker_layer.bindTooltip(bb_info);
 
                               results.push(marker_layer);

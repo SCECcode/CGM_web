@@ -20,10 +20,10 @@ var CGM = new function () {
     };
 
     this.gotZoomed = function(zoom) {
-      if(visibleGNSS()) {
+      if(_visibleGNSS()) {
         CGM_GNSS.gotZoomed(zoom); 
       }
-      if(visibleINSAR()) {
+      if(_visibleINSAR()) {
         CGM_INSAR.gotZoomed(zoom); 
       }
     };
