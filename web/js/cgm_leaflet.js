@@ -4,8 +4,9 @@
 This is leaflet specific utilities for CGM
 ***/
 
-var init_map_zoom_level = 7;
-var init_map_coordinates = [34.3, -118.4];
+// [34.3, -118.4]
+var init_map_zoom_level = 6.7;
+var init_map_coordinates = [34.4, -117.4];
 
 var rectangle_options = {
        showArea: false,
@@ -13,10 +14,10 @@ var rectangle_options = {
               stroke: true,
               color: "blue",
               weight: 2,
-              opacity: 0.2,
+              opacity: 1,
               fill: true,
               fillColor: null, //same as color by default
-              fillOpacity: 0.08,
+              fillOpacity: 0.02,
               clickable: false
          }
 };
@@ -43,6 +44,14 @@ var drawing_point=false;
 
 // scec
 var scecAttribution ='<a href="https://www.scec.org">SCEC</a>';
+
+/*****************************************************************/
+// track
+
+var cgm_latlon_area_list=[];
+var cgm_latlon_point_list=[];
+
+/*****************************************************************/
 
 function clear_popup()
 {
@@ -256,23 +265,6 @@ function closeDetails(layer) {
    layer.closePopup();
 }
 
-function addGeoToMap(aTrace) {
-
-   var geoLayer=L.geoJSON(aTrace, {
-     style: function(feature) {
-        var tmp=feature.properties.style;
-        if (feature.properties.style != undefined) {
-            return feature.properties.style;
-        } else {
-            return {...defaultStyle}
-        }
-     },
-   });
-   visibleFaults.addLayer(geoLayer);
-
-  return geoLayer;
-}
-
 // https://gis.stackexchange.com/questions/148554/disable-feature-popup-when-creating-new-simple-marker
 function unbindPopupEachFeature(layer) {
     layer.unbindPopup();
@@ -322,6 +314,56 @@ function containsLayer(layergroup,layer) {
     return 0;
 }
 
+/***************** utilities ************************/
+// supply a new layer
+function add_bounding_rectangle(a,b,c,d) {
+  // remove old one and add a new one
+  remove_bounding_rectangle_layer();
+  var layer=addRectangleLayer(a,b,c,d);
+  var tmp={"layer":layer, "latlngs":[{"lat":a,"lon":b},{"lat":c,"lon":d}]};
+  cgm_latlon_area_list.push(tmp);
+  return layer;
+}
+
+function remove_bounding_rectangle_layer() {
+   if(cgm_latlon_area_list.length == 1) {
+     var area=cgm_latlon_area_list.pop();
+     var l=area["layer"]; 
+     viewermap.removeLayer(l);
+   }
+}
+
+function add_bounding_rectangle_layer(layer, a,b,c,d) {
+  // remove old one and add a new one
+  remove_bounding_rectangle_layer();
+  var tmp={"layer":layer, "latlngs":[{"lat":a,"lon":b},{"lat":c,"lon":d}]};
+  //set_latlons(a,b,c,d);
+  cgm_latlon_area_list.push(tmp);
+}
+
+function add_marker_point(a,b) {
+  // remove old one and add a new one
+  remove_marker_point_layer();
+  var layer=addMarkerLayer(a,b);
+  var tmp={"layer":layer, "latlngs":[{"lat":a,"lon":b}]};
+  cgm_latlon_point_list.push(tmp);
+  return layer;
+}
+
+function remove_marker_point_layer() {
+   if(cgm_latlon_point_list.length == 1) {
+     var point=cgm_latlon_point_list.pop();
+     var l=point["layer"]; 
+     viewermap.removeLayer(l);
+   }
+}
+
+function add_marker_point_layer(layer, a,b) {
+  // remove old one and add a new one
+  remove_marker_point_layer();
+  var tmp={"layer":layer, "latlngs":[{"lat":a,"lon":b}]};
+  cgm_latlon_point_list.push(tmp);
+}
 
 /***************** marker cluster ************************/
 var use_markerCluster = 0;

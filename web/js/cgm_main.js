@@ -18,7 +18,6 @@ $(document).ready(function () {
     viewermap=setup_viewer();
 
     $("#cgm-model-gnss").on('click', function () {
-//??        if (viewermap.hasLayer(CGM_GNSS.cgm_layers) ||  CGM_GNSS.searching) {
         if ($(this).prop('checked')) {
             CGM_GNSS.showProduct();
         } else {
@@ -43,7 +42,7 @@ $(document).ready(function () {
     });
 
 
-    $("#cgm-model-cfm").on('click', function () {
+    $("#cxm-model-cfm").on('click', function () {
         if ($(this).prop('checked')) {
             CXM.showCFMFaults(viewermap);
         } else {
@@ -51,6 +50,13 @@ $(document).ready(function () {
         }
     });
 
+    $("#cxm-model-gfm").change(function() {
+        if ($("#cxm-model-gfm").prop('checked')) {
+            CXM.showGFMRegions(viewermap);
+        } else {
+              CXM.hideGFMRegions(viewermap);
+      }
+    });
 
     $("#cgm-search-type").on('change', function () {
         let type=$(this).val();

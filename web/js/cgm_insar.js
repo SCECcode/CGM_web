@@ -70,9 +70,8 @@ var CGM_INSAR = new function () {
     };
 
     this.defaultMapView = {
-        // coordinates: [34.3, -118.4],
-        coordinates: [34.16, -118.57],
-        zoom: 7
+	coordinates: init_map_coordinates,
+        zoom: init_map_zoom_level
     };
 
     this.searchType = {
@@ -426,7 +425,10 @@ window.console.log("calling.. addToResultsTable..");
     };
 
     this.executeShowVS = function(gid,downloadURL) {
-      togglePixiOverlay(gid);
+      let op=pixiGetPixiOverlayOpacity(gid);
+window.console.log("found opacity ..", op);
+      if(op == 0) { pixiSetPixiOverlayOpacity(gid, 0.8); }
+      else { pixiSetPixiOverlayOpacity(gid, 0); }
       // XX -- might need to refocus because it seems to be off for a sec and need a refresh
     };
 
@@ -641,7 +643,7 @@ window.console.log(">>> calling freshSearch..");
           } else {
           this.hideProduct();
         }
-        if ($("#cgm-model-cfm").prop('checked')) {
+        if ($("#cxm-model-cfm").prop('checked')) {
           CXM.showCFMFaults(viewermap);
           } else {
           CXM.hideCFMFaults(viewermap);
@@ -979,7 +981,6 @@ window.console.log("changeResultsTableBody..");
         $("#cgm-controlers-container").css('display','none');
 
         $("div.mapData div.map-container").css('padding-left','30px');
-        $("#CGM_plot").css('height','500px');
         viewermap.invalidateSize();
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
         $download_queue_table.floatThead('destroy');

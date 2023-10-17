@@ -91,9 +91,8 @@ var CGM_GNSS = new function () {
     };
 
     this.defaultMapView = {
-        // coordinates: [34.3, -118.4],
-        coordinates: [34.16, -118.57],
-        zoom: 7
+        coordinates: init_map_coordinates,
+        zoom: init_map_zoom_level 
     };
 
     this.searchType = {
@@ -643,12 +642,14 @@ window.console.log("HERE.. selectStationByLayer..");
     this.gotZoomed = function (zoom) {
 
         let target = 3;
-        if(zoom > 6)  {
-           target = (zoom > 9) ? 7 : (zoom - 8)+target;
+        if(zoom > 7)  {
+           target = (zoom > 9) ? 6 : (zoom - 7)+target;
         }
+window.console.log("zoom ",zoom, "sz ", target);
         if(gnss_marker_style.normal.radius == target) { // no changes..
            return;
         }
+
         gnss_marker_style.normal.radius=target;
         gnss_marker_style.selected.radius=target;
         gnss_marker_style.hover.radius = (target *2) ;
@@ -786,7 +787,7 @@ window.console.log(">>> calling freshSearch..");
           CGM_INSAR.hideProduct();
         }
 
-        if ($("#cgm-model-cfm").prop('checked')) {
+        if ($("#cxm-model-cfm").prop('checked')) {
           CXM.showCFMFaults(viewermap);
           } else {
           CXM.hideCFMFaults(viewermap);
@@ -1163,7 +1164,6 @@ window.console.log("setupInterface: retrieved stations "+sz);
 //$("div.mapData div.map-container").removeClass("col-7 pr-0 pl-2").addClass("col-12").css('padding-left','30px');
 
             $("div.mapData div.map-container").css('padding-left','30px');
-            $("#CGM_plot").css('height','500px');
             viewermap.invalidateSize();
             viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
             $download_queue_table.floatThead('destroy');
@@ -1207,7 +1207,6 @@ window.console.log("setupInterface: retrieved stations "+sz);
             viewermap.on("zoomend dragend panend",function() {
                  CGM_GNSS.generateVectorScale();
             });
-
 
             $("#wait-spinner").hide();
         };
