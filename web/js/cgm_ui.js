@@ -20,8 +20,7 @@ let h=576+c_height;
 
 $('#top-intro').css("display", "none");
 $('#CGM_plot').css("height", h);
-//$('#metricData').removeClass('col-5').addClass('col-0');
-$('#metricData').css("display", "none");
+$('#searchDataControl').css("display", "none");
 $('.leaflet-control-attribution').css("width", "70rem");
 $('#top-map').removeClass('col-7').addClass('row');
 $('#top-map').removeClass('pl-1').addClass('pl-0');
@@ -66,8 +65,7 @@ $('.container').css("padding-left", "15px");
 $('.container').css("padding-right", "15px");
 
 $('#top-intro').css("display", "");
-//$('#metricData').addClass('col-5').removeClass('col-0');
-$('#metricData').css("display","");
+$('#searchDataControl').css("display","");
 $('#top-map').removeClass('row').addClass('col-7');
 $('#top-map').removeClass('pl-1').addClass('pl-0');
 $('#mapDataBig').removeClass('col-12').addClass('row');

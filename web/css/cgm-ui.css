@@ -1,5 +1,13 @@
 /* cgm */
 
+#expand-view-key {
+    z-index: 8000;
+    position: absolute;
+    background-color: rgb(255,255,255);
+    right: 15px;
+    bottom: 1px;
+}
+
 .custom-select-sm {
   padding: 0.25rem 1.75rem 0.25rem 0.75rem;
 }

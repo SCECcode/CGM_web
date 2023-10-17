@@ -58,6 +58,11 @@ function clear_popup()
   viewermap.closePopup();
 }
 
+function resize_map()
+{
+  viewermap.invalidateSize();
+}
+
 function refresh_map()
 {
   if (viewermap == undefined) {
@@ -66,6 +71,39 @@ function refresh_map()
       viewermap.setView(init_map_coordinates,init_map_zoom_level);
   }
 }
+
+function set_map(center,zoom)
+{
+  if (viewermap == undefined) {
+    window.console.log("set_map: BAD BAD BAD");
+    } else {
+//window.console.log("set_map: calling setView");
+      viewermap.setView(center, zoom);
+  }
+}
+
+function get_bounds()
+{
+   var bounds=viewermap.getBounds();
+   return bounds;
+}
+
+function get_map()
+{
+  var center=init_map_coordinates;
+  var zoom=init_map_zoom_level;
+
+  if (viewermap == undefined) {
+    window.console.log("get_map: BAD BAD BAD");
+    } else {
+      center=viewermap.getCenter();
+      zoom=viewermap.getZoom();
+  }
+  return [center, zoom];
+}
+
+
+/****************************************************/
 
 function setup_viewer()
 {
@@ -234,7 +272,7 @@ let tmp=$(".leaflet-control-attribution");
 let v= document.getElementsByClassName("leaflet-control-attribution")[0];
 v.style.right="1.5rem";
 v.style.height="1.4rem";
-v.style.width="50rem";
+v.style.width="35rem";
 
 // finally,
   return mymap;
