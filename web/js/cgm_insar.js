@@ -424,17 +424,12 @@ window.console.log("calling.. addToResultsTable..");
       let item= [ { "dtype":"TS", "track": tType, "gid":gid } ];
       showTSview(downloadURL,Products.INSAR,item);
       showPlotTSWarning();
-    }
+    };
 
-// downloadURL is a single local file, [url][gid][track]
-    this.executePlotVS = function(downloadURL,tType,gid,nx,ny) {
-      let item= [ { "dtype":"VS", "track": tType, "gid":gid, "nx":nx,"ny":ny } ];
-      showTSview(downloadURL,Products.INSAR,item);
-    }
     this.executeShowVS = function(gid,downloadURL) {
       togglePixiOverlay(gid);
       // XX -- might need to refocus because it seems to be off for a sec and need a refresh
-    }
+    };
 
 // could be D071,A064,D173,A166
     this.downloadURLsAsZip = function(track_target) {
@@ -505,12 +500,32 @@ var generateTableRow = function(layer) {
               html += `<td class="text-center">`;
 
               html += `<button class=\"btn btn-xs\" title=\"show velocity layer\" onclick=CGM_INSAR.executeShowVS(\"${layer.scec_properties.gid}\",\"${layer.scec_properties.file}\")>showVS&nbsp<span class=\"far fa-image\"></span></button>`;
-              html += `<br><button class=\"btn btn-xs\" title=\"plot velocity layer\" onclick=CGM_INSAR.executePlotVS([\"${downloadURL}\"],\"${layer.scec_properties.track}\",\"${layer.scec_properties.gid}\",\"${layer.scec_properties.nx}\",\"${layer.scec_properties.ny}\")>plotVS&nbsp<span class=\"far fa-chart-area\"></span></button>`;
         } 
 
         html += `</tr>`;
 
         return html;
+    };
+
+// only affected the selected one
+    this.gotZoomed = function (zoom) {
+
+        let target = 3;
+        if(zoom > 6)  {
+           target = (zoom > 9) ? 7 : (zoom - 8)+target;
+        }
+        if(insar_marker_style.normal.radius == target) { // no changes..
+           return;
+        }
+        insar_marker_style.normal.radius=target;
+        insar_marker_style.selected.radius=target;
+        insar_marker_style.hover.radius = (target *2) ;
+
+//window.console.log(" RESIZE: marker zoom("+zoom+") radius "+target);
+        this.cgm_layers.eachLayer(function(layer){
+          layer.setRadius(target);
+        });
+
     };
 
     this.showSearch = function (type) {
@@ -525,7 +540,6 @@ var generateTableRow = function(layer) {
             case this.searchType.latlon:
                 $all_search_controls.hide();
                 $("#cgm-insar-latlon").show();
-                showColorLegend("insar_colorbar.png");
                 drawRectangle();
                 skipPoint();
                 break;
@@ -549,7 +563,6 @@ var generateTableRow = function(layer) {
         let layer=this.cgm_track_layers.addTo(viewermap);
         layer.bringToBack();
 
-window.console.log("HERE");
         this.cgm_track_ref_layers.addTo(viewermap);
         
 
@@ -790,13 +803,19 @@ window.console.log("Did not find any PHP result");
                              ncriteria.push(nlon2);
 
                              let url = getDataDownloadURL(file);
-
                              let rc = makeOnePixiLayer(ngid,url);
+
                              let pixilayer = rc["pixiLayer"];
                              let max_v = rc["max_v"];
                              let min_v = rc["min_v"];
                              let count_v = rc["count_v"];
-        
+                             let pixiuid= rc["pixiuid"];
+
+                             let seginfo=pixiFindSegmentProperties(pixiuid);
+                             setupPixiSegmentDebug(pixiuid,seginfo);
+                             setupPixiLegend(pixiuid,{"title":"LOS Velocity<br>(mm/yr)"},seginfo);
+                             let opacity=pixiGetPixiOverlayOpacity(pixiuid);
+
  //XXX not tracking it or else only 1 can be made and left on the map
                              let layer=addRectangleLayer(nlat1,nlon1,nlat2,nlon2);
 
@@ -941,7 +960,7 @@ window.console.log("changeResultsTableBody..");
         let urlPrefix = "./result/";
         let url=urlPrefix + fname;
         return url;
-    } 
+    }; 
 
     this.setupInterface = function() {
         var $download_queue_table = $('#metadata-viewer');
@@ -973,6 +992,134 @@ window.console.log("changeResultsTableBody..");
         });
 
         $("#wait-spinner").hide();
+    };
+
+/**  this is for segmentation/legend **/
+// a layer is always generated with the full set of legend bins
+   function _legendoptionChecked(label,pixiuid,idx,color,check) {
+     var html="<li>";
+     if(check) {
+       html=html+ "<input type=\"checkbox\" class='legend-label mr-1' title=\"toggle the region\" id=\"pixiLegend_"+idx+"\" onclick=CSM.togglePixiLegend(\""+pixiuid+"\","+idx+",\"pixiLegend_"+idx+"\") style=\"accent-color:"+color+"\" checked >";
+       } else {
+         html=html+ "<input type=\"checkbox\" class='legend-label mr-1' title=\"toggle the region\" id=\"pixiLegend_"+idx+"\" onclick=CSM.togglePixiLegend(\""+pixiuid+"\","+idx+",\"pixiLegend_"+idx+"\") style=\"accent-color:"+color+"\" >";
+     }
+     html=html+"<label for=\"pixiLegend_"+idx+"\"><span>"+label+"</span></label></li>";
+     return html;
+    };
+
+// a layer is always generated with the full set of legend bins
+   function _legendoptioncolor(color) {
+     var html="<li><span class=\"color\" style=\"background-color: "+color+"\"></span></li>";
+     return html;
+    };
+
+// a layer is always generated with the full set of legend bins
+    function _legendoptionlabel(label) {
+     var html="<li><label class=\"legend-label\"><span>"+label+"</span></label></li>";
+     return html;
+    };
+
+    function setupPixiLegend(pixiuid, spec,legendinfo) {
+      if(jQuery.isEmptyObject(legendinfo)) {
+        $("#pixi-legend").html("");
+        return;
+      }
+
+      let namelist=legendinfo['names'];
+      let lengthlist=legendinfo['counts'];
+      let labellist=legendinfo['labels']; // label includes the last extra one
+      let colorlist=legendinfo['colors'];
+      let checklist=legendinfo['checks'];
+      let n=namelist.length;
+      let chtml = "";
+      let lhtml = "";
+      // include the top 'invisible' one
+      for(let i=0; i<n; i++) {
+         let name=namelist[i];
+         let color=colorlist[i];
+         let label=labellist[i]; // segment's label 
+         let length=lengthlist[i];
+         let check=checklist[i];
+         if(length == 0) {
+	    check=0;
+         }
+         if(i== Math.floor(n/2)) {
+	   chtml=_legendoptioncolor(color, 1)+chtml;
+           } else {
+	     chtml=_legendoptioncolor(color, 0)+chtml;
+         }
+         lhtml=_legendoptionlabel(label)+lhtml;
+      }
+      // include the top 'invisible' one
+      lhtml=_legendoptionlabel(labellist[n])+lhtml;
+
+      chtml="<ul>"+chtml+"</ul>";
+      $("#pixi-legend-color").html(chtml);
+
+      lhtml="<ul>"+lhtml+"</ul>";
+      $("#pixi-legend-label").html(lhtml);
+
+      // update the title to pixi legend,
+      $("#pixi-legend-title").html(spec.title);
+
+    };
+
+    this.togglePixiLegend = function(pixiuid, n, label) {
+//window.console.log("calling togglePixiLegend.. with ",n,"on pixiuid ",pixiuid);
+      let vis=pixiToggleParticleContainer(pixiuid,n);
+    };
+
+// a layer is always generated with the full set of segments 
+// so pop up the pixi segment selector on dashboard
+// max n would be 20
+   function _segmentoption(label,pixiuid,idx,color,check) {
+     var html="";
+     if(check) {
+       html=html+ "<input type=\"checkbox\" class='checkboxk-group mr-1' id=\"pixiSegment_"+idx+"\" onclick=CSM.togglePixiSegment(\""+pixiuid+"\","+idx+") style=\"accent-color:"+color+"\" checked >";
+       } else {
+         html=html+ "<input type=\"checkbox\" class='checkboxk-group mr-1' id=\"pixiSegment_"+idx+"\" onclick=CSM.togglePixiSegment(\""+pixiuid+"\","+idx+") style=\"accent-color:"+color+"\" >";
+     }
+     html=html+"<label class='checkbox-group-label mr-2' for=\"pixiSegment_"+idx+"\"><span>"+label+"</span></label>";
+      return html;
+    };
+
+    //seginfo is { names: nlist, counts:clist, labels:llist };
+    function setupPixiSegmentDebug(pixiuid,seginfo) {
+
+      if(!this.model_debug) return;
+
+//window.console.log("setupPixiSegmentDebug...",pixiuid);
+      if(jQuery.isEmptyObject(seginfo)) {
+        $("#pixi-segment").html("");
+        return;
+      }
+
+      let namelist=seginfo['names'];
+      let lengthlist=seginfo['counts'];
+      let labellist=seginfo['labels'];
+      let colorlist=seginfo['colors'];
+      let checklist=seginfo['checks'];
+      let n=namelist.length;
+      let html = "";
+      for(let i=0; i<n; i++) {
+         let name=namelist[i];
+         let color=colorlist[i];
+         let label=labellist[i]; // segment's label 
+         let length=lengthlist[i];
+         let check=checklist[i];
+         if(length == 0) {
+	    check=0;
+         }
+         let v=i+1;
+         let foo=label+"&nbsp;&nbsp;&nbsp;(n="+length+")";
+	 html=_segmentoption(foo,pixiuid,i,color,check)+"<br>"+html;
+      }
+      $("#pixi-segment").html(html);
+    };
+
+    this.togglePixiSegment = function(pixiuid, n) {
+window.console.log("calling togglePixiSegment.. with ",n,"on pixiuid ",pixiuid);
+      let vis=pixiToggleParticleContainer(pixiuid,n);
     };
 
 }

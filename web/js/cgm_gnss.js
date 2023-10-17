@@ -642,10 +642,9 @@ window.console.log("HERE.. selectStationByLayer..");
 
     this.gotZoomed = function (zoom) {
 
-        let normal=3;
-        let target = normal;
+        let target = 3;
         if(zoom > 6)  {
-           target = (zoom > 9) ? 7 : (zoom - 7)+target;
+           target = (zoom > 9) ? 7 : (zoom - 8)+target;
         }
         if(gnss_marker_style.normal.radius == target) { // no changes..
            return;
@@ -681,14 +680,6 @@ window.console.log("HERE.. selectStationByLayer..");
                 $all_search_controls.hide();
         }
     };
-
-    this.visibleGNSS = function () {
-        let $cgm_model_checkbox = $("#cgm-model-gnss");
-        if ($cgm_model_checkbox.prop('checked')) {
-          return 1;
-        }
-        return 0;
-    }
 
     this.showProduct = function () {
 window.console.log("SHOW product");

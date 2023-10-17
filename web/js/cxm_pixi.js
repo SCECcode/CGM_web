@@ -34,7 +34,7 @@ var PIXI_DEFAULT_OPACITY=0.8;
 var DATA_SEGMENT_COUNT=undefined; // chunking supplied from client 
 var DATA_MAX_V=undefined;
 var DATA_MIN_V=undefined;
-var DATA_count=0;
+var DATA_COUNT=0;
 
 var pixi_cmap_tb=undefined;
 
@@ -235,7 +235,7 @@ function _loadup_data_list(uid,latlist,lonlist,vallist) {
 
    let data_max_v=null;
    let data_min_v=null;
-   DATA_count=0;
+   DATA_COUNT=0;
 
    let rawlist=[];
    let pixiLatlngList;
@@ -281,8 +281,8 @@ function _loadup_data_list(uid,latlist,lonlist,vallist) {
    });
    let sorted_vlist=sorted_rawlist.map(function(value,index){ return value[0]; });
 
-   DATA_count=sorted_rawlist.length;
-   for(let i=0; i<DATA_count; i++ ) {
+   DATA_COUNT=sorted_rawlist.length;
+   for(let i=0; i<DATA_COUNT; i++ ) {
       let item=sorted_rawlist[i];
       let lon=item[2];
       let lat=item[1];
@@ -436,11 +436,15 @@ window.console.log(" >>>   PIXI: redraw event -- with data update");
             if(spec.scale_hint == 5) {  // when grid points are about 5km
               scaleFactor=8; 
             }
-  
+	    if(spec.scale_hint == 1) {  // when grid points are about 5km
+              scaleFactor=250;
+            }
+
+
   // :-) very hacky, just in case it got zoomed in before search
             let t= (8/invScale);
             scaleFactor=scaleFactor / t;
-  
+
           // fill in the particles one group at a time
             let collect_len=0;
             var segments=[];
@@ -466,12 +470,11 @@ window.console.log(" >>>   PIXI: redraw event -- with data update");
                   var gg=latlng['lng'];
                   var coords = pixiProject([ll,gg]);
               
-                  var particle = new PIXI.TilingSprite(pTexture);
+		  var particle = new PIXI.TilingSprite(pTexture);
                   particle.clampMargin = -0.5;
-               
                   particle.alpha=1; // add, multiply,screen
                   particle.blendMode=0; // add, multiply,screen
-  
+
                   particle.x = coords.x - origin.x;
                   particle.y= coords.y - origin.y;
     
@@ -509,11 +512,14 @@ window.console.log(" >>>   PIXI: add event");
           if(spec.scale_hint == 5) {  // when grid points are about 5km
             scaleFactor=8; 
           }
+          if(spec.scale_hint == 1) {  // when grid points are about 5km
+            scaleFactor=250;
+          }
   
   // :-) very hacky, just in case it got zoomed in before search
           let t= (8/invScale);
           scaleFactor=scaleFactor / t;
-  
+
           // fill in the particles one group at a time
           let collect_len=0;
           var segments=[];
@@ -541,11 +547,10 @@ window.console.log(" >>>   PIXI: add event");
   //window.console.log("    and xy at "+coords.x+" "+coords.y);
               
                 var particle = new PIXI.TilingSprite(pTexture);
-                particle.clampMargin = -0.5;
-               
+		particle.clampMargin = -0.5;
                 particle.alpha=1; // add, multiply,screen
                 particle.blendMode=0; // add, multiply,screen
-  
+
                 particle.x = coords.x - origin.x;
                 particle.y= coords.y - origin.y;
   
@@ -869,7 +874,7 @@ function pixiToggleParticleContainer(uid,target_segment_idx) {
 function _loadup_data_url(uid,url) {
    let data_max_v=null;
    let data_min_v=null;
-   DATA_count=0;
+   DATA_COUNT=0;
 
    let rawlist=[];
    let pixiLatlngList;
@@ -926,8 +931,8 @@ function _loadup_data_url(uid,url) {
    });
    let sorted_vlist=sorted_rawlist.map(function(value,index){ return value[0]; });
 
-   DATA_count=sorted_rawlist.length;
-   for(let i=0; i<DATA_count; i++ ) {
+   DATA_COUNT=sorted_rawlist.length;
+   for(let i=0; i<DATA_COUNT; i++ ) {
       let item=sorted_rawlist[i];
       let lon=item[2];
       let lat=item[1];
@@ -937,14 +942,21 @@ function _loadup_data_url(uid,url) {
    }
    pixiLatlngList= {"uid":uid,"data":datalist} ; 
 
-   window.console.log("PIXI: FILE:"+url+" total data:"+DATA_count+"("+data_min_v+","+data_max_v+")");
+   window.console.log("PIXI: FILE:"+url+" total data:"+DATA_COUNT+"("+data_min_v+","+data_max_v+")");
    return pixiLatlngList;
 }
 
 // this is from cgm
-function makePixiOverlayLayerWithFile(uid,file) {
+function makePixiOverlayLayerWithFile(uid,file,spec) {
+    DATA_SEGMENT_COUNT = spec.seg_cnt;
+
     var pixiLatlngList=_loadup_data_url(uid,file)
-    let spec={'hint':0};
+
+// fill in the spec after retrieving data from file
+    spec.data_min=DATA_MAX_V;
+    spec.data_max=DATA_MIN_V;
+    spec.data_count=DATA_COUNT;
+
     return makePixiOverlayLayer(uid,pixiLatlngList,spec);
 }
 

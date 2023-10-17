@@ -20,9 +20,30 @@ var CGM = new function () {
     };
 
     this.gotZoomed = function(zoom) {
-      if(CGM_GNSS.visibleGNSS()) {
+      if(visibleGNSS()) {
         CGM_GNSS.gotZoomed(zoom); 
       }
+      if(visibleINSAR()) {
+        CGM_INSAR.gotZoomed(zoom); 
+      }
     };
+
+    function _visibleINSAR() {
+      let $cgm_model_checkbox = $("#cgm-model-insar");
+      if ($cgm_model_checkbox.prop('checked')) {
+        return 1;
+      }
+      return 0;
+    };
+
+    function _visibleGNSS() {
+      let $cgm_model_checkbox = $("#cgm-model-gnss");
+      if ($cgm_model_checkbox.prop('checked')) {
+        return 1;
+      }
+      return 0;
+    };
+
+
 };
 

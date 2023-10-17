@@ -420,6 +420,17 @@ $cgm_insar = new CGM_INSAR();
                     <div id="wait-spinner" align="center" style="display:;"><i class="glyphicon glyphicon-cog fa-spin" style="color:red"></i></div>
                </div>
 
+<!-- legend/scalebar -->
+             <div class="main-legend geometry top center" style="bottom:10%;background-color: rgba(255,255,255,0.5);">
+               <div class="col">
+                  <div class="row" style="margin:0px 2px 0px -20px">
+                    <div class="legend ml-2 mt-2" id="pixi-legend-color"></div>
+                    <div class="legend" id="pixi-legend-label"></div>
+                  </div>
+                  <div id="pixi-legend-title" align="center" class="legend content mt-1" style="border-top:2px solid grey">Degrees</div>
+               </div>
+             </div> <!-- legend -->
+
             </div>
 
 

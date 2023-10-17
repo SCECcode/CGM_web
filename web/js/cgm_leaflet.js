@@ -35,7 +35,6 @@ var polygon_options = {
 
 var rectangleDrawer;
 var mymap, baseLayers, layerControl, currentLayer, currentLayerName;
-var mylegend;
 var visibleFaults = new L.FeatureGroup();
 
 var drawing_rectangle=false;
@@ -148,24 +147,6 @@ window.console.log("map got zoomed..>>",zoom);
   }          
   mymap.on('zoomend dragend', onMapZoom);
 
-  mylegend=L.control( {position:'bottomleft'});
-
-  mylegend.onAdd = function (map) {
-    this._div = L.DomUtil.create('div');
-    this.update();
-    return this._div;
-  };
-
-  mylegend.update = function (props, param=null) {
-     if(param == null) {
-       this._div.innerHTML="";
-       return;
-     }
-     this._div.innerHTML='<img src="./img/'+param+'" style="width:200px; margin-left:-5px;" >';
-  }
-
-  mylegend.addTo(mymap);
-
 // ==> mouse location popup <==
 //   var popup = L.popup();
   // function onMapClick(e) {
@@ -249,14 +230,6 @@ v.style.width="50rem";
 // finally,
   return mymap;
 }
-
-function removeColorLegend() {
-  mylegend.update();
-}
-function showColorLegend(param) {
-  mylegend.update({}, param);
-}
-
 
 function drawPoint() {
   pointDrawer.enable();
