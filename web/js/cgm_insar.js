@@ -226,8 +226,11 @@ window.console.log(">>> generateLayers..");
                 let track_polygon=L.polygon(latlngs,mypoly);
 
                 let latlngs2 = [[lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4],[lat1,lon1]];
-                let poptrack="<strong>Track name: </strong>"+track_name+"<br><strong>Info: </strong>track info<br>";
-		let track_lines=L.polyline(latlngs2,{color:track_color,weight:2,riseOnHover:true}).bindPopup(poptrack,{maxWidth: 500});
+//                let poptrack="<strong>Track name: </strong>"+track_name+"<br><strong>Info: </strong>track info<br>";
+//		let track_lines=L.polyline(latlngs2,{color:track_color,weight:2,riseOnHover:true}).bindPopup(poptrack,{maxWidth: 500});
+		let track_lines=L.polyline(latlngs2,{color:track_color,weight:2,riseOnHover:true});
+                let poptip="<strong>InSAR</strong><br>Track name:"+track_name+"<br>Info:track info<br>";
+                track_lines.bindTooltip(poptip).openTooltip();
 
                 track_lines.on('mouseover',function() { this.setStyle({weight:5}); });                    
                 track_lines.on('mouseout',function() { this.setStyle({weight:2}); });                    

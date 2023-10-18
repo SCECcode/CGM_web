@@ -8,6 +8,7 @@ const Products = {
     GNSS: 'gnss',
     INSAR: 'insar',
 };
+
 var activeProduct = Products.GNSS;
 var viewermap;
 var cgm_gnss_station_data=null;
@@ -58,13 +59,14 @@ $(document).ready(function () {
       }
     });
 
-    $("#cgm-search-type").on('change', function () {
+    $("#gnss-search-select").on('change', function () {
         let type=$(this).val();
 window.console.log("main(gnss) changing search type.."+type);
         CGM_GNSS.freshSearch();
         CGM_GNSS.showSearch(type);
     });
 
+/*** NOT SURE if want to have this done automatically 
     $('.cgm-search-item').on('focus', function () {
       $(this).on('blur mouseout', function () {
           $(this).off('mouseout');
@@ -106,16 +108,20 @@ window.console.log(">>>> causing a start of gnss search..");
           $(this).blur();
        });
     });
-
-    $("#cgm-insar-search-type").on('change', function () {
-        CGM_INSAR.showSearch($(this).val());
-    });
+    XXXXX
+***/
 
     $("#insar-track-select").on('change', function () {
         CGM_INSAR.setTrackName($(this).val());
 	CGM_INSAR.resetTrackView($(this).val());
     });
 
+    $("#insar-search-type").on('change', function () {
+        CGM_INSAR.freshSearch();
+        CGM_INSAR.showSearch($(this).val());
+    });
+
+/*** NOT SURE
     $('.cgm-insar-search-item').on('focus', function () {
       $(this).on('blur mouseout', function () {
         $(this).off('mouseout');
@@ -157,7 +163,7 @@ window.console.log("FOUND..."+val);
           $(this).blur();
        });
     });
-
+***/
 
     $("#metadata-viewer-container").on('click','td.cgm-data-click', function(){
         if ($(this).find('button[id="cgm-allBtn"]').length != 0) {
@@ -202,8 +208,7 @@ window.console.log("FOUND..."+val);
 
     });
 
-    $("#data-product-select").on('change', function(){
-
+    $("#dataProductSelect").on('change', function(){
        if(activeProduct == Products.GNSS) {
 window.console.log("==> reset what was there/GNSS");
           CGM_GNSS.reset();

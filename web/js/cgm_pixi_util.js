@@ -10,7 +10,7 @@ var vs_zoom_threshold=7;
 
 // pixi, Leafle.overlayLayer.js
 /* How many segments to chunk a set of cgm data */
-const CGM_DEFAULT_DATA_SEGMENT_COUNT= 12;
+const CGM_DEFAULT_DATA_SEGMENT_COUNT= 20;
 
 /* there are 1 different particleTextures set.. */
 const CGM_TEXTURE_SETS= 1;
@@ -19,6 +19,30 @@ var particleTexturesSet0=[];
 var cgm_pixi_cmap_tb={
   data_rgb: [
     { type:0,
+      note: "for INSAR",
+      rgbs: [ 
+"rgb(233,213,117)",     
+"rgb(198,220,100)",     
+"rgb(161,227,95)",
+"rgb(161,227,95)",
+"rgb(124,231,103)",     
+"rgb(93,229,120)",
+"rgb(71,223,145)",
+"rgb(60,210,172)",
+"rgb(60,210,172)",
+"rgb(59,192,197)",
+"rgb(69,170,215)",
+"rgb(84,146,223)",
+"rgb(103,123,220)",     
+"rgb(103,123,220)",     
+"rgb(121,102,207)",     
+"rgb(135,85,185)",
+"rgb(143,72,157)",
+"rgb(143,64,127)",
+"rgb(143,64,127)",
+"rgb(135,59,97)"
+              ]},
+    { type:12,
       note: "for INSAR",
       rgbs: [ 
 	      "rgb(140,62.125,115.75)",

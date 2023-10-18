@@ -79,6 +79,7 @@ $cgm_insar = new CGM_INSAR();
     <script type="text/javascript" src="js/cgm_insar.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_gnss.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_main.js?v=1"></script>
+    <script type="text/javascript" src="js/cgm_model.js?v=1"></script>
     <script type="text/javascript" src="js/cgm.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_viewTS.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_viewTS_util.js?v=1"></script>
@@ -159,7 +160,7 @@ $cgm_insar = new CGM_INSAR();
         </div> <!-- top-control-row-1 -->
 
 <!-- top-control-row-2 -->
-        <div id="top-control-row-2" class="col-12 mb-1">
+        <div id="top-control-row-2" class="col-12 mb-1 mt-2">
 
           <div class="row justify-content-end">
             <div id='model-options' class="form-check-inline">
@@ -253,13 +254,13 @@ $cgm_insar = new CGM_INSAR();
 <!-- map space -->
     <div id="mapDataBig" class="row mapData">
 
-       <div id="searchDataControl" class="col-5 button-container flex-column pr-0" style="overflow:hidden;">
+       <div id="dataProductSelect" class="col-5 button-container flex-column pr-0" style="overflow:hidden;">
 <!-- search method -->
          <div class="row">
              <div class="col-9">
                <form id="cgm-data-product">
-                 <label><input type="radio" id="productTypeGNSS" name="producttype"><span>GNSS</span></label>
-                 <label><input type="radio" id="productTypeINSAR" name="producttype"><span>INSAR</span></label>
+                 <label><input type="radio" id="productTypeGNSS" name="producttype" checked="checked"><span>GNSS</span></label>
+                 <label><input type="radio" id="productTypeINSAR" name="producttype"><span>InSAR</span></label>
                </form>
              </div>
 
@@ -271,7 +272,7 @@ $cgm_insar = new CGM_INSAR();
          </div>
 
 <!-- GNSS control -->
-         <div class="input-group input-group-sm custom-control-inline mt-2" style="max-width:450px">
+         <div class="gnss-select-group input-group input-group-sm custom-control-inline mt-2" style="max-width:450px">
             <div class="input-group-prepend">
                   <label class="input-group-text" for="insar-track-select">Search GNSS by</label>
             </div>
@@ -283,7 +284,7 @@ $cgm_insar = new CGM_INSAR();
          </div> <!-- gnss search select -->
 
 <!-- INSAR control -->
-         <div class="input-group input-group-sm custom-control-inline mt-2" style="max-width:450px">
+         <div class="insar-select-group input-group input-group-sm custom-control-inline mt-2" style="max-width:450px;display:none" >
             <div class="input-group-prepend">
                   <label class="input-group-text" for="insar-track-select">Select INSAR Track</label>
             </div>
@@ -295,7 +296,7 @@ $cgm_insar = new CGM_INSAR();
             </select>
          </div> <!-- insar track select -->
 
-         <div class="input-group input-group-sm custom-control-inline mt-2" style="max-width:450px">
+         <div class="insar-select-group input-group input-group-sm custom-control-inline mt-2" style="max-width:450px;display:none">
             <div class="input-group-prepend">
                   <label class="input-group-text" for="insar-track-select">Search INSAR by</label>
             </div>
@@ -303,9 +304,9 @@ $cgm_insar = new CGM_INSAR();
                    <option selected value="location">Point Location</option>
                    <option value="latlon">Latitude &amp; Longitude Box</option>
             </select>
-         </div> <!-- gnss search select -->
+         </div> <!-- insar search select -->
 
-<!-- opacity slider -->
+<!-- opacity slider TODO -->
          <div class="input-group input-group-sm custom-control-inline mt-2" style="display:none;max-width:450px">
             <div class="input-group-prepend">
                   <label class="input-group-text">Change Opacity</label>
@@ -374,12 +375,12 @@ $cgm_insar = new CGM_INSAR();
                                  placeholder='Latitude'
                                  id="cgm-insar-LatTxt"
                                  title="insar lat"
-                                 class="cgm-insar-search-item form-control">
+                                 class="cgm-search-item form-control">
                           <input type="text" 
                                  placeholder='Longitude' 
                                  id="cgm-insar-LonTxt" 
                                  title="insar lon"
-                                 class="cgm-insar-search-item form-control">
+                                 class="cgm-search-item form-control">
                         </div>
                       </div>
                    </div>
@@ -397,16 +398,15 @@ $cgm_insar = new CGM_INSAR();
                           placeholder="Min Latitude"
                           id="cgm-firstLatTxt"
                           title="min latitude"
-                          class="cgm-latlon-item form-control">
+                          class="cgm-search-item form-control">
                       <input type="text" 
                           id="cgm-firstLonTxt" 
                           placeholder='Min Longitude' 
                           title="min longitude"
-                          class="cgm-latlon-item form-control mt-1">
-
+                          class="cgm-search-item form-control mt-1">
 <!--
                       <div class="row pl-3 pr-2 mt-2">
-                         <button id="toResetRegion" type="button" class="btn btn-dark" style="width:110px" onclick="CSM.clearLatlon()">Reset Region</button>
+                         <button id="toResetRegion" type="button" class="btn btn-dark" style="width:110px" onclick="CGM.clearLatlon()">Reset Region</button>
                        </div>
 -->
                     </div>
@@ -415,14 +415,14 @@ $cgm_insar = new CGM_INSAR();
                           id="cgm-secondLatTxt"
                           title="max latitude"
                           placeholder='Max Latitude'
-                          class="cgm-latlon-item form-control">
+                          class="cgm-search-item form-control">
                       <input type="text" style="width:105px"
                           id="cgm-secondLonTxt"
                           title="max longitude"
                           placeholder='Max Longitude'
-                          class="cgm-latlon-item form-control mt-1">
+                          class="cgm-search-item form-control mt-1">
                       <div class="row pl-3 pr-0 mt-2">
-                          <button id="searchAgain" type="button" class="btn btn-dark" style="width:110px" onclick="CSM.searchLatlon(0,[])" >Get Data</button>
+                          <button id="searchAgain" type="button" class="btn btn-dark" style="width:110px" onclick="CGM.searchLatlon(0,[])" >Get Data</button>
                       </div>
                     </div>
                   </div>
@@ -436,7 +436,7 @@ $cgm_insar = new CGM_INSAR();
            <br>
            <p><b>You Selected:</b></p>
            <p id="cgm-product-description"></p>
-           <p>For more model details , see  <a href="https://doi.org/10.5281/zenodo.foo">CGM archive</a></p>
+           <p>For more product details , see  <a href="https://doi.org/10.5281/zenodo.foo">CGM archive</a></p>
          </div>
 
 <!-- result parking location -->
@@ -572,6 +572,60 @@ $cgm_insar = new CGM_INSAR();
     </div> <!--Content-->
   </div>
 </div> <!--Modal: modalwarnTS-->
+
+<!--Modal: Name Azimuth  -->
+<div class="modal" id="modalazimuth" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" id="modalazimuthDialog" role="document">
+
+    <!--Content-->
+    <div class="modal-content" id="modalazimuthContent">
+      <!--Body-->
+      <div class="modal-body" id="modalazimuthBody">
+        <div class="row col-md-12 ml-auto" style="overflow:hidden;">
+         <p> Talk about what is this azimuth about...</p>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-outline-primary btn-md" data-dismiss="modal">Close</button>
+      </div>
+
+    </div> <!--Content-->
+  </div>
+</div> <!--Modal: Azimuth-->
+
+
+<!--Modal: Name TS(time series)-->
+<div class="modal" id="modalTS" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="modalTS" aria-hidden="true">
+  <div class="modal-dialog modal-full" id="modalTSDialog" role="document">
+
+    <!--Content-->
+    <div class="modal-content" id="modalTSContent">
+      <!--Header-->
+      <div class="modal-header">
+        <button id="viewTSTogglebtn" class="btn btn-outline-primary btn-sm" type="button" onclick="toggleTSview()">Switch Frame Type</button>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body" id="modalTSBody">
+        <div id="iframe-container" class="row col-12" style="overflow:hidden;">
+          <iframe id="viewTSIfram" title="SCEC CGM Time series viewer" src="" onload="setIframHeight(this.id)" height="10" width="100%" allowfullscreen></iframe>
+        </div>
+        <div id="paramsTS" value="" style="display:none"></div>
+      </div>
+
+      <div class="modal-footer justify-content-center" id="modalTSFooter">
+        <button id="viewTSClosebtn" class="btn btn-outline-primary btn-sm" data-dismiss="modal">Close</button>
+        <button id="viewTSRefreshbtn" class="btn btn-outline-primary btn-sm" type="button" onclick="refreshTSview()">Reset</button>
+        <button id="viewTSMovebtn" class="btn btn-outline-primary btn-sm" type="button" onclick="moveTSview()">New Window</button>
+        <button id="viewTSWarnbtn" class="btn btn-outline-primary btn-sm" style="display:none" data-toggle="modal" data-target="#modalwarnTS"></button>
+<!-- Plotly's toImage does not work for surface-contour plot -->
+        <button id="viewTSSavebtn" class="btn btn-outline-primary btn-sm" type="button" onclick="saveTSview()">Save Image</button>
+        <button id="viewTSHelpbtn" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modalinfoTS" onclick="$('#modalTS').modal('hide');">Help</button>
+      </div> <!-- footer -->
+
+    </div> <!--Content-->
+  </div>
+</div> <!--Modal: Name TS(time series)-->
 
 </div> <!-- container -->
 
