@@ -411,12 +411,12 @@ $cgm_insar = new CGM_INSAR();
 -->
                     </div>
                     <div class="col-3 pl-2 pr-0">
-                      <input type="text"
+                      <input type="text" style="width:105px"
                           id="cgm-secondLatTxt"
                           title="max latitude"
-                          placeholder='Max Latitude '
+                          placeholder='Max Latitude'
                           class="cgm-latlon-item form-control">
-                      <input type="text"
+                      <input type="text" style="width:105px"
                           id="cgm-secondLonTxt"
                           title="max longitude"
                           placeholder='Max Longitude'

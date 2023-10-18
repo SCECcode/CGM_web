@@ -148,7 +148,6 @@ var CGM_GNSS = new function () {
 
     // generate vector scale, if there is existing one, remove and regenerate
     this.generateVectorScale = function () {
-window.console.log("generate a new vector scale..");
         // clear old set
         this.cgm_vector_scale.eachLayer(function (layer) { viewermap.removeLayer(layer); });
 
@@ -157,7 +156,6 @@ window.console.log("generate a new vector scale..");
         let pbds=viewermap.getPixelBounds();
         let pmin=pbds['min'];
         let pmax=pbds['max'];
-window.console.log("pmin ",pmin, "pmax ", pmax);
 
         // scale bar height = 34 pixels
         // vector bar target height = 34+17=51
@@ -349,6 +347,8 @@ window.console.log("pmin ",pmin, "pmax ", pmax);
         }
 window.console.log("MAX found is "+ CGM_GNSS.cgm_vector_max);
 window.console.log("MIN found is "+ CGM_GNSS.cgm_vector_min);
+
+	CGM_GNSS.generateVectorScale(); // hacky
 
         this.cgm_layers.on('click', function(event) {
             if(activeProduct == Products.GNSS) { 
@@ -645,7 +645,6 @@ window.console.log("HERE.. selectStationByLayer..");
         if(zoom > 7)  {
            target = (zoom > 9) ? 6 : (zoom - 7)+target;
         }
-window.console.log("zoom ",zoom, "sz ", target);
         if(gnss_marker_style.normal.radius == target) { // no changes..
            return;
         }
@@ -897,8 +896,8 @@ window.console.log("gnss --->> calling search.. <<----");
             let results = [];
             switch (type) {
                 case CGM_GNSS.searchType.vectorSlider:
-                    $("#cgm-minVectorSliderTxt").val(Math.floor(criteria[0]*1000)/1000);
-                    $("#cgm-maxVectorSliderTxt").val(Math.floor(criteria[1]*1000)/1000);
+                    $("#cgm-minVectorSliderTxt").val(Math.floor(criteria[0]*10000)/10000);
+                    $("#cgm-maxVectorSliderTxt").val(Math.floor(criteria[1]*10000)/10000);
                     this.cgm_layers.eachLayer(function (layer) {
                         if (layer.scec_properties.vector_dist > criteria[0]
                              && layer.scec_properties.vector_dist < criteria[1]){
@@ -1135,8 +1134,8 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
         this.resetVectorSlider = function () {
           $("#slider-vector-range").slider('values', 
                               [CGM_GNSS.cgm_vector_min,CGM_GNSS.cgm_vector_max]);
-          $("#cgm-minVectorSliderTxt").val(Math.floor(CGM_GNSS.cgm_vector_min*1000)/1000);
-          $("#cgm-maxVectorSliderTxt").val(Math.floor(CGM_GNSS.cgm_vector_max*1000)/1000);
+          $("#cgm-minVectorSliderTxt").val(Math.floor(CGM_GNSS.cgm_vector_min*10000)/10000);
+          $("#cgm-maxVectorSliderTxt").val(Math.floor(CGM_GNSS.cgm_vector_max*10000)/10000);
         }
 
         this.setupInterface = function() {
@@ -1185,13 +1184,13 @@ window.console.log("setupInterface: retrieved stations "+sz);
             $("#slider-vector-range").slider({ 
                       range:true, step:0.01, min:CGM_GNSS.cgm_vector_min, max:CGM_GNSS.cgm_vector_max, values:[CGM_GNSS.cgm_vector_min, CGM_GNSS.cgm_vector_max],
                   slide: function( event, ui ) {
-                               $("#cgm-minVectorSliderTxt").val(Math.floor(ui.values[0]*1000)/1000);
-                               $("#cgm-maxVectorSliderTxt").val(Math.floor(ui.values[1]*1000)/1000);
+                               $("#cgm-minVectorSliderTxt").val(Math.floor(ui.values[0]*10000)/10000);
+                               $("#cgm-maxVectorSliderTxt").val(Math.floor(ui.values[1]*10000)/10000);
                                resetVectorRangeColor(ui.values[0],ui.values[1]);
                          },
                   change: function( event, ui ) {
-                               $("#cgm-minVectorSliderTxt").val(Math.floor(ui.values[0]*1000)/1000);
-                               $("#cgm-maxVectorSliderTxt").val(Math.floor(ui.values[1]*1000)/1000);
+                               $("#cgm-minVectorSliderTxt").val(Math.floor(ui.values[0]*10000)/10000);
+                               $("#cgm-maxVectorSliderTxt").val(Math.floor(ui.values[1]*10000)/10000);
                                resetVectorRangeColor(ui.values[0],ui.values[1]);
                          },
                   stop: function( event, ui ) {
@@ -1199,12 +1198,12 @@ window.console.log("setupInterface: retrieved stations "+sz);
                                CGM_GNSS.searchBox(searchType, ui.values);
                          },
                   create: function() {
-                              $("#cgm-minVectorSliderTxt").val(Math.floor(CGM_GNSS.cgm_vector_min*1000)/1000);
-                              $("#cgm-maxVectorSliderTxt").val(Math.floor(CGM_GNSS.cgm_vector_max*1000)/1000);
+                              $("#cgm-minVectorSliderTxt").val(Math.floor(CGM_GNSS.cgm_vector_min*10000)/10000);
+                              $("#cgm-maxVectorSliderTxt").val(Math.floor(CGM_GNSS.cgm_vector_max*10000)/10000);
                         }
             });
-            $('#slider-vector-range').slider("option", "min", Math.floor(CGM_GNSS.cgm_vector_min*1000)/1000);
-            $('#slider-vector-range').slider("option", "max", Math.floor(CGM_GNSS.cgm_vector_max*1000)/1000);
+            $('#slider-vector-range').slider("option", "min", Math.floor(CGM_GNSS.cgm_vector_min*10000)/10000);
+            $('#slider-vector-range').slider("option", "max", Math.floor(CGM_GNSS.cgm_vector_max*10000)/10000);
 
             viewermap.on("resize zoomend dragend panend",function() {
                  CGM_GNSS.generateVectorScale();
