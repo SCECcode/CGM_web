@@ -719,7 +719,6 @@ window.console.log("STASHING "+results.length+" layers from PHP calls");
 
     this.search = function(type, criteria) {
         window.console.log("insar  -->  calling search..");
-        var track_name="D071";
 
         $searchResult = $("#searchResult");
         if (!type || !criteria) {
@@ -741,8 +740,13 @@ window.console.log("calling search() with the string.."+JSON_criteria);
             let results=[];
             let ncriteria=[];
 window.console.log(cgm_insar_data);
-            if(cgm_insar_data === "[\"[]\"]") {
+            if(cgm_insar_data === "[]") {
 window.console.log("Did not find any PHP result");
+               notify("NO DATA..");
+               if(type==CGM_INSAR.searchType.latlon) {
+                   remove_bounding_rectangle_layer();
+               }
+
             } else {
                  let tmp=JSON.parse(cgm_insar_data); 
                  let jblob=JSON.parse(tmp[0].replace(/'/g,'"'));

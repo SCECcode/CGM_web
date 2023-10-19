@@ -252,6 +252,7 @@ window.console.log("map got zoomed..>>",zoom);
                 CGM_INSAR.searchBox(CGM_INSAR.searchType.latlon, [sw['lat'], sw['lng'], ne['lat'], ne['lng']]);
             });
         }
+
     } else if (type === 'marker') {  // can be a point 
         var sw=layer.getLatLng();
         add_marker_point_layer(layer,sw['lat'],sw['lng']);

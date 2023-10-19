@@ -473,7 +473,7 @@ $cgm_insar = new CGM_INSAR();
     </div> <!-- mapDataBig -->
 
     <div id="top-select" class="row mb-2">
-       <div class="col-12" style="padding-right:0px">
+       <div class="col-12">
           <div id="metadata-viewer-container" style="border:solid 1px #ced4da; overflow-x:hidden">
              <table id="metadata-viewer">
                <thead>
