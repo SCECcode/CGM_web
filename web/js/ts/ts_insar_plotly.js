@@ -74,7 +74,7 @@ function plotly_plot_insar_ts(cdata) {
                         width: 1.5,
                         opacity: 0.8 
                   },
-                  mode: 'markers',
+                  mode: 'lines+markers',
                   type: 'scatter' };
 
   let data = [traceUp ];
@@ -89,7 +89,7 @@ margin: { l:margin_left, t:margin_top, r:margin_right },
 colorway: [ '#1f77b4','#1f77b4','#1f77b4'],
 images: scec_image,
 yaxis: {
-    title: {text: 'LOS(mm)', font: { size:18,color:'#000000'}},
+    title: {text: 'LOS (mm)', font: { size:18,color:'#000000'}},
     showgrid: true,
     zeroline: true,
     showline: true,

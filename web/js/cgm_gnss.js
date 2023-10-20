@@ -665,6 +665,9 @@ window.console.log("HERE.. selectStationByLayer..");
         switch (type) {
             case this.searchType.vectorSlider:
                 $all_search_controls.hide();
+		if(! $("#cgm-model-gnss-vectors").prop('checked')) {
+                  $("#cgm-model-gnss-vectors").click();
+                }
                 $("#cgm-vector-slider").show();
                 break;
             case this.searchType.stationName:
