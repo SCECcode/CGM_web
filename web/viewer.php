@@ -23,7 +23,7 @@ $cgm_insar = new CGM_INSAR();
     <link rel="stylesheet" href="css/vendor/glyphicons.css">
     <link rel="stylesheet" href="css/vendor/all.css">
     <link rel="stylesheet" href="css/cgm-ui.css?v=1">
-    <link rel="stylesheet" href="css/sidebar.css?v=1">
+    <link rel="stylesheet" href="css/sidebar-ui.css?v=1">
 
     <script type="text/javascript" src="js/vendor/leaflet-src.js"></script>
     <script type='text/javascript' src='js/vendor/leaflet.awesome-markers.min.js'></script>
@@ -334,7 +334,12 @@ $cgm_insar = new CGM_INSAR();
                                  <option value="A166">A166</option>
                          </select>
                 </div>
-<!-- -->
+                <button id="downloadInSARBtn" class="btn" style="display:none"
+                        onClick="downloadHDF5InSAR()">
+                        <span class="glyphicon glyphicon-download"
+                        title="download complete HDF5 data file"
+			style="font-size:14px;"></span>
+                </button>
                 <div class="input-group input-group-sm custom-control-inline ml-0" id="dataset-controls" style="max-width:180px">
                          <div class="input-group-prepend">
                                  <label style='border-bottom:1;' class="input-group-text" for="data-product-select">Select Dataset</label>
@@ -534,6 +539,22 @@ $cgm_insar = new CGM_INSAR();
   </div>
 </div> <!--Modal: Name-->
 
+<!--Modal: Model(modalinotify) -->
+<div class="modal" id="modalnotify" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-small" id="modalnotifyDialog" role="document">
+    <!--Content-->
+    <div class="modal-content" id="modalnotifyContent">
+      <!--Body-->
+      <div class="modal-body" id="modalnotifyBody">
+        <div class="row col-md-12 ml-auto" style="overflow:hidden;">
+          <div class="col-12" style="font-size:14pt">
+            <p id="notify-container">blah blah</p>
+          </div>
+        </div>
+      </div>
+    </div> <!--Content-->
+  </div>
+</div> <!--Modal: modalnotify-->
 
 <!-- -->
     <script type="text/javascript">

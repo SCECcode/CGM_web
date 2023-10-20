@@ -645,6 +645,10 @@ var generateTableRow = function(layer) {
         switch (type) {
             case this.searchType.vectorSlider:
                 $all_search_controls.hide();
+                // if vector is not showing..
+		if(! $("#cgm-model-gnss-vectors").prop('checked')) {
+		  $("#cgm-model-gnss-vectors").click();
+                }
                 $("#cgm-vector-slider").show();
                 break;
             case this.searchType.stationName:
@@ -875,8 +879,8 @@ window.console.log("gnss --->> calling search.. <<----");
             let results = [];
             switch (type) {
                 case CGM_GNSS.searchType.vectorSlider:
-                    $("#cgm-minVectorSliderTxt").val(criteria[0]);
-                    $("#cgm-maxVectorSliderTxt").val(criteria[1]);
+                    $("#cgm-minVectorSliderTxt").val(Math.floor(criteria[0]*10000)/10000);
+                    $("#cgm-maxVectorSliderTxt").val(Math.floor(criteria[1]*10000)/10000);
                     this.cgm_layers.eachLayer(function (layer) {
                         if (layer.scec_properties.vector_dist > criteria[0]
                              && layer.scec_properties.vector_dist < criteria[1]){
@@ -1113,8 +1117,8 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
         this.resetVectorSlider = function () {
           $("#slider-vector-range").slider('values', 
                               [CGM_GNSS.cgm_vector_min, CGM_GNSS.cgm_vector_max]);
-          $("#cgm-minVectorSliderTxt").val(CGM_GNSS.cgm_vector_min);
-          $("#cgm-maxVectorSliderTxt").val(CGM_GNSS.cgm_vector_max);
+          $("#cgm-minVectorSliderTxt").val(Math.floor(CGM_GNSS.cgm_vector_min*10000)/10000);
+          $("#cgm-maxVectorSliderTxt").val(Math.floor(CGM_GNSS.cgm_vector_max*10000)/10000);
         }
 
         this.setupInterface = function() {
@@ -1140,6 +1144,7 @@ window.console.log("setupInterface: retrieved stations "+sz);
             $("#cgm-controlers-container").css('display','');
             $("#cgm-insar-controlers-container").css('display','none');
             $("#insar-track-controls").css('display','none');
+            $("#downloadInSARBtn").css('display','none');
 
 //$("div.mapData div.map-container").removeClass("col-7 pr-0 pl-2").addClass("col-12").css('padding-left','30px');
 
@@ -1164,13 +1169,13 @@ window.console.log("setupInterface: retrieved stations "+sz);
             $("#slider-vector-range").slider({ 
                       range:true, step:0.01, min:CGM_GNSS.cgm_vector_min, max:CGM_GNSS.cgm_vector_max, values:[CGM_GNSS.cgm_vector_min, CGM_GNSS.cgm_vector_max],
                   slide: function( event, ui ) {
-                               $("#cgm-minVectorSliderTxt").val(ui.values[0]);
-                               $("#cgm-maxVectorSliderTxt").val(ui.values[1]);
+                               $("#cgm-minVectorSliderTxt").val(Math.floor(ui.values[0]*10000)/10000);
+                               $("#cgm-maxVectorSliderTxt").val(Math.floor(ui.values[1]*10000)/10000);
                                resetVectorRangeColor(ui.values[0],ui.values[1]);
                          },
                   change: function( event, ui ) {
-                               $("#cgm-minVectorSliderTxt").val(ui.values[0]);
-                               $("#cgm-maxVectorSliderTxt").val(ui.values[1]);
+                               $("#cgm-minVectorSliderTxt").val(Math.floor(ui.values[0]*10000)/10000);
+                               $("#cgm-maxVectorSliderTxt").val(Math.floor(ui.values[1]*10000)/10000);
                                resetVectorRangeColor(ui.values[0],ui.values[1]);
                          },
                   stop: function( event, ui ) {
@@ -1178,12 +1183,12 @@ window.console.log("setupInterface: retrieved stations "+sz);
                                CGM_GNSS.searchBox(searchType, ui.values);
                          },
                   create: function() {
-                              $("#cgm-minVectorSliderTxt").val(CGM_GNSS.cgm_vector_min);
-                              $("#cgm-maxVectorSliderTxt").val(CGM_GNSS.cgm_vector_max);
+                              $("#cgm-minVectorSliderTxt").val(Math.floor(CGM_GNSS.cgm_vector_min*10000)/10000);
+                              $("#cgm-maxVectorSliderTxt").val(Math.floor(CGM_GNSS.cgm_vector_max*10000)/10000);
                         }
             });
-            $('#slider-vector-range').slider("option", "min", CGM_GNSS.cgm_vector_min);
-            $('#slider-vector-range').slider("option", "max", CGM_GNSS.cgm_vector_max);
+            $('#slider-vector-range').slider("option", "min", Math.floor(CGM_GNSS.cgm_vector_min*10000)/10000);
+            $('#slider-vector-range').slider("option", "max", Math.floor(CGM_GNSS.cgm_vector_max*10000)/10000);
 
             viewermap.on("zoomend dragend panend",function() {
                  CGM_GNSS.generateVectorScale();

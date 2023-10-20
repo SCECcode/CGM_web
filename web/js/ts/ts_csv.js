@@ -120,7 +120,7 @@ function processCSV(data,gid,track) {
      }
    }
 
-   cgm_title=cgm_gid+"("+cgm_lon+","+cgm_lat+")";
+   cgm_title=cgm_track+" ("+cgm_lon+","+cgm_lat+")";
    csv_plot_data.push({
             info: { cgm_title:cgm_title,
                     cgm_name: cgm_gid,

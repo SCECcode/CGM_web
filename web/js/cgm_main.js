@@ -102,7 +102,9 @@ window.console.log(">>>> causing a start of gnss search..");
     });
 
     $("#cgm-insar-search-type").on('change', function () {
-        CGM_INSAR.showSearch($(this).val());
+        let type=$(this).val();
+window.console.log("main(insar) changing search type.."+type);
+        CGM_INSAR.showSearch(type);
     });
 
     $("#insar-track-select").on('change', function () {

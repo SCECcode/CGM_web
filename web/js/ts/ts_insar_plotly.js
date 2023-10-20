@@ -49,7 +49,19 @@ function plotly_plot_insar_ts(cdata) {
 
   let pUp=plot[0];   
 
-  let scec_image=[{
+  let ref_image={
+        source: "img/SCEC_Traditional_Logo_Red.png",
+        xref: "paper",
+        yref: "paper",
+        x:0,
+        y:0,
+        sizex: 0.1,
+        sizey: 0.1,
+        'xanchor':'right',
+        'yanchor':'top'
+      };
+
+  let scec_image={
         source: "img/SCEC_Traditional_Logo_Red.png",
         xref: "paper",
         yref: "paper",
@@ -59,7 +71,9 @@ function plotly_plot_insar_ts(cdata) {
         sizey: 0.1,
         'xanchor':'left',
         'yanchor':'top'
-      }];
+      };
+
+  let images= [ ref_image, scec_image ];
 
   let traceUp = { x: pUp.x,
                   y: pUp.y,
@@ -74,7 +88,7 @@ function plotly_plot_insar_ts(cdata) {
                         width: 1.5,
                         opacity: 0.8 
                   },
-                  mode: 'markers',
+                  mode: 'markers+lines',
                   type: 'scatter' };
 
   let data = [traceUp ];
@@ -87,9 +101,9 @@ width: nw,
 height: nh,
 margin: { l:margin_left, t:margin_top, r:margin_right },
 colorway: [ '#1f77b4','#1f77b4','#1f77b4'],
-images: scec_image,
+images: images,
 yaxis: {
-    title: {text: 'LOS(mm)', font: { size:18,color:'#000000'}},
+    title: {text: 'LOS (mm)', font: { size:18,color:'#000000'}},
     showgrid: true,
     zeroline: true,
     showline: true,
@@ -226,7 +240,7 @@ function plotly_plot_insar_vs(cdata) {
     }
   }];
 
-window.console.log("aspect ration is "+pdata['aspect']);
+window.console.log("aspect ratio is "+pdata['aspect']);
 
   let layout = { 
     paper_bgcolor: '#f1fff1',
@@ -238,7 +252,7 @@ window.console.log("aspect ration is "+pdata['aspect']);
     aspectmode : 'manual',
     scene: { aspectratio : {x:1,y:pdata['aspect'],z:0.5},camera: {eye: {x: 0, y: -1, z: 0.50}}},
     margin: { l:margin_left, t:margin_top, r:margin_right },
-    images: scec_image,
+    images: images,
   };
 
   let config = {displayModeBar:true, toImageButtonOptions: {filename:makeUname(info.cgm_name)}};

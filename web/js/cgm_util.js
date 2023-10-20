@@ -5,6 +5,37 @@
 var cgm_latlon_area_list=[];
 var cgm_latlon_point_list=[];
 
+function saveAsURLFile(url) {
+  var dname=url.substring(url.lastIndexOf('/')+1);
+  var dload = document.createElement('a');
+  dload.href = url;
+  dload.download = dname;
+  dload.type="application/octet-stream";
+  dload.style.display='none';
+  document.body.appendChild(dload);
+  dload.click();
+  document.body.removeChild(dload);
+  delete dload;
+}
+
+
+function downloadHDF5InSAR() {
+    let type=$("#insar-track-select").val();
+    window.console.log("TYPE ..", type);
+    let fname="./cgm_data/insar/"+type+"_COMB_CGM_InSAR_v0_0_1.hdf5";
+    saveAsURLFile(fname);
+//  saveAsURLFile('./csm_data/LuttrellHardebeckJGR2021_Table1.csv');
+//  saveAsURLFile('https://files.scec.org/s3fs-public/LuttrellHardebeckJGR2021_Table1.csv');
+}
+
+// pop up the notify model with a timeout
+function notify(msg) {
+  let html=document.getElementById('notify-container');
+  html.innerHTML=msg;
+  $('#modalnotify').modal('show');
+  setTimeout(function() {$('#modalnotify').modal('hide')}, 2000);
+}
+
 function truncateNumber(num, digits) {
     let numstr = num.toString();
     if (numstr.indexOf('.') > -1) {
@@ -64,7 +95,7 @@ function MapFeature(gid, properties, geometry, scec_properties) {
 
 
 function updateDownloadCounter(select_count) {
-//    window.console.log("download counter updated.."+select_count);
+    window.console.log("download counter updated.."+select_count);
     let downloadCounterElem = $("#download-counter");
     let plotCounterElem = $("#plot-counter");
     let downloadBtnElem = $("#download-all");

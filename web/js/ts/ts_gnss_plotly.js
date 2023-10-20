@@ -126,7 +126,7 @@ function plotly_plot_gnss_ts(pdata) {
     colorway: [ '#1f77b4','#1f77b4','#1f77b4'],
     images: scec_image,
     yaxis: {
-        title: {text: 'East(mm)', font: { size:18,color:'#000000'}},
+        title: {text: 'East (mm)', font: { size:18,color:'#000000'}},
         showgrid: true,
         zeroline: true,
         showline: true,
@@ -140,7 +140,7 @@ function plotly_plot_gnss_ts(pdata) {
         linecolor: '#636363',
         linewidth: 2, },
     yaxis2: {
-        title: {text: 'North(mm)', font: { size:18,color:'#000000'}},
+        title: {text: 'North (mm)', font: { size:18,color:'#000000'}},
         showgrid: true,
         zeroline: true,
         showline: true,
@@ -154,7 +154,7 @@ function plotly_plot_gnss_ts(pdata) {
         linecolor: '#636363',
         linewidth: 2 },
     yaxis3: {
-        title: {text: 'Up(mm)', font: { size:18,color:'#000000'}},
+        title: {text: 'Up (mm)', font: { size:18,color:'#000000'}},
         showgrid: true,
         zeroline: true,
         showline: true,

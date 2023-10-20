@@ -386,6 +386,9 @@ window.console.log(">>> generateLayers..");
     this.addToResultsTable = function(layer) {
 
 window.console.log("calling.. addToResultsTable..");
+let ttmp=drawing_point;
+let pttmp=pointDrawer;
+window.console.log("STATE >>>", ttmp);
 
         let $table = $("#metadata-viewer.insar tbody");
 
@@ -490,7 +493,6 @@ var generateTableRow = function(layer) {
               html += `<td class="text-center">`;
 
               html += `<button class=\"btn btn-xs\" title=\"show velocity layer\" onclick=CGM_INSAR.executeShowVS(\"${layer.scec_properties.gid}\",\"${layer.scec_properties.file}\")>showVS&nbsp<span class=\"far fa-image\"></span></button>`;
-              html += `<br><button class=\"btn btn-xs\" title=\"plot velocity layer\" onclick=CGM_INSAR.executePlotVS([\"${downloadURL}\"],\"${layer.scec_properties.track}\",\"${layer.scec_properties.gid}\",\"${layer.scec_properties.nx}\",\"${layer.scec_properties.ny}\")>plotVS&nbsp<span class=\"far fa-chart-area\"></span></button>`;
         } 
 
         html += `</tr>`;
@@ -530,7 +532,9 @@ var generateTableRow = function(layer) {
         if (!$cgm_model_checkbox.prop('checked')) {
             $cgm_model_checkbox.prop('checked', true);
         }
-        this.cgm_track_layers.addTo(viewermap);
+
+        let layer=this.cgm_track_layers.addTo(viewermap);
+        layer.bringToBack();
 
         if (currentLayerName != 'esri topo') {
             switchLayer('esri topo');
@@ -553,9 +557,7 @@ window.console.log("Hide model/product");
         window.console.log("insar calling -->>> reset");
         $("#wait-spinner").hide();
 
-        viewermap.removeLayer(this.search_result);
         this.searching = false;
-        this.search_result = new L.FeatureGroup();
 
         this.unhighlightTrack();
 
@@ -563,12 +565,15 @@ window.console.log("Hide model/product");
         this.zeroSelectCount()
         this.showSearch('none');
         this.searching = false;
-        this.cgm_layers.remove();
-        this.search_result.remove();
+
+        viewermap.removeLayer(this.cgm_layers);
+        viewermap.removeLayer(this.search_result);
         this.search_result = new L.FeatureGroup();
         this.cgm_layers = new L.FeatureGroup();
 
         skipRectangle();
+	remove_bounding_rectangle_layer();
+
         skipPoint();
         this.replaceResultsTableBody([]);
 
@@ -581,12 +586,14 @@ window.console.log("Hide model/product");
     this.resetSearch = function (){
 window.console.log("insar calling -->> resetSearch..");
         $("#wait-spinner").hide();
-        viewermap.removeLayer(this.search_result);
         this.searching = false;
+
+        viewermap.removeLayer(this.search_result);
         this.search_result = new L.FeatureGroup();
 
         this.replaceResultsTableBody([]);
         skipRectangle();
+	remove_bounding_rectangle_layer();
         skipPoint();
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
         this.clearAllSelections();
@@ -696,9 +703,12 @@ window.console.log("calling search() with the string.."+JSON_criteria);
 
             let results=[];
             let ncriteria=[];
-window.console.log(cgm_insar_data);
-            if(cgm_insar_data === "[\"[]\"]") {
+            if(cgm_insar_data === "[]" || cgm_insar_data === "[\"[]\"]") {
 window.console.log("Did not find any PHP result");
+               notify("NO DATA..");
+               if(type==CGM_INSAR.searchType.latlon) {
+                   remove_bounding_rectangle_layer();
+               }
             } else {
                  let tmp=JSON.parse(cgm_insar_data); 
                  let jblob=JSON.parse(tmp[0].replace(/'/g,'"'));
@@ -931,6 +941,7 @@ window.console.log("changeResultsTableBody..");
         $("#cgm-controlers-container").css('display','none');
         $("#cgm-insar-controlers-container").css('display','');
         $("#insar-track-controls").css('display','');
+        $("#downloadInSARBtn").css('display','');
         $("#cgm-controlers-container").css('display','none');
 
         $("div.mapData div.map-container").css('padding-left','30px');

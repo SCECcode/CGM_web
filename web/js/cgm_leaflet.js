@@ -173,8 +173,10 @@ function setup_viewer()
 
   function onMapMouseOver(e) {
     if(drawing_rectangle) {
-      window.console.log("before calling draw_at.."); 
-      draw_at();
+      window.console.log("MMMouse over -- in rectangle.."); 
+    }
+    if(drawing_point) {
+      window.console.log("MMMouse over -- in point.."); 
     }
   }
   mymap.on('mouseover', onMapMouseOver);
@@ -252,11 +254,15 @@ function showColorLegend(param) {
 
 
 function drawPoint() {
+window.console.log("===>drawPoint..");
   pointDrawer.enable();
+ drawing_point=true;
 }
 
 function skipPoint() {
+window.console.log("===>skipPoint..");
   pointDrawer.disable();
+  drawing_point=false;
 }
 
 function drawRectangle(){
