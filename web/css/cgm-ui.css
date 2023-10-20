@@ -445,6 +445,10 @@ a {
     text-decoration: none;
 }
 
+.container a {
+    color: #990000;
+}
+
 nav.navbar.navbar-dark a.nav-link  {
     color: white;
 }

@@ -217,6 +217,8 @@ window.console.log(">>> generateLayers..");
                 let mypoly=polygon_options;
                 mypoly['color']=track_color;
                 let track_polygon=L.polygon(latlngs, mypoly);
+                var popup=L.popup().setContent("InSAR track name: "+track_name);
+                track_polygon.bindPopup(popup);
 
                 let myicon=L.divIcon({ 
 //                                     iconUrl:'some_icon.png',
@@ -226,7 +228,10 @@ window.console.log(">>> generateLayers..");
                 html: `<span style="opacity:80%; background-color:${track_color};"/>`});
 //                html: `<span style="border:2px solid green; opacity:80%; color:${track_color};" class="fas fa-caret-down"></span>`});
 
+		let popref="<strong>Track References for "+track_name+ "</strong><br>Lat:"+latr+"<br>Lon:"+lonr+"<br>";
                 let track_ref=L.marker([latr,lonr], {type:"ref",icon:myicon});
+                track_ref.bindPopup(popref, {maxWidth: 500});
+
                 track.addLayer(track_ref);
 
                 track.addLayer(track_polygon);
@@ -239,10 +244,6 @@ window.console.log(">>> generateLayers..");
                     selected:false,
                 };
 
-                //let bb_info = `InSAR track name: ${track_name}`;
-                //track.bindTooltip(bb_info);
-                var popup=L.popup().setContent("InSAR track name: "+track_name);
-                track.bindPopup(popup);
                 this.cgm_track_layers.addLayer(track);
             }
         }

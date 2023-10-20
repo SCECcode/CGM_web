@@ -1,5 +1,5 @@
 /*** 
-   ts_pos.js
+   ts_cvs.js
 
 For INSAR
 ***/
@@ -30,9 +30,10 @@ Datetime, LOS, Std Dev LOS
 2015-07-01T13:51:59Z, -3.069258, 0.000000
 *******************/
 // has 1 plot
-// {id:idx, track: [ { cgm_title:cgm_gid,
-//                     cgm_name:cgm_gid,
-//                     cgm_track:'D071' }],
+// {id:idx, track: [ { cgm_title:gid,
+//                     cgm_name:gid,
+//                     cgm_track:'D071',
+//                     cgm_annotation:'blah blah'}],
 //          plot:[{xlabel:'time',
 //                ylabel:'East(mm)',
 //                x:[...],
@@ -53,12 +54,11 @@ function processCSV(data,gid,track) {
    var data_start=0;
    let dlines=data.split("\n");
    let sz=dlines.length;
-   let cgm_gid=gid;
-   let cgm_track=track;
-   let cgm_lat=0;
-   let cgm_lon=0;
-   let cgm_hgt=0;
-   let cgm_title=0;
+   let mission;
+   let lat=0;
+   let lon=0;
+   let hgt=0;
+   let title=0;
    let xrange_start,xrange_end;
    let yrange_start,yrange_end;
    let Xtime=[];
@@ -98,11 +98,11 @@ function processCSV(data,gid,track) {
      }
 
      if(terms[1]=="SAR" && terms[2]=="mission") {
-         cgm_mission=pair[1].trim();
+         mission=pair[1].trim();
          continue;
      }
      if(terms[1]=="SAR" && terms[2]=="track") {
-         cgm_track=pair[1].trim();
+         track=pair[1].trim();
          continue;
      }
 
@@ -110,21 +110,28 @@ function processCSV(data,gid,track) {
      if(terms[1]=="LLH" && terms[2]=="Pixel") {
          terms=pair[2].split(";");
          let tmp=terms[0].trim();
-         cgm_lon=truncate(tmp,3);
+         lon=truncate(tmp,3);
          terms=pair[3].split(";");
          tmp=terms[0].trim();
-         cgm_lat=truncate(tmp,3);
-         cgm_hgt=pair[4].trim();
-         //??? cgm_title=cgm_mission+"("+cgm_lon+","+cgm_lat+")";
+         lat=truncate(tmp,3);
+         hgt=pair[4].trim();
+         //??? title=mission+"("+lon+","+lat+")";
          continue;
      }
    }
 
-   cgm_title=cgm_track+" ("+cgm_lon+","+cgm_lat+")";
+   if(track[0]=="D") {
+     title="Descending "+track+" ("+lon+","+lat+")";
+     } else {
+       title="Ascending "+track+" ("+lon+","+lat+")";
+   }
+   let annotation = "Reference annotation for the InSAR track";
    csv_plot_data.push({
-            info: { cgm_title:cgm_title,
-                    cgm_name: cgm_gid,
-                    cgm_track:cgm_track },
+            info: { cgm_title:title,
+                    cgm_name: gid,
+                    cgm_track:track,
+	            cgm_annotation: annotation},
+
             plot:[
                   {xlabel:'time',
                    ylabel:'North(mm)',

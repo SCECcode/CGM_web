@@ -23,7 +23,6 @@ $cgm_insar = new CGM_INSAR();
     <link rel="stylesheet" href="css/vendor/glyphicons.css">
     <link rel="stylesheet" href="css/vendor/all.css">
     <link rel="stylesheet" href="css/cgm-ui.css?v=1">
-    <link rel="stylesheet" href="css/sidebar-ui.css?v=1">
 
     <script type="text/javascript" src="js/vendor/leaflet-src.js"></script>
     <script type='text/javascript' src='js/vendor/leaflet.awesome-markers.min.js'></script>
@@ -337,7 +336,7 @@ $cgm_insar = new CGM_INSAR();
                 <button id="downloadInSARBtn" class="btn" style="display:none"
                         onClick="downloadHDF5InSAR()">
                         <span class="glyphicon glyphicon-download"
-                        title="download complete HDF5 data file"
+                        title="download complete HDF5 data file for selected Track"
 			style="font-size:14px;"></span>
                 </button>
                 <div class="input-group input-group-sm custom-control-inline ml-0" id="dataset-controls" style="max-width:180px">
@@ -414,7 +413,7 @@ $cgm_insar = new CGM_INSAR();
 
                 <div class="col" id='CGM_plot'
                         style="position:relative;border:solid 1px #ced4da; height:500px;">
-                    <div  id='wait-spinner' style="">
+                    <div  id='wait-spinner' style="z-index:9999;">
                         <div class="d-flex justify-content-center" >
                           <div class="spinner-border text-light" role="status">
                             <span class="sr-only">Loading...</span>
