@@ -385,7 +385,6 @@ window.console.log(">>> generateLayers..");
 
     this.addToResultsTable = function(layer) {
 
-window.console.log("STATE >>>", ttmp);
         let $table = $("#metadata-viewer.insar tbody");
 
         let gid = layer.scec_properties.gid;
