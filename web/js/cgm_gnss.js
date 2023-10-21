@@ -641,7 +641,7 @@ var generateTableRow = function(layer) {
     };
 
     this.showSearch = function (type) {
-        const $all_search_controls = $("#cgm-controls-container ul li");
+        const $all_search_controls = $("#cgm-gnss-controls-container ul li");
         switch (type) {
             case this.searchType.vectorSlider:
                 $all_search_controls.hide();
@@ -724,7 +724,7 @@ window.console.log("gnss calling --->> reset");
         skipDrawRectangle();
 
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
-        $("#cgm-controls-container input, #cgm-controls-container select").val("");
+        $("#cgm-gnss-controls-container input, #cgm-gnss-controls-container select").val("");
 
         this.resetVectorSlider();
         this.clearAllSelections();
