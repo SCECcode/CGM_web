@@ -361,8 +361,8 @@ select {
 }
 
 input[type=text] {
-    /*width: 140px;*/
-    /*padding: 0px 5px 0px 5px;*/
+   width: 105px;
+   margin-left: 5px;
 }
 
 .banner-container {
