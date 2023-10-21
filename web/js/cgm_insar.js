@@ -551,6 +551,7 @@ window.console.log("Hide model/product");
 
     this.reset = function() {
         window.console.log("insar calling -->>> reset");
+
         $("#wait-spinner").hide();
 
         this.searching = false;
@@ -756,7 +757,8 @@ window.console.log("Did not find any PHP result");
                      } else if(type==CGM_INSAR.searchType.latlon) {
 /*
 ["[{'gid': 'insar_612e946b8f597', 'vlist': 
-[{'bb': [[-118.3172607421875, 33.84290273847109], [-118.20739746093751, 33.961443911623384]], 'track': 'D071', 'file': '/app/web/result/insar_612e946b8f597_D071/velocity_list.json'}]}]"]
+[{'bb': [[-118.3172607421875, 33.84290273847109], [-118.20739746093751, 33.961443911623384]], 
+'track': 'D071','nx':..,'ny':.., 'file': '/app/web/result/insar_612e946b8f597_D071/velocity_list.json'}]}]"]
 */
                          let vlist=item['vlist'];
                          for(let j=0; j<vlist.length; j++) {

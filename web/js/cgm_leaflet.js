@@ -259,24 +259,28 @@ window.console.log("===>drawPoint..");
 }
 
 function addDrawPoint() {
+window.console.log("===>add drawPoint..");
   drawing_point=true;
 }
 
 function skipDrawPoint() {
-window.console.log("===>skipPoint..");
+window.console.log("===>skip drawPoint..");
   pointDrawer.disable();
   drawing_point=false;
 }
 
 function drawRectangle(){
+window.console.log("===>drawRectangle..");
   rectangleDrawer.enable();
 }
 
 function addDrawRectangle() {
+window.console.log("===>add drawRectangle..");
   drawing_rectangle = true;
 }
 
 function skipDrawRectangle(){
+window.console.log("===>skip drawRectangle..");
   rectangleDrawer.disable();
   drawing_rectangle = false;
 }

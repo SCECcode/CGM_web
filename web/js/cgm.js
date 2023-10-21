@@ -19,5 +19,14 @@ var CGM = new function () {
       $("#cgm-model-insar").click();
     };
 
+
+    this.resetCGM = function() {
+      // if insar, just click to gnss
+      if(activeProduct == Products.INSAR) {
+        $("#data-product-select").val('gnss');
+        } else { // if gnss, call gnss.reset
+	   CGM_GNSS.reset();
+      }
+    }
 };
 
