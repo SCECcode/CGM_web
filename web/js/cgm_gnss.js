@@ -110,7 +110,7 @@ var CGM_GNSS = new function () {
         activeProduct = Products.GNSS;
         this.showProduct();
         $("div.control-container").hide();
-        $("#cgm-controls-container").show();
+        $("#cgm-gnss-controls-container").show();
 
     };
 
@@ -751,7 +751,7 @@ window.console.log("gnss calling --->> resetSearch.");
     this.freshSearch = function (){
 
 window.console.log(">>> calling freshSearch..");
-        $("#cgm-controls-container input").val("");
+        $("#cgm-gnss-controls-container input").val("");
         this.resetVectorSlider();
         this.resetSearch();
 
@@ -1145,10 +1145,10 @@ window.console.log("setupInterface: retrieved stations "+sz);
 
             this.activateData();
 
-            $("#cgm-controlers-container").css('display','');
-            $("#cgm-insar-controlers-container").css('display','none');
-            $("#insar-track-controls").css('display','none');
-            $("#downloadInSARBtn").css('display','none');
+            $("#cgm-controlers-container").css('display','none');
+            $("#cgm-gnss-controlers-container").css('display','');
+            $("#insar-track-controls").css('display','');
+            $("#downloadInSARBtn").css('display','');
 
 //$("div.mapData div.map-container").removeClass("col-7 pr-0 pl-2").addClass("col-12").css('padding-left','30px');
 

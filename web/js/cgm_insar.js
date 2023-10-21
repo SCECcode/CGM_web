@@ -945,7 +945,6 @@ window.console.log("changeResultsTableBody..");
         $("#cgm-insar-controlers-container").css('display','');
         $("#insar-track-controls").css('display','');
         $("#downloadInSARBtn").css('display','');
-        $("#cgm-controlers-container").css('display','none');
 
         $("div.mapData div.map-container").css('padding-left','30px');
         $("#CGM_plot").css('height','500px');
