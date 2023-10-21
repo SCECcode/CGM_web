@@ -321,23 +321,25 @@ $cgm_insar = new CGM_INSAR();
          </div>
 
 <!-- search-option -->
-         <div id="search-option" class="col-12 mt-4" >
+         <div id="cgm-search-options" class="col-12 mt-4" >
             <ul id="option" class="navigation col-11" style="padding: 0 0 0 0;margin-bottom: 0">
               <li id='cgm-station-name' class='navigationLi ' style="border:1px solid green;display:">
-                 <div id='station-nameMenu' class='menu'>
+                 <div id='cgm-station-nameMenu' class='menu'>
                    <div class="row">
                       <div class="col-5">
                           <p>Select on the map<br>or enter the name</p>
                       </div>
 		      <div class="col-7">
-                        <input type="text"
+                        <input id="cgm-stationTxt" type="text"
+                               placeholder="Station followed by Enter key"
                                class="cgm-search-item form-control"
+                               onkeypress="javascript:if (event.key == 'Enter') $('.cgm-search-item').mouseout();"
                                style="width:200px;margin-left:5px;">
                       </div>
                    </div>
                  </div>
               </li>
-              <li id='cgm-vector-slider' class='navigationLi' style="border:1px solid blue;display:">
+              <li id='cgm-vector-slider' class='navigationLi' style="border:1px solid blue;display:none">
                  <div id='vector-sliderMenu' class='menu'>
                    <div class="row">
                       <div class="col-5">
@@ -363,8 +365,8 @@ $cgm_insar = new CGM_INSAR();
                    </div>
                  </div>
               </li>
-              <li id='cgm-insar-location' class='navigationLi' style="border:1px solid orange;display:">
-                <div id='cgm-insar-locationMenu' class='menu'>
+              <li id='cgm-location' class='navigationLi' style="border:1px solid orange;display:none">
+                <div id='cgm-locationMenu' class='menu'>
                   <div class="row">
                     <div class="col-5">
                         <p>Select a location on the map or enter latitude and longitude</p>
@@ -373,21 +375,21 @@ $cgm_insar = new CGM_INSAR();
                         <div class="form-inline latlon-input-boxes">
                           <input type="text"
                                  placeholder='Latitude'
-                                 id="cgm-insar-LatTxt"
-                                 title="insar lat"
+                                 id="cgm-LatTxt"
+                                 title="lat"
                                  class="cgm-search-item form-control">
                           <input type="text" 
                                  placeholder='Longitude' 
-                                 id="cgm-insar-LonTxt" 
-                                 title="insar lon"
+                                 id="cgm-LonTxt" 
+                                 title="lon"
                                  class="cgm-search-item form-control">
                         </div>
                       </div>
                    </div>
                 </div>
               </li>
-              <li id='cgm-latlon' class='navigationLi' style="border:1px solid blue;display:;">
-                <div id='latlonMenu' class='menu'>
+              <li id='cgm-latlon' class='navigationLi' style="border:1px solid blue;display:none;">
+                <div id='cgm-latlonMenu' class='menu'>
                   <div class="row">
                     <div class="col-6">
 		      <p>Draw a rectangle on the map or enter latitudes and longitudes. Note: Use negative longitudes for California.

@@ -661,7 +661,7 @@ window.console.log("HERE.. selectStationByLayer..");
     };
 
     this.showSearch = function (type) {
-        const $all_search_controls = $("#cgm-controls-container ul li");
+        const $all_search_controls = $("#cgm-search-options ul li");
         switch (type) {
             case this.searchType.vectorSlider:
                 $all_search_controls.hide();
@@ -669,15 +669,17 @@ window.console.log("HERE.. selectStationByLayer..");
                   $("#cgm-model-gnss-vectors").click();
                 }
                 $("#cgm-vector-slider").show();
+                skipDrawRectangle();
                 break;
             case this.searchType.stationName:
                 $all_search_controls.hide();
                 $("#cgm-station-name").show();
+                skipDrawRectangle();
                 break;
             case this.searchType.latlon:
                 $all_search_controls.hide();
                 $("#cgm-latlon").show();
-                drawRectangle();
+                addDrawRectangle();
                 break;
             default:
                 $all_search_controls.hide();
@@ -734,9 +736,10 @@ window.console.log("gnss calling --->> reset");
         this.hideVectors();
         this.showProduct();
 
+        skipDrawRectangle();
         remove_bounding_rectangle_layer();
         this.replaceResultsTableBody([]);
-        skipRectangle();
+
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
         $("#cgm-controls-container input, #cgm-controls-container select").val("");
 
@@ -753,9 +756,9 @@ window.console.log("gnss calling --->> resetSearch.");
         viewermap.removeLayer(this.search_result);
         this.search_result = new L.FeatureGroup();
 
-        this.replaceResultsTableBody([]);
-        skipRectangle();
+        skipDrawRectangle();
         remove_bounding_rectangle_layer();
+        this.replaceResultsTableBody([]);
 
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
         this.clearAllSelections();
@@ -976,7 +979,7 @@ window.console.log("gnss --->> calling searchBox");
                     markerLocations.push(L.latLng(criteria[2],criteria[3]));
                     let bounds = L.latLngBounds(markerLocations);
                     viewermap.fitBounds(bounds, {maxZoom: 12});
-                    setTimeout(skipRectangle, 500);
+                    setTimeout(skipDrawRectangle(), 500);
 
                 } else if (type == this.searchType.stationName) {
                     let bounds = L.latLngBounds(markerLocations);

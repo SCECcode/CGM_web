@@ -538,25 +538,24 @@ var generateTableRow = function(layer) {
     };
 
     this.showSearch = function (type) {
-        const $all_search_controls = $("#cgm-insar-controls-container ul li");
+        const $all_search_controls = $("#cgm-search-options ul li");
         switch (type) {
             case this.searchType.location:
                 $all_search_controls.hide();
-                $("#cgm-insar-location").show();
-                drawPoint();
-                skipRectangle();
+                $("#cgm-location").show();
+                addDrawPoint();
+                skipDrawRectangle();
                 break;
             case this.searchType.latlon:
                 $all_search_controls.hide();
                 $("#cgm-insar-latlon").show();
-                drawRectangle();
-                skipPoint();
+                addDrawRectangle();
+                skipDrawPoint();
                 break;
             default:
                 $all_search_controls.hide();
-   //             removeColorLegend();
-                skipPoint();
-                skipRectangle();
+                skipDrawPoint();
+                skipDrawRectangle();
                 window.console.log("showSearch:skip to default mode..");
         }
     };

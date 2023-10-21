@@ -1,4 +1,20 @@
 /* cgm */
+.navigation {
+        position: relative;
+        padding: 0px;
+        /*width:110%;*/
+        list-style: none;
+        z-index: 9999;
+}
+
+.navigationLi {
+        /*width:110%;*/
+        /*padding: 10px;*/
+        border: none;
+        /*overflow: hidden;*/
+}
+
+
 .input-group-text {
   min-width: 130px;
 }

@@ -41,7 +41,6 @@ var visibleFaults = new L.FeatureGroup();
 var drawing_rectangle=false;
 var drawing_point=false;
 
-
 // scec
 var scecAttribution ='<a href="https://www.scec.org">SCEC</a>';
 
@@ -208,10 +207,13 @@ window.console.log("map got zoomed..>>",zoom);
 
   function onMapMouseOver(e) {
     if(drawing_rectangle) {
-      window.console.log("before calling draw_at.."); 
-      draw_at();
+      drawRectangle();
+    }
+    if(drawing_point) {  // only got set in INSAR
+      drawPoint();
     }
   }
+
   mymap.on('mouseover', onMapMouseOver);
 
 // ==> rectangle drawing control <==
@@ -280,19 +282,31 @@ v.style.width="35rem";
 }
 
 function drawPoint() {
+window.console.log("===>drawPoint..");
   pointDrawer.enable();
 }
 
-function skipPoint() {
+function addDrawPoint() {
+  drawing_point=true;
+}
+
+function skipDrawPoint() {
+window.console.log("===>skipPoint..");
   pointDrawer.disable();
+  drawing_point=false;
 }
 
 function drawRectangle(){
   rectangleDrawer.enable();
 }
 
-function skipRectangle(){
+function addDrawRectangle() {
+  drawing_rectangle = true;
+}
+
+function skipDrawRectangle(){
   rectangleDrawer.disable();
+  drawing_rectangle = false;
 }
 
 // ==> feature popup on each layer <==

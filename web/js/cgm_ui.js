@@ -124,7 +124,7 @@ function setOpacitySliderHandle(alpha) {
 }
 
 /************************************************************************************/
-function downloadHDF5InSAR(() {
+function downloadHDF5InSAR() {
     let type=$("#insar-track-select").val();
     window.console.log("TYPE ..", type);
 //  saveAsURLFile('./csm_data/LuttrellHardebeckJGR2021_Table1.csv');

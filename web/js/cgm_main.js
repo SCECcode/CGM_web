@@ -66,104 +66,90 @@ window.console.log("main(gnss) changing search type.."+type);
         CGM_GNSS.showSearch(type);
     });
 
-/*** NOT SURE if want to have this done automatically 
+
     $('.cgm-search-item').on('focus', function () {
       $(this).on('blur mouseout', function () {
           $(this).off('mouseout');
           $(this).off('blur');
 
-window.console.log(">>>> causing a start of gnss search..");
-// these is where the change in latlon causes a new search..
-// 
-          if( $(this).val() != '' ) {
-            let searchType = CGM_GNSS.searchType.latlon  // set default
-            let $p=$(this).parent();
-            let $criteria = $p.children("input");
+window.console.log(">>>> causing a start of a  search..");
 
-            let criteria = [];
-            let skip = false;
+          if( activeProduct == Products.GNSS ) {
+            if( $(this).val() != '' ) {
+              let searchType = CGM_GNSS.searchType.latlon  // set default
+              let $p=$(this).parent();
+              let $criteria = $p.children("input");
+              let skip = false;
 
-            if ($criteria.length === 1) {
-               searchType = CGM_GNSS.searchType.stationName;
-               criteria = $criteria.val();
-            } else { // 2 or 4
+              if ($criteria.length === 1) {
+                 searchType = CGM_GNSS.searchType.stationName;
+                 criteria = $criteria.val();
+              } else { // 2 or 4
+                  $criteria.each(function(){
+                      if(!isNaN($(this).val()) && $(this).val() !='') {
+                        criteria.push($(this).val());
+                        } else {
+                          skip=true;
+                      }
+                  });
+              }
+              if ($criteria.length === 2) {
+                 searchType = CGM_GNSS.searchType.vectorSlider;
+              }
+  
+              if(!skip) {
+                  CGM_GNSS.searchBox(searchType, criteria);
+              }
+            }
+            //$(this).blur();
+
+            } else { // it is InSAR
+
+              if( $(this).val() != '' ) {
+                let searchType = CGM_INSAR.searchType.location
+                let $p=$(this).parent();
+                let $criteria = $p.children("input");
+                let skip = false;
+
                 $criteria.each(function(){
-                    if(!isNaN($(this).val()) && $(this).val() !='') {
-                      criteria.push($(this).val());
+                   let val=$(this).val();
+    window.console.log("FOUND..."+val);
+                    let n=isNaN(val);
+                    if(!isNaN(val) && val !='') {
+                      criteria.push(parseFloat(val));
                       } else {
                         skip=true;
                     }
                 });
-            }
-            if ($criteria.length === 2) {
-               searchType = CGM_GNSS.searchType.vectorSlider;
-            }
 
-            if(!skip) {
-              $("div#wait-spinner").show(400, function(){
-                  CGM_GNSS.searchBox(searchType, criteria);
-              });
-            }
+                if ($criteria.length === 4) {
+                   searchType = CGM_INSAR.searchType.latlon;
+                }
+                if(!skip) {
+                   $("div#wait-spinner").show(400, function(){
+                      CGM_INSAR.searchBox(searchType, criteria);
+                   });
+
+                }
+                } else {
+                   // do nothing ???
+                   CGM_INSAR.showSearch();
+              }
+              $(this).blur();
           }
-          $(this).blur();
-       });
+      });
     });
-    XXXXX
-***/
+
 
     $("#insar-track-select").on('change', function () {
         CGM_INSAR.setTrackName($(this).val());
-	CGM_INSAR.resetTrackView($(this).val());
+        CGM_INSAR.resetTrackView($(this).val());
     });
 
     $("#insar-search-type").on('change', function () {
         CGM_INSAR.freshSearch();
         CGM_INSAR.showSearch($(this).val());
     });
-
-/*** NOT SURE
-    $('.cgm-insar-search-item').on('focus', function () {
-      $(this).on('blur mouseout', function () {
-        $(this).off('mouseout');
-        $(this).off('blur');
-window.console.log(">>>>XXX causing a start of inar search..");
-// these is where the change in latlon causes a new search..
-// 
-          if( $(this).val() != '' ) {
-            let searchType = CGM_INSAR.searchType.location
-            let $p=$(this).parent();
-            let $criteria = $p.children("input");
-
-            let criteria = [];
-            let skip = false;
-
-            $criteria.each(function(){
-               let val=$(this).val();
-window.console.log("FOUND..."+val);
-                let n=isNaN(val);
-                if(!isNaN(val) && val !='') {
-                  criteria.push(parseFloat(val));
-                  } else {
-                    skip=true;
-                }
-            });
-
-            if ($criteria.length === 4) {
-               searchType = CGM_INSAR.searchType.latlon;
-            }
-
-            if(!skip) {
-              $("div#wait-spinner").show(400, function(){
-                  CGM_INSAR.searchBox(searchType, criteria);
-              });
-            }
-            } else {
-               CGM_INSAR.showSearch();
-          }
-          $(this).blur();
-       });
-    });
-***/
 
     $("#metadata-viewer-container").on('click','td.cgm-data-click', function(){
         if ($(this).find('button[id="cgm-allBtn"]').length != 0) {
