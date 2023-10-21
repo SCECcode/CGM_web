@@ -270,6 +270,7 @@ $cgm_insar = new CGM_INSAR();
                </div>
              </div>
          </div>
+      
 
 <!-- GNSS control -->
          <div class="gnss-select-group input-group input-group-sm custom-control-inline mt-2" style="max-width:450px">

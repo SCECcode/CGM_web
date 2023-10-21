@@ -194,7 +194,7 @@ window.console.log(">>>> causing a start of a  search..");
 
     });
 
-    $("#dataProductSelect").on('change', function(){
+    $("#cgm-data-product").on('change', function(){
        if(activeProduct == Products.GNSS) {
 window.console.log("==> reset what was there/GNSS");
           CGM_GNSS.reset();
