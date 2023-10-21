@@ -514,6 +514,8 @@ var generateTableRow = function(layer) {
                 break;
             default:
                 $all_search_controls.hide();
+		$("#insar-track-controls").css('display','none');
+		$("#downloadInSARBtn").css('display','none');
                 removeColorLegend();
                 skipDrawRectangle();
                 skipDrawPoint();
