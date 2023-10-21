@@ -247,7 +247,7 @@ $cgm_insar = new CGM_INSAR();
                     <option value="latlon">Latitude &amp; Longitude Box</option>
                 </select>
                 <div class="input-group-append">
-                    <button id="refresh-insar-all-button" onclick="CGM.reset()" class="btn btn-dark pl-4 pr-4"
+                    <button id="refresh-insar-all-button" onclick="CGM.resetCGM()" class="btn btn-dark pl-4 pr-4"
                             type="button">Reset</button>
                 </div>
             </div>
