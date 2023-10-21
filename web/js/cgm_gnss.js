@@ -649,16 +649,18 @@ var generateTableRow = function(layer) {
 		if(! $("#cgm-model-gnss-vectors").prop('checked')) {
 		  $("#cgm-model-gnss-vectors").click();
                 }
-                $("#cgm-vector-slider").show();
+                $("#cgm-gnss-vector-slider").show();
+                skipDrawRectangle();
                 break;
             case this.searchType.stationName:
                 $all_search_controls.hide();
-                $("#cgm-station-name").show();
+                $("#cgm-gnss-station-name").show();
+                skipDrawRectangle();
                 break;
             case this.searchType.latlon:
                 $all_search_controls.hide();
-                $("#cgm-latlon").show();
-                drawRectangle();
+                $("#cgm-gnss-latlon").show();
+                addDrawRectangle();
                 break;
             default:
                 $all_search_controls.hide();
@@ -718,7 +720,9 @@ window.console.log("gnss calling --->> reset");
 
         remove_bounding_rectangle_layer();
         this.replaceResultsTableBody([]);
-        skipRectangle();
+
+        skipDrawRectangle();
+
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
         $("#cgm-controls-container input, #cgm-controls-container select").val("");
 
@@ -736,7 +740,7 @@ window.console.log("gnss calling --->> resetSearch.");
         this.search_result = new L.FeatureGroup();
 
         this.replaceResultsTableBody([]);
-        skipRectangle();
+        skipDrawRectangle();
         remove_bounding_rectangle_layer();
 
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
@@ -956,7 +960,7 @@ window.console.log("gnss --->> calling searchBox");
                     markerLocations.push(L.latLng(criteria[2],criteria[3]));
                     let bounds = L.latLngBounds(markerLocations);
                     viewermap.fitBounds(bounds, {maxZoom: 12});
-                    setTimeout(skipRectangle, 500);
+                    skipDrawRectangle();
 
                 } else if (type == this.searchType.stationName) {
                     let bounds = L.latLngBounds(markerLocations);

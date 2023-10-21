@@ -173,10 +173,10 @@ function setup_viewer()
 
   function onMapMouseOver(e) {
     if(drawing_rectangle) {
-      window.console.log("MMMouse over -- in rectangle.."); 
-    }
-    if(drawing_point) {
-      window.console.log("MMMouse over -- in point.."); 
+      drawRectangle();
+    }  
+    if(drawing_point) {  // only got set in INSAR
+      drawPoint();
     }
   }
   mymap.on('mouseover', onMapMouseOver);
@@ -256,10 +256,13 @@ function showColorLegend(param) {
 function drawPoint() {
 window.console.log("===>drawPoint..");
   pointDrawer.enable();
- drawing_point=true;
 }
 
-function skipPoint() {
+function addDrawPoint() {
+  drawing_point=true;
+}
+
+function skipDrawPoint() {
 window.console.log("===>skipPoint..");
   pointDrawer.disable();
   drawing_point=false;
@@ -269,8 +272,13 @@ function drawRectangle(){
   rectangleDrawer.enable();
 }
 
-function skipRectangle(){
+function addDrawRectangle() {
+  drawing_rectangle = true;
+}
+
+function skipDrawRectangle(){
   rectangleDrawer.disable();
+  drawing_rectangle = false;
 }
 
 // ==> feature popup on each layer <==

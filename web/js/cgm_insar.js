@@ -366,7 +366,6 @@ window.console.log(">>> generateLayers..");
         });
         $("#metadata-viewer.insar tr.row-selected button span.glyphicon.glyphicon-check").removeClass('glyphicon-check').addClass('glyphicon-unchecked');
         $("#metadata-viewer.insar tr.row-selected").removeClass('row-selected');
-        removeColorLegend();
     };
 
 
@@ -386,11 +385,7 @@ window.console.log(">>> generateLayers..");
 
     this.addToResultsTable = function(layer) {
 
-window.console.log("calling.. addToResultsTable..");
-let ttmp=drawing_point;
-let pttmp=pointDrawer;
 window.console.log("STATE >>>", ttmp);
-
         let $table = $("#metadata-viewer.insar tbody");
 
         let gid = layer.scec_properties.gid;
@@ -507,21 +502,22 @@ var generateTableRow = function(layer) {
             case this.searchType.location:
                 $all_search_controls.hide();
                 $("#cgm-insar-location").show();
-                drawPoint();
-                skipRectangle();
+                removeColorLegend();
+                skipDrawRectangle();
+                addDrawPoint();
                 break;
             case this.searchType.latlon:
                 $all_search_controls.hide();
                 $("#cgm-insar-latlon").show();
                 showColorLegend("insar_colorbar.png");
-                drawRectangle();
-                skipPoint();
+                addDrawRectangle();
+                skipDrawPoint();
                 break;
             default:
                 $all_search_controls.hide();
-   //             removeColorLegend();
-                skipPoint();
-                skipRectangle();
+                removeColorLegend();
+                skipDrawRectangle();
+                skipDrawPoint();
                 window.console.log("showSearch:skip to default mode..");
         }
     };
@@ -572,10 +568,11 @@ window.console.log("Hide model/product");
         this.search_result = new L.FeatureGroup();
         this.cgm_layers = new L.FeatureGroup();
 
-        skipRectangle();
+        skipDrawPoint();
+        skipDrawRectangle();
+        removeColorLegend();
 	remove_bounding_rectangle_layer();
 
-        skipPoint();
         this.replaceResultsTableBody([]);
 
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
@@ -593,9 +590,12 @@ window.console.log("insar calling -->> resetSearch..");
         this.search_result = new L.FeatureGroup();
 
         this.replaceResultsTableBody([]);
-        skipRectangle();
+
+        skipDrawPoint();
+        skipDrawRectangle();
+        removeColorLegend();
 	remove_bounding_rectangle_layer();
-        skipPoint();
+
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
         this.clearAllSelections();
     };
@@ -659,8 +659,10 @@ window.console.log("STASHING "+results.length+" layers from PHP calls");
                 $("#cgm-insar-firstLonTxt").val(ncriteria[1]);
                 $("#cgm-insar-secondLatTxt").val(ncriteria[2]);
                 $("#cgm-insar-secondLonTxt").val(ncriteria[3]);
-                skipRectangle();
-                setTimeout(drawRectangle, 3000); // restart drawing in 3 seconds
+
+                skipDrawRectangle();
+                setTimeout(addDrawRectangle(), 3000); // restart drawing in 3 seconds
+
             } else if (type == this.searchType.location) {
                 let bounds = L.latLngBounds(markerLocations);
                 viewermap.flyToBounds(bounds, {maxZoom: 10 });

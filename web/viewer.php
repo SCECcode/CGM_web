@@ -146,7 +146,7 @@ $cgm_insar = new CGM_INSAR();
 <!-- GNSS select -->
     <div class="row control-container mt-1" id="cgm-controls-container" style="display:;">
             <div class="col-4 input-group filters mb-3">
-                <select id="cgm-search-type" class="custom-select">
+                <select id="cgm-gnss-search-type" class="custom-select">
                     <option value="">Search the GNSS ...</option>
                     <option value="stationname">Station Name</option>
                     <option value="latlon">Latitude &amp; Longitude Box</option>

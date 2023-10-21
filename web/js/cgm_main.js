@@ -52,14 +52,14 @@ $(document).ready(function () {
     });
 
 
-    $("#cgm-search-type").on('change', function () {
+    $("#cgm-gnss-search-type").on('change', function () {
         let type=$(this).val();
 window.console.log("main(gnss) changing search type.."+type);
         CGM_GNSS.freshSearch();
         CGM_GNSS.showSearch(type);
     });
 
-    $('.cgm-search-item').on('focus', function () {
+    $('.cgm-gnss-search-item').on('focus', function () {
       $(this).on('blur mouseout', function () {
           $(this).off('mouseout');
           $(this).off('blur');
