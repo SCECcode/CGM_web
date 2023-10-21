@@ -144,7 +144,7 @@ $cgm_insar = new CGM_INSAR();
     </div>
 
 <!-- GNSS select -->
-    <div class="row control-container mt-1" id="cgm-controls-container" style="display:;">
+    <div class="row control-container mt-1" id="cgm-gnss-controls-container" style="display:;">
             <div class="col-4 input-group filters mb-3">
                 <select id="cgm-gnss-search-type" class="custom-select">
                     <option value="">Search the GNSS ...</option>
@@ -153,25 +153,25 @@ $cgm_insar = new CGM_INSAR();
                     <option value="vectorslider">Vector</option>
                 </select>
                 <div class="input-group-append">
-                    <button id="refresh-all-button" onclick="CGM_GNSS.reset();" class="btn btn-dark pl-4 pr-4"
+                    <button id="refresh-gnss-all-button" onclick="CGM_GNSS.reset();" class="btn btn-dark pl-4 pr-4"
                             type="button">Reset</button>
                 </div>
             </div>
             <div class="col-8">
                 <ul>
-                    <li id='cgm-station-name' class='navigationLi ' style="display:none">
+                    <li id='cgm-gnss-station-name' class='navigationLi ' style="display:none">
                         <div class='menu row justify-content-center'>
                             <div class="col-12">
                                 <div class="d-flex">
                                     <input placeholder="Enter Station Name" type="text"
-                                            class="cgm-search-item form-control"
+                                            class="cgm-gnss-search-item form-control"
                                             style=""/>
                                 </div>
                             </div>
                         </div>
                     </li>
-                    <li id='cgm-latlon' class='navigationLi ' style="display:none">
-                        <div id='cgm-latlonMenu' class='menu'>
+                    <li id='cgm-gnss-latlon' class='navigationLi ' style="display:none">
+                        <div id='cgm-gnss-latlonMenu' class='menu'>
                             <div class="row">
                                 <div class="col-4">
                                     <p>Draw a rectangle on the map or enter latitudes and longitudes</p>
@@ -183,32 +183,32 @@ $cgm_insar = new CGM_INSAR();
                                                 id="cgm-firstLatTxt"
                                                 title="first lat"
                                                 onfocus="this.value=''"
-                                                class="cgm-search-item form-control">
+                                                class="cgm-gnss-search-item form-control">
                                         <input type="text" 
                                                 placeholder='Longitude' 
                                                 id="cgm-firstLonTxt" 
                                                 title="first lon"
                                                 onfocus="this.value=''" 
-                                                class="cgm-search-item form-control">
+                                                class="cgm-gnss-search-item form-control">
                                         <input type="text"
                                                 id="cgm-secondLatTxt"
                                                 title="second lat"
                                                 placeholder='2nd Latitude'
                                                 onfocus="this.value=''"
-                                                class="cgm-search-item form-control">
+                                                class="cgm-gnss-search-item form-control">
                                         <input type="text"
                                                 id="cgm-secondLonTxt"
                                                 title="second lon"
                                                 placeholder='2nd Longitude'
                                                 onfocus="this.value=''"
-                                                class="cgm-search-item form-control">
+                                                class="cgm-gnss-search-item form-control">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </li>
-                    <li id='cgm-vector-slider' class='navigationLi' style="display:none">
-                        <div id='cgm-vector-sliderMenu' class='menu'>
+                    <li id='cgm-gnss-vector-slider' class='navigationLi' style="display:none">
+                        <div id='cgm-gnss-vector-sliderMenu' class='menu'>
                             <div class="row">
                                 <div class="col-4">
                                     <p>Select a vector range on the slider or enter the two boundaries</p>
@@ -219,7 +219,7 @@ $cgm_insar = new CGM_INSAR();
                                               id="cgm-minVectorSliderTxt"
                                               title="min vector slider"
                                               onfocus="this.value=''"
-                                              class="cgm-search-item form-control">
+                                              class="cgm-gnss-search-item form-control">
                                        <div class="col-5">
                                          <div id="slider-vector-range" style="border:2px solid black"></div>
 		           <div id="min-vector-slider-handle" class="ui-slider-handle"></div>
@@ -229,7 +229,7 @@ $cgm_insar = new CGM_INSAR();
                                               id="cgm-maxVectorSliderTxt"
                                               title="max vector slider"
                                               onfocus="this.value=''"
-                                              class="cgm-search-item form-control">
+                                              class="cgm-gnss-search-item form-control">
                                   </div>
                                 </div>
                             </div>
