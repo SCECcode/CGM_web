@@ -517,6 +517,7 @@ var generateTableRow = function(layer) {
                 removeColorLegend();
                 skipDrawRectangle();
                 skipDrawPoint();
+	        remove_bounding_rectangle_layer();
                 window.console.log("showSearch:skip to default mode..");
         }
     };
@@ -567,11 +568,6 @@ window.console.log("Hide model/product");
         viewermap.removeLayer(this.search_result);
         this.search_result = new L.FeatureGroup();
         this.cgm_layers = new L.FeatureGroup();
-
-        skipDrawPoint();
-        skipDrawRectangle();
-        removeColorLegend();
-	remove_bounding_rectangle_layer();
 
         this.replaceResultsTableBody([]);
 

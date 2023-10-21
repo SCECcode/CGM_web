@@ -1,9 +1,9 @@
 /* required styles */
-.refresh-gnss-all-button:hover {
-    color: #990000;
+#refresh-gnss-all-button:hover {
+   background-color: #990000;
 }
-.refresh-insar-all-button:hover {
-    color: #990000;
+#refresh-insar-all-button:hover {
+   background-color: #990000;
 }
 
 .navigation {

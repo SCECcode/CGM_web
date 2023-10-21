@@ -22,6 +22,7 @@ var CGM = new function () {
     this.resetCGM = function() {
       // if insar, just click to gnss
       if(activeProduct == Products.INSAR) {
+	CGM_INSAR.reset();
         $("#data-product-select").val('gnss');
         $("#data-product-select").click();
         } else { // if gnss, call gnss.reset
