@@ -946,7 +946,7 @@ window.console.log("changeResultsTableBody..");
         $("#downloadInSARBtn").css('display','');
 
         $("div.mapData div.map-container").css('padding-left','30px');
-        $("#CGM_plot").css('height','500px');
+        $("#CGM_plot").css('height','600px');
         viewermap.invalidateSize();
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
         $download_queue_table.floatThead('destroy');

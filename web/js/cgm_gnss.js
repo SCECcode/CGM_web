@@ -1153,7 +1153,7 @@ window.console.log("setupInterface: retrieved stations "+sz);
 //$("div.mapData div.map-container").removeClass("col-7 pr-0 pl-2").addClass("col-12").css('padding-left','30px');
 
             $("div.mapData div.map-container").css('padding-left','30px');
-            $("#CGM_plot").css('height','500px');
+            $("#CGM_plot").css('height','600px');
             viewermap.invalidateSize();
             viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
             $download_queue_table.floatThead('destroy');

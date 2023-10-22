@@ -412,7 +412,7 @@ $cgm_insar = new CGM_INSAR();
             <div class="row" >
 
                 <div class="col" id='CGM_plot'
-                        style="position:relative;border:solid 1px #ced4da; height:500px;">
+                        style="position:relative;border:solid 1px #ced4da; height:600px;">
                     <div  id='wait-spinner' style="z-index:9999;">
                         <div class="d-flex justify-content-center" >
                           <div class="spinner-border text-light" role="status">
