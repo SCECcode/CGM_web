@@ -349,7 +349,7 @@ $cgm_insar = new CGM_INSAR();
                                  <option value="insar">InSAR</option>
                          </select>
                 </div>
-                <div id='model-options' class="form-check-inline mr-0">
+                <div id='model-options' class="col-7 justify-content-end  form-check-inline mr-0" >
                     <div class="form-check form-check-inline">
                          <label class='form-check-label'
                                  for="cgm-model-gnss">
