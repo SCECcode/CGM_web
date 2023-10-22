@@ -111,7 +111,7 @@ function setup_viewer()
   currentLayer = esri_topographic;
 
 // ==> mymap <==
-  mymap = L.map('CGM_plot', { zoomSnap: 0.25, drawControl:false, zoomControl:true} );
+  mymap = L.map('CGM_plot', { zoomSnap: 0.25, drawControl:false, zoomControl:true, maxZoom:16} );
   mymap.setView(init_map_coordinates,init_map_zoom_level);
   mymap.attributionControl.addAttribution(scecAttribution);
 
@@ -358,6 +358,103 @@ function containsLayer(layergroup,layer) {
       }
     }
     return 0;
+}
+
+/***************** marker cluster ************************/
+var use_markerCluster = 0;
+var force_no_markerCluster=false;
+var marker_cluster_uid=0;
+
+function refresh_markerGroup(markers) {
+   if(use_markerCluster) {
+     markers.refreshClusters();
+   }
+}
+
+function refresh_markerGroupCluster(myMarkerGroup, myMarker) {
+  if(use_markerCluster) {
+    let cluster = myMarkerGroup.getVisibleParent(myMarker);
+    if(cluster != null) {
+      myMarkerGroup.refreshClusters(cluster);
+    }
+  }
+}
+
+function _unbindClusterTooltip(ev) {
+  ev.propagatedFrom.unbindTooltip();
+}
+
+function make_markerGroup(enableCluster=true) {
+
+  window.console.log(" ===> a new markerGroup =====");
+  if(enableCluster && !force_no_markerCluster) {
+    use_markerCluster=true;
+    } else {
+      use_markerCluster=false;
+      window.console.log(" ==== creating a marker feature group ===");
+      var group=new L.FeatureGroup();
+      group.cgm_cluster_cnt=0;
+      return group;
+  }
+
+  window.console.log(" ==== creating a marker cluster group ===");
+  let iconsize=7;
+  var group=new L.markerClusterGroup(
+        {
+         maxClusterRadius: 1,
+        /* default: marker-cluster-small, marker-cluster  */
+         iconCreateFunction: function(cluster) {
+
+           let zoom=mymap.getZoom();
+           if(zoom < 5) {
+             iconsize=7;
+             } else {
+                if(zoom > 10) {
+                   iconsize=17;
+                   } else {
+                      let t=(0.2637 * zoom * zoom) - (1.978 * zoom) + 9.4032;
+                      iconsize= (Math.round( t * 100))/100+1;
+                }
+           }
+
+//window.console.log( "I am a cluster at >>"+marker_cluster_cnt++);
+           var classname="cgm-cluster cgm-cluster-"+marker_cluster_uid;
+           var clusterIcon=L.divIcon( { html: '',
+                                        className: classname,
+                                        iconSize: L.point(iconsize,iconsize) });
+           marker_cluster_uid++;
+           return clusterIcon;
+         },
+         showCoverageOnHover: false,
+        });
+
+        group.on('clustermouseover',
+                function(ev) {
+                    var myev=ev;
+                    let cluster=myev.layer;
+                    let desc = "contains "+cluster.getAllChildMarkers().length + " InSAR reference points,<br>click to expand";
+                    myev.propagatedFrom.bindTooltip(desc,{sticky:true}).openTooltip();
+                    setTimeout(function() {_unbindClusterTooltip(myev)},1000);
+                    });
+         group.on('clustermouseout',
+                 function(ev) {
+                    var myev=ev;
+                    let cluster=myev.layer;
+                    });
+
+   return group;
+}
+
+
+/***************** utlities ****************************/
+// let marker = L.circleMarker([latitude, longitude], site_marker_style.normal);
+function makeLeafletCircleMarker(latlng, opt, cname=undefined) {
+
+  if(cname != undefined) {
+    opt.className=cname;
+  }
+  let marker= L.circleMarker(latlng, opt);
+  return marker;
 }
 
 

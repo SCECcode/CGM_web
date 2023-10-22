@@ -1,4 +1,15 @@
 /* required styles */
+.cgm-cluster {
+    background-color: rgba(255,255,255,1);
+    border:solid 2px black;
+    border-radius: 30%;
+}
+.cgm-cluster-highlight {
+    background-color: rgba(255,255,255,1);
+    border:solid 1px grey;
+    border-radius: 30%;
+}
+
 #refresh-gnss-all-button:hover {
    background-color: #990000;
 }
