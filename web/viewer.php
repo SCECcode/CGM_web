@@ -374,14 +374,15 @@ $cgm_insar = new CGM_INSAR();
                                  id="cgm-model-insar" value="1" />InSAR
                          </label>
                     </div>
-                    <div class="form-check form-check-inline">
+                    <div class="form-check form-check-inline mr-5">
                          <label class='form-check-label ml-1 mini-option'
                                  for="cgm-model-cfm">
                          <input class='form-check-inline mr-1'
                                  type="checkbox"
-                                 id="cgm-model-cfm" value="1" />CFM faults
+                                 id="cgm-model-cfm" value="1" />CFM6.0
                          </label>
                     </div>
+
                     <div class="input-group input-group-sm custom-control-inline mr-0" id="map-controls">
                         <div class="input-group-prepend">
                             <label style='border-bottom:1;' class="input-group-text" for="mapLayer">Select Map Type</label>
@@ -539,7 +540,7 @@ $cgm_insar = new CGM_INSAR();
   </div>
 </div> <!--Modal: Name-->
 
-<!--Modal: Model(modalinotify) -->
+<!--Modal: Model(modalnotify) -->
 <div class="modal" id="modalnotify" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-small" id="modalnotifyDialog" role="document">
     <!--Content-->
