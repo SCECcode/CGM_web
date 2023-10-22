@@ -215,6 +215,12 @@ window.console.log(">>> generateLayers..");
               
                 let track = new L.FeatureGroup();
 
+                let ref;
+                if(track_name[0]=="D") {
+                  ref="Descending";
+                  } else { ref="Ascending";
+                }
+
 // polygon
                 let latlngs = [[lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4]];
                 let mypoly=polygon_options;
@@ -224,19 +230,13 @@ window.console.log(">>> generateLayers..");
                 track_polygon.bindPopup(popup);
 // line-border
                 let latlngs2 = [[lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4],[lat1,lon1]];
-                let track_lines=L.polyline(latlngs2,{color:track_color,weight:2,riseOnHover:true});
-                let poptip="<strong>InSAR</strong><br>Track name:"+track_name+"<br>Info:track info<br>";
+                let track_lines=L.polyline(latlngs2,{color:track_color,weight:1.5,riseOnHover:true});
+                let poptip="<strong>InSAR</strong><br>Track name: "+track_name+"<br>Info: "+ref+"<br>";
                 track_lines.bindTooltip(poptip).openTooltip();
 
 // ref points
 		var icon=L.divIcon( { background: 'red', iconSize: L.point(10,10) });
                 let track_ref=L.marker([latr,lonr], { type:"ref", icon:icon });
-                let ref;
-                if(track_name[0]=="D") {
-                  ref="Descending";
-                  } else { ref="Ascending";
-                }
-
 		let popref="<strong>Track name: </strong>"+track_name+"<br><strong>Reference: </strong>"+ref+"<br><strong>Lat: </strong>"+latr+"<br><strong>Lon: </strong>"+lonr+"<br>";
                 track_ref.bindPopup(popref, {maxWidth: 500});
 

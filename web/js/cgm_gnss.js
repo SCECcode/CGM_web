@@ -259,7 +259,7 @@ var CGM_GNSS = new function () {
                 // save the dist into cgm_gnss_station_data
                 cgm_gnss_station_data[index].vector_dist=dist;
 
-                let station_info = `station id: ${station_id}, vel: ${horizontalVelocity} mm/yr`;
+                let station_info = `<strong>GNSS</strong><br>station id: ${station_id}<br>vel: ${horizontalVelocity} mm/yr`;
                 marker.bindTooltip(station_info).openTooltip();
 
                 let line_latlons = [
