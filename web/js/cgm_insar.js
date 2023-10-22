@@ -226,8 +226,6 @@ window.console.log(">>> generateLayers..");
                 let track_polygon=L.polygon(latlngs,mypoly);
 
                 let latlngs2 = [[lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4],[lat1,lon1]];
-//                let poptrack="<strong>Track name: </strong>"+track_name+"<br><strong>Info: </strong>track info<br>";
-//		let track_lines=L.polyline(latlngs2,{color:track_color,weight:2,riseOnHover:true}).bindPopup(poptrack,{maxWidth: 500});
 		let track_lines=L.polyline(latlngs2,{color:track_color,weight:2,riseOnHover:true});
                 let poptip="<strong>InSAR</strong><br>Track name:"+track_name+"<br>Info:track info<br>";
                 track_lines.bindTooltip(poptip).openTooltip();
@@ -235,18 +233,12 @@ window.console.log(">>> generateLayers..");
                 track_lines.on('mouseover',function() { this.setStyle({weight:5}); });                    
                 track_lines.on('mouseout',function() { this.setStyle({weight:2}); });                    
 		    
-//                let track_ref=makeLeafletCircleMarker([latr,lonr], insar_ref_marker_style);
-//                let track_ref=makeLeafletCircleMarker([latr,lonr], insar_ref_marker_style);
 		var icon=L.divIcon( { background: 'red', iconSize: L.point(10,10) });
                 let track_ref=L.marker([latr,lonr], { type:"ref", icon:icon });
 
-//                let ref_info = "foo | oh";
-//                track_ref.bindTooltip(ref_info).openTooltip();
-		    
 		let popref="<strong>Track name: </strong>"+track_name+"<br><strong>References: </strong>abc<br><strong>Lat: </strong>"+latr+"<br><strong>Lon: </strong>"+lonr+"<br>";
 		track_ref.bindPopup(popref, {maxWidth: 500});
 
-                //track.addLayer(track_ref);
                 track.addLayer(track_lines);
                 track.addLayer(track_polygon);
                
@@ -570,7 +562,6 @@ var generateTableRow = function(layer) {
 
         let layer=this.cgm_track_layers.addTo(viewermap);
         layer.bringToBack();
-
         this.cgm_track_ref_layers.addTo(viewermap);
         
 
