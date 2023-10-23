@@ -321,27 +321,27 @@ $cgm_insar = new CGM_INSAR();
             </div>
          </div>
 
-<!-- search-option -->
-         <div id="cgm-search-options" class="col-12 mt-4" >
-            <ul id="option" class="navigation col-11" style="padding: 0 0 0 0;margin-bottom: 0">
-              <li id='cgm-station-name' class='navigationLi ' style="border:1px solid green;display:">
-                 <div id='cgm-station-nameMenu' class='menu'>
+<!-- GSNSS search-option -->
+         <div id="gnss-control-options" class="col-12 mt-4" >
+            <ul class="navigation col-11" style="padding: 0 0 0 0;margin-bottom: 0">
+              <li id='cgm-gnss-station-name' class='navigationLi ' style="border:1px solid green;display:">
+                 <div class='menu'>
                    <div class="row">
                       <div class="col-5">
                           <p>Select on the map<br>or enter the name</p>
                       </div>
 		      <div class="col-7">
-                        <input id="cgm-stationTxt" type="text"
+                        <input id="cgm-gnss-tationTxt" type="text"
                                placeholder="Station followed by Enter key"
-                               class="cgm-search-item form-control"
-                               onkeypress="javascript:if (event.key == 'Enter') $('.cgm-search-item').mouseout();"
+                               class="cgm-gnss-search-item form-control"
+                               onkeypress="javascript:if (event.key == 'Enter') $('.cgm-gnss-search-item').mouseout();"
                                style="width:200px;margin-left:5px;">
                       </div>
                    </div>
                  </div>
               </li>
-              <li id='cgm-vector-slider' class='navigationLi' style="border:1px solid blue;display:none">
-                 <div id='vector-sliderMenu' class='menu'>
+              <li id='cgm-gnss-vector-slider' class='navigationLi' style="border:1px solid blue;display:none">
+                 <div class='menu'>
                    <div class="row">
                       <div class="col-5">
                           <p>Select a vector range on the slider or enter the two boundaries</p>
@@ -349,13 +349,13 @@ $cgm_insar = new CGM_INSAR();
                       <div class="col-7">
                          <div class="form-inline vector-slider-input-boxes">
                              <input type="text"
-                                    id="cgm-minVectorSliderTxt"
+                                    id="cgm-gnss-minVectorSliderTxt"
                                     title="min vector slider"
-                                    class="cgm-search-item form-control">
+                                    class="cgm-gnss-search-item form-control">
                              <input type="text"
-                                     id="cgm-maxVectorSliderTxt"
+                                     id="cgm-gnss-maxVectorSliderTxt"
                                      title="max vector slider"
-                                     class="cgm-search-item form-control">
+                                     class="cgm-gnss-earch-item form-control">
                              <div class="col-12 mt-3 pr-0 pl-0" style="border:solid 1px green">
                                 <div id="slider-vector-range" style="border:2px solid black"></div>
 	                        <div id="min-vector-slider-handle" class="ui-slider-handle"></div>
@@ -366,31 +366,8 @@ $cgm_insar = new CGM_INSAR();
                    </div>
                  </div>
               </li>
-              <li id='cgm-location' class='navigationLi' style="border:1px solid orange;display:none">
-                <div id='cgm-locationMenu' class='menu'>
-                  <div class="row">
-                    <div class="col-5">
-                        <p>Select a location on the map or enter latitude and longitude</p>
-                    </div>
-                    <div class="col-7">
-                        <div class="form-inline latlon-input-boxes">
-                          <input type="text"
-                                 placeholder='Latitude'
-                                 id="cgm-LatTxt"
-                                 title="lat"
-                                 class="cgm-search-item form-control">
-                          <input type="text" 
-                                 placeholder='Longitude' 
-                                 id="cgm-LonTxt" 
-                                 title="lon"
-                                 class="cgm-search-item form-control">
-                        </div>
-                      </div>
-                   </div>
-                </div>
-              </li>
-              <li id='cgm-latlon' class='navigationLi' style="border:1px solid blue;display:none;">
-                <div id='cgm-latlonMenu' class='menu'>
+              <li id='cgm-gnss-latlon' class='navigationLi' style="border:1px solid blue;display:none;">
+                <div class='menu'>
                   <div class="row">
                     <div class="col-6">
 		      <p>Draw a rectangle on the map or enter latitudes and longitudes. Note: Use negative longitudes for California.
@@ -399,40 +376,110 @@ $cgm_insar = new CGM_INSAR();
                     <div class="col-3 pl-0 pr-2">
                       <input type="text"
                           placeholder="Min Latitude"
-                          id="cgm-firstLatTxt"
+                          id="cgm-gnss-firstLatTxt"
                           title="min latitude"
-                          class="cgm-search-item form-control">
+                          class="cgm-gnss-earch-item form-control">
                       <input type="text" 
-                          id="cgm-firstLonTxt" 
+                          id="cgm-gnss-firstLonTxt" 
                           placeholder='Min Longitude' 
                           title="min longitude"
-                          class="cgm-search-item form-control mt-1">
+                          class="cgm-gnss-search-item form-control mt-1">
 <!--
                       <div class="row pl-3 pr-2 mt-2">
-                         <button id="toResetRegion" type="button" class="btn btn-dark" style="width:110px" onclick="CGM.clearLatlon()">Reset Region</button>
+                         <button id="toResetGNSSRegion" type="button" class="btn btn-dark" style="width:110px" onclick="CGM.clearGNSSLatlon()">Reset Region</button>
                        </div>
 -->
                     </div>
                     <div class="col-3 pl-2 pr-0">
                       <input type="text" style="width:105px"
-                          id="cgm-secondLatTxt"
+                          id="cgm-gnss-secondLatTxt"
                           title="max latitude"
                           placeholder='Max Latitude'
-                          class="cgm-search-item form-control">
+                          class="cgm-gnss-search-item form-control">
                       <input type="text" style="width:105px"
-                          id="cgm-secondLonTxt"
+                          id="cgm-gnss-secondLonTxt"
                           title="max longitude"
                           placeholder='Max Longitude'
-                          class="cgm-search-item form-control mt-1">
+                          class="cgm-gnss-search-item form-control mt-1">
                       <div class="row pl-3 pr-0 mt-2">
-                          <button id="searchAgain" type="button" class="btn btn-dark" style="width:110px" onclick="CGM.searchLatlon(0,[])" >Get Data</button>
+                          <button id="searchGNSSAgain" type="button" class="btn btn-dark" style="width:110px" onclick="CGM.searchGNSSLatlon(0,[])" >Get Data</button>
                       </div>
                     </div>
                   </div>
                 </div>
               </li>
-            </ul> <!-- option -->
-         </div>
+	    </ul> 
+         </div> <!-- gnss-control-options -->
+
+         <div id="insar-search-options" class="col-12 mt-4" >
+            <ul class="navigation col-11" style="padding: 0 0 0 0;margin-bottom: 0">
+              <li id='cgm-insar-location' class='navigationLi' style="border:1px solid orange;display:none">
+                <div class='menu'>
+                  <div class="row">
+                    <div class="col-5">
+                        <p>Select a location on the map or enter latitude and longitude</p>
+                    </div>
+                    <div class="col-7">
+                        <div class="form-inline latlon-input-boxes">
+                          <input type="text"
+                                 placeholder='Latitude'
+                                 id="cgm-insar-LatTxt"
+                                 title="lat"
+                                 class="cgm-insar-search-item form-control">
+                          <input type="text" 
+                                 placeholder='Longitude' 
+                                 id="cgm-insar-LonTxt" 
+                                 title="lon"
+                                 class="cgm-insar-search-item form-control">
+                        </div>
+                      </div>
+                   </div>
+                </div>
+              </li>
+              <li id='cgm-insar-latlon' class='navigationLi' style="border:1px solid blue;display:none;">
+                <div class='menu'>
+                  <div class="row">
+                    <div class="col-6">
+		      <p>Draw a rectangle on the map or enter latitudes and longitudes. Note: Use negative longitudes for California.
+                      </p>
+                    </div>
+                    <div class="col-3 pl-0 pr-2">
+                      <input type="text"
+                          placeholder="Min Latitude"
+                          id="cgm-insar-firstLatTxt"
+                          title="min latitude"
+                          class="cgm-insar-search-item form-control">
+                      <input type="text" 
+                          id="cgm-insar-firstLonTxt" 
+                          placeholder='Min Longitude' 
+                          title="min longitude"
+                          class="cgm-insar-search-item form-control mt-1">
+<!--
+                      <div class="row pl-3 pr-2 mt-2">
+                         <button id="toResetINSARRegion" type="button" class="btn btn-dark" style="width:110px" onclick="CGM.clearINSARLatlon()">Reset Region</button>
+                       </div>
+-->
+                    </div>
+                    <div class="col-3 pl-2 pr-0">
+                      <input type="text" style="width:105px"
+                          id="cgm-insar-secondLatTxt"
+                          title="max latitude"
+                          placeholder='Max Latitude'
+                          class="cgm-insar-search-item form-control">
+                      <input type="text" style="width:105px"
+                          id="cgm-insar-secondLonTxt"
+                          title="max longitude"
+                          placeholder='Max Longitude'
+                          class="cgm-insar-search-item form-control mt-1">
+                      <div class="row pl-3 pr-0 mt-2">
+                          <button id="searchINSARAgain" type="button" class="btn btn-dark" style="width:110px" onclick="CGM.searchINSARLatlon(0,[])" >Get Data</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul> 
+         </div> <!-- insar-search-options -->
 
 <!-- description page -->
          <div id="cgm-description" class="col-12 pr-0" style="display:;font-size:14px; background-color:rgb(245,245,245); max-width:450px" >
