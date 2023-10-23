@@ -234,7 +234,7 @@ function _loadup_data(gid,url) {
       let token=ll.split(",");
       if(token.length != 7) {
          window.console.log("invalid data in this line "+i+" >>"+token.length);
-         
+         window.console.log(" bad line: >>"+ll+"<<");
          continue;
       }
       let lon=parseFloat(token[0].trim());

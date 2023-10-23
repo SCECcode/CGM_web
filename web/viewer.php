@@ -321,9 +321,19 @@ $cgm_insar = new CGM_INSAR();
     </div>
 <!-- -->
     <div class="row">
-        <div class="col-12 text-right pr-0">
-<!--- no need for this right now -->
-                <div id="insar-track-controls" class="input-group input-group-sm custom-control-inline ml-0" style="max-width:180px;display:none">
+        <div class="col-12 d-flex text-right pr-0">
+            <div class="col-5" style="padding:0">
+                <div class="input-group input-group-sm custom-control-inline pull-left" id="dataset-controls" style="max-width:170px">
+                         <div class="input-group-prepend">
+                                 <label style='border-bottom:1;' class="input-group-text" for="data-product-select">Select Dataset</label>
+                         </div>
+                         <select id='data-product-select' class="custom-select custom-select-sm">
+                                 <option selected value="gnss">GNSS</option>
+                                 <option value="insar">InSAR</option>
+                         </select>
+                </div>
+
+                <div id="insar-track-controls" class="input-group input-group-sm custom-control-inline pull-left mb-2" style="max-width:160px;display:none">
                          <div class="input-group-prepend">
                                  <label style='border-bottom:1;' class="input-group-text" for="insar-track-select">Select Track</label>
                          </div>
@@ -334,21 +344,15 @@ $cgm_insar = new CGM_INSAR();
                                  <option value="A166">A166</option>
                          </select>
                 </div>
-                <button id="downloadInSARBtn" class="btn" style="display:none"
+                <button id="downloadInSARBtn" class="btn pull-left" style="display:none"
                         onClick="downloadHDF5InSAR()">
                         <span class="glyphicon glyphicon-download"
                         title="download complete HDF5 data file for selected Track"
 			style="font-size:14px;"></span>
                 </button>
-                <div class="input-group input-group-sm custom-control-inline ml-0" id="dataset-controls" style="max-width:180px">
-                         <div class="input-group-prepend">
-                                 <label style='border-bottom:1;' class="input-group-text" for="data-product-select">Select Dataset</label>
-                         </div>
-                         <select id='data-product-select' class="custom-select custom-select-sm">
-                                 <option selected value="gnss">GNSS</option>
-                                 <option value="insar">InSAR</option>
-                         </select>
-                </div>
+
+            </div>
+
                 <div id='model-options' class="col-7 justify-content-end  form-check-inline mr-0" >
                     <div class="form-check form-check-inline">
                          <label class='form-check-label'
@@ -383,7 +387,7 @@ $cgm_insar = new CGM_INSAR();
                          </label>
                     </div>
 
-                    <div class="input-group input-group-sm custom-control-inline mr-0" id="map-controls">
+                    <div class="input-group input-group-sm custom-control-inline mr-0 mb-1" id="map-controls">
                         <div class="input-group-prepend">
                             <label style='border-bottom:1;' class="input-group-text" for="mapLayer">Select Map Type</label>
                         </div>
