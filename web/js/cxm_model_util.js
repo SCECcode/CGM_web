@@ -201,6 +201,7 @@ function _readLocalAndProcessActiveCFMGeo() {
   let url=CFM_URL;
   var blob=ckExist(url);
   var jblob=JSON.parse(blob);
+window.console.log("loading "+CFM_URL);
 
   var trace_list= jblob["trace_list"];
   var cnt=trace_list.length;
@@ -279,6 +280,7 @@ function _readLocalAndProcessActiveCRMGeo() {
   let url=CRM_URL;
   var blob=ckExist(url);
   var jblob=JSON.parse(blob);
+window.console.log("loading "+CRM_URL);
 
   var trace_list= jblob["trace_list"];
   var cnt=trace_list.length;

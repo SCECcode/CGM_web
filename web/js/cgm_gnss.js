@@ -661,24 +661,24 @@ window.console.log("HERE.. selectStationByLayer..");
     };
 
     this.showSearch = function (type) {
-        const $all_search_controls = $("#cgm-search-options ul li");
+        const $all_search_controls = $("#gnss-control-options ul li");
         switch (type) {
             case this.searchType.vectorSlider:
                 $all_search_controls.hide();
 		if(! $("#cgm-model-gnss-vectors").prop('checked')) {
                   $("#cgm-model-gnss-vectors").click();
                 }
-                $("#cgm-vector-slider").show();
+                $("#cgm-gnss-vector-slider").show();
                 skipDrawRectangle();
                 break;
             case this.searchType.stationName:
                 $all_search_controls.hide();
-                $("#cgm-station-name").show();
+                $("#cgm-gnss-station-name").show();
                 skipDrawRectangle();
                 break;
             case this.searchType.latlon:
                 $all_search_controls.hide();
-                $("#cgm-latlon").show();
+                $("#cgm-gnss-latlon").show();
                 addDrawRectangle();
                 break;
             default:
@@ -922,10 +922,10 @@ window.console.log("gnss --->> calling search.. <<----");
                     break;
 
                 case CGM_GNSS.searchType.latlon:
-                    $("#cgm-firstLatTxt").val(criteria[0]);
-                    $("#cgm-firstLonTxt").val(criteria[1]);
-                    $("#cgm-secondLatTxt").val(criteria[2]);
-                    $("#cgm-secondLonTxt").val(criteria[3]);
+                    $("#cgm-gnss-firstLatTxt").val(criteria[0]);
+                    $("#cgm-gnsss-firstLonTxt").val(criteria[1]);
+                    $("#cgm-gnss-secondLatTxt").val(criteria[2]);
+                    $("#cgm-gnss-secondLonTxt").val(criteria[3]);
                     remove_bounding_rectangle_layer();
                     add_bounding_rectangle(criteria[0],criteria[1],criteria[2],criteria[3]);
                     this.cgm_layers.eachLayer(function(layer){
@@ -1164,11 +1164,10 @@ window.console.log("setupInterface: retrieved stations "+sz);
 
             this.activateData();
 
-            $("#cgm-controlers-container").css('display','');
+            $("#cgm-gnss-controlers-container").css('display','');
             $("#cgm-insar-controlers-container").css('display','none');
             $("#insar-track-controls").css('display','none');
-
-//$("div.mapData div.map-container").removeClass("col-7 pr-0 pl-2").addClass("col-12").css('padding-left','30px');
+            this.showSearch("stationname");
 
             $("div.mapData div.map-container").css('padding-left','30px');
             viewermap.invalidateSize();

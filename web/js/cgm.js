@@ -19,6 +19,30 @@ var CGM = new function () {
       $("#cgm-model-insar").click();
     };
 
+    this.searchLatlonAgain = function() {
+      if(_visibleGNSS()) {
+        CGM_GNSS.searchLatlon(0,[]); 
+      }
+      if(_visibleINSAR()) {
+        CGM_INSAR.searchLatlon(0,[]); 
+      }
+    };
+
+    this.switchDataset = function(val) {
+
+       if(activeProduct == Products.GNSS) {
+window.console.log("==> reset what was there/GNSS");
+          CGM_GNSS.reset();
+       } else {
+window.console.log("==> reset what was there/INSAR");
+          CGM_INSAR.reset();
+       }
+// set to new interface
+       if (val == 'gnss') { CGM_GNSS.setupInterface(); }
+       if (val == 'insar') { CGM_INSAR.setupInterface(); }
+    };
+
+
     this.gotZoomed = function(zoom) {
       if(_visibleGNSS()) {
         CGM_GNSS.gotZoomed(zoom); 

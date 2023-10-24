@@ -259,8 +259,8 @@ $cgm_insar = new CGM_INSAR();
          <div class="row">
              <div class="col-9">
                <form id="cgm-data-product">
-                 <label><input type="radio" id="productTypeGNSS" name="producttype" checked="checked"><span>GNSS</span></label>
-                 <label><input type="radio" id="productTypeINSAR" name="producttype"><span>InSAR</span></label>
+                 <label><input type="radio" id="productTypeGNSS" name="producttype" onclick="CGM.switchDataset('gnss')" checked="checked"><span>GNSS</span></label>
+                 <label><input type="radio" id="productTypeINSAR" name="producttype" onclick="CGM.switchDataset('insar')"><span>InSAR</span></label>
                </form>
              </div>
 
@@ -273,9 +273,9 @@ $cgm_insar = new CGM_INSAR();
       
 
 <!-- GNSS control -->
-         <div class="gnss-select-group input-group input-group-sm custom-control-inline mt-2" style="max-width:450px">
+         <div id="cgm-gnss-controlers-container" class="gnss-select-group input-group input-group-sm custom-control-inline mt-2" style="max-width:450px">
             <div class="input-group-prepend">
-                  <label class="input-group-text" for="insar-track-select">Search GNSS by</label>
+                  <label class="input-group-text" for="gnss-search-select">Search GNSS by</label>
             </div>
 	    <select id="gnss-search-select" class="custom-select custom-select-sm">
                    <option selected value="stationname">Station Name</option>
@@ -285,7 +285,7 @@ $cgm_insar = new CGM_INSAR();
          </div> <!-- gnss search select -->
 
 <!-- INSAR control -->
-         <div class="insar-select-group input-group input-group-sm custom-control-inline mt-2" style="max-width:450px;display:none" >
+         <div id="insar-track-controls" class="insar-select-group input-group input-group-sm custom-control-inline mt-2" style="max-width:450px;display:none" >
             <div class="input-group-prepend">
                   <label class="input-group-text" for="insar-track-select">Select INSAR Track</label>
             </div>
@@ -297,9 +297,9 @@ $cgm_insar = new CGM_INSAR();
             </select>
          </div> <!-- insar track select -->
 
-         <div class="insar-select-group input-group input-group-sm custom-control-inline mt-2" style="max-width:450px;display:none">
+         <div id="cgm-insar-controlers-container" class="insar-select-group input-group input-group-sm custom-control-inline mt-2" style="max-width:450px;display:none">
             <div class="input-group-prepend">
-                  <label class="input-group-text" for="insar-track-select">Search INSAR by</label>
+                  <label class="input-group-text" for="insar-search-select">Search INSAR by</label>
             </div>
             <select id="insar-search-select" class="custom-select custom-select-sm">
                    <option selected value="location">Point Location</option>
@@ -331,10 +331,10 @@ $cgm_insar = new CGM_INSAR();
                           <p>Select on the map<br>or enter the name</p>
                       </div>
 		      <div class="col-7">
-                        <input id="cgm-gnss-tationTxt" type="text"
+                        <input id="cgm-gnss-stationTxt" type="text"
                                placeholder="Station followed by Enter key"
-                               class="cgm-gnss-search-item form-control"
-                               onkeypress="javascript:if (event.key == 'Enter') $('.cgm-gnss-search-item').mouseout();"
+                               class="cgm-search-item form-control"
+                               onkeypress="javascript:if (event.key == 'Enter') $('.cgm-search-item').mouseout();"
                                style="width:200px;margin-left:5px;">
                       </div>
                    </div>
@@ -349,13 +349,13 @@ $cgm_insar = new CGM_INSAR();
                       <div class="col-7">
                          <div class="form-inline vector-slider-input-boxes">
                              <input type="text"
-                                    id="cgm-gnss-minVectorSliderTxt"
+                                    id="cgm-minVectorSliderTxt"
                                     title="min vector slider"
-                                    class="cgm-gnss-search-item form-control">
+                                    class="cgm-search-item form-control">
                              <input type="text"
-                                     id="cgm-gnss-maxVectorSliderTxt"
+                                     id="cgm-maxVectorSliderTxt"
                                      title="max vector slider"
-                                     class="cgm-gnss-earch-item form-control">
+                                     class="cgm-search-item form-control">
                              <div class="col-12 mt-3 pr-0 pl-0" style="border:solid 1px green">
                                 <div id="slider-vector-range" style="border:2px solid black"></div>
 	                        <div id="min-vector-slider-handle" class="ui-slider-handle"></div>
@@ -378,15 +378,15 @@ $cgm_insar = new CGM_INSAR();
                           placeholder="Min Latitude"
                           id="cgm-gnss-firstLatTxt"
                           title="min latitude"
-                          class="cgm-gnss-earch-item form-control">
+                          class="cgm-search-item form-control">
                       <input type="text" 
                           id="cgm-gnss-firstLonTxt" 
                           placeholder='Min Longitude' 
                           title="min longitude"
-                          class="cgm-gnss-search-item form-control mt-1">
+                          class="cgm-search-item form-control mt-1">
 <!--
                       <div class="row pl-3 pr-2 mt-2">
-                         <button id="toResetGNSSRegion" type="button" class="btn btn-dark" style="width:110px" onclick="CGM.clearGNSSLatlon()">Reset Region</button>
+                         <button id="toResetGNSSRegion" type="button" class="btn btn-dark" style="width:110px" onclick="CGM.clearLatlon()">Reset Region</button>
                        </div>
 -->
                     </div>
@@ -395,14 +395,14 @@ $cgm_insar = new CGM_INSAR();
                           id="cgm-gnss-secondLatTxt"
                           title="max latitude"
                           placeholder='Max Latitude'
-                          class="cgm-gnss-search-item form-control">
+                          class="cgm-search-item form-control">
                       <input type="text" style="width:105px"
                           id="cgm-gnss-secondLonTxt"
                           title="max longitude"
                           placeholder='Max Longitude'
-                          class="cgm-gnss-search-item form-control mt-1">
+                          class="cgm-search-item form-control mt-1">
                       <div class="row pl-3 pr-0 mt-2">
-                          <button id="searchGNSSAgain" type="button" class="btn btn-dark" style="width:110px" onclick="CGM.searchGNSSLatlon(0,[])" >Get Data</button>
+                          <button type="button" class="btn btn-dark" style="width:110px" onclick="CGM.searchLatlonAgain()" >Get Data</button>
                       </div>
                     </div>
                   </div>
@@ -423,14 +423,14 @@ $cgm_insar = new CGM_INSAR();
                         <div class="form-inline latlon-input-boxes">
                           <input type="text"
                                  placeholder='Latitude'
-                                 id="cgm-insar-LatTxt"
+                                 id="cgm-LatTxt"
                                  title="lat"
-                                 class="cgm-insar-search-item form-control">
+                                 class="cgm-search-item form-control">
                           <input type="text" 
                                  placeholder='Longitude' 
-                                 id="cgm-insar-LonTxt" 
+                                 id="cgm-LonTxt" 
                                  title="lon"
-                                 class="cgm-insar-search-item form-control">
+                                 class="cgm-search-item form-control">
                         </div>
                       </div>
                    </div>
@@ -448,15 +448,15 @@ $cgm_insar = new CGM_INSAR();
                           placeholder="Min Latitude"
                           id="cgm-insar-firstLatTxt"
                           title="min latitude"
-                          class="cgm-insar-search-item form-control">
+                          class="cgm-search-item form-control">
                       <input type="text" 
                           id="cgm-insar-firstLonTxt" 
                           placeholder='Min Longitude' 
                           title="min longitude"
-                          class="cgm-insar-search-item form-control mt-1">
+                          class="cgm-search-item form-control mt-1">
 <!--
                       <div class="row pl-3 pr-2 mt-2">
-                         <button id="toResetINSARRegion" type="button" class="btn btn-dark" style="width:110px" onclick="CGM.clearINSARLatlon()">Reset Region</button>
+                         <button id="toResetINSARRegion" type="button" class="btn btn-dark" style="width:110px" onclick="CGM.clearLatlon()">Reset Region</button>
                        </div>
 -->
                     </div>
@@ -465,14 +465,14 @@ $cgm_insar = new CGM_INSAR();
                           id="cgm-insar-secondLatTxt"
                           title="max latitude"
                           placeholder='Max Latitude'
-                          class="cgm-insar-search-item form-control">
+                          class="cgm-search-item form-control">
                       <input type="text" style="width:105px"
                           id="cgm-insar-secondLonTxt"
                           title="max longitude"
                           placeholder='Max Longitude'
-                          class="cgm-insar-search-item form-control mt-1">
+                          class="cgm-search-item form-control mt-1">
                       <div class="row pl-3 pr-0 mt-2">
-                          <button id="searchINSARAgain" type="button" class="btn btn-dark" style="width:110px" onclick="CGM.searchINSARLatlon(0,[])" >Get Data</button>
+                          <button type="button" class="btn btn-dark" style="width:110px" onclick="CGM.searchLatlonAgain()" >Get Data</button>
                       </div>
                     </div>
                   </div>
@@ -503,7 +503,7 @@ $cgm_insar = new CGM_INSAR();
 
 <!-- spinner -->
              <div class="spinDialog" style="position:absolute;top:40%;left:50%; z-index:9999;">
-               <div id="cgm-wait-spin" align="center" style="display:none;"><i class="glyphicon glyphicon-cog fa-spin" style="color:red"></i></div>
+               <div id="wait-spinner" align="center" style="display:none;"><i class="glyphicon glyphicon-cog fa-spin" style="color:red"></i></div>
              </div>
 
 <!-- legend --> 

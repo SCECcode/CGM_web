@@ -146,7 +146,7 @@ window.console.log(">>>> causing a start of a  search..");
         CGM_INSAR.resetTrackView($(this).val());
     });
 
-    $("#insar-search-type").on('change', function () {
+    $("#insar-search-select").on('change', function () {
         CGM_INSAR.freshSearch();
         CGM_INSAR.showSearch($(this).val());
     });
@@ -193,27 +193,6 @@ window.console.log(">>>> causing a start of a  search..");
         }
 
     });
-
-    $("#cgm-data-product").on('change', function(){
-       if(activeProduct == Products.GNSS) {
-window.console.log("==> reset what was there/GNSS");
-          CGM_GNSS.reset();
-       } else {
-window.console.log("==> reset what was there/INSAR");
-          CGM_INSAR.reset();
-       }
-
-// set to new interface
-       if ($(this).val() == 'gnss') {
-           CGM_GNSS.setupInterface();
-       }
-       if ($(this).val() == 'insar') {
-           CGM_INSAR.setupInterface();
-// and also always go to the location search.. cgm-insar-search-type/"location"
-//           $("#cgm-insar-search-type").val('location').trigger('change');
-       }
-    });
-
 
 // MAIN SETUP
     setup_infoTSTable();

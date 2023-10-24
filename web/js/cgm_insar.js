@@ -220,23 +220,30 @@ window.console.log(">>> generateLayers..");
               
                 let track = new L.FeatureGroup();
 
+                let ref;
+                if(track_name[0]=="D") {
+                  ref="Descending";
+                  } else { 
+                    ref="Ascending";
+                }
+
+// polygon
                 let latlngs = [[lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4]];
                 let mypoly=polygon_options;
                 mypoly['color']=track_color;
                 let track_polygon=L.polygon(latlngs,mypoly);
-
+// line-border
                 let latlngs2 = [[lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4],[lat1,lon1]];
-		let track_lines=L.polyline(latlngs2,{color:track_color,weight:2,riseOnHover:true});
-                let poptip="<strong>InSAR</strong><br>Track name:"+track_name+"<br>Info:track info<br>";
+		let track_lines=L.polyline(latlngs2,{color:track_color,weight:1,riseOnHover:true});
+                let poptip="<strong>InSAR</strong><br>Track name:"+track_name+"<br>Info: "+ref+"<br>";
                 track_lines.bindTooltip(poptip).openTooltip();
-
-                track_lines.on('mouseover',function() { this.setStyle({weight:5}); });                    
-                track_lines.on('mouseout',function() { this.setStyle({weight:2}); });                    
-		    
+                track_lines.on('mouseover',function() { this.setStyle({weight:3}); });                    
+                track_lines.on('mouseout',function() { this.setStyle({weight:1}); });                    
+//ref points		    
 		var icon=L.divIcon( { background: 'red', iconSize: L.point(10,10) });
                 let track_ref=L.marker([latr,lonr], { type:"ref", icon:icon });
 
-		let popref="<strong>Track name: </strong>"+track_name+"<br><strong>References: </strong>abc<br><strong>Lat: </strong>"+latr+"<br><strong>Lon: </strong>"+lonr+"<br>";
+		let popref="<strong>Track name: </strong>"+track_name+"<br><strong>Reference: </strong>"+ref+"<br><strong>Lat: </strong>"+latr+"<br><strong>Lon: </strong>"+lonr+"<br>";
 		track_ref.bindPopup(popref, {maxWidth: 500});
 
                 track.addLayer(track_lines);
@@ -373,7 +380,6 @@ window.console.log(">>> generateLayers..");
         });
         $("#metadata-viewer.insar tr.row-selected button span.glyphicon.glyphicon-check").removeClass('glyphicon-check').addClass('glyphicon-unchecked');
         $("#metadata-viewer.insar tr.row-selected").removeClass('row-selected');
-        removeColorLegend();
     };
 
 
@@ -530,11 +536,11 @@ var generateTableRow = function(layer) {
     };
 
     this.showSearch = function (type) {
-        const $all_search_controls = $("#cgm-search-options ul li");
+        const $all_search_controls = $("#insar-search-options ul li");
         switch (type) {
             case this.searchType.location:
                 $all_search_controls.hide();
-                $("#cgm-location").show();
+                $("#cgm-insar-location").show();
                 addDrawPoint();
                 skipDrawRectangle();
                 break;
@@ -584,8 +590,7 @@ window.console.log("Hide model/product");
     };
 
     this.reset = function() {
-        window.console.log("insar calling -->>> reset");
-        $("#wait-spinner").hide();
+        window.console.log("insar calling -->>> reset"); $("#wait-spinner").hide();
 
         viewermap.removeLayer(this.search_result);
         this.searching = false;
@@ -593,17 +598,15 @@ window.console.log("Hide model/product");
 
         this.unhighlightTrack();
 
-        clearAllPixiOverlay();
+        pixiClearAllPixiOverlay();
         this.zeroSelectCount()
         this.showSearch('none');
         this.searching = false;
-        this.cgm_layers.remove();
-        this.search_result.remove();
-        this.search_result = new L.FeatureGroup();
+        viewermap.removeLayer(this.cgm_layers);
         this.cgm_layers = new L.FeatureGroup();
 
-        skipRectangle();
-        skipPoint();
+        skipDrawRectangle();
+        skipDrawPoint();
         this.replaceResultsTableBody([]);
 
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
@@ -620,8 +623,8 @@ window.console.log("insar calling -->> resetSearch..");
         this.search_result = new L.FeatureGroup();
 
         this.replaceResultsTableBody([]);
-        skipRectangle();
-        skipPoint();
+        skipDrawRectangle();
+        skipDrawPoint();
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
         this.clearAllSelections();
     };
@@ -631,7 +634,7 @@ window.console.log(">>> calling freshSearch..");
         $("#cgm-insar-controls-container input").val("");
         this.resetSearch();
 
-        if ($("#cgm-insar-model").prop('checked')) {
+        if ($("#cgm-model-insar").prop('checked')) {
           this.showProduct();
           } else {
           this.hideProduct();
@@ -691,8 +694,8 @@ window.console.log("STASHING "+results.length+" layers from PHP calls");
                 let bounds = L.latLngBounds(markerLocations);
                 viewermap.flyToBounds(bounds, {maxZoom: 10 });
 // make sure the search box is refilled with actual lat lon
-                $("#cgm-insar-LatTxt").val(ncriteria[0]);
-                $("#cgm-insar-LonTxt").val(ncriteria[1]);
+                $("#cgm-LatTxt").val(ncriteria[0]);
+                $("#cgm-LonTxt").val(ncriteria[1]);
             }
         }
 
@@ -864,7 +867,7 @@ window.console.log("nx is "+nx+" and ny "+ny);
     };
 
     var modelVisible = function (){
-        return $("#cgm-insar-model").prop('checked');
+        return $("#cgm-model-insar").prop('checked');
     };
 
         // private function
@@ -972,10 +975,10 @@ window.console.log("changeResultsTableBody..");
 
         this.activateData();
 
-        $("#cgm-controlers-container").css('display','none');
+        $("#cgm-gnss-controlers-container").css('display','none');
         $("#cgm-insar-controlers-container").css('display','');
         $("#insar-track-controls").css('display','');
-        $("#cgm-controlers-container").css('display','none');
+	this.showSearch("location");
 
         $("div.mapData div.map-container").css('padding-left','30px');
         viewermap.invalidateSize();
