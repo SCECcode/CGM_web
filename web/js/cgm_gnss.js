@@ -664,6 +664,7 @@ var generateTableRow = function(layer) {
                 break;
             default:
                 $all_search_controls.hide();
+                skipDrawRectangle();
         }
     };
 

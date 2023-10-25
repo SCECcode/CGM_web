@@ -569,6 +569,7 @@ window.console.log("Hide model/product");
 
         this.unhighlightTrack();
 
+	removeColorLegend();
         clearAllPixiOverlay();
         this.zeroSelectCount()
         this.showSearch('none');
@@ -583,7 +584,6 @@ window.console.log("Hide model/product");
 
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
         $("#cgm-insar-controls-container input, #cgm-insar-controls-container select").val("");
-
         this.clearAllSelections();
     };
 

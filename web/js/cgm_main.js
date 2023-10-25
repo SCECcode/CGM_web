@@ -55,7 +55,9 @@ $(document).ready(function () {
     $("#cgm-gnss-search-type").on('change', function () {
         let type=$(this).val();
 window.console.log("main(gnss) changing search type.."+type);
-        CGM_GNSS.freshSearch();
+        if(type != "") {
+          CGM_GNSS.freshSearch();
+        }
         CGM_GNSS.showSearch(type);
     });
 

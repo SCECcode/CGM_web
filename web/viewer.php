@@ -7,6 +7,7 @@ $header = getHeader("Viewer");
 $cgm_gnss = new CGM_GNSS();
 $cgm_insar = new CGM_INSAR();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -121,14 +122,10 @@ $cgm_insar = new CGM_INSAR();
 
 </head>
 <body>
-<br>
-<br>
-<br>
-<br>
 <?php echo $header; ?>
 
-
-<div class="container main">
+<div class="container">
+<div class="main" id="cgmMain">
     <div class="row">
         <div class="col-12">
             <p>The Community Geodetic Model (CGM) provides displacement time series and velocities of the Earth’s surface over southern California using data from Global Navigation Satellite Systems (GNSS), which includes the Global Positioning System (GPS), and interferometric synthetic aperture radar (InSAR), both space-based geodetic observation techniques.</p>
@@ -447,7 +444,7 @@ $cgm_insar = new CGM_INSAR();
                 </div>
         </div>
     </div>
-</div> <!-- container -->
+</div> <!-- main/cgmMain -->
 
 <!--Modal: (modalazimuth)  -->
 <div class="modal" id="modalazimuth" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -559,6 +556,7 @@ $cgm_insar = new CGM_INSAR();
   </div>
 </div> <!--Modal: modalnotify-->
 
+</div> <!-- container -->
 <!-- -->
     <script type="text/javascript">
             cgm_gnss_station_data = <?php print $cgm_gnss->getAllStationData()->outputJSON(); ?>;
