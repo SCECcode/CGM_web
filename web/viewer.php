@@ -1,5 +1,4 @@
 <?php
-
 require_once("php/navigation.php");
 require_once("php/CGM_GNSS.php");
 require_once("php/CGM_INSAR.php");
@@ -41,10 +40,6 @@ $cgm_insar = new CGM_INSAR();
     <script type='text/javascript' src='js/vendor/jquery.floatThead.min.js'></script>
     <script type='text/javascript' src='js/vendor/html2canvas.js'></script>
 
-    <!--
-    https://leaflet.github.io/Leaflet.draw/docs/Leaflet.draw-latest.html#l-draw
-    this is for including the Leaflet.draw plugin
-    -->
     <link rel="stylesheet" href="plugin/Leaflet.draw/leaflet.draw.css">
     <script type='text/javascript' src="plugin/Leaflet.draw/Leaflet.draw.js"></script>
     <script type='text/javascript' src="plugin/Leaflet.draw/Leaflet.Draw.Event.js"></script>
@@ -78,7 +73,6 @@ $cgm_insar = new CGM_INSAR();
     <script type='text/javascript' src="plugin/leaflet.polylineDecorator.js"></script>
 
     <!-- cgm js -->
-    <script type="text/javascript" src="js/debug.js?v=1"></script>
     <script type="text/javascript" src="js/cgm.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_main.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_gnss.js?v=1"></script>
@@ -127,6 +121,10 @@ $cgm_insar = new CGM_INSAR();
 
 </head>
 <body>
+<br>
+<br>
+<br>
+<br>
 <?php echo $header; ?>
 
 
@@ -148,7 +146,7 @@ $cgm_insar = new CGM_INSAR();
     <div class="row control-container mt-1" id="cgm-gnss-controls-container" style="display:;">
             <div class="col-4 input-group filters mb-3">
                 <select id="cgm-gnss-search-type" class="custom-select">
-                    <option value="">Search the GNSS ...</option>
+                    <option value="">Search GNSS by</option>
                     <option value="stationname">Station Name</option>
                     <option value="latlon">Latitude &amp; Longitude Box</option>
                     <option value="vectorslider">Vector</option>
@@ -243,7 +241,7 @@ $cgm_insar = new CGM_INSAR();
     <div class="row control-container mt-1" id="cgm-insar-controls-container" style="display:none;">
             <div class="col-4 input-group filters mb-3">
                 <select id="cgm-insar-search-type" class="custom-select">
-                    <option value="">Search the InSAR</option>
+                    <option value="">Search InSAR by</option>
                     <option value="location">Point Location</option>
                     <option value="latlon">Latitude &amp; Longitude Box</option>
                 </select>
@@ -449,9 +447,9 @@ $cgm_insar = new CGM_INSAR();
                 </div>
         </div>
     </div>
-</div>
+</div> <!-- container -->
 
-<!--Modal: Name Azimuth  -->
+<!--Modal: (modalazimuth)  -->
 <div class="modal" id="modalazimuth" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" id="modalazimuthDialog" role="document">
 
@@ -469,10 +467,10 @@ $cgm_insar = new CGM_INSAR();
 
     </div> <!--Content-->
   </div>
-</div> <!--Modal: Name-->
+</div> <!--Modal: modalazimuth -->
 
 
-<!--Modal: Name TS(time series)-->
+<!--Modal: (modalTS, time series)-->
 <div class="modal" id="modalTS" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="modalTS" aria-hidden="true">
   <div class="modal-dialog modal-full" id="modalTSDialog" role="document">
 
@@ -503,9 +501,9 @@ $cgm_insar = new CGM_INSAR();
 
     </div> <!--Content-->
   </div>
-</div> <!--Modal: Name-->
+</div> <!--Modal: modalTS -->
 
-<!--Modal: ModelType -->
+<!--Modal: (modalinfoTS) -->
 <div class="modal" id="modalinfoTS" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xlg" id="modalinfoTSDialog" role="document">
     <!--Content-->
@@ -522,9 +520,9 @@ $cgm_insar = new CGM_INSAR();
       </div>
     </div> <!--Content-->
   </div>
-</div> <!--Modal: Name-->
+</div> <!--Modal: modalinfoTS-->
 
-<!--Modal: ModelType -->
+<!--Modal: (modalwarnTS)  -->
 <div class="modal" id="modalwarnTS" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" id="modalwarnTSDialog" role="document">
 
@@ -542,9 +540,9 @@ $cgm_insar = new CGM_INSAR();
 
     </div> <!--Content-->
   </div>
-</div> <!--Modal: Name-->
+</div> <!--Modal: modalwarnTS -->
 
-<!--Modal: Model(modalnotify) -->
+<!--Modal: (modalnotify) -->
 <div class="modal" id="modalnotify" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-small" id="modalnotifyDialog" role="document">
     <!--Content-->
@@ -566,6 +564,7 @@ $cgm_insar = new CGM_INSAR();
             cgm_gnss_station_data = <?php print $cgm_gnss->getAllStationData()->outputJSON(); ?>;
             cgm_insar_track_data = <?php print $cgm_insar->getAllTrackData()->outputJSON(); ?>;
     </script>
+
 </body>
 </html>
 

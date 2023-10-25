@@ -59,6 +59,7 @@ function processCSV(data,gid,track) {
    let lon=0;
    let hgt=0;
    let title=0;
+   let annotation = "Reference annotation for the InSAR track";
    let xrange_start,xrange_end;
    let yrange_start,yrange_end;
    let Xtime=[];
@@ -118,6 +119,12 @@ function processCSV(data,gid,track) {
          //??? title=mission+"("+lon+","+lat+")";
          continue;
      }
+
+//# LLH Reference Coordinate: Lon: -116.571640; Lat: 35.320640; Hgt: [future]
+     if(terms[1]=="LLH" && terms[2]=="Reference" && terms[3]=="Coordinate") {
+         annotation = "LLH Reference: "+ pair[1]+":"+ pair[2]+":"+pair[3]+":"+pair[4];
+     }
+
    }
 
    if(track[0]=="D") {
@@ -125,7 +132,8 @@ function processCSV(data,gid,track) {
      } else {
        title="Ascending "+track+" ("+lon+","+lat+")";
    }
-   let annotation = "Reference annotation for the InSAR track";
+
+
    csv_plot_data.push({
             info: { cgm_title:title,
                     cgm_name: gid,

@@ -226,8 +226,8 @@ window.console.log(">>> generateLayers..");
                 let mypoly=polygon_options;
                 mypoly['color']=track_color;
                 let track_polygon=L.polygon(latlngs, mypoly);
-                var popup=L.popup().setContent("InSAR track name: "+track_name);
-                track_polygon.bindPopup(popup);
+//                var popup=L.popup().setContent("InSAR track name: "+track_name);
+//                track_polygon.bindPopup(popup);
 // line-border
                 let latlngs2 = [[lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4],[lat1,lon1]];
                 let track_lines=L.polyline(latlngs2,{color:track_color,weight:1,riseOnHover:true});
@@ -522,14 +522,10 @@ var generateTableRow = function(layer) {
                 addDrawRectangle();
                 skipDrawPoint();
                 break;
-            default:
+            default: // viewing mode
                 $all_search_controls.hide();
-		$("#insar-track-controls").css('display','none');
-		$("#downloadInSARBtn").css('display','none');
-                removeColorLegend();
                 skipDrawRectangle();
                 skipDrawPoint();
-	        remove_bounding_rectangle_layer();
                 window.console.log("showSearch:skip to default mode..");
         }
     };
@@ -717,12 +713,12 @@ window.console.log("calling search() with the string.."+JSON_criteria);
             let results=[];
             let ncriteria=[];
             if(cgm_insar_data === "[]" || cgm_insar_data === "[\"[]\"]") {
-window.console.log("Did not find any PHP result");
                notify("NO DATA..");
                if(type==CGM_INSAR.searchType.latlon) {
                    remove_bounding_rectangle_layer();
                }
             } else {
+//window.console.log(cgm_insar_data);
                  let tmp=JSON.parse(cgm_insar_data); 
                  let jblob=JSON.parse(tmp[0].replace(/'/g,'"'));
 /*****
@@ -828,6 +824,30 @@ window.console.log("nx is "+nx+" and ny "+ny);
             }
             CGM_INSAR.showPHP(type, results, ncriteria);
         });
+    };
+
+    this.makeBaseLayer = function (track_name,url) {
+        let rc = makeOnePixiLayer(ngid,url);
+        let pixilayer = rc["pixiLayer"];
+        let max_v = rc["max_v"];
+        let min_v = rc["min_v"];
+        let count_v = rc["count_v"];
+
+ //XXX not tracking it or else only 1 can be made and left on the map
+        let layer=addRectangleLayer(nlat1,nlon1,nlat2,nlon2);
+        layer.scec_properties = {
+            velocity_plot : pixilayer,
+            max_velocity: max_v,
+            min_velocity: min_v,
+            count_velocity: count_v,
+            track: track_name,
+            file: url,
+            gid: ngid,
+            selected: false,
+        };
+        let bb_info = `track:${track_name}`;
+        layer.bindTooltip(bb_info);
+        return layer;
     };
 
     this.searchBox = function (type, criteria) {
