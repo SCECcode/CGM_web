@@ -647,6 +647,25 @@ window.console.log(">>> calling freshSearch..");
         }
     };
 
+    this.getBaseURL = function (target) {
+       let mlist=CGM_tb['products'];
+       let sz=mlist.length;
+       for(let i=0; i<sz; i++) {
+         let term=mlist[i];
+         if(term['name'] == "INSAR") {
+           let tlist=term['tracks'];
+           let tsz=tlist.length;
+           for(let j=0; j<tsz; j++) {
+             let tterm=tlist[j];
+             if(tterm['name'] == target) {
+               let baseurl=tterm['baseline'];
+               return baseurl;
+             }
+           }
+         }
+       }
+    };
+
     this.refreshProductDescription = function (target){
 window.console.log("refresh.. description "+target);
        let mlist=CGM_tb['products'];
@@ -1028,6 +1047,43 @@ window.console.log("changeResultsTableBody..");
 
         $("#wait-spinner").hide();
     };
+
+    this.createBaseLayer = function (track_name) {
+        let ngid= getRnd();
+        let url = this.getBaseURL(track_name);
+        let rc = makeOnePixiLayer(ngid,url);
+
+        let pixilayer = rc["pixiLayer"];
+        let max_v = rc["max_v"];
+        let min_v = rc["min_v"];
+        let count_v = rc["count_v"];
+        let pixiuid= rc["pixiuid"];
+
+        let seginfo=pixiFindSegmentProperties(pixiuid);
+        setupPixiSegmentDebug(pixiuid,seginfo);
+        setupPixiLegend(pixiuid,{"title":"LOS Velocity<br>(mm/yr)"},seginfo);
+        let opacity=pixiGetPixiOverlayOpacity(pixiuid);
+
+ //XXX not tracking it or else only 1 can be made and left on the map
+        let layer=addRectangleLayer(nlat1,nlon1,nlat2,nlon2);
+
+window.console.log("nx is "+nx+" and ny "+ny);
+        layer.scec_properties = {
+                  velocity_plot : pixilayer, 
+                  max_velocity: max_v,
+                  min_velocity: min_v,
+                  count_velocity: count_v,
+                  track: track_name,
+                  file: file,
+                  type: type,
+                  gid: ngid,
+                  selected: false,
+        };
+        let bb_info = `track:${track_name}<br>sw:${nlat1},${nlon1}<br>ne:${nlat2},${nlon2}`;
+        layer.bindTooltip(bb_info);
+        return layer;
+    };
+
 
 /**  this is for segmentation/legend **/
 // a layer is always generated with the full set of legend bins

@@ -33,18 +33,22 @@ products: [
      tracks : [
         { name: 'D071',
           file: 'D071_COMB_CGM_InSAR_v0_0_1.hdf5',
+          baseline: 'insar_baseline_D071_velocity_list.csv',
           label: 'InSAR - D071 - label',
           description: '<b>D071</b> (Descending) ...'},
         { name: 'D073',
           file: 'D073_COMB_CGM_InSAR_v0_0_1.hdf5',
+          baseline: 'insar_baseline_D073_velocity_list.csv',
           label: 'InSAR - D073 - label',
           description: '<b>D073</b> (Descending) ...'},
         { name: 'A064',
           file: 'A064_COMB_CGM_InSAR_v0_0_1.hdf5',
+          baseline: 'insar_baseline_A064_velocity_list.csv',
           label: 'InSAR - A064 - label',
           description: '<b>A064</b> (Ascending) ...'},
         { name: 'A166',
           file: 'A166_COMB_CGM_InSAR_v0_0_1.hdf5',
+          baseline: 'insar_baseline_A166_velocity_list.csv',
           label: 'InSAR - A166 - label',
           description: '<b>A166</b> (Ascending)...'}
       ]

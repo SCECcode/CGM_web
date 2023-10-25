@@ -31,6 +31,10 @@ RUN python3 -m pip install h5py
 RUN cd /app/web/cgm_data && \
     mkdir -p insar && \
     cd insar && \
+    wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/cxm/models/cgm/insar/insar_baseline_A064_velocity_list.csv && \
+    wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/cxm/models/cgm/insar/insar_baseline_A166_velocity_list.csv && \
+    wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/cxm/models/cgm/insar/insar_baseline_D071_velocity_list.csv && \
+    wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/cxm/models/cgm/insar/insar_baseline_D173_velocity_list.csv && \
     wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/cxm/models/cgm/insar/D071_COMB_CGM_InSAR_v0_0_1.hdf5 && \
     wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/cxm/models/cgm/insar/A166_COMB_CGM_InSAR_v0_0_1.hdf5 && \
     wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/cxm/models/cgm/insar/A064_COMB_CGM_InSAR_v0_0_1.hdf5 && \
