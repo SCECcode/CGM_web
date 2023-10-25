@@ -47,6 +47,11 @@ function plotly_plot_insar_ts(cdata) {
   let plot=csv_data[0].plot;   
   let info=csv_data[0].info;
 
+  let anno = { text:info.cgm_annotation,
+                   font: { size:18},
+                   xref:"paper", yref:"paper", x:0.5, y:0.5,
+                   showarrow:false };
+
   let pUp=plot[0];   
 
   let scec_image=[{
@@ -80,49 +85,49 @@ function plotly_plot_insar_ts(cdata) {
   let data = [traceUp ];
 
   let layout = { 
-paper_bgcolor: '#f1fff1',
-plot_bgcolr: '#f1fff1',
-title: info.cgm_title,
-width: nw,
-height: nh,
-margin: { l:margin_left, t:margin_top, r:margin_right },
-colorway: [ '#1f77b4','#1f77b4','#1f77b4'],
-images: scec_image,
-yaxis: {
-    title: {text: 'LOS (mm)', font: { size:18,color:'#000000'}},
-    showgrid: true,
-    zeroline: true,
-    showline: true,
-    mirror: 'allticks',
-    tickes: 'inside',
-    nticks: 8,
-    gridcolor: '#f1f1f1',
-    gridwidth: 1,
-    zerolinecolor: '#969696',
-    zerolinewidth: 1,
-    linecolor: '#636363',
-    linewidth: 2 },
-xaxis: {
-    tickmode: "linear",
-    tick0: '2015-01-01',
-    dtick: 'M4', // number of months
-    tickformat:'%b %Y',
-    tickangle: 45,
-    matches: 'x',
-    showgrid: true,
-    zeroline: true,
-    showline: true,
-    mirror: 'allticks',
-    tickes: 'inside',
-    gridcolor: '#f1f1f1',
-    gridwidth: 1,
-    zerolinecolor: '#969696',
-    zerolinewidth: 2,
-    linecolor: '#636363',
-    linewidth: 2 },
-grid: { rows: 3, columns: 1, pattern: 'independent' },
-annotations: [ ]
-};
+    paper_bgcolor: '#f1fff1',
+    plot_bgcolr: '#f1fff1',
+    title: info.cgm_title,
+    width: nw,
+    height: nh,
+    margin: { l:margin_left, t:margin_top, r:margin_right },
+    colorway: [ '#1f77b4','#1f77b4','#1f77b4'],
+    images: scec_image,
+    yaxis: {
+        title: {text: 'LOS (mm)', font: { size:18,color:'#000000'}},
+        showgrid: true,
+        zeroline: true,
+        showline: true,
+        mirror: 'allticks',
+        tickes: 'inside',
+        nticks: 8,
+        gridcolor: '#f1f1f1',
+        gridwidth: 1,
+        zerolinecolor: '#969696',
+        zerolinewidth: 1,
+        linecolor: '#636363',
+        linewidth: 2 },
+    xaxis: {
+        tickmode: "linear",
+        tick0: '2015-01-01',
+        dtick: 'M4', // number of months
+        tickformat:'%b %Y',
+        tickangle: 45,
+        matches: 'x',
+        showgrid: true,
+        zeroline: true,
+        showline: true,
+        mirror: 'allticks',
+        tickes: 'inside',
+        gridcolor: '#f1f1f1',
+        gridwidth: 1,
+        zerolinecolor: '#969696',
+        zerolinewidth: 2,
+        linecolor: '#636363',
+        linewidth: 2 },
+    grid: { rows: 3, columns: 1, pattern: 'independent' },
+    annotations: [ anno ]
+    };
 
   let config = {displayModeBar:true, toImageButtonOptions: {filename:makeUname(info.cgm_name)}};
 

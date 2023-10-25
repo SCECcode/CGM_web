@@ -81,6 +81,7 @@ function setup_warnTSTable() {
 }
 
 function showPlotTSWarning() {
+window.console.log("calling showPlotTSWarning..");
   if(!skip_warning) {
     skip_warning=true;
     let elt=document.getElementById("viewTSWarnbtn");

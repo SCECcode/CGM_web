@@ -30,8 +30,8 @@ Datetime, LOS, Std Dev LOS
 2015-07-01T13:51:59Z, -3.069258, 0.000000
 *******************/
 // has 1 plot
-// {id:idx, track: [ { cgm_title:cgm_gid,
-//                     cgm_name:cgm_gid,
+// {id:idx, track: [ { cgm_title:ts_gid,
+//                     cgm_name:ts_gid,
 //                     cgm_track:'D071' }],
 //          plot:[{xlabel:'time',
 //                ylabel:'East(mm)',
@@ -53,12 +53,13 @@ function processCSV(data,gid,track) {
    var data_start=0;
    let dlines=data.split("\n");
    let sz=dlines.length;
-   let cgm_gid=gid;
-   let cgm_track=track;
-   let cgm_lat=0;
-   let cgm_lon=0;
-   let cgm_hgt=0;
-   let cgm_title=0;
+   let ts_gid=gid;
+   let ts_track=track;
+   let ts_lat=0;
+   let ts_lon=0;
+   let ts_hgt=0;
+   let ts_title=0;
+   let ts_annotation="Reference..";
    let xrange_start,xrange_end;
    let yrange_start,yrange_end;
    let Xtime=[];
@@ -98,11 +99,11 @@ function processCSV(data,gid,track) {
      }
 
      if(terms[1]=="SAR" && terms[2]=="mission") {
-         cgm_mission=pair[1].trim();
+         ts_mission=pair[1].trim();
          continue;
      }
      if(terms[1]=="SAR" && terms[2]=="track") {
-         cgm_track=pair[1].trim();
+         ts_track=pair[1].trim();
          continue;
      }
 
@@ -110,21 +111,28 @@ function processCSV(data,gid,track) {
      if(terms[1]=="LLH" && terms[2]=="Pixel") {
          terms=pair[2].split(";");
          let tmp=terms[0].trim();
-         cgm_lon=truncate(tmp,3);
+         ts_lon=truncate(tmp,3);
          terms=pair[3].split(";");
          tmp=terms[0].trim();
-         cgm_lat=truncate(tmp,3);
-         cgm_hgt=pair[4].trim();
-         //??? cgm_title=cgm_mission+"("+cgm_lon+","+cgm_lat+")";
+         ts_lat=truncate(tmp,3);
+         ts_hgt=pair[4].trim();
+         //??? ts_title=ts_mission+"("+ts_lon+","+ts_lat+")";
          continue;
      }
+
+//# LLH Reference Coordinate: Lon: -116.571640; Lat: 35.320640; Hgt: [future]
+     if(terms[1]=="LLH" && terms[2]=="Reference" && terms[3]=="Coordinate") {
+         ts_annotation = "LLH Reference: "+ pair[1]+":"+ pair[2]+":"+pair[3]+":"+pair[4];
+     }
+
    }
 
-   cgm_title=cgm_track+"("+cgm_lon+","+cgm_lat+")";
+   ts_title=ts_track+"("+ts_lon+","+ts_lat+")";
    csv_plot_data.push({
-            info: { cgm_title:cgm_title,
-                    cgm_name: cgm_gid,
-                    cgm_track:cgm_track },
+            info: { cgm_title:ts_title,
+                    cgm_name: ts_gid,
+                    cgm_track:ts_track,
+	            cgm_annotation:ts_annotation},
             plot:[
                   {xlabel:'time',
                    ylabel:'North(mm)',
