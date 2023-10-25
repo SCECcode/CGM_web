@@ -287,7 +287,7 @@ $cgm_insar = new CGM_INSAR();
 <!-- INSAR control -->
          <div id="insar-track-controls" class="insar-select-group input-group input-group-sm custom-control-inline mt-2" style="max-width:450px;display:none" >
             <div class="input-group-prepend">
-                  <label class="input-group-text" for="insar-track-select">Select INSAR Track</label>
+                  <label class="input-group-text" for="insar-track-select">Select InSAR Track</label>
             </div>
 	    <select id="insar-track-select" class="custom-select custom-select-sm">
                    <option selected value="D071">D071</option>
@@ -486,7 +486,8 @@ $cgm_insar = new CGM_INSAR();
            <br>
            <p><b>You Selected:</b></p>
            <p id="cgm-product-description"></p>
-           <p>For more product details , see  <a href="https://doi.org/10.5281/zenodo.foo">CGM archive</a></p>
+           <p id="cgm-product-download"></p>
+           <p>For more complete product details, see  <a href="https://doi.org/10.5281/zenodo.foo">CGM archive</a></p>
          </div>
 
 <!-- result parking location -->

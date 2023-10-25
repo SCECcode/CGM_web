@@ -86,6 +86,7 @@ var CGM_INSAR = new function () {
     this.setTrackName = function(name) {
         this.track_name=name;
         this.highlightTrack(name);
+	this.refreshProductDescription(name);
     };
 
     this.highlightTrack =function(name) {
@@ -186,7 +187,7 @@ var CGM_INSAR = new function () {
 
     // get make the track boundary layers
     this.generateLayers = function () {
-window.console.log(">>> generateLayers..");
+window.console.log(">>> generate insar layers ..");
         if(cgm_insar_track_data == null)
           return;
 
@@ -428,7 +429,7 @@ window.console.log("calling.. addToResultsTable..");
     this.executeShowVS = function(gid,downloadURL) {
       let op=pixiGetPixiOverlayOpacity(gid);
 window.console.log("found opacity ..", op);
-      if(op == 0) { pixiSetPixiOverlayOpacity(gid, 0.8); }
+      if(op == 0) { pixiSetPixiOverlayOpacity(gid, 0.9); }
       else { pixiSetPixiOverlayOpacity(gid, 0); }
       // XX -- might need to refocus because it seems to be off for a sec and need a refresh
     };
@@ -646,6 +647,34 @@ window.console.log(">>> calling freshSearch..");
         }
     };
 
+    this.refreshProductDescription = function (target){
+window.console.log("refresh.. description "+target);
+       let mlist=CGM_tb['products'];
+       let sz=mlist.length;
+       for(let i=0; i<sz; i++) {
+         let term=mlist[i];
+         if(term['name'] == "INSAR") {
+           let tlist=term['tracks'];
+           let tsz=tlist.length;
+           for(let j=0; j<tsz; j++) {
+             let tterm=tlist[j];
+             if(tterm['name'] == target) {
+               let descript=tterm['description'];
+               $("#cgm-product-description").html(descript);
+               let file=tterm['file'];
+               let dlink="Click to download complete HDF5 for the selected track <button id=\"downloadInSARBtn\" class=\"cxm-small-btn\" onClick=downloadHDF5InSAR('"+file+"')><span class=\"glyphicon glyphicon-download\" ></span><button>";
+window.console.log("HERE..");
+window.console.log(dlink);
+               $("#cgm-product-download").html(dlink);
+               return;
+             }
+           }
+           return;
+         }       
+       }             
+    };            
+ 
+
     this.resetTrackView = function (tracks){
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
     };
@@ -688,7 +717,7 @@ window.console.log("STASHING "+results.length+" layers from PHP calls");
                 $("#cgm-insar-firstLonTxt").val(ncriteria[1]);
                 $("#cgm-insar-secondLatTxt").val(ncriteria[2]);
                 $("#cgm-insar-secondLonTxt").val(ncriteria[3]);
-                skipRectangle();
+                skipDrawRectangle();
                 setTimeout(drawRectangle, 3000); // restart drawing in 3 seconds
             } else if (type == this.searchType.location) {
                 let bounds = L.latLngBounds(markerLocations);
@@ -972,6 +1001,7 @@ window.console.log("changeResultsTableBody..");
         var $download_queue_table = $('#metadata-viewer');
 
         this.highlightTrack(this.track_name);
+	this.refreshProductDescription(this.track_name);
 
         this.activateData();
 

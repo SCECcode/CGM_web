@@ -206,6 +206,7 @@ var CGM_GNSS = new function () {
 
     this.generateLayers = function () {
 
+window.console.log(">>>  generate gnss layers...");
         this.cgm_layers = new L.FeatureGroup();
         this.cgm_vectors = new L.FeatureGroup();
 

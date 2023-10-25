@@ -28,7 +28,7 @@ var PIXI_pixiOverlayList=[];
 /* How many segments to chunk a set of data */
 var PIXI_DEFAULT_DATA_SEGMENT_COUNT=undefined;
 
-var PIXI_DEFAULT_OPACITY=0.8;
+var PIXI_DEFAULT_OPACITY=0.9;
 
 
 var DATA_SEGMENT_COUNT=undefined; // chunking supplied from client 

@@ -34,19 +34,19 @@ products: [
         { name: 'D071',
           file: 'D071_COMB_CGM_InSAR_v0_0_1.hdf5',
           label: 'InSAR - D071 - label',
-          description: '<b>D071</b> track info ...'},
+          description: '<b>D071</b> (Descending) ...'},
         { name: 'D073',
           file: 'D073_COMB_CGM_InSAR_v0_0_1.hdf5',
           label: 'InSAR - D073 - label',
-          description: '<b>D073</b> track info ...'},
+          description: '<b>D073</b> (Descending) ...'},
         { name: 'A064',
           file: 'A064_COMB_CGM_InSAR_v0_0_1.hdf5',
           label: 'InSAR - A064 - label',
-          description: '<b>A064</b> track info ...'},
+          description: '<b>A064</b> (Ascending) ...'},
         { name: 'A166',
           file: 'A166_COMB_CGM_InSAR_v0_0_1.hdf5',
           label: 'InSAR - A166 - label',
-          description: '<b>A166</b> track info ...'}
+          description: '<b>A166</b> (Ascending)...'}
       ]
     },
 ]};

@@ -104,7 +104,7 @@ function setupOpacitySlider(alpha) {
     var handle = $( "#opacitySlider-handle" );
 
     $( "#opacitySlider" ).slider({
-      value:0.8,
+      value:0.9,
       min: 0,
       max: 1,
       step: 0.1, 
@@ -124,10 +124,9 @@ function setOpacitySliderHandle(alpha) {
 }
 
 /************************************************************************************/
-function downloadHDF5InSAR() {
-    let type=$("#insar-track-select").val();
-    window.console.log("TYPE ..", type);
-//  saveAsURLFile('./csm_data/LuttrellHardebeckJGR2021_Table1.csv');
-//  saveAsURLFile('https://files.scec.org/s3fs-public/LuttrellHardebeckJGR2021_Table1.csv');
+function downloadHDF5InSAR(file) {
+window.console.log("calling here..");
+    let fname="./cgm_data/insar/"+file;
+    saveAsURLFile(fname);
 }
 

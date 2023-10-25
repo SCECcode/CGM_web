@@ -9,6 +9,8 @@ import json
 import sys
 from contextlib import redirect_stdout
 import shutil
+#import pandas as pd
+#import pathlib2
 
 ######################################
 def getLoc(locs,idx) :
@@ -39,6 +41,12 @@ for filename in flist:
   os.makedirs(dirpath, exist_ok=True)
   with redirect_stdout(io.StringIO()) as f:
     rout=cgm_library.hdf5_to_geocsv.velocities_to_csv(filename, bounding_box, dirpath);
+## generate a sorted one in place file
+#  path = pathlib2.Path(filename)
+#  data = pd.read_csv(path,sep=', ',engine='python')
+#  data.sort_values('velocity(mm/yr)', ascending=True, inplace=True)
+#  data.to_csv(filename+'_sorted', index=False)
+
   s = f.getvalue()
 
   latlon=[[rout[0],rout[2]],[rout[1],rout[3]]]
