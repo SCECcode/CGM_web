@@ -110,8 +110,10 @@ window.console.log("main(insar) changing search type.."+type);
     });
 
     $("#insar-track-select").on('change', function () {
-        CGM_INSAR.setTrackName($(this).val());
-	CGM_INSAR.resetTrackView($(this).val());
+        let type=$(this).val();
+        if(type == "")  return;   
+        CGM_INSAR.setTrackName(type);
+	CGM_INSAR.resetTrackView(type);
     });
 
     $('.cgm-insar-search-item').on('focus', function () {

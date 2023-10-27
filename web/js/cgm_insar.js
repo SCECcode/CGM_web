@@ -15,6 +15,8 @@ var CGM_INSAR = new function () {
     this.cgm_track_layers;
     this.cgm_ref_layers;
 
+    this.cgm_insar_baseline=[];
+
     // label <= locally generated unique id for a search
     this.cgm_select_label = [];
 
@@ -78,11 +80,18 @@ var CGM_INSAR = new function () {
                     </tr>`;
 
     this.setTrackName = function(name) {
+         
         this.track_name=name;
         this.highlightTrack(name);
     };
 
     this.highlightTrack =function(name) {
+
+
+window.console.log("calling highlight.."+name);
+      this.offAllBaseline();
+      this.setupBaseline(name);
+
 // search through cgm_track_layers 
       this.cgm_track_layers.remove();
       this.cgm_track_layers.eachLayer(function(track){
@@ -118,7 +127,9 @@ var CGM_INSAR = new function () {
 
 
     this.unhighlightTrack =function() {
-window.console.log("2HERE");
+
+      this.offBaseline(this.track_name);
+
       this.cgm_track_layers.remove();
       this.cgm_track_layers.eachLayer(function(track){
         if ( track.scec_properties.selected) {
@@ -257,6 +268,71 @@ window.console.log(">>> generateLayers..");
 		this.cgm_track_ref_layers.addLayer(track_ref);
             }
         }
+    };
+
+
+//insar_baseline_A064_velocity_list.csv
+//insar_baseline_A166_velocity_list.csv
+//insar_baseline_D071_velocity_list.csv
+//insar_baseline_D173_velocity_list.csv
+    this.setupBaseline = function(track) {
+       if(track == "") return;
+       let sz=this.cgm_insar_baseline.length;
+       for(let i=0; i<sz; i++) {
+         let term=this.cgm_insar_baseline[i];
+         if( term.track == track ) {
+           this.onBaseline(track);
+           return;
+         }
+       }
+       notify("Setting up baseline layer for InSAR track:"+track);
+       let ngid= $.now();
+       let url="./cgm_data/insar/insar_baseline_"+track+"_velocity_list.csv";
+       let rc = makeOnePixiLayer(ngid,url);
+       this.cgm_insar_baseline.push({'track':track,'pixiuid':ngid});
+       //  pixiSetPixiOverlayOpacity(pixiuid, 0);
+    };
+
+    this.offBaseline= function(target) {
+       if(target == "") return;
+       let sz=this.cgm_insar_baseline.length;
+       for(let i=0; i<sz; i++) {
+         let term=this.cgm_insar_baseline[i];
+         if( term.track == target ) {
+           let pixiuid=term.pixiuid;
+           let viz=eyePixiOverlay(pixiuid);
+           if(viz == 1) {
+             togglePixiOverlay(pixiuid);
+           }
+           return;
+         }
+       }
+    };
+    this.onBaseline = function(target) {
+       if(target == "") return;
+       let sz=this.cgm_insar_baseline.length;
+       for(let i=0; i<sz; i++) {
+         let term=this.cgm_insar_baseline[i];
+         if( term.track == target ) {
+           let pixiuid=term.pixiuid;
+           let viz=eyePixiOverlay(pixiuid);
+           if(viz == 0) {
+             togglePixiOverlay(pixiuid);
+           }
+           return;
+         }
+       }
+    };
+    this.offAllBaseline = function() {
+       let sz=this.cgm_insar_baseline.length;
+       for(let i=0; i<sz; i++) {
+         let term=this.cgm_insar_baseline[i];
+         let pixiuid=term.pixiuid;
+         let viz=eyePixiOverlay(pixiuid);
+         if(viz == 1) {
+           togglePixiOverlay(pixiuid);
+         }
+       }
     };
 
 // for InSAR
@@ -570,6 +646,7 @@ window.console.log("Hide model/product");
         this.unhighlightTrack();
 
 	removeColorLegend();
+	remove_bounding_rectangle_layer();
         clearAllPixiOverlay();
         this.zeroSelectCount()
         this.showSearch('none');
@@ -713,9 +790,12 @@ window.console.log("calling search() with the string.."+JSON_criteria);
             let results=[];
             let ncriteria=[];
             if(cgm_insar_data === "[]" || cgm_insar_data === "[\"[]\"]") {
-               notify("NO DATA..");
+//               notify("NO DATA..");
                if(type==CGM_INSAR.searchType.latlon) {
+	           alert(" No data available for selected geographical area ");	
                    remove_bounding_rectangle_layer();
+                   } else {
+	               alert(" No data available for selected point ");	
                }
             } else {
 //window.console.log(cgm_insar_data);
@@ -824,30 +904,6 @@ window.console.log("nx is "+nx+" and ny "+ny);
             }
             CGM_INSAR.showPHP(type, results, ncriteria);
         });
-    };
-
-    this.makeBaseLayer = function (track_name,url) {
-        let rc = makeOnePixiLayer(ngid,url);
-        let pixilayer = rc["pixiLayer"];
-        let max_v = rc["max_v"];
-        let min_v = rc["min_v"];
-        let count_v = rc["count_v"];
-
- //XXX not tracking it or else only 1 can be made and left on the map
-        let layer=addRectangleLayer(nlat1,nlon1,nlat2,nlon2);
-        layer.scec_properties = {
-            velocity_plot : pixilayer,
-            max_velocity: max_v,
-            min_velocity: min_v,
-            count_velocity: count_v,
-            track: track_name,
-            file: url,
-            gid: ngid,
-            selected: false,
-        };
-        let bb_info = `track:${track_name}`;
-        layer.bindTooltip(bb_info);
-        return layer;
     };
 
     this.searchBox = function (type, criteria) {
@@ -966,6 +1022,8 @@ window.console.log("changeResultsTableBody..");
     } 
 
     this.setupInterface = function() {
+window.console.log("calling INSAR setupInterface..");
+
         var $download_queue_table = $('#metadata-viewer');
 
         this.highlightTrack(this.track_name);

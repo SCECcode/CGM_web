@@ -48,6 +48,7 @@ var markerTextures=[];
 var loadOnce=1;
 
 function initMarkerTextures(resources) {
+window.console.log("initMarkerTexutres..");
     markerTextures.push(resources.marker1.texture);
     markerTextures.push(resources.marker2.texture);
     markerTextures.push(resources.marker3.texture);
@@ -430,4 +431,16 @@ function togglePixiOverlay(gid) {
        return;
      }
   }
+}
+
+function eyePixiOverlay(gid) {
+  for(let i=0; i<pixiOverlayList.length; i++) {
+     let pixi=pixiOverlayList[i];
+     if(pixi["gid"] == gid) {
+       let v=pixi["vis"];
+       let layer=pixi["overlay"];
+       return pixi["vis"];
+     }
+  }
+  return -1;
 }

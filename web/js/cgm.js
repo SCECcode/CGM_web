@@ -13,6 +13,7 @@ var CGM = new function () {
     this.setupCGMInterface = function() {
       CGM_GNSS.generateLayers();
       CGM_INSAR.generateLayers();
+window.console.log("HERE...");
 
       CGM_GNSS.setupInterface();
       $("#cgm-model-insar").click();
@@ -20,11 +21,9 @@ var CGM = new function () {
 
 
     this.resetCGM = function() {
-      // if insar, just click to gnss
+      // if insar, call insar.reset
       if(activeProduct == Products.INSAR) {
 	CGM_INSAR.reset();
-        $("#data-product-select").val('gnss');
-        $("#data-product-select").click();
         } else { // if gnss, call gnss.reset
 	   CGM_GNSS.reset();
       }
