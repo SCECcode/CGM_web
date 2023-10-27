@@ -290,7 +290,8 @@ $cgm_insar = new CGM_INSAR();
                   <label class="input-group-text" for="insar-track-select">Select InSAR Track</label>
             </div>
 	    <select id="insar-track-select" class="custom-select custom-select-sm">
-                   <option selected value="D071">D071</option>
+                   <option selected value="">None</option>
+                   <option value="D071">D071</option>
                    <option value="D173">D173</option>
                    <option value="A064">A064</option>
                    <option value="A166">A166</option>
@@ -503,12 +504,12 @@ $cgm_insar = new CGM_INSAR();
              style="position:relative;border:solid 1px #ced4da; height:576px;">
 
 <!-- spinner -->
-             <div class="spinDialog" style="position:absolute;top:40%;left:50%; z-index:9999;">
+             <div class="spinDialog" style="position:absolute;top:40%;left:0%; z-index:9999;">
                <div id="wait-spinner" align="center" style="display:none;"><i class="glyphicon glyphicon-cog fa-spin" style="color:red"></i></div>
              </div>
 
 <!-- legend --> 
-             <div class="main-legend geometry top center" style="bottom:10%;background-color: rgba(255,255,255,0.5);">
+	     <div id="pixi-legend" class="main-legend geometry top center" style="bottom:10%;background-color: rgba(255,255,255,0.5);display:none">
                <div class="col">
                   <div class="row" style="margin:0px 2px 0px -20px">
                     <div class="legend mt-2" id="pixi-legend-color"></div> 

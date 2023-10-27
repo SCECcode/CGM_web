@@ -961,3 +961,32 @@ function makePixiOverlayLayerWithFile(uid,file,spec) {
 }
 
 
+function pixiEyePixiOverlay(gid) {
+  for(let i=0; i<PIXI_pixiOverlayList.length; i++) {
+     let pixi=PIXI_pixiOverlayList[i];
+     if(pixi["gid"] == gid) {
+       return pixi.visible;
+     }
+  }
+  return -1;
+}
+
+
+function pixiTogglePixiOverlay(gid) {
+  for(let i=0; i<PIXI_pixiOverlayList.length; i++) {
+     let pixi=PIXI_pixiOverlayList[i];
+     if(pixi["gid"] == gid) {
+       let v=pixi.visible;
+       let layer=pixi["overlay"];
+       if(v==1) {
+         pixi.visible=0;
+         viewermap.removeLayer(layer);
+         } else {
+           viewermap.addLayer(layer);
+           pixi.visible=1;
+       }
+       return;
+     }
+  }
+}
+

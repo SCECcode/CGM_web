@@ -15,6 +15,9 @@ var CGM_INSAR = new function () {
     this.cgm_track_layers;
     this.cgm_track_ref_layers;
 
+    // [ {"track":'D071','info':rc }]
+    this.cgm_insar_baseline = [];
+
     // label <= locally generated unique id for a search
     this.cgm_select_label = [];
 
@@ -90,6 +93,10 @@ var CGM_INSAR = new function () {
     };
 
     this.highlightTrack =function(name) {
+
+      this.offAllBaseline();
+      this.setupBaseline(name);
+
 // search through cgm_track_layers 
       this.cgm_track_layers.remove();
       this.cgm_track_layers.eachLayer(function(track){
@@ -125,6 +132,9 @@ var CGM_INSAR = new function () {
 
 
     this.unhighlightTrack =function() {
+
+      this.offBaseline(this.track_name);
+
       this.cgm_track_layers.remove();
       this.cgm_track_layers.eachLayer(function(track){
         if ( track.scec_properties.selected) {
@@ -264,6 +274,90 @@ window.console.log(">>> generate insar layers ..");
         }
     };
 
+// [ {"track":'D071','info':rc }]
+//  pixiSetPixiOverlayOpacity(pixiuid, 0);
+    this.setupBaseline = function (track) {
+       let sz=this.cgm_insar_baseline.length;
+       for(let t=0; t<sz; t++) {
+         let term=this.cgm_insar_baseline[t];
+         if( term.track == track ) {
+           this.onBaseline(track);
+           return;
+         }
+       }
+       $("#wait-spinner").show();
+ window.console.log(" should be spinning "); 
+       let mlist=CGM_tb['products'];
+       let msz=mlist.length;
+       for(let i=0; i<msz; i++) {
+         let product=mlist[i];
+         if(product['name'] == "INSAR") {
+           let tlist=product['tracks'];
+           let tsz=tlist.length;
+           for(let j=0; j<tsz; j++) {
+             let term=tlist[j];
+             if(term['name'] == track) {
+               let fname=term['baseline'];
+               let url="./cgm_data/insar/"+fname;
+               let ngid= getRnd();
+
+ window.console.log(" ADDING a baseline "+track+" "+url); 
+               notify("ADDING a baseline layer "+track);
+
+               let rc = makeOnePixiLayer(ngid,url);
+               this.cgm_insar_baseline.push({'track':track,'info':rc});
+               return;  
+             }
+           }
+           return;
+         }
+       }
+    };
+
+    this.offBaseline= function(target) {
+       let sz=this.cgm_insar_baseline.length;
+       for(let i=0; i<sz; i++) {
+         let term=this.cgm_insar_baseline[i];
+         if( term.track == target ) {
+           let info=term.info;
+           let pixiuid=info.pixiuid;
+           let vis=pixiEyePixiOverlay(pixiuid);
+           if(vis == 1) {
+             pixiTogglePixiOverlay(pixiuid);
+           }
+           return;
+         }
+       }
+    };
+    this.onBaseline = function(target) {
+       let sz=this.cgm_insar_baseline.length;
+       for(let i=0; i<sz; i++) {
+         let term=this.cgm_insar_baseline[i];
+         if( term.track == target ) {
+           let info=term.info;
+           let pixiuid=info.pixiuid;
+           let vis=pixiEyePixiOverlay(pixiuid);
+           if(vis == 0) {
+             pixiTogglePixiOverlay(pixiuid);
+           }
+           return;
+         }
+       }
+    };
+    this.offAllBaseline = function() {
+       let sz=this.cgm_insar_baseline.length;
+       for(let i=0; i<sz; i++) {
+         let term=this.cgm_insar_baseline[i];
+         let info=term.info;
+         let pixiuid=info.pixiuid;
+         let vis=pixiEyePixiOverlay(pixiuid);
+         if(vis == 1) {
+           pixiTogglePixiOverlay(pixiuid);
+         }
+       }
+    };
+
+
 // for InSAR
 // Station == Location
 // Gid == Label
@@ -276,7 +370,7 @@ window.console.log(">>> generate insar layers ..");
 
         if (layer.scec_properties.selected) {
             this.selectLocationByLayer(layer, clickFromMap);
-            // if this locatin is not in search result, should add it in XX
+            // if this locatin is not in search result, should add it in 
             let i=this.search_result.getLayerId(layer);
             if(!containsLayer(this.search_result,layer)) {
                 let tmp=this.search_result;
@@ -423,15 +517,15 @@ window.console.log("calling.. addToResultsTable..");
     this.executePlotTS = function(downloadURL,tType,gid) {
       let item= [ { "dtype":"TS", "track": tType, "gid":gid } ];
       showTSview(downloadURL,Products.INSAR,item);
-      showPlotTSWarning();
+      //setTimeout(showPlotTSWarning, 500);
     };
 
     this.executeShowVS = function(gid,downloadURL) {
       let op=pixiGetPixiOverlayOpacity(gid);
-window.console.log("found opacity ..", op);
+window.console.log("  found opacity ..", op);
       if(op == 0) { pixiSetPixiOverlayOpacity(gid, 0.9); }
       else { pixiSetPixiOverlayOpacity(gid, 0); }
-      // XX -- might need to refocus because it seems to be off for a sec and need a refresh
+      // -- might need to refocus because it seems to be off for a sec and need a refresh
     };
 
 // could be D071,A064,D173,A166
@@ -647,25 +741,6 @@ window.console.log(">>> calling freshSearch..");
         }
     };
 
-    this.getBaseURL = function (target) {
-       let mlist=CGM_tb['products'];
-       let sz=mlist.length;
-       for(let i=0; i<sz; i++) {
-         let term=mlist[i];
-         if(term['name'] == "INSAR") {
-           let tlist=term['tracks'];
-           let tsz=tlist.length;
-           for(let j=0; j<tsz; j++) {
-             let tterm=tlist[j];
-             if(tterm['name'] == target) {
-               let baseurl=tterm['baseline'];
-               return baseurl;
-             }
-           }
-         }
-       }
-    };
-
     this.refreshProductDescription = function (target){
 window.console.log("refresh.. description "+target);
        let mlist=CGM_tb['products'];
@@ -682,8 +757,6 @@ window.console.log("refresh.. description "+target);
                $("#cgm-product-description").html(descript);
                let file=tterm['file'];
                let dlink="Click to download complete HDF5 for the selected track <button id=\"downloadInSARBtn\" class=\"cxm-small-btn\" onClick=downloadHDF5InSAR('"+file+"')><span class=\"glyphicon glyphicon-download\" ></span><button>";
-window.console.log("HERE..");
-window.console.log(dlink);
                $("#cgm-product-download").html(dlink);
                return;
              }
@@ -770,8 +843,8 @@ window.console.log("STASHING "+results.length+" layers from PHP calls");
         }
 
         let JSON_criteria = JSON.stringify(criteria);
-window.console.log("calling search() with the type.."+type);
-window.console.log("calling search() with the string.."+JSON_criteria);
+//window.console.log("calling search() with the type.."+type);
+//window.console.log("calling search() with the string.."+JSON_criteria);
         $("#wait-spinner").show();
         $.ajax({
             url: "php/search.php",
@@ -780,13 +853,15 @@ window.console.log("calling search() with the string.."+JSON_criteria);
 
             let results=[];
             let ncriteria=[];
-window.console.log(cgm_insar_data);
             if(cgm_insar_data === "[]") {
-window.console.log("Did not find any PHP result");
-               notify("NO DATA..");
+window.console.log("Did not find any PHP result -- NO DATA");
+//               notify("NO DATA..");
                if(type==CGM_INSAR.searchType.latlon) {
+		   alert(" No data available for selected geographical area ");
                    remove_bounding_rectangle_layer();
-               }
+                   } else {
+			   alert(" No data available for selected point ");
+	       }	        
 
             } else {
                  let tmp=JSON.parse(cgm_insar_data); 
@@ -840,7 +915,7 @@ window.console.log("Did not find any PHP result");
 
                              let v=vlist[j];
                              let bb=v['bb'];
-// XXX should not be chopping here..
+// X should not be chopping here..
                              let nlon1=truncateNumber(bb[0][0],4);
                              let nlat1=truncateNumber(bb[0][1],4);
                              let nlon2=truncateNumber(bb[1][0],4);
@@ -870,7 +945,7 @@ window.console.log("Did not find any PHP result");
                              setupPixiLegend(pixiuid,{"title":"LOS Velocity<br>(mm/yr)"},seginfo);
                              let opacity=pixiGetPixiOverlayOpacity(pixiuid);
 
- //XXX not tracking it or else only 1 can be made and left on the map
+ //X not tracking it or else only 1 can be made and left on the map
                              let layer=addRectangleLayer(nlat1,nlon1,nlat2,nlon2);
 
 window.console.log("nx is "+nx+" and ny "+ny);
@@ -1048,42 +1123,6 @@ window.console.log("changeResultsTableBody..");
         $("#wait-spinner").hide();
     };
 
-    this.createBaseLayer = function (track_name) {
-        let ngid= getRnd();
-        let url = this.getBaseURL(track_name);
-        let rc = makeOnePixiLayer(ngid,url);
-
-        let pixilayer = rc["pixiLayer"];
-        let max_v = rc["max_v"];
-        let min_v = rc["min_v"];
-        let count_v = rc["count_v"];
-        let pixiuid= rc["pixiuid"];
-
-        let seginfo=pixiFindSegmentProperties(pixiuid);
-        setupPixiSegmentDebug(pixiuid,seginfo);
-        setupPixiLegend(pixiuid,{"title":"LOS Velocity<br>(mm/yr)"},seginfo);
-        let opacity=pixiGetPixiOverlayOpacity(pixiuid);
-
- //XXX not tracking it or else only 1 can be made and left on the map
-        let layer=addRectangleLayer(nlat1,nlon1,nlat2,nlon2);
-
-window.console.log("nx is "+nx+" and ny "+ny);
-        layer.scec_properties = {
-                  velocity_plot : pixilayer, 
-                  max_velocity: max_v,
-                  min_velocity: min_v,
-                  count_velocity: count_v,
-                  track: track_name,
-                  file: file,
-                  type: type,
-                  gid: ngid,
-                  selected: false,
-        };
-        let bb_info = `track:${track_name}<br>sw:${nlat1},${nlon1}<br>ne:${nlat2},${nlon2}`;
-        layer.bindTooltip(bb_info);
-        return layer;
-    };
-
 
 /**  this is for segmentation/legend **/
 // a layer is always generated with the full set of legend bins
@@ -1112,9 +1151,12 @@ window.console.log("nx is "+nx+" and ny "+ny);
 
     function setupPixiLegend(pixiuid, spec,legendinfo) {
       if(jQuery.isEmptyObject(legendinfo)) {
-        $("#pixi-legend").html("");
+window.console.log("turn off legend..");
+        $("#pixi-legend").css('display','none');
         return;
       }
+window.console.log("turn on legend..");
+       $("#pixi-legend").css('display','');
 
       let namelist=legendinfo['names'];
       let lengthlist=legendinfo['counts'];
