@@ -29,7 +29,7 @@ var CGM_INSAR = new function () {
     this.search_result = new L.FeatureGroup();
     this.searching = false;
 
-    this.track_name = "D071";
+    this.track_name = "";
 
     var cgm_colors = {
 //        normal: '#006E90',
@@ -80,17 +80,26 @@ var CGM_INSAR = new function () {
                     </tr>`;
 
     this.setTrackName = function(name) {
-         
         this.track_name=name;
         this.highlightTrack(name);
     };
 
     this.highlightTrack =function(name) {
 
-
 window.console.log("calling highlight.."+name);
+
       this.offAllBaseline();
-      this.setupBaseline(name);
+      if(name != "") { 
+          if(this.inBaseline(name)) {
+              this.setupBaseline(name);
+              } else {
+              startLoadTrackWait(name);
+	      setTimeout(function(target) {CGM_INSAR.setupBaseline(target);}, 1000, name);
+          }
+          } else {
+             $("#cgm-insar-search-type").val("").change();
+      }
+
 
 // search through cgm_track_layers 
       this.cgm_track_layers.remove();
@@ -129,6 +138,9 @@ window.console.log("calling highlight.."+name);
     this.unhighlightTrack =function() {
 
       this.offBaseline(this.track_name);
+// set to None
+      this.track_name="";
+      $("#insar-track-select").val("");
 
       this.cgm_track_layers.remove();
       this.cgm_track_layers.eachLayer(function(track){
@@ -277,6 +289,8 @@ window.console.log(">>> generateLayers..");
 //insar_baseline_D173_velocity_list.csv
     this.setupBaseline = function(track) {
        if(track == "") return;
+window.console.log(" CAlling setupBaseline..");
+       let tmp=this.cgm_insar_baseline;
        let sz=this.cgm_insar_baseline.length;
        for(let i=0; i<sz; i++) {
          let term=this.cgm_insar_baseline[i];
@@ -285,12 +299,23 @@ window.console.log(">>> generateLayers..");
            return;
          }
        }
-       notify("Setting up baseline layer for InSAR track:"+track);
        let ngid= $.now();
        let url="./cgm_data/insar/insar_baseline_"+track+"_velocity_list.csv";
        let rc = makeOnePixiLayer(ngid,url);
        this.cgm_insar_baseline.push({'track':track,'pixiuid':ngid});
        //  pixiSetPixiOverlayOpacity(pixiuid, 0);
+       doneLoadTrackWait();
+    };
+
+    this.inBaseline = function(target) {
+       let sz=this.cgm_insar_baseline.length;
+       for(let i=0; i<sz; i++) {
+         let term=this.cgm_insar_baseline[i];
+         if( term.track == target ) {
+           return 1;
+         }
+       }
+       return 0;     
     };
 
     this.offBaseline= function(target) {
@@ -600,6 +625,8 @@ var generateTableRow = function(layer) {
                 break;
             default: // viewing mode
                 $all_search_controls.hide();
+                $("#cgm-insar-latlon").hide();
+                $("#cgm-insar-location").hide();
                 skipDrawRectangle();
                 skipDrawPoint();
                 window.console.log("showSearch:skip to default mode..");
@@ -768,7 +795,6 @@ window.console.log("STASHING "+results.length+" layers from PHP calls");
 
     this.search = function(type, criteria) {
         window.console.log("insar  -->  calling search..");
-        var track_name="D071";
 
         $searchResult = $("#searchResult");
         if (!type || !criteria) {
@@ -790,7 +816,6 @@ window.console.log("calling search() with the string.."+JSON_criteria);
             let results=[];
             let ncriteria=[];
             if(cgm_insar_data === "[]" || cgm_insar_data === "[\"[]\"]") {
-//               notify("NO DATA..");
                if(type==CGM_INSAR.searchType.latlon) {
 	           alert(" No data available for selected geographical area ");	
                    remove_bounding_rectangle_layer();

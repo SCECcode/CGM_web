@@ -111,7 +111,7 @@ window.console.log("main(insar) changing search type.."+type);
 
     $("#insar-track-select").on('change', function () {
         let type=$(this).val();
-        if(type == "")  return;   
+window.console.log("main(insar) changing track.."+type);
         CGM_INSAR.setTrackName(type);
 	CGM_INSAR.resetTrackView(type);
     });

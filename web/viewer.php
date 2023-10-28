@@ -598,6 +598,23 @@ $cgm_insar = new CGM_INSAR();
   </div>
 </div> <!--Modal: modalnotify-->
 
+<!--Modal: (modalwaitnotify) -->
+<div class="modal" id="modalwait" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" id="modalwaitDialog" role="document">
+    <!--Content-->
+    <div class="modal-content" id="modalwaitContent">
+      <!--Body-->
+      <div class="modal-body" id="modalwaitBody">
+        <div class="row col-md-12 ml-auto" style="overflow:hidden; font-size:10pt">
+           <p id="wait-text" style="font-size:25px">
+                <i class="glyphicon glyphicon-cog fa-spin" style='color:#990000'></i>
+           </p>
+        </div>
+      </div>
+    </div> <!--Content-->
+  </div>
+</div> <!--Modal: modalwaitnotify-->
+
 </div> <!-- container -->
 <!-- -->
     <script type="text/javascript">

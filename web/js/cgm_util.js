@@ -5,6 +5,15 @@
 var cgm_latlon_area_list=[];
 var cgm_latlon_point_list=[];
 
+function startLoadTrackWait(track, fptr) {
+  let ptxt="Please wait for InSAR "+track+ " to load... ";
+  $("#wait-text").html(ptxt);
+  $("#modalwait").modal({ backdrop: 'static', keyboard: false });
+}
+function doneLoadTrackWait() {
+  $("#modalwait").modal('hide');
+}
+
 function saveAsURLFile(url) {
   var dname=url.substring(url.lastIndexOf('/')+1);
   var dload = document.createElement('a');
@@ -21,6 +30,9 @@ function saveAsURLFile(url) {
 
 function downloadHDF5InSAR() {
     let type=$("#insar-track-select").val();
+    if(type == "") {
+      return;
+    }
     window.console.log("TYPE ..", type);
     let fname="./cgm_data/insar/"+type+"_COMB_CGM_InSAR_v0_0_1.hdf5";
     saveAsURLFile(fname);
