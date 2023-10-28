@@ -9,7 +9,7 @@ c) import external latlon.csv with 'name' and create a group Layerof mulitple gr
 
 var CXM = new function () {
 
-  const CFM_URL="data/CFM6.0_geoJson.txt";
+  const CFM_URL="data/CFM6.1_geoJson.txt";
   const CTM_URL="data/CTM_geoJson.txt";
   const CRM_URL="data/CRM_geoJson.txt";
   const CRM_POLYGON_URL="data/CRM_polygons_points_with_corrected_Rift_names_Mar112019.csv";

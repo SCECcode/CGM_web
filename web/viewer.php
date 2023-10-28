@@ -389,6 +389,7 @@ $cgm_insar = new CGM_INSAR();
             <div id='model-options' class="col-7 justify-content-end  form-check-inline mr-0" >
                 <div class="form-check form-check-inline">
                      <label class='form-check-label'
+                             title='Show GNSS station location on map'
                              for="cgm-model-gnss">
                      <input class='form-check-inline mr-1'
                              type="checkbox"
@@ -397,6 +398,7 @@ $cgm_insar = new CGM_INSAR();
                 </div>
                 <div class="form-check form-check-inline">
                      <label class='form-check-label ml-1 mini-option'
+                             title='Show GNSS vectors on map'
                              for="cgm-model-gnss-vectors">
                      <input class='form-check-inline mr-1'
                              type="checkbox"
@@ -405,6 +407,7 @@ $cgm_insar = new CGM_INSAR();
                 </div>
                 <div class="form-check form-check-inline">
                      <label class='form-check-label ml-1 mini-option'
+                             title='Show InSAR track boundaries on map'
                              for="cgm-model-insar">
                      <input class='form-check-inline mr-1'
                              type="checkbox"
@@ -413,10 +416,11 @@ $cgm_insar = new CGM_INSAR();
                 </div>
                 <div class="form-check form-check-inline mr-5">
                      <label class='form-check-label ml-1 mini-option'
+                             title='Show Community Fault Model v6.1 on map'
                              for="cgm-model-cfm">
                      <input class='form-check-inline mr-1'
                              type="checkbox"
-                             id="cgm-model-cfm" value="1" />CFM6.0
+                             id="cgm-model-cfm" value="1" />CFM6.1
                      </label>
                 </div>
 
