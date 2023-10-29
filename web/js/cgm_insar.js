@@ -131,7 +131,9 @@ window.console.log("calling highlight.."+name);
             }
           }
       });
-      this.cgm_track_layers.addTo(viewermap);
+
+      let layer=this.cgm_track_layers.addTo(viewermap);
+      layer.bringToBack();
     };
 
 
@@ -158,7 +160,8 @@ window.console.log("calling highlight.."+name);
         }
       });
 // refresh tracks
-      this.cgm_track_layers.addTo(viewermap);
+      let layer=this.cgm_track_layers.addTo(viewermap);
+      layer.bringToBack();
     };
 
     this.activateData = function() {
@@ -302,6 +305,7 @@ window.console.log(" CAlling setupBaseline..");
        let ngid= $.now();
        let url="./cgm_data/insar/insar_baseline_"+track+"_velocity_list.csv";
        let rc = makeOnePixiLayer(ngid,url);
+       let layer=rc.pixiOverlay;
        this.cgm_insar_baseline.push({'track':track,'pixiuid':ngid});
        //  pixiSetPixiOverlayOpacity(pixiuid, 0);
        doneLoadTrackWait();
