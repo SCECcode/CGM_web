@@ -598,7 +598,7 @@ $cgm_insar = new CGM_INSAR();
   </div>
 </div> <!--Modal: modalnotify-->
 
-<!--Modal: (modalwaitnotify) -->
+<!--Modal: (modalwait) -->
 <div class="modal" id="modalwait" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" id="modalwaitDialog" role="document">
     <!--Content-->
@@ -606,14 +606,42 @@ $cgm_insar = new CGM_INSAR();
       <!--Body-->
       <div class="modal-body" id="modalwaitBody">
         <div class="row col-md-12 ml-auto" style="overflow:hidden; font-size:10pt">
-           <p id="wait-text" style="font-size:25px">
+           <p id="modal-wait-text" style="font-size:25px">
                 <i class="glyphicon glyphicon-cog fa-spin" style='color:#990000'></i>
            </p>
         </div>
       </div>
     </div> <!--Content-->
   </div>
-</div> <!--Modal: modalwaitnotify-->
+</div> <!--Modal: modalwait-->
+
+<!--Modal: Model (modalprogress)-->
+<div class="modal" id="modalprogress" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="width:45%" id="modalprogressDialog" role="document">
+    <!--Content-->
+    <div class="modal-content" id="modalprogressContent">
+      <!--Body-->
+      <div class="modal-body" id="modalprogressBody">
+        <div class="row col-md-11 ml-auto" style="overflow:hidden; font-size:10pt">
+           <div class="row">
+	   <p id="modalprogressLabel" style="text-align:center;font-size:20px"> 
+                <input type="text" style="width:400px; border:0px solid red" id="wait-text">
+                <div class="row" style="display:none">
+                  <input type="text" style="width:100px;margin-right:50px;" id="wait-expected" value="0">
+                </div>
+                <input type="text" style="text-align:center;width:60px;margin-right:50px;margin-left:10px;padding:0px" id="wait-progress" value="0%" disabled>
+		<div class="row" id="myProgress" style="border:2px solid grey">
+                       <div id="myProgressBar"></div>
+                </div>
+           </p>
+           </div>
+        </div>
+      </div>
+
+    </div> <!--Content-->
+  </div>
+</div> <!--Modal: modalprogress-->
+
 
 </div> <!-- container -->
 <!-- -->

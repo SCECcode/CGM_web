@@ -81,7 +81,12 @@ function ckExist(url) {
     }
   }
   http.open("GET", url, false);
-  http.send();
+  try { http.send();
+  } catch(e) {
+     window.console.log("bad http.send call..");
+     alert("Unable to retrieve \n\n"+url);
+     return null;
+  }
   if(http.status !== 404) {
     return http.responseText;
     } else {
@@ -117,6 +122,9 @@ function load_GNSS_ProcessTSFromPOS(ulist,tlist) {
    }
    if(pos == null) {
      let data = ckExist(url);
+     if(data == null) {
+        return; 
+     }
      let plot_data=processPOS(data);
      pos={'type':ftype,'pos':plot_data};
      TS_pos_data.push(pos);

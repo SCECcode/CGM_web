@@ -10,19 +10,22 @@ var CGM_INSAR = new function () {
 
     this.cgm_velocity_loc = 0;
 
-    // cgm_track_layers <== all polygon layers for each insar track
+    // cgm_track_layers <== all layers for each insar track
     //                      setup once from viewer.php 
     this.cgm_track_layers;
     this.cgm_ref_layers;
 
     this.cgm_insar_baseline=[];
+    // csv file's approximate size, used for making loading bar
+    this.cgm_insar_baseline_size={ "D071": 2748439, "D173": 2575963, 
+	                           "A064": 3652382, "A166": 3302880 };
+
 
     // label <= locally generated unique id for a search
     this.cgm_select_label = [];
 
     // for each session, collect all the searches in here
     //   by location = marker layer
-    //   by latlon area = polygon layer 
     this.cgm_layers = new L.FeatureGroup();
 
     // refresh from reset/freshSearch ??
@@ -87,53 +90,17 @@ var CGM_INSAR = new function () {
     this.highlightTrack =function(name) {
 
 window.console.log("calling highlight.."+name);
-
       this.offAllBaseline();
       if(name != "") { 
           if(this.inBaseline(name)) {
               this.setupBaseline(name);
               } else {
-              startLoadTrackWait(name);
+              startLoadTrackWait(name, this.cgm_insar_baseline_size[name]);
 	      setTimeout(function(target) {CGM_INSAR.setupBaseline(target);}, 1000, name);
           }
           } else {
              $("#cgm-insar-search-type").val("").change();
       }
-
-
-// search through cgm_track_layers 
-      this.cgm_track_layers.remove();
-      this.cgm_track_layers.eachLayer(function(track){
-        if (track.scec_properties.track==name ) {
-                track.scec_properties.selected = true;
-                // has a polygon and a marker layers
-          let layers=track.getLayers();
-          let len=layers.length;
-          for(let i=0; i<len; i++) {
-            let layer=layers[i];             
-            if(layer.options.type == 'polygon') {             
-              layer.options.fillOpacity=0.1;
-            }
-          }
-          } else {
-            // clear all else           
-            if(track.scec_properties.selected) {
-                track.scec_properties.selected = false;
-                // has a polygon and a marker layers
-               let layers=track.getLayers();
-               let len=layers.length;
-               for(let i=0; i<len; i++) {
-                 let layer=layers[i];             
-                 if(layer.options.type == 'polygon') {             
-                    layer.options.fillOpacity=0.02;
-                 }
-               }
-            }
-          }
-      });
-
-      let layer=this.cgm_track_layers.addTo(viewermap);
-      layer.bringToBack();
     };
 
 
@@ -143,25 +110,6 @@ window.console.log("calling highlight.."+name);
 // set to None
       this.track_name="";
       $("#insar-track-select").val("");
-
-      this.cgm_track_layers.remove();
-      this.cgm_track_layers.eachLayer(function(track){
-        if ( track.scec_properties.selected) {
-        //do something
-          track.scec_properties.selected = false;
-          let layers=track.getLayers();
-          let len=layers.length;
-          for(let i=0; i<len; i++) {
-            let layer=layers[i];             
-            if(layer.options.type == 'polygon') {             
-              layer.options.fillOpacity=0.01;
-            }
-          }
-        }
-      });
-// refresh tracks
-      let layer=this.cgm_track_layers.addTo(viewermap);
-      layer.bringToBack();
     };
 
     this.activateData = function() {
@@ -247,14 +195,8 @@ window.console.log(">>> generateLayers..");
                   } else { ref="Ascending";
                 }
 
-// polygon
-                let latlngs = [[lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4]];
-                let mypoly=polygon_options;
-                mypoly['color']=track_color;
-                let track_polygon=L.polygon(latlngs, mypoly);
-//                var popup=L.popup().setContent("InSAR track name: "+track_name);
-//                track_polygon.bindPopup(popup);
 // line-border
+		let latlngs = [[lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4]];
                 let latlngs2 = [[lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4],[lat1,lon1]];
                 let track_lines=L.polyline(latlngs2,{color:track_color,weight:1,riseOnHover:true});
                 let poptip="<strong>InSAR</strong><br>Track name: "+track_name+"<br>Info: "+ref+"<br>";
@@ -269,7 +211,6 @@ window.console.log(">>> generateLayers..");
                 track_ref.bindPopup(popref, {maxWidth: 500});
 
                 track.addLayer(track_lines);
-                track.addLayer(track_polygon);
 
                 track.scec_properties = {
                     file:track_file,
@@ -304,11 +245,13 @@ window.console.log(" CAlling setupBaseline..");
        }
        let ngid= $.now();
        let url="./cgm_data/insar/insar_baseline_"+track+"_velocity_list.csv";
-       let rc = makeOnePixiLayer(ngid,url);
+       let rc = makeOnePixiLayer(ngid,url,4);
+
        let layer=rc.pixiOverlay;
        this.cgm_insar_baseline.push({'track':track,'pixiuid':ngid});
        //  pixiSetPixiOverlayOpacity(pixiuid, 0);
        doneLoadTrackWait();
+
     };
 
     this.inBaseline = function(target) {
@@ -792,8 +735,6 @@ window.console.log("STASHING "+results.length+" layers from PHP calls");
 
         $("#wait-spinner").hide();
 
-//no need restart the with showSearch()
-//        this.showSearch(type);
     };
 
 
@@ -864,7 +805,7 @@ window.console.log("calling search() with the string.."+JSON_criteria);
                                     gid: ngid,
                                     selected: false,
                                     };
-                              let bb_info = `track:${track_name}<br>lat:${nlat} lon:${nlon}`;
+                              let bb_info = `Selected InSAR point<br>track:${track_name}<br>lat:${nlat} lon:${nlon}`;
                               marker_layer.bindTooltip(bb_info);
 
                               results.push(marker_layer);
@@ -898,7 +839,7 @@ window.console.log("calling search() with the string.."+JSON_criteria);
 
                              let url = getDataDownloadURL(file);
 
-                             let rc = makeOnePixiLayer(ngid,url);
+                             let rc = makeOnePixiLayer(ngid,url,1);
                              let pixilayer = rc["pixiLayer"];
                              let max_v = rc["max_v"];
                              let min_v = rc["min_v"];
@@ -924,25 +865,18 @@ window.console.log("nx is "+nx+" and ny "+ny);
                                  gid: ngid,
                                  selected: false,
                              };
-                             let bb_info = `track:${track_name}<br>sw:${nlat1},${nlon1}<br>ne:${nlat2},${nlon2}`;
+                             let bb_info = `Selected InSAR region<br>track:${track_name}<br>sw:${nlat1},${nlon1}<br>ne:${nlat2},${nlon2}`;
                              layer.bindTooltip(bb_info);
                              results.push(layer);
                         }
                      }
                  }
             }
-            CGM_INSAR.showPHP(type, results, ncriteria);
+            CGM_INSAR.showPHP(type, results,Sncriteria);
         });
     };
 
     this.searchBox = function (type, criteria) {
-
-/*** what if these are done in the search part ???
-        if(!this.searching) { // don't restart 
-          this.hideProduct();
-          this.resetSearch();
-        }
-****/
 
         this.searching = true;
         let results = this.search(type, criteria);

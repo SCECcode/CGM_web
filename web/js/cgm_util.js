@@ -5,13 +5,45 @@
 var cgm_latlon_area_list=[];
 var cgm_latlon_point_list=[];
 
-function startLoadTrackWait(track, fptr) {
-  let ptxt="Please wait for InSAR "+track+ " to load... ";
-  $("#wait-text").html(ptxt);
-  $("#modalwait").modal({ backdrop: 'static', keyboard: false });
+function setupProgressBar(exp,txt) {
+  $("#wait-expected").val(exp);
+  $("#wait-text").val(txt);
+  var element = document.getElementById("myProgressBar");
+  element.style.width = 0+'%';
+  let elm = $("#wait-progress");
+  let percent= 0+'%';
+  elm.val(percent);
 }
+  
+function updateProgressBar(n) {
+window.console.log("updating.. progress bar"); 
+    $('#modalprogress').modal('hide');
+    let maxelm  = $("#wait-expected");
+    let max = parseInt(maxelm.val());
+    var width = Math.floor((n/max) * 100);
+
+    var element = document.getElementById("myProgressBar");
+    element.style.width = width + '%';
+    let elm = $("#wait-progress");
+    let percent= width * 1  + '%';
+    elm.val(percent);
+window.console.log("  done with updating.."+percent); 
+    return 1;
+}
+
+function startLoadTrackWait(track, n) {
+  let txt= "Please wait, retrieving InSAR track "+track;
+  setupProgressBar(n,txt);
+  $("#modalprogress").modal({ backdrop: 'static', keyboard: false });
+}
+
+function showProgressBar() {
+  $('#modalprogress').modal('show');
+}
+
 function doneLoadTrackWait() {
-  $("#modalwait").modal('hide');
+//  $("#modalprogress").modal('hide');
+  setTimeout(function() {$('#modalprogress').modal('hide')}, 2000);
 }
 
 function saveAsURLFile(url) {

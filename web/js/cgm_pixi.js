@@ -161,9 +161,9 @@ function setup_pixi() {
   return loader;
 }
 
-function makeOnePixiLayer(gid,file) {
-
-  let pixiLayer = makePixiOverlayLayer(gid,file);
+// if expect_chunk is greater than 0, then running in 'Progress checking mode'
+function makeOnePixiLayer(gid,file,expect_chunk) {
+  let pixiLayer = makePixiOverlayLayer(gid,file,expect_chunk);
   let ticker = new PIXI.ticker.Ticker();
 
   ticker.add(function(delta) { 
@@ -208,7 +208,8 @@ function toggleMarkerContainer(pixi,target_segment) {
 // order everything into a sorted array
 // break up data into buckets (one per segment)
 /* {"gid":gid,"data":[ [{"lat":lat,"lng":lng},...], ...] } */
-function _loadup_data(gid,url) {
+//  insar_baseline_A064_velocity_list.csv_part0 so forth
+function _loadup_data(gid,url,expect_chunk) {
 
    DATA_max_v=INSAR_min_v;
    DATA_min_v=INSAR_max_v;
@@ -219,38 +220,56 @@ function _loadup_data(gid,url) {
    let datalist=[];
    
    for(var i=0; i<DATA_SEGMENT_COUNT; i++) {
-      datalist.push([]);
+     datalist.push([]);
    }
 
-   let blob=ckExist(url);
-   let tmp=blob.split("\n");
-   let sz=tmp.length;
-   window.console.log("size of tmp is "+sz);
+   let dataurl;
+   let datacnt=0;
 
-   for(let i=0; i<sz; i++) {
-      let ll=tmp[i];
-      if(ll[0]=='#') { // comment line
-        continue;
-      }	      
-      let token=ll.split(",");
-      if(token.length != 7) {
-         window.console.log("invalid data in this line "+i+" >>"+token.length);
-         window.console.log(" bad line: >>"+ll+"<<");
-         continue;
-      }
-      let lon=parseFloat(token[0].trim());
-      let lat=parseFloat(token[1].trim());
-      let vel=token[2].trim();
-      if(Number.isNaN(vel) || vel == "nan") {
+   for(let cidx=0; cidx < expect_chunk; cidx++) {
+     if(expect_chunk == 1) {
+       dataurl=url;
+       } else {
+         dataurl=url+"_part"+cidx;
+     }
+
+     let blob=ckExist(dataurl);
+     let tmp=blob.split("\n");
+     let sz=tmp.length;
+     window.console.log("size of "+dataurl+" is "+sz);
+
+     for(let i=0; i<sz; i++) {
+        let ll=tmp[i];
+        if(ll[0]=='#') { // comment line
           continue;
-      }
-      vel=parseFloat(vel);
-      rawlist.push([vel,lat,lon]);
-      if(vel > DATA_max_v)
-        DATA_max_v=vel;
-      if(vel < DATA_min_v)
-        DATA_min_v=vel
+        }	      
+        let token=ll.split(",");
+        if(token.length != 7) {
+           window.console.log("invalid data in this line "+i+" >>"+token.length);
+           window.console.log(" bad line: >>"+ll+"<<");
+           continue;
+        }
+        let lon=parseFloat(token[0].trim());
+        let lat=parseFloat(token[1].trim());
+        let vel=token[2].trim();
+
+        if(Number.isNaN(vel) || vel == "nan") { continue; }
+
+        vel=parseFloat(vel);
+        rawlist.push([vel,lat,lon]);
+        datacnt++;
+        if(vel > DATA_max_v)
+          DATA_max_v=vel;
+        if(vel < DATA_min_v)
+          DATA_min_v=vel
+
+     }
+
+     let rc=updateProgressBar(datacnt);
+     $('#modalprogress').modal('show');
    }
+
+
    // sort datalist
    let sorted_rawlist = rawlist.sort((a,b) => {
           return b[0] - a[0];
@@ -269,16 +288,17 @@ function _loadup_data(gid,url) {
    pixiLatlngList= {"gid":gid,"data":datalist} ; 
 
    window.console.log("FILE:"+url+" total data:"+DATA_count+"("+DATA_min_v+","+DATA_max_v+")");
+
    return pixiLatlngList;
 }
 
-function makePixiOverlayLayer(gid,file) {
+function makePixiOverlayLayer(gid,file,expect_chunk=1) {
     let zoomChangeTs = null;
 
     let pixiContainer = new PIXI.Container();
     let pContainers=[]; //particle container
 
-    let pixiLatlngList=_loadup_data(gid,file)
+    let pixiLatlngList= _loadup_data(gid,file,expect_chunk);
 
     for(var i=0; i<DATA_SEGMENT_COUNT; i++) {
       var length=getMarkerCount(pixiLatlngList,i);

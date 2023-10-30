@@ -1,4 +1,14 @@
 /* required styles */
+#myProgress {
+  width: 50%;
+  background-color: transparent;
+}
+
+#myProgressBar {
+  width: 0%;
+  background-color: #4CAF50;
+}
+
 .cgm-cluster {
     background-color: rgba(255,255,255,1);
     border:solid 2px black;

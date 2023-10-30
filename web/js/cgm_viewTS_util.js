@@ -55,6 +55,7 @@ function resetTSviewSelection(){
 }
 
 function nextTSviewSelection() {
+window.console.log("gnss url l ist ",TS_urllist);
    let sz=TS_urllist.length;
    let nx=(TS_track_view + 1) % sz;
    return nx;
