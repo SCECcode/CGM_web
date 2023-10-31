@@ -237,7 +237,7 @@ $("#CGM_plot").prepend($("#expand-view-key-container").html());
 let tmp=$(".leaflet-control-attribution");
 // should  only have 1, adjust the attribution's location
 let v= document.getElementsByClassName("leaflet-control-attribution")[0];
-v.style.right="1.5rem";
+v.style.right="0rem";
 v.style.height="1.4rem";
 v.style.width="35rem";
 
