@@ -233,7 +233,8 @@ function _loadup_data(gid,url,expect_chunk) {
          dataurl=url+"_part"+cidx;
      }
 
-     let blob=ckExist(dataurl);
+     let blob=ckExistTrack(dataurl,updateProgressBar,datacnt);
+
      let tmp=blob.split("\n");
      let sz=tmp.length;
      window.console.log("size of "+dataurl+" is "+sz);
@@ -265,7 +266,7 @@ function _loadup_data(gid,url,expect_chunk) {
 
      }
 
-     let rc=updateProgressBar(datacnt);
+     //let rc=updateProgressBar(datacnt);
    }
 
 

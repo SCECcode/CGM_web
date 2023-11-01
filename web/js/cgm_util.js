@@ -96,40 +96,81 @@ function isObject(objV) {
 // should be a very small file and used for testing and so can ignore
 // >>Synchronous XMLHttpRequest on the main thread is deprecated
 // >>because of its detrimental effects to the end user's experience.
-function ckExist(url) {
+function ckExistTrack(url, callback, datacnt) {
   var http = new XMLHttpRequest();
+
   http.onreadystatechange = function () {
     if (this.readyState == 4) {
- // okay
+      window.console.log("http ready..");
+      setTimeout(function() {window.console.log("http: READY: delay a few seconds,"+datacnt) },5000);
     }
   }
+  http.onprogress = function (pbar) {
+    if (pbar.lengthComputable) {
+       window.console.log("http total "+ pbar.total + " val "+pbar.loaded);
+    }
+  }
+
+  http.onload = function (pbar) {
+     window.console.log( "http last one "+ pbar.loaded);
+      callback(datacnt);
+     setTimeout(function() {window.console.log("http: INSIDE: delay a few seconds,"+datacnt) },5000);
+     window.console.log( "http last one status "+ http.status);
+  }
+
+// sychronous
   http.open("GET", url, false);
   http.send();
-  if(http.status !== 404) {
-    return http.responseText;
-    } else {
-      return null;
-  }
+ 
+     if(http.status !== 404) {
+        callback(datacnt);
+        setTimeout(function() {window.console.log("http:OUTSIDE: delay a few seconds,"+datacnt) },5000);
+window.console.log(" YYY from here ???");
+        return http.responseText;
+        } else {
+           return null;
+     }
 };
 
+/**********************************************************************/
+  
 function ckExist2(url) {
-  var http = new XMLHttpRequest();
-  http.onreadystatechange = function () {
-    if (this.readyState == 4) {
- // okay
-    }
-  }
-  http.open("GET", url, true);
-  http.send();
-  http.onreadystatechange = function() {
-    if(this.status != 404) {
-      return this.responseText;
-      } else {
-        return null;
-    }
-  }
-};
 
+let myPromise = new Promise(function(myResolve, myReject) {
+  let http = new XMLHttpRequest();
+  http.open('GET', url);
+  http.onload = function() {
+    if (http.status == 200) {
+      myResolve(http.responseText);
+    } else {
+      myReject(null);
+    }
+  };
+  http.send();
+});
+
+return myPromise.then( function(value) {return value;}, function(error) { return error;});
+
+}
+
+async function ckExistTrack0(url, callback, datacnt) {
+  let result=null;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("Network response was not OK");
+    }
+    result = await response.text();
+    callback(datacnt);
+window.console.log("in ckExistTrack");
+
+  } catch (error) {
+window.console.error("There has been a problem with your fetch operation:", error);
+  }
+  return result;
+}
+
+/**********************************************************************/
 
 /* color from blue to red */
 function makeRGB(val, maxV, minV) {
