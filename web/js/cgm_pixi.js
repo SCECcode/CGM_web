@@ -266,7 +266,6 @@ function _loadup_data(gid,url,expect_chunk) {
      }
 
      let rc=updateProgressBar(datacnt);
-     $('#modalprogress').modal('show');
    }
 
 

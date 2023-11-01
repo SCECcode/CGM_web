@@ -85,6 +85,7 @@ function ckExist(url) {
   } catch(e) {
      window.console.log("bad http.send call..");
      alert("Unable to retrieve \n\n"+url);
+     window.top.postMessage({'call':'fromTSviewer', value:'fail to load'}, '*');
      return null;
   }
   if(http.status !== 404) {

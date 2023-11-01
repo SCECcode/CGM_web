@@ -17,7 +17,6 @@ function setupProgressBar(exp,txt) {
   
 function updateProgressBar(n) {
 window.console.log("updating.. progress bar"); 
-    $('#modalprogress').modal('hide');
     let maxelm  = $("#wait-expected");
     let max = parseInt(maxelm.val());
     var width = Math.floor((n/max) * 100);
@@ -110,6 +109,24 @@ function ckExist(url) {
     return http.responseText;
     } else {
       return null;
+  }
+};
+
+function ckExist2(url) {
+  var http = new XMLHttpRequest();
+  http.onreadystatechange = function () {
+    if (this.readyState == 4) {
+ // okay
+    }
+  }
+  http.open("GET", url, true);
+  http.send();
+  http.onreadystatechange = function() {
+    if(this.status != 404) {
+      return this.responseText;
+      } else {
+        return null;
+    }
   }
 };
 

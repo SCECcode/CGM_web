@@ -169,7 +169,13 @@ window.addEventListener("DOMContentLoaded", function () {
           window.console.log(" SERVER, TS viewer is ready");
           return;
         }
+        if(event.data.value == "fail to load") {
+          window.console.log(" SERVER, TS viewer having problem !!!!");
+          $("#wait-spinner").hide();
+          return;
+        }
         window.console.log("service, what the heck ..",event.data.value);
+        $("#wait-spinner").hide();
       } else {
       window.console.log("service, what the heck 2 ..",event.data);
     }
