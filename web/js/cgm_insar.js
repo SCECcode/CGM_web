@@ -245,7 +245,7 @@ window.console.log(" CAlling setupBaseline..");
        }
        let ngid= $.now();
        let url="./cgm_data/insar/insar_baseline_"+track+"_velocity_list.csv";
-       let rc = makeOnePixiLayer(ngid,url);
+       let rc = makeOneBasePixiLayer(ngid,url);
        this.cgm_insar_baseline.push({'track':track,'pixiuid':ngid});
     };
 
@@ -835,6 +835,7 @@ window.console.log("calling search() with the string.."+JSON_criteria);
                              let url = getDataDownloadURL(file);
 
                              let rc = makeOnePixiLayer(ngid,url);
+
                              let pixilayer = rc["pixiLayer"];
                              let max_v = rc["max_v"];
                              let min_v = rc["min_v"];
@@ -867,7 +868,7 @@ window.console.log("nx is "+nx+" and ny "+ny);
                      }
                  }
             }
-            CGM_INSAR.showPHP(type, results,Sncriteria);
+            CGM_INSAR.showPHP(type, results,ncriteria);
         });
     };
 

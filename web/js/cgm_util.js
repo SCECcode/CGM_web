@@ -16,13 +16,11 @@ function setupProgressBar(exp,txt) {
 }
   
 function updateProgressBar(width) {
-window.console.log("updating.. progress bar"); 
     var element = document.getElementById("myProgressBar");
     element.style.width = width + '%';
     let elm = $("#wait-progress");
     let percent= width * 1  + '%';
     elm.val(percent);
-window.console.log("  done with updating.."+percent); 
     return 1;
 }
 
@@ -91,8 +89,10 @@ function isObject(objV) {
 // should be a very small file and used for testing and so can ignore
 // >>Synchronous XMLHttpRequest on the main thread is deprecated
 // >>because of its detrimental effects to the end user's experience.
-function retrieveTrack(gid, url, callback) {
+function retrieveTrack(gid, url, callback, async) {
+
   var http = new XMLHttpRequest();
+window.console.log("FIRST line in http");
 
   http.onreadystatechange = function () {
     if (this.readyState == 4) {
@@ -105,7 +105,6 @@ function retrieveTrack(gid, url, callback) {
        updateProgressBar(width);
     }
   }
-
   http.onloadend = function (pbar) {
      doneLoadTrackWait();
      if(http.status !== 404) {
@@ -114,10 +113,16 @@ function retrieveTrack(gid, url, callback) {
      window.console.log( "http last one status "+ http.statusText);
   }
 
-// sychronous
-  http.open("GET", url, true);
+// sychronous=false, async=true
+  http.open("GET", url, async);
   http.send();
 
+  if(async == false) {
+    window.console.log("LAST line in http");
+    if(http.status !== 404) {
+      return callback(gid,http.responseText);
+    } 
+  }
 };
 
 /**********************************************************************/

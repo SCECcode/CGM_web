@@ -161,11 +161,17 @@ function setup_pixi() {
   return loader;
 }
 
-// first retrieve data from external file and as a
-// call back build the layer
+// first retrieve data from external file and user 
+// callback to build the layer
+function makeOneBasePixiLayer(gid,file) {
+   let rarray=retrieveTrack(gid, file, makePixiOverlayLayer,true);
+   return rarray;
+}
 
+// retrieve data from extracted external data, call
+// schronized get
 function makeOnePixiLayer(gid,file) {
-   let rarray=retrieveTrack(gid, file, makePixiOverlayLayer);
+   let rarray=retrieveTrack(gid, file, makePixiOverlayLayer,false);
    return rarray;
 }
 
@@ -230,12 +236,9 @@ function _process_data(gid, blob) {
      datalist.push([]);
    }
 
-   let dataurl;
-   let datacnt=0;
-
    let tmp=blob.split("\n");
    let sz=tmp.length;
-   window.console.log("size of "+dataurl+" is "+sz);
+   window.console.log("size of data file is "+sz);
 
    for(let i=0; i<sz; i++) {
       let ll=tmp[i];
@@ -256,7 +259,6 @@ function _process_data(gid, blob) {
 
       vel=parseFloat(vel);
       rawlist.push([vel,lat,lon]);
-      datacnt++;
       if(vel > DATA_max_v)
           DATA_max_v=vel;
       if(vel < DATA_min_v)
@@ -282,7 +284,7 @@ function _process_data(gid, blob) {
    }
    pixiLatlngList= {"gid":gid,"data":datalist} ; 
 
-   window.console.log("FILE:"+dataurl+" total data:"+DATA_count+"("+DATA_min_v+","+DATA_max_v+")");
+   window.console.log("data file, total data:"+DATA_count+"("+DATA_min_v+","+DATA_max_v+")");
 
    return pixiLatlngList;
 }
@@ -296,8 +298,6 @@ function makePixiOverlayLayer(gid, blob) {
 
     let pixiContainer = new PIXI.Container();
     let pContainers=[]; //particle container
-
-window.console.log(" HERE...");
 
     for(var i=0; i<DATA_SEGMENT_COUNT; i++) {
       var length=getMarkerCount(pixiLatlngList,i);
