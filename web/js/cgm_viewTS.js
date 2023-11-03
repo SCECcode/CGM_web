@@ -117,6 +117,7 @@ window.console.log("calling showTSview..");
 
   let params= "urls="+ublob+"&ptype="+pblob+"&ftypes="+fblob;
   set_PARAMS(params);
+window.console.log("showTSview..param > "+params);
 
   $('#viewTSIfram').attr('src',"cgm_ts.html?"+params);
 }

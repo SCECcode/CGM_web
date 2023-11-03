@@ -15,12 +15,8 @@ function setupProgressBar(exp,txt) {
   elm.val(percent);
 }
   
-function updateProgressBar(n) {
+function updateProgressBar(width) {
 window.console.log("updating.. progress bar"); 
-    let maxelm  = $("#wait-expected");
-    let max = parseInt(maxelm.val());
-    var width = Math.floor((n/max) * 100);
-
     var element = document.getElementById("myProgressBar");
     element.style.width = width + '%';
     let elm = $("#wait-progress");
@@ -41,7 +37,6 @@ function showProgressBar() {
 }
 
 function doneLoadTrackWait() {
-//  $("#modalprogress").modal('hide');
   setTimeout(function() {$('#modalprogress').modal('hide')}, 2000);
 }
 
@@ -96,79 +91,34 @@ function isObject(objV) {
 // should be a very small file and used for testing and so can ignore
 // >>Synchronous XMLHttpRequest on the main thread is deprecated
 // >>because of its detrimental effects to the end user's experience.
-function ckExistTrack(url, callback, datacnt) {
+function retrieveTrack(gid, url, callback) {
   var http = new XMLHttpRequest();
 
   http.onreadystatechange = function () {
     if (this.readyState == 4) {
       window.console.log("http ready..");
-      setTimeout(function() {window.console.log("http: READY: delay a few seconds,"+datacnt) },5000);
     }
   }
   http.onprogress = function (pbar) {
     if (pbar.lengthComputable) {
-       window.console.log("http total "+ pbar.total + " val "+pbar.loaded);
+       let width = Math.floor((pbar.loaded/pbar.total) * 100);
+       updateProgressBar(width);
     }
   }
 
-  http.onload = function (pbar) {
-     window.console.log( "http last one "+ pbar.loaded);
-      callback(datacnt);
-     setTimeout(function() {window.console.log("http: INSIDE: delay a few seconds,"+datacnt) },5000);
-     window.console.log( "http last one status "+ http.status);
+  http.onloadend = function (pbar) {
+     doneLoadTrackWait();
+     if(http.status !== 404) {
+       return callback(gid,http.responseText);
+     } 
+     window.console.log( "http last one status "+ http.statusText);
   }
 
 // sychronous
-  http.open("GET", url, false);
+  http.open("GET", url, true);
   http.send();
- 
-     if(http.status !== 404) {
-        callback(datacnt);
-        setTimeout(function() {window.console.log("http:OUTSIDE: delay a few seconds,"+datacnt) },5000);
-window.console.log(" YYY from here ???");
-        return http.responseText;
-        } else {
-           return null;
-     }
+
 };
-
-/**********************************************************************/
-  
-function ckExist2(url) {
-
-let myPromise = new Promise(function(myResolve, myReject) {
-  let http = new XMLHttpRequest();
-  http.open('GET', url);
-  http.onload = function() {
-    if (http.status == 200) {
-      myResolve(http.responseText);
-    } else {
-      myReject(null);
-    }
-  };
-  http.send();
-});
-
-return myPromise.then( function(value) {return value;}, function(error) { return error;});
-
-}
-
-async function ckExistTrack0(url, callback, datacnt) {
-  let result=null;
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("Network response was not OK");
-    }
-    result = await response.text();
-    callback(datacnt);
-window.console.log("in ckExistTrack");
-
-  } catch (error) {
-window.console.error("There has been a problem with your fetch operation:", error);
-  }
-  return result;
-}
 
 /**********************************************************************/
 

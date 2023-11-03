@@ -161,9 +161,16 @@ function setup_pixi() {
   return loader;
 }
 
-// if expect_chunk is greater than 0, then running in 'Progress checking mode'
-function makeOnePixiLayer(gid,file,expect_chunk) {
-  let pixiLayer = makePixiOverlayLayer(gid,file,expect_chunk);
+// first retrieve data from external file and as a
+// call back build the layer
+
+function makeOnePixiLayer(gid,file) {
+   let rarray=retrieveTrack(gid, file, makePixiOverlayLayer);
+   return rarray;
+}
+
+function makeOnePixiLayerWrap(pixiLayer) {
+
   let ticker = new PIXI.ticker.Ticker();
 
   ticker.add(function(delta) { 
@@ -209,7 +216,7 @@ function toggleMarkerContainer(pixi,target_segment) {
 // break up data into buckets (one per segment)
 /* {"gid":gid,"data":[ [{"lat":lat,"lng":lng},...], ...] } */
 //  insar_baseline_A064_velocity_list.csv_part0 so forth
-function _loadup_data(gid,url,expect_chunk) {
+function _process_data(gid, blob) {
 
    DATA_max_v=INSAR_min_v;
    DATA_min_v=INSAR_max_v;
@@ -226,47 +233,34 @@ function _loadup_data(gid,url,expect_chunk) {
    let dataurl;
    let datacnt=0;
 
-   for(let cidx=0; cidx < expect_chunk; cidx++) {
-     if(expect_chunk == 1) {
-       dataurl=url;
-       } else {
-         dataurl=url+"_part"+cidx;
-     }
+   let tmp=blob.split("\n");
+   let sz=tmp.length;
+   window.console.log("size of "+dataurl+" is "+sz);
 
-     let blob=ckExistTrack(dataurl,updateProgressBar,datacnt);
+   for(let i=0; i<sz; i++) {
+      let ll=tmp[i];
+      if(ll[0]=='#') { // comment line
+        continue;
+      }	      
+      let token=ll.split(",");
+      if(token.length != 7) {
+         window.console.log("invalid data in this line "+i+" >>"+token.length);
+         window.console.log(" bad line: >>"+ll+"<<");
+         continue;
+      }
+      let lon=parseFloat(token[0].trim());
+      let lat=parseFloat(token[1].trim());
+      let vel=token[2].trim();
 
-     let tmp=blob.split("\n");
-     let sz=tmp.length;
-     window.console.log("size of "+dataurl+" is "+sz);
+      if(Number.isNaN(vel) || vel == "nan") { continue; }
 
-     for(let i=0; i<sz; i++) {
-        let ll=tmp[i];
-        if(ll[0]=='#') { // comment line
-          continue;
-        }	      
-        let token=ll.split(",");
-        if(token.length != 7) {
-           window.console.log("invalid data in this line "+i+" >>"+token.length);
-           window.console.log(" bad line: >>"+ll+"<<");
-           continue;
-        }
-        let lon=parseFloat(token[0].trim());
-        let lat=parseFloat(token[1].trim());
-        let vel=token[2].trim();
-
-        if(Number.isNaN(vel) || vel == "nan") { continue; }
-
-        vel=parseFloat(vel);
-        rawlist.push([vel,lat,lon]);
-        datacnt++;
-        if(vel > DATA_max_v)
+      vel=parseFloat(vel);
+      rawlist.push([vel,lat,lon]);
+      datacnt++;
+      if(vel > DATA_max_v)
           DATA_max_v=vel;
-        if(vel < DATA_min_v)
+      if(vel < DATA_min_v)
           DATA_min_v=vel
-
-     }
-
-     //let rc=updateProgressBar(datacnt);
    }
 
 
@@ -274,6 +268,7 @@ function _loadup_data(gid,url,expect_chunk) {
    let sorted_rawlist = rawlist.sort((a,b) => {
           return b[0] - a[0];
    });
+
    let sorted_vlist=sorted_rawlist.map(function(value,index){ return value[0]; });
 
    DATA_count=sorted_rawlist.length;
@@ -287,18 +282,22 @@ function _loadup_data(gid,url,expect_chunk) {
    }
    pixiLatlngList= {"gid":gid,"data":datalist} ; 
 
-   window.console.log("FILE:"+url+" total data:"+DATA_count+"("+DATA_min_v+","+DATA_max_v+")");
+   window.console.log("FILE:"+dataurl+" total data:"+DATA_count+"("+DATA_min_v+","+DATA_max_v+")");
 
    return pixiLatlngList;
 }
 
-function makePixiOverlayLayer(gid,file,expect_chunk=1) {
+
+function makePixiOverlayLayer(gid, blob) {
+
+    let pixiLatlngList=_process_data(gid, blob);
+	
     let zoomChangeTs = null;
 
     let pixiContainer = new PIXI.Container();
     let pContainers=[]; //particle container
 
-    let pixiLatlngList= _loadup_data(gid,file,expect_chunk);
+window.console.log(" HERE...");
 
     for(var i=0; i<DATA_SEGMENT_COUNT; i++) {
       var length=getMarkerCount(pixiLatlngList,i);
@@ -410,7 +409,9 @@ function makePixiOverlayLayer(gid,file,expect_chunk=1) {
     }).addTo(viewermap);
 
 pixiOverlayList.push({"gid":gid,"vis":1,"overlay":overlay,"top":pixiContainer,"inner":pContainers,"latlnglist":pixiLatlngList});
-    return overlay;
+
+    let rc=makeOnePixiLayerWrap(overlay);
+    return rc;
 }
 
 function foundOverlay(gid) {
