@@ -82,7 +82,8 @@ $cgm_insar = new CGM_INSAR();
     <script type="text/javascript" src="js/cgm_viewTS_util.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_viewTS.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_leaflet.js?v=1"></script>
-    <script type="text/javascript" src="js/cxm_misc_util.js?v=1"></script>
+    <script type="text/javascript" src="js/cxm_model_util.js?v=1"></script>
+    <script type="text/javascript" src="js/cxm_kml.js?v=1"></script>
 
    <!-- pixi pixiOverlay -->
     <script type="text/javascript" src="js/vendor/pixi.js"></script>
@@ -98,12 +99,8 @@ $cgm_insar = new CGM_INSAR();
         var tableLoadCompleted = false;
         window.dataLayer = window.dataLayer || [];
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-
         gtag('config', 'UA-495056-12');
 
         $(document).on("tableLoadCompleted", function () {
@@ -126,20 +123,18 @@ $cgm_insar = new CGM_INSAR();
 
 <div class="container">
 <div class="main" id="cgmMain">
-    <div class="row">
-        <div class="col-12">
-            <p>The Community Geodetic Model (CGM) provides displacement time series and velocities of the Earth’s surface over southern California using data from Global Navigation Satellite Systems (GNSS), which includes the Global Positioning System (GPS), and interferometric synthetic aperture radar (InSAR), both space-based geodetic observation techniques.</p>
-        </div>
+    <div id="top-intro">
+        <p>The Community Geodetic Model (CGM) provides displacement time series and velocities of the Earth’s surface over southern California using data from Global Navigation Satellite Systems (GNSS), which includes the Global Positioning System (GPS), and interferometric synthetic aperture radar (InSAR), both space-based geodetic observation techniques.</p>
     </div>
 
     <div class="row" style="display:none;">
         <div class="col justify-content-end custom-control-inline">
             <div style="display:none;" id="external_leaflet_control"></div>
-            <div id="downloadSelect" class="cfm-control-download" onMouseLeave="removeDownloadControl()"></div>
+            <div id="downloadSelect" class="cgm-control-download" onMouseLeave="removeDownloadControl()"></div>
         </div>
     </div>
 
-    <div class="row mb-2">
+    <div id="top-control-row-1" class="row mb-2">
         <div class="col-12 d-flex text-left pr-0">
             <div class="col-5" style="padding:0">
                 <div class="input-group input-group-sm custom-control-inline pull-left" id="dataset-controls" style="max-width:170px">
@@ -173,9 +168,10 @@ $cgm_insar = new CGM_INSAR();
 
             </div>
          </div>
-     </div>
+    </div>
 
 <!-- GNSS select -->
+    <div id="top-control-row-2">
     <div class="row control-container mt-1" id="cgm-gnss-controls-container" style="display:;">
             <div class="col-4 input-group filters mb-3">
                 <select id="cgm-gnss-search-type" class="custom-select">
@@ -350,43 +346,10 @@ $cgm_insar = new CGM_INSAR();
                 </ul>
             </div>
     </div>
+    </div> <!-- top-select --> 
 <!-- -->
-    <div class="row">
-        <div class="col-12 d-flex text-right pr-0">
-            <div class="col-5" style="padding:0">
-<!---
-                <div class="input-group input-group-sm custom-control-inline pull-left" id="dataset-controls" style="max-width:170px">
-                         <div class="input-group-prepend">
-                                 <label style='border-bottom:1;' class="input-group-text" for="data-product-select">Select Dataset</label>
-                         </div>
-                         <select id='data-product-select' class="custom-select custom-select-sm">
-                                 <option selected value="gnss">GNSS</option>
-                                 <option value="insar">InSAR</option>
-                         </select>
-                </div>
-
-                <div id="insar-track-controls" class="input-group input-group-sm custom-control-inline pull-left mb-2" style="max-width:160px;display:none">
-                         <div class="input-group-prepend">
-                                 <label style='border-bottom:1;' class="input-group-text" for="insar-track-select">Select Track</label>
-                         </div>
-                         <select id='insar-track-select' class="custom-select custom-select-sm">
-                                 <option selected value="D071">D071</option>
-                                 <option value="D173">D173</option>
-                                 <option value="A064">A064</option>
-                                 <option value="A166">A166</option>
-                         </select>
-                </div>
-                <button id="downloadInSARBtn" class="btn pull-left" style="display:none"
-                        onClick="downloadHDF5InSAR()">
-                        <span class="glyphicon glyphicon-download"
-                        title="download complete HDF5 data file for selected Track"
-			style="font-size:14px;"></span>
-                </button>
-
---->
-            </div>
-
-            <div id='model-options' class="col-7 justify-content-end  form-check-inline mr-0" >
+    <div id="top-control-row-3" class="row justify-content-end">
+            <div id='model-options' class="form-check-inline" >
                 <div class="form-check form-check-inline">
                      <label class='form-check-label'
                              title='Show GNSS station location on map'
@@ -414,7 +377,7 @@ $cgm_insar = new CGM_INSAR();
                              id="cgm-model-insar" value="1" />InSAR
                      </label>
                 </div>
-                <div class="form-check form-check-inline mr-5">
+                <div class="form-check form-check-inline">
                      <label class='form-check-label ml-1 mini-option'
                              title='Show Community Fault Model v6.1 on map'
                              for="cgm-model-cfm">
@@ -424,7 +387,31 @@ $cgm_insar = new CGM_INSAR();
                      </label>
                 </div>
 
-                <div class="input-group input-group-sm custom-control-inline mr-0 mb-1" id="map-controls">
+                <div class="form-check form-check-inline">
+                    <label class='form-check-label ml-1 mini-option'
+                               for="cgm-model-gfm">
+                    <input class='form-check-inline mr-1'
+                               type="checkbox"
+                               id="cgm-model-gfm" value="1" />GFM
+                    </label>
+                </div>
+            </div>
+
+<!-- KML/KMZ overlay -->
+            <div id="kml-row" class="col-2 custom-control-inline mb-1">
+                    <input id="fileKML" type='file' multiple onchange='uploadKMLFile(this.files)' style='display:none;'></input>
+                    <button id="kmlBtn" class="btn"
+                      onclick='javascript:document.getElementById("fileKML").click();'
+                      title="Upload your own kml/kmz file to be displayed on the map interface. We currently support points, lines, paths, polygons, and image overlays (kmz only)."
+                      style="color:#395057;background-color:#f2f2f2;border:1px solid #ced4da;border-radius:0.2rem;padding:0.15rem 0.5rem;"><span>Upload kml/kmz</span></button>
+                    <button id="kmlSelectBtn" class="btn cxm-small-no-btn"
+                      title="Show/Hide uploaded kml/kmz files"
+                      style="display:none;" data-toggle="modal" data-target="#modalkmlselect">
+                      <span id="eye_kml"  class="glyphicon glyphicon-eye-open"></span></button>
+            </div> <!-- kml-row -->
+
+
+            <div class="input-group input-group-sm custom-control-inline mr-0 mb-1" id="map-controls">
                     <div class="input-group-prepend">
                         <label style='border-bottom:1;' class="input-group-text" for="mapLayer">Select Map Type</label>
                     </div>
@@ -439,37 +426,25 @@ $cgm_insar = new CGM_INSAR();
                         <option value="osm street">OSM Street</option>
                         <option value="esri terrain">ESRI Terrain</option>
                     </select>
+            </div>
+    </div> <!-- top-control-row-2 -->
+
+<div id="mapDataBig" class="row mapData">
+    <div id="top-map" class="col-12 map-container">
+        <div class="row" id='CGM_plot'
+                   style="padding:0px;position:relative;border:solid 1px #ced4da; height:600px;">
+            <div  id='wait-spinner' style="z-index:9999;">
+                <div class="d-flex justify-content-center" >
+                  <div class="spinner-border text-light" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row mapData">
-<!-- NO NEED FOR THIS ??
-        <div class="col-5 button-container d-flex flex-column cgm-search-result-container pr-1" style="overflow:hidden;">
-            <div id="searchResult" class="mb-1" style="display:none">
-            </div>
-        </div>
---->
-        <div class="col-12 map-container">
+    </div> <!-- top-map -->
+</div> <!-- mapDataBig -->
 
-            <div class="row" >
-
-                <div class="col" id='CGM_plot'
-                        style="position:relative;border:solid 1px #ced4da; height:600px;">
-                    <div  id='wait-spinner' style="z-index:9999;">
-                        <div class="d-flex justify-content-center" >
-                          <div class="spinner-border text-light" role="status">
-                            <span class="sr-only">Loading...</span>
-                          </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-        </div>
-    </div>
-    <div class="row mt-1">
+    <div id="top-select" class="row mt-1">
         <div class="col-12" style="padding-right:0px">
             <div id="metadata-viewer-container" style="border:solid 1px #ced4da; overflow-x:hidden">
                 <table id="metadata-viewer">
@@ -487,6 +462,36 @@ $cgm_insar = new CGM_INSAR();
         </div>
     </div>
 </div> <!-- main/cgmMain -->
+
+<div id="expand-view-key-container" style="display:none;">
+  <div id="expand-view-key" class="row" style="opacity:0.8; height:1.4rem;">
+    <button id="bigMapBtn" class="btn cgm-small-btn" title="Expand into a larger map" style="color:black;background-color:rgb(255,255,255);padding: 0rem 0.3rem 0rem 0.3rem" onclick="toggleBigMap()"><span class="fas fa-expand"></span>
+    </button>
+  </div>
+</div>
+
+
+<!-- modal list -->
+<!--Modal: (modalkmlselect) -->
+<div class="modal" id="modalkmlselect" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-small" id="modalkmlselectDialog" role="document">
+
+    <!--Content-->
+    <div class="modal-content" id="modalkmlselectContent">
+      <!--Body-->
+      <div class="modal-body" id="modalkmlselectBody">
+        <div class="row col-md-12 ml-auto" style="overflow:hidden;">
+          <div class="col-12" id="kmlselectTable-container" style="font-size:14pt"></div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-outline-primary btn-md" data-dismiss="modal">Close</button>
+      </div>
+
+    </div> <!--Content-->
+  </div>
+</div> <!--Modal: modalkmlselect-->
+
 
 <!--Modal: (modalazimuth)  -->
 <div class="modal" id="modalazimuth" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

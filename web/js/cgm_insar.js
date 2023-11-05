@@ -472,7 +472,7 @@ window.console.log(" CAlling setupBaseline..");
       // XX -- might need to refocus because it seems to be off for a sec and need a refresh
     }
 
-// could be D071,A064,D173,A166
+// could be D071,A064,D173,A166,all
     this.downloadURLsAsZip = function(track_target) {
         var nzip=new JSZip();
         var layers=CGM_INSAR.search_result.getLayers();
@@ -505,7 +505,7 @@ window.console.log(" CAlling setupBaseline..");
             saveAs(content, zipfname);
           })
         } else {
-window.console.log("CGM_INSAR: no matching ts to download..");
+		alert(" No data file for download ");
         }
     }
 
@@ -554,14 +554,12 @@ var generateTableRow = function(layer) {
             case this.searchType.location:
                 $all_search_controls.hide();
                 $("#cgm-insar-location").show();
-                removeColorLegend();
                 skipDrawRectangle();
                 addDrawPoint();
                 break;
             case this.searchType.latlon:
                 $all_search_controls.hide();
                 $("#cgm-insar-latlon").show();
-                showColorLegend("insar_colorbar.png");
                 addDrawRectangle();
                 skipDrawPoint();
                 break;
@@ -614,7 +612,6 @@ window.console.log("Hide model/product");
 
         this.unhighlightTrack();
 
-	removeColorLegend();
 	remove_bounding_rectangle_layer();
         clearAllPixiOverlay();
         this.zeroSelectCount()
@@ -645,7 +642,6 @@ window.console.log("insar calling -->> resetSearch..");
 
         skipDrawPoint();
         skipDrawRectangle();
-        removeColorLegend();
 	remove_bounding_rectangle_layer();
 
         viewermap.setView(this.defaultMapView.coordinates, this.defaultMapView.zoom);
@@ -745,8 +741,8 @@ window.console.log("STASHING "+results.length+" layers from PHP calls");
         }
 
         let JSON_criteria = JSON.stringify(criteria);
-window.console.log("calling search() with the type.."+type);
-window.console.log("calling search() with the string.."+JSON_criteria);
+//window.console.log("calling search() with the type.."+type);
+//window.console.log("calling search() with the string.."+JSON_criteria);
         $("#wait-spinner").show();
         $.ajax({
             url: "php/search.php",
@@ -903,27 +899,9 @@ window.console.log("generateResultsTable..");
                         <th style="width:20%;"><div class="col text-center">
 <!--download all -->
                             <div class="btn-group download-now">
-                                <button id="download-all" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false" disabled>
+                                <button id="download-all" type="button" class="btn btn-dark" onClick= "CGM_INSAR.downloadURLsAsZip('all')">
                                     DOWNLOAD&nbsp<span id="download-counter"></span>
                                 </button>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <button class="dropdown-item" type="button" value="D071"
-                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);">D071
-                                    </button>
-                                    <button class="dropdown-item" type="button" value="D173"
-                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);">D173
-                                    </button>
-                                    <button class="dropdown-item" type="button" value="A064"
-                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);">A064
-                                    </button>
-                                    <button class="dropdown-item" type="button" value="A166"
-                                            onclick="CGM_INSAR.downloadURLsAsZip(this.value);">A166
-                                    </button>
-                                    <button class="dropdown-item" type="button" value="all"
-                                          onclick="CGM_INSAR.downloadURLsAsZip(this.value);">All of the Above
-                                    </button>
-                                </div>
                             </div>
                         </th>
 </tr>
@@ -988,6 +966,8 @@ window.console.log("calling INSAR setupInterface..");
         this.highlightTrack(this.track_name);
 
         this.activateData();
+
+        showColorLegend("insar_colorbar.png");
 
         $("#cgm-controlers-container").css('display','none');
         $("#cgm-insar-controlers-container").css('display','');

@@ -5,6 +5,86 @@
 var cgm_latlon_area_list=[];
 var cgm_latlon_point_list=[];
 
+/************************************************************************************/
+var big_map=0; // 0(some control),1(none)
+var park_plot_width=0;
+var park_plot_height=0;
+var park_plot_container=0;
+
+function _toBigView()
+{
+window.console.log(" calling toBigView..");
+
+park_plot_height=$('#CGM_plot').css("height");
+park_plot_width=$('#CGM_plot').css("width");
+park_plot_container=$('#container').css("width");
+
+let height=window.innerHeight;
+let width=window.innerWidth;
+
+window.console.log("with wh"+height +" with ww"+width);
+window.console.log("nn with wh"+park_plot_height +" with ww"+park_plot_width+" with cc"+park_plot_container);
+
+$('#top-intro').css("display", "none");
+$('#top-control-row-1').css("display", "none");
+$('#top-control-row-2').css("display", "none");
+$('#top-control-row-3').css("display", "none");
+$('#top-select').css("display", "none");
+//$('#top-map').css("border-left-width", "0px");
+//$('#top-map').css("border-right-width", "0px");
+$('#top-map').css("padding-left", "15px");
+$('.navbar').css("margin-bottom", "0px");
+$('.container').css("max-width", "100%");
+$('.leaflet-control-attribution').css("width", "80rem");
+// minus the height of the container top 
+let elt = document.getElementById('banner-container');
+let c_height = elt.clientHeight;
+let h = height - c_height - 4.5;
+let w = width - 4.5;
+$('#CGM_plot').css("height", h);
+$('#CGM_plot').css("width", w);
+resize_map();
+}
+
+function _toNormalView()
+{
+window.console.log(" calling toNormalView..");
+
+let height=window.innerHeight;
+let width=window.innerWidth;
+window.console.log("with wh"+height +" with ww"+width);
+window.console.log("nn with wh"+park_plot_height +" with ww"+park_plot_width);
+
+$('#CGM_plot').css("height", park_plot_height);
+$('#CGM_plot').css("width", park_plot_width);
+$('#top-control-row-1').css("display", "");
+$('#top-control-row-2').css("display", "");
+$('#top-control-row-3').css("display", "");
+$('#top-select').css("display", "");
+$('#top-map').css("padding-left", "30px");
+$('.navbar').css("margin-bottom", "20px");
+$('.container').css("max-width", "1140px");
+$('.leaflet-control-attribution').css("width", "35rem");
+$('#top-intro').css("display", "");
+resize_map();
+}
+
+function toggleBigMap()
+{
+  switch (big_map)  {
+    case 0:
+      big_map=1;
+      _toBigView();		   
+      break;
+    case 1:
+      big_map=0;
+      _toNormalView();		   
+      break;
+  }
+}
+
+/************************************************************************************/
+
 function setupProgressBar(exp,txt) {
   $("#wait-expected").val(exp);
   $("#wait-text").val(txt);
@@ -124,6 +204,26 @@ window.console.log("FIRST line in http");
     } 
   }
 };
+
+// should be a very small file and used for testing and so can ignore
+// >>Synchronous XMLHttpRequest on the main thread is deprecated
+// >>because of its detrimental effects to the end user's experience.
+//     url=http://localhost/data/synapse/segments-dummy.csv
+function ckExist(url) {
+  var http = new XMLHttpRequest();
+  http.onreadystatechange = function () {
+    if (this.readyState == 4) {
+ // okay
+    }
+  }
+  http.open("GET", url, false);
+  http.send();
+  if(http.status !== 404) {
+    return http.responseText;
+    } else {
+      return null;
+  }
+}
 
 /**********************************************************************/
 

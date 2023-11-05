@@ -161,16 +161,20 @@ var CGM_GNSS = new function () {
         // scale bar height = 34 pixels
         // vector bar target height = 34+17=51
         let targetx=pmin['x']+10;
-        let targety=pmax['y']-51;
+//        let targety=pmax['y']-51;
+        let targety=pmax['y']-90;
+
         if(this.cgm_vector_loc == 0) {
            targetx=pmin['x'];
-           targety=pmax['y']-40;
+//           targety=pmax['y']-40;
+           targety=pmax['y']-110;
            this.cgm_vector_loc=targety;
         }
 
         let start_latlng=viewermap.unproject([targetx,targety],z);
 
         let o_latlng=viewermap.unproject([pmin['x'],pmax['y']],z);
+
 //window.console.log("origin >>"+pmin['x'],pmin['y']);
 //window.console.log("zoom >>"+z);
 //window.console.log("start_latlng>>",+start_latlng['lat'],start_latlng['lng']);
@@ -565,7 +569,9 @@ window.console.log("HERE.. selectStationByLayer..");
         var nzip=new JSZip();
         var layers=CGM_GNSS.search_result.getLayers();
         let timestamp=$.now();
-      
+
+
+        let zcnt=0;    
         var cnt=layers.length;
         for(var i=0; i<cnt; i++) {
           let layer=layers[i];
@@ -575,24 +581,28 @@ window.console.log("HERE.. selectStationByLayer..");
           }
       
           if(ftype == frameType.IGB14 || ftype == "all") {
+            zcnt++;
             let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.IGB14);
             let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
             let promise = $.get(downloadURL);
             nzip.file(dname,promise);
           }
           if(ftype == frameType.NAM14 || ftype == "all") {
+            zcnt++;
             let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.NAM14);
             let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
             let promise = $.get(downloadURL);
             nzip.file(dname,promise);
           }
           if(ftype == frameType.NAM17 || ftype == "all") {
+            zcnt++;
             let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.NAM14);
             let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
             let promise = $.get(downloadURL);
             nzip.file(dname,promise);
           }
           if(ftype == frameType.PCF14 || ftype == "all") {
+            zcnt++;
             let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.PCF14);
             let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
             let promise = $.get(downloadURL);
@@ -601,14 +611,19 @@ window.console.log("HERE.. selectStationByLayer..");
         }
       
       
-        var zipfname="CGM_GNSS_"+timestamp+".zip"; 
-        nzip.generateAsync({type:"blob"}).then(function (content) {
-          // see FileSaver.js
-          saveAs(content, zipfname);
-        })
+        if(zcnt == 0) {
+          alert(" No available file for download");
+          return;
+          } else {
+            var zipfname="CGM_GNSS_"+timestamp+".zip"; 
+            nzip.generateAsync({type:"blob"}).then(function (content) {
+            // see FileSaver.js
+            saveAs(content, zipfname);
+            })
+        }
     }
 
-var generateTableRow = function(layer) {
+    var generateTableRow = function(layer) {
         let $table = $("#metadata-viewer");
         let html = "";
 

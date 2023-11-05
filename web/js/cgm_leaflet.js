@@ -50,6 +50,11 @@ function clear_popup()
   viewermap.closePopup();
 }
 
+function resize_map()
+{
+  viewermap.invalidateSize();
+}
+
 function refresh_map()
 {
   if (viewermap == undefined) {
@@ -234,10 +239,10 @@ function setup_viewer()
 
 // enable the expand view key
 $("#CGM_plot").prepend($("#expand-view-key-container").html());
-let tmp=$(".leaflet-control-attribution");
+
 // should  only have 1, adjust the attribution's location
 let v= document.getElementsByClassName("leaflet-control-attribution")[0];
-v.style.right="0rem";
+v.style.right="1.5rem";
 v.style.height="1.4rem";
 v.style.width="35rem";
 
@@ -247,9 +252,11 @@ v.style.width="35rem";
 
 function removeColorLegend() {
   mylegend.update();
+window.console.log("removeColorLegend..");
 }
 function showColorLegend(param) {
   mylegend.update({}, param);
+window.console.log("showColorLegend..");
 }
 
 

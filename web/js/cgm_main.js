@@ -51,6 +51,14 @@ $(document).ready(function () {
         }
     });
 
+    $("#cgm-model-gfm").change(function() {
+      if ($("#cgm-model-gfm").prop('checked')) {
+          CXM.showGFMRegions(viewermap);
+          } else {
+              CXM.hideGFMRegions(viewermap);
+      }
+    });
+
 
     $("#cgm-gnss-search-type").on('change', function () {
         let type=$(this).val();
@@ -105,13 +113,13 @@ window.console.log(">>>> causing a start of gnss search..");
 
     $("#cgm-insar-search-type").on('change', function () {
         let type=$(this).val();
-window.console.log("main(insar) changing search type.."+type);
+//window.console.log("main(insar) changing search type.."+type);
         CGM_INSAR.showSearch(type);
     });
 
     $("#insar-track-select").on('change', function () {
         let type=$(this).val();
-window.console.log("main(insar) changing track.."+type);
+//window.console.log("main(insar) changing track.."+type);
         CGM_INSAR.setTrackName(type);
 	CGM_INSAR.resetTrackView(type);
     });
@@ -120,7 +128,7 @@ window.console.log("main(insar) changing track.."+type);
       $(this).on('blur mouseout', function () {
         $(this).off('mouseout');
         $(this).off('blur');
-window.console.log(">>>>XXX causing a start of inar search..");
+//window.console.log(">>>>XXX causing a start of inar search..");
 // these is where the change in latlon causes a new search..
 // 
           if( $(this).val() != '' ) {
