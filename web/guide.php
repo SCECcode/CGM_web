@@ -76,7 +76,13 @@ $header = getHeader("User Guide");
                     the interactive map after selecting stations (described below). “InSAR” adds
                     the outlines of the InSAR track footprints. “CFM6.1” adds the surface traces of
                     version 6.1 of the Community Fault Model faults, with blind faults indicated by
-                    a dashed line. Click on each individual fault to see a popup of its name.</p>
+                    a dashed line. Click on each individual fault to see a popup of its name. "GFM"
+                    adds the Geologic Framework Model regions defined as a component of the Community
+                    Rheology Model. Click on each individual polygon to see a popup of the region name.
+                    "KML/KMZ Uploader" allows users to upload their own Google Earth kml/kmz files 
+                    for display on the map interface.  The kml/kmz uploader currently supports 
+                    point/line data (kml/kmz) and image overlays (kmz only). kml/kmz files with remote
+                    links are currently not supported.</p>
 
 
             <h4><strong>Explore CGM products</strong></h4>
