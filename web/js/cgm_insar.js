@@ -900,7 +900,7 @@ window.console.log("generateResultsTable..");
 <!--download all -->
                             <div class="btn-group download-now">
                                 <button id="download-all" type="button" class="btn btn-dark" onClick= "CGM_INSAR.downloadURLsAsZip('all')">
-                                    DOWNLOAD&nbsp<span id="download-counter"></span>
+                                    DOWNLOAD&nbsp<span id="download-counter" disabled></span>
                                 </button>
                             </div>
                         </th>
