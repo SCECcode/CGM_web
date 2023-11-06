@@ -59,7 +59,6 @@ $(document).ready(function () {
       }
     });
 
-
     $("#cgm-gnss-search-type").on('change', function () {
         let type=$(this).val();
 window.console.log("main(gnss) changing search type.."+type);

@@ -31,6 +31,7 @@ function updateTSviewSelection(nx) {
 }
 
 function setupTSviewSelection(urllist, ptype, ftypelist) {
+window.console.log(ftypelist);
   TS_urllist=urllist;
   TS_ptype=ptype;
   TS_ftypelist=ftypelist;
@@ -40,6 +41,16 @@ function setupTSviewSelection(urllist, ptype, ftypelist) {
 //    btnElem.prop("disabled", true)
     btnElem.hide();
   }
+}
+
+function findTSviewTrack(tname) {
+   let sz=TS_urllist.length;
+   for(let i=0; i<sz; i++) {
+     if(TS_ftypelist[i] == tname)
+       return i; 
+   }
+   window.console.log("BAD frame type name.."+tname);
+   reurn -1;
 }
 
 function getTSviewSelection(){

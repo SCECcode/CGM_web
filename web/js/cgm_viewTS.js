@@ -14,8 +14,8 @@ var VIEWTS_tb = {
               'name': 'Basic Navigation',
               'description': 'How to manipulate the Time Series view' },
              {'id':1,
-              'name': 'Switch Frame Type',
-              'description': 'Cycle through time series with different frame types'},
+              'name': 'Select GNSS Frame Type',
+              'description': 'Select a Time Series frame type to display'},
              { 'id':2,
                'name': 'Close',
                'description': 'Close the Time Series view'},
@@ -103,8 +103,6 @@ function get_PARAMS() {
 //           [{}]/for INSAR
 function showTSview(urls,ptype,ftypes) {
 window.console.log("calling showTSview..");
-
-  window.console.log("HERE");
 
   setupTSviewSelection(urls,ptype,ftypes);
   [url,ptype,ftype] = getTSviewSelection();
@@ -228,3 +226,11 @@ window.console.log("server,need to toggle to "+ftype[0]);
   }
 }
 
+function selectTSview(tname) {
+   let nx=findTSviewTrack(tname);
+   updateTSviewSelection(nx);
+   [url,ptype,ftype]=getTSviewSelection(); 
+window.console.log("server,need to toggle to "+url[0]);
+window.console.log("server,need to toggle to "+ftype[0]);
+   _replotTSview(url,ptype,ftype);
+}

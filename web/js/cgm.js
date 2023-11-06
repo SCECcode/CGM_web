@@ -13,7 +13,6 @@ var CGM = new function () {
     this.setupCGMInterface = function() {
       CGM_GNSS.generateLayers();
       CGM_INSAR.generateLayers();
-window.console.log("HERE...");
 
       CGM_GNSS.setupInterface();
       $("#cgm-model-insar").click();

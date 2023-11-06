@@ -1,4 +1,25 @@
 /* required styles */
+
+#gnss-frame-type input[type="radio"] {
+  display: none;
+}
+
+#gnss-frame-type span {
+  padding: 0.5rem 1.5rem 0.5rem 1.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.2rem;
+  background-color: #f2f2f2;
+  color: #395057;
+  cursor: pointer;
+}
+
+#gnss-frame-type input[type="radio"]:checked + span {
+  background-color: #007bff;
+  border: 1px solid #007bff;
+  color: white;
+}
+
+
 #expand-view-key {
     z-index: 8000;
     position: absolute;

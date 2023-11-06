@@ -522,7 +522,24 @@ $cgm_insar = new CGM_INSAR();
     <div class="modal-content" id="modalTSContent">
       <!--Header-->
       <div class="modal-header">
+<!--
         <button id="viewTSTogglebtn" class="btn btn-outline-primary btn-sm" type="button" onclick="toggleTSview()">Switch Frame Type</button>
+-->
+         <div class="col">
+         <p>Select GNSS Frame Type: </p>   
+             <div>
+             <form id="gnss-frame-type">
+                <label><input type="radio" id="frameigb14" name="gnssframetype" value="igb14" onclick='selectTSview("igb14")' checked>
+                       <span>igb14</span></label>
+		<label><input type="radio" id="framenam14" name="gnssframetype" value="nam14" onclick='selectTSview("nam14")'>
+                       <span>nam14</span></label>
+		<label><input type="radio" id="framenam17" name="gnssframetype" value="nam17" onclick='selectTSview("nam17")'>
+                       <span>nam17</span></label>
+		<label><input type="radio" id="framepcf14" name="gnssframetype" value="pcf14" onclick='selectTSview("pcf14")'>
+                       <span>pcf147</span></label>
+             </form>
+             </div>
+         </div>
       </div>
 
       <!--Body-->
