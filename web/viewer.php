@@ -82,6 +82,7 @@ $cgm_insar = new CGM_INSAR();
     <script type="text/javascript" src="js/cgm_viewTS_util.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_viewTS.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_leaflet.js?v=1"></script>
+    <script type="text/javascript" src="js/cgm_model.js?v=1"></script>
     <script type="text/javascript" src="js/cxm_model_util.js?v=1"></script>
     <script type="text/javascript" src="js/cxm_kml.js?v=1"></script>
 

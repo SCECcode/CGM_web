@@ -27,7 +27,7 @@ $header = getHeader("User Guide");
 
     <h1>CGM Viewer User Guide</h1>
         <div class="col-12">
-            <figure class="cxm-interface figure float-lg-right">
+            <figure class="cgm-interface figure float-lg-right">
                 <img src="img/cgm-viewer.png" class="figure-img img-fluid" alt="Screen capture of CSM viewer interface">
                 <figcaption class="figure-caption">Screen capture of CGM viewer interface</figcaption>
             </figure>
@@ -104,7 +104,7 @@ $header = getHeader("User Guide");
                     the top-left corner. Options are: “Station Name”, then enter the station name
                     and press return; “Latitude & Longitude Box”, then either enter the latitude 
                     and longitude of the lower-left and top-right points or auto-populate the 
-                    fields by clicking-and- dragging to draw a box within the interactive map; 
+                    fields by clicking-and-dragging to draw a box within the interactive map; 
                     or “Vector”, which automatically displays the GNSS vectors (see “Display Layers”,
                     above), then select a range of velocities.</p>
 
@@ -117,9 +117,9 @@ $header = getHeader("User Guide");
                     criterion, or where InSAR is selected by points, the time series associated 
                     with those locations is available to view by selecting the “plotTS” button
                     in the table populated with selected points below the interactive map. In 
-                    the case of GNSS, the reference frame may be changed by selecting the 
-                    “Switch Frame Type” button in the top-left and other buttons along the bottom
-                    can close, reset or save the time series; select “Help” for details.</p>
+		    the case of GNSS, the reference frame may be changed by select one among 
+		    the GNSS frame type buttons in the top-left and other buttons along the 
+                    bottom can close, reset or save the time series; select “Help” for details.</p>
 
 	    <h4><strong>Select Points or Region to Download Data Subset</strong></h4>
 
