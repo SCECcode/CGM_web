@@ -14,8 +14,9 @@ var VIEWTS_tb = {
               'name': 'Basic Navigation',
               'description': 'How to manipulate the Time Series view' },
              {'id':1,
+              'ptype': 'gnss',
               'name': 'Select GNSS Frame Type',
-              'description': 'Select a Time Series frame type to display'},
+              'description': 'Select a GNSS Time Series frame type to display'},
              { 'id':2,
                'name': 'Close',
                'description': 'Close the Time Series view'},
@@ -34,7 +35,7 @@ var VIEWTS_tb = {
              ]
 }
 
-function setup_infoTSTable() {
+function setup_infoTSTable(target) {
    var tb=VIEWTS_tb['tsview'];
    var cnt=tb.length-1;
    var i;
@@ -42,10 +43,15 @@ function setup_infoTSTable() {
    tbhtml=tbhtml+"<thead><tr><th style=\"width:8vw\">Name</th><th style=\"width:40vw\"><b>Description</b></th></tr></thead><tbody>";
 
    for( i=0; i<cnt; i++) {
-     var item=tb[i];
-     var mname=item['name'];
-     var descript=item['description'];
-     var t="<tr><td style=\"width:6vw\">"+mname+"</td><td style=\"width:40vw\">"+descript+"</td></tr>";
+     let item=tb[i];
+     let mname=item['name'];
+     let descript=item['description'];
+     if ('ptype' in item) {
+ window.console.log("HERE... In seutp_infoTSTable.."+item['ptype']);
+       if(item['ptype'] != target)
+         continue;
+     }
+     let t="<tr><td style=\"width:6vw\">"+mname+"</td><td style=\"width:40vw\">"+descript+"</td></tr>";
      tbhtml=tbhtml+t;
    }
    tbhtml=tbhtml+"</tbody></table></div>";

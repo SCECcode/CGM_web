@@ -232,7 +232,6 @@ window.console.log("==> reset what was there/INSAR");
 
 
 // MAIN SETUP
-    setup_infoTSTable();
     setup_warnTSTable();
     setup_pixi();
 

@@ -1142,6 +1142,9 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
         }
 
         this.setupInterface = function() {
+
+	    setup_infoTSTable('gnss');
+
             var $download_queue_table = $('#metadata-viewer');
             var sz=0;
             if(cgm_gnss_station_data != null) {

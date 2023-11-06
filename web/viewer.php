@@ -440,6 +440,12 @@ $cgm_insar = new CGM_INSAR();
                   </div>
                 </div>
             </div>
+<div id="expand-view-key-container" style="display:none;">
+  <div id="expand-view-key" class="row" style="opacity:0.8; height:1.4rem;">
+    <button id="bigMapBtn" class="btn cgm-small-btn" title="Expand into a larger map" style="color:black;background-color:rgb(255,255,255);padding: 0rem 0.3rem 0rem 0.3rem" onclick="toggleBigMap()"><span class="fas fa-expand"></span>
+    </button>   
+  </div>               
+</div>     
         </div>
     </div> <!-- top-map -->
 </div> <!-- mapDataBig -->
@@ -462,14 +468,6 @@ $cgm_insar = new CGM_INSAR();
         </div>
     </div>
 </div> <!-- main/cgmMain -->
-
-<div id="expand-view-key-container" style="display:none;">
-  <div id="expand-view-key" class="row" style="opacity:0.8; height:1.4rem;">
-    <button id="bigMapBtn" class="btn cgm-small-btn" title="Expand into a larger map" style="color:black;background-color:rgb(255,255,255);padding: 0rem 0.3rem 0rem 0.3rem" onclick="toggleBigMap()"><span class="fas fa-expand"></span>
-    </button>
-  </div>
-</div>
-
 
 <!-- modal list -->
 <!--Modal: (modalkmlselect) -->
@@ -525,7 +523,8 @@ $cgm_insar = new CGM_INSAR();
 <!--
         <button id="viewTSTogglebtn" class="btn btn-outline-primary btn-sm" type="button" onclick="toggleTSview()">Switch Frame Type</button>
 -->
-         <div class="col">
+<!-- selected in cgm_viewTS_util.js -->
+         <div class="col" id="gnss-frame-selection">
          <p>Select GNSS Frame Type: </p>   
              <div>
              <form id="gnss-frame-type">

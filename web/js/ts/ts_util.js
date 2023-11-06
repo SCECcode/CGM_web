@@ -159,14 +159,16 @@ function load_INSAR_ProcessVSFromCSV(ulist,params) {
    plotly_plot_insar_vs({'type':track,'csv':vs_plot_data});
 }
 
-
 function changeTSview(params) {
-  window.top.postMessage({'call':'fromTSviewer', value:'start loading'}, '*');
   plotly_plot_clear();
 
   // grab new params,
   [urls, ptype, ftypes]=getParams(params);
+  if(urls==null) { return; }
+
   window.console.log("changeTSview.."+urls[0]+" "+ptype+" "+ftypes[0]);
+  window.top.postMessage({'call':'fromTSviewer', value:'start loading'}, '*');
+
 
   if(ptype == "gnss") {
   load_GNSS_ProcessTSFromPOS(urls,ftypes);
@@ -191,7 +193,8 @@ function getParams(param) {
   }
   window.console.log("param string is .."+param);
   if(param == "") {
-    return [];
+    window.top.postMessage({'call':'fromTSviewer', value:'fail to load'}, '*');
+    return [null,null,null];
   }
 
   let myURL;

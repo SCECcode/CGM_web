@@ -35,11 +35,11 @@ window.console.log(ftypelist);
   TS_urllist=urllist;
   TS_ptype=ptype;
   TS_ftypelist=ftypelist;
-  if(TS_ftypelist.length == 1) {
-    window.console.log("HERE.. no need for type toggle");
-    let btnElem = $("#viewTSTogglebtn");
-//    btnElem.prop("disabled", true)
-    btnElem.hide();
+  let selElem = $("#gnss-frame-selection");
+  if(ptype=="insar") {
+    selElem.hide();
+    } else {
+      selElem.show();
   }
 }
 

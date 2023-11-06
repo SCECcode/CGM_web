@@ -899,8 +899,8 @@ window.console.log("generateResultsTable..");
                         <th style="width:20%;"><div class="col text-center">
 <!--download all -->
                             <div class="btn-group download-now">
-                                <button id="download-all" type="button" class="btn btn-dark" onClick= "CGM_INSAR.downloadURLsAsZip('all')">
-                                    DOWNLOAD&nbsp<span id="download-counter" disabled></span>
+                                <button id="download-all" type="button" class="btn btn-dark" onClick= "CGM_INSAR.downloadURLsAsZip('all')" disabled>
+                                    DOWNLOAD&nbsp<span id="download-counter"></span>
                                 </button>
                             </div>
                         </th>
@@ -960,6 +960,8 @@ window.console.log("changeResultsTableBody..");
 
     this.setupInterface = function() {
 window.console.log("calling INSAR setupInterface..");
+
+	setup_infoTSTable('insar');
 
         var $download_queue_table = $('#metadata-viewer');
 
