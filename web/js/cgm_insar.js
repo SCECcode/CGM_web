@@ -973,6 +973,8 @@ window.console.log("calling INSAR setupInterface..");
 
         this.highlightTrack(this.track_name);
 
+	$("#infoGNSSBtn").css('display','none');
+
         this.activateData();
 
         showColorLegend("insar_colorbar.png");

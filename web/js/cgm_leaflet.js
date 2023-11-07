@@ -159,7 +159,7 @@ function setup_viewer()
        this._div.innerHTML="";
        return;
      }
-     this._div.innerHTML='<img src="./img/'+param+'" style="width:200px; margin-left:-5px;" >';
+     this._div.innerHTML='<img src="./img/'+param+'" style="width:200px; margin-left:5px;" >';
   }
 
   mylegend.addTo(mymap);

@@ -13,16 +13,16 @@ products: [
      description: '<b>GNSS</b> product is in GAGE’s “pos” format',
      frames : [
         { name: 'igb14',
-          label: 'GNSS - IGB14 - label',
+          label: 'IGB14',
 	  description: "<b>IGB14</b> is the International GNSS Service’s (IGS’s) second version of the International Terrestrial Reference Frame (ITRF) 2014 (Altamimi et al., 2016)"},
         { name: 'nam14',
-          label: 'GNSS - NAM14 - label',
+          label: 'NAM14',
 	  description: '<b>NAM14</b> is relative to North America, defined for ITRF2014 (Altamimi et al., 2017)'},
         { name: 'nam17',
-          label: 'GNSS - NAM17 - label',
+          label: 'NAM17',
 	  description: '<b>NAM17</b> is relative to North America, defined by Kreemer et al. (2018)'},
         { name: 'pcf14',
-          label: 'GNSS - PCF14 - label',
+          label: 'PCF14',
 	  description: '<b>PCF14</b> is relative to the Pacific, defined for ITRF2014 (Altamimi et al., 2017)'}
      ]
     },

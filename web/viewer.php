@@ -148,6 +148,14 @@ $cgm_insar = new CGM_INSAR();
                                  <option value="insar">InSAR</option>
                          </select>
                 </div>
+                <button id="infoGNSSBtn" class="infoBtn btn pull-left" style="display:"
+                        title="show GNSS frame info"
+                        onClick="infoGNSS()"
+                        data-toggle="modal" data-target="#modalinfoProduct">
+                        <span class="glyphicon glyphicon-info-sign"
+                        title="show GNSS Frame info"
+                        style="font-size:14px;"></span>
+                </button>
 
                 <div id="insar-track-controls" class="input-group input-group-sm custom-control-inline pull-left mb-2" style="max-width:160px;display:none">
                          <div class="input-group-prepend">
@@ -171,7 +179,7 @@ $cgm_insar = new CGM_INSAR();
                 <button id="infoInSARBtn" class="infoBtn btn pull-left" style="display:none"
                         title="show InSAR track dataset info"
 			onClick="infoInSAR()"
-			data-toggle="modal" data-target="#modalinfoInSAR">
+			data-toggle="modal" data-target="#modalinfoProduct">
                         <span class="glyphicon glyphicon-info-sign"
                         title="show InSAR Track info"
 			style="font-size:14px;"></span>
@@ -613,16 +621,16 @@ $cgm_insar = new CGM_INSAR();
   </div>
 </div> <!--Modal: modalwarnTS -->
 
-<!--Modal: (modalinfoInSAR)  -->
-<div class="modal" id="modalinfoInSAR" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" id="modalinfoInSARDialog" role="document">
+<!--Modal: (modalinfoProduct)  -->
+<div class="modal" id="modalinfoProduct" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" id="modalinfoProductDialog" role="document">
 
     <!--Content-->
-    <div class="modal-content" id="modalinfoInSARContent">
+    <div class="modal-content" id="modalinfoProductContent">
       <!--Body-->
-      <div class="modal-body" id="modalinfoInSARBody">
+      <div class="modal-body" id="modalinfoProductBody">
         <div class="row col-md-12 ml-auto" style="overflow:hidden;">
-          <div class="col-12" id="infoInSARTable-container"></div>
+          <div class="col-12" id="infoProductTable-container"></div>
         </div>
       </div>
       <div class="modal-footer justify-content-center">
@@ -631,7 +639,7 @@ $cgm_insar = new CGM_INSAR();
 
     </div> <!--Content-->
   </div>
-</div> <!--Modal: modalinfoInSAR -->
+</div> <!--Modal: modalinfoProduct -->
 
 <!--Modal: (modalnotify) -->
 <div class="modal" id="modalnotify" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

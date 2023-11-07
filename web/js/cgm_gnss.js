@@ -160,9 +160,9 @@ var CGM_GNSS = new function () {
 
         // scale bar height = 34 pixels
         // vector bar target height = 34+17=51
-        let targetx=pmin['x']+10;
+        let targetx=pmin['x']+20;
 //        let targety=pmax['y']-51;
-        let targety=pmax['y']-90;
+        let targety=pmax['y']-110;
 
         if(this.cgm_vector_loc == 0) {
            targetx=pmin['x'];
@@ -1144,6 +1144,7 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
         this.setupInterface = function() {
 
 	    setup_infoTSTable('gnss');
+            $("#infoGNSSBtn").css('display','');
 
             var $download_queue_table = $('#metadata-viewer');
             var sz=0;
