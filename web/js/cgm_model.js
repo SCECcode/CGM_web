@@ -5,10 +5,6 @@
 "For more model details and metrics, see [LINK TO ZENODO ARCHIVE]"
 ****/
 
-nam17 is relative to North America, defined by Kreemer et al. (2018);
-pcf14 is relative to the Pacific, defined for ITRF2014 (Altamimi et al., 2017). 
-
-
 var CGM_tb={
 products: [
     {name: 'GNSS', 
@@ -38,22 +34,22 @@ products: [
         { name: 'D071',
           file: 'D071_COMB_CGM_InSAR_v0_0_1.hdf5',
           baseline: 'insar_baseline_D071_velocity_list.csv',
-          label: 'InSAR - D071 - label',
+          label: 'D071_COMB_CGM_InSAR_v0_0_1',
           description: '<b>D071</b> (Descending) ...'},
         { name: 'D173',
           file: 'D173_COMB_CGM_InSAR_v0_0_1.hdf5',
           baseline: 'insar_baseline_D173_velocity_list.csv',
-          label: 'InSAR - D173 - label',
+          label: 'D173_COMB_CGM_InSAR_v0_0_1',
           description: '<b>D173</b> (Descending) ...'},
         { name: 'A064',
           file: 'A064_COMB_CGM_InSAR_v0_0_1.hdf5',
           baseline: 'insar_baseline_A064_velocity_list.csv',
-          label: 'InSAR - A064 - label',
+          label: 'A064_COMB_CGM_InSAR_v0_0_1',
           description: '<b>A064</b> (Ascending) ...'},
         { name: 'A166',
           file: 'A166_COMB_CGM_InSAR_v0_0_1.hdf5',
           baseline: 'insar_baseline_A166_velocity_list.csv',
-          label: 'InSAR - A166 - label',
+          label: 'A166_COMB_CGM_InSAR_v0_0_1',
           description: '<b>A166</b> (Ascending)...'}
       ]
     },

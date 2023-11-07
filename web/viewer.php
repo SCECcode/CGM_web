@@ -83,6 +83,7 @@ $cgm_insar = new CGM_INSAR();
     <script type="text/javascript" src="js/cgm_viewTS.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_leaflet.js?v=1"></script>
     <script type="text/javascript" src="js/cgm_model.js?v=1"></script>
+    <script type="text/javascript" src="js/cgm_model_util.js?v=1"></script>
     <script type="text/javascript" src="js/cxm_model_util.js?v=1"></script>
     <script type="text/javascript" src="js/cxm_kml.js?v=1"></script>
 
@@ -137,7 +138,7 @@ $cgm_insar = new CGM_INSAR();
 
     <div id="top-control-row-1" class="row mb-2">
         <div class="col-12 d-flex text-left pr-0">
-            <div class="col-5" style="padding:0">
+            <div class="col-6" style="padding:0">
                 <div class="input-group input-group-sm custom-control-inline pull-left" id="dataset-controls" style="max-width:170px">
                          <div class="input-group-prepend">
                                  <label style='border-bottom:1;' class="input-group-text" for="data-product-select">Select Dataset</label>
@@ -161,12 +162,20 @@ $cgm_insar = new CGM_INSAR();
                          </select>
                 </div>
                 <button id="downloadInSARBtn" class="btn pull-left" style="display:none"
+                        title="click to download full InSAR track"
                         onClick="downloadHDF5InSAR()">
                         <span class="glyphicon glyphicon-download"
                         title="download complete HDF5 data file for selected Track"
 			style="font-size:14px;"></span>
                 </button>
-
+                <button id="infoInSARBtn" class="infoBtn btn pull-left" style="display:none"
+                        title="show InSAR track dataset info"
+			onClick="infoInSAR()"
+			data-toggle="modal" data-target="#modalinfoInSAR">
+                        <span class="glyphicon glyphicon-info-sign"
+                        title="show InSAR Track info"
+			style="font-size:14px;"></span>
+                </button>
             </div>
          </div>
     </div>
@@ -390,10 +399,11 @@ $cgm_insar = new CGM_INSAR();
 
                 <div class="form-check form-check-inline">
                     <label class='form-check-label ml-1 mini-option'
-                               for="cgm-model-gfm">
+                             title='Show Community Geological Framework regions on map'
+                             for="cgm-model-gfm">
                     <input class='form-check-inline mr-1'
-                               type="checkbox"
-                               id="cgm-model-gfm" value="1" />GFM
+                             type="checkbox"
+                             id="cgm-model-gfm" value="1" />GFM
                     </label>
                 </div>
             </div>
@@ -602,6 +612,26 @@ $cgm_insar = new CGM_INSAR();
     </div> <!--Content-->
   </div>
 </div> <!--Modal: modalwarnTS -->
+
+<!--Modal: (modalinfoInSAR)  -->
+<div class="modal" id="modalinfoInSAR" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" id="modalinfoInSARDialog" role="document">
+
+    <!--Content-->
+    <div class="modal-content" id="modalinfoInSARContent">
+      <!--Body-->
+      <div class="modal-body" id="modalinfoInSARBody">
+        <div class="row col-md-12 ml-auto" style="overflow:hidden;">
+          <div class="col-12" id="infoInSARTable-container"></div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-outline-primary btn-md" data-dismiss="modal">Close</button>
+      </div>
+
+    </div> <!--Content-->
+  </div>
+</div> <!--Modal: modalinfoInSAR -->
 
 <!--Modal: (modalnotify) -->
 <div class="modal" id="modalnotify" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

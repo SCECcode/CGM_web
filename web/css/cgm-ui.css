@@ -84,8 +84,7 @@ th{
   width: 6rem;
 }
 
-#infoBtn {
-/*     outline: none !important; */
+.infoBtn {
     box-shadow: none !important; 
 } 
 
