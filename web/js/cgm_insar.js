@@ -99,11 +99,9 @@ window.console.log("calling highlight.."+name);
 	      setTimeout(function(target) {CGM_INSAR.setupBaseline(target);}, 1000, name);
           }
           $("#downloadInSARBtn").css('display','');
-          $("#infoInSARBtn").css('display','');
           } else {
              $("#cgm-insar-search-type").val("").change();
              $("#downloadInSARBtn").css('display','none');
-             $("#infoInSARBtn").css('display','none');
       }
     };
 
@@ -115,7 +113,6 @@ window.console.log("calling highlight.."+name);
       this.track_name="";
       $("#insar-track-select").val("");
       $("#downloadInSARBtn").css('display','none');
-      $("#infoInSARBtn").css('display','none');
     };
 
     this.activateData = function() {
@@ -974,6 +971,7 @@ window.console.log("calling INSAR setupInterface..");
         this.highlightTrack(this.track_name);
 
 	$("#infoGNSSBtn").css('display','none');
+	$("#infoInSARBtn").css('display','');
 
         this.activateData();
 
@@ -982,8 +980,6 @@ window.console.log("calling INSAR setupInterface..");
         $("#cgm-controlers-container").css('display','none');
         $("#cgm-insar-controlers-container").css('display','');
         $("#insar-track-controls").css('display','');
-//        $("#downloadInSARBtn").css('display','');
-//        $("#infoInSARBtn").css('display','');
 
         $("div.mapData div.map-container").css('padding-left','30px');
         $("#CGM_plot").css('height','600px');

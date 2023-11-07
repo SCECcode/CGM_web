@@ -169,19 +169,19 @@ $cgm_insar = new CGM_INSAR();
                                  <option value="A166">A166</option>
                          </select>
                 </div>
+                <button id="infoInSARBtn" class="infoBtn btn pull-left" style="display:none"
+                        title="show full InSAR track dataset info"
+			onClick="infoInSAR()"
+			data-toggle="modal" data-target="#modalinfoProduct">
+                        <span class="glyphicon glyphicon-info-sign"
+                        title="show InSAR Tracks info"
+			style="font-size:14px;"></span>
+                </button>
                 <button id="downloadInSARBtn" class="btn pull-left" style="display:none"
                         title="click to download full InSAR track"
                         onClick="downloadHDF5InSAR()">
                         <span class="glyphicon glyphicon-download"
                         title="download complete HDF5 data file for selected Track"
-			style="font-size:14px;"></span>
-                </button>
-                <button id="infoInSARBtn" class="infoBtn btn pull-left" style="display:none"
-                        title="show InSAR track dataset info"
-			onClick="infoInSAR()"
-			data-toggle="modal" data-target="#modalinfoProduct">
-                        <span class="glyphicon glyphicon-info-sign"
-                        title="show InSAR Track info"
 			style="font-size:14px;"></span>
                 </button>
             </div>
