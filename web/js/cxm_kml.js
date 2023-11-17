@@ -157,10 +157,10 @@ function _readKMLFile(urls,idx) {
   var reader = new FileReader();
 
   reader.onload=function(event) {
-    var result =reader.result;
+    let result =reader.result;
 
-    var kmlLayer = L.kmzLayer();
-    kmlLayer.parse(result, { name: fname, icons: {} });
+    let kmlLayer = L.kmzLayer();
+    let rc=kmlLayer.parse(result, { name: fname, icons: {} });
 
 //  add to kml table
     let tidx=addToKMLSelectTable(fname);

@@ -47,7 +47,6 @@ function setup_infoTSTable(target) {
      let mname=item['name'];
      let descript=item['description'];
      if ('ptype' in item) {
- window.console.log("HERE... In seutp_infoTSTable.."+item['ptype']);
        if(item['ptype'] != target)
          continue;
      }

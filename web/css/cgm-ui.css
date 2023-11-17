@@ -13,6 +13,10 @@
   cursor: pointer;
 }
 
+#gnss-frame-type input[type="radio"]:hover + span {
+  color: #007bff;
+}
+
 #gnss-frame-type input[type="radio"]:checked + span {
   background-color: #007bff;
   border: 1px solid #007bff;

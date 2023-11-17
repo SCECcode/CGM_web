@@ -98,7 +98,11 @@ window.console.log("calling highlight.."+name);
               startLoadTrackWait(name, this.cgm_insar_baseline_size[name]);
 	      setTimeout(function(target) {CGM_INSAR.setupBaseline(target);}, 1000, name);
           }
+    
+          let foo = descriptInSAR(name);
+          $("#insar-descript").html(foo);
           $("#downloadInSARBtn").css('display','');
+          $("#insar-descript-block").css('display','');
           } else {
              $("#cgm-insar-search-type").val("").change();
              $("#downloadInSARBtn").css('display','none');
@@ -113,6 +117,7 @@ window.console.log("calling highlight.."+name);
       this.track_name="";
       $("#insar-track-select").val("");
       $("#downloadInSARBtn").css('display','none');
+      $("#insar-descript-block").css('display','none');
     };
 
     this.activateData = function() {
@@ -303,7 +308,9 @@ window.console.log(" CAlling setupBaseline..");
            togglePixiOverlay(pixiuid);
          }
        }
+       $("#insar-descript-block").css('display','none');
     };
+
 
 // for InSAR
 // Station == Location
