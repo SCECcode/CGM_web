@@ -41,24 +41,24 @@ var CGM_GNSS = new function () {
 
     var cgm_colors = {
         normal: '#006E90',
-        normal2: '#990000',
+        normal2: '#F18F01',
         selected: '#B02E0C',
         abnormal: '#00FFFF',
     };
 
     var cgm_marker_style = {
         normal: {
-            color: cgm_colors.normal,
+            color: "white",
             fillColor: cgm_colors.normal,
-            fillOpacity: 0.5,
+            fillOpacity: 1,
             radius: 3,
             riseOnHover: true,
             weight: 1,
         },
         normal2: {
-            color: cgm_colors.normal2,
+            color: "white",
             fillColor: cgm_colors.normal2,
-            fillOpacity: 0.5,
+            fillOpacity: 1,
             radius: 3,
             riseOnHover: true,
             weight: 1,
@@ -242,11 +242,16 @@ var CGM_GNSS = new function () {
                 let station_type = cgm_gnss_station_data[index].station_type;
                 let gid = cgm_gnss_station_data[index].gid;
 
-                let station_group = "cont";
-window.console.log("HERE", surv_site);
-		if(surv_site.includes(station_id)) {
-                    station_group = "surv";
-window.console.log("HERE.. found a surv group  >> "+station_id);
+                let station_group="NA";
+                if(station_type == "continuous") {
+                    cont_site.push(station_id);
+                    station_group = "cont";
+                    } else {
+                       if(station_type == "campaign") {
+                           surv_site.push(station_id);
+                           station_group = "surv";
+window.console.log("FOUND .. a surv gnss site_group >> "+station_id);
+                       }
                 }
 
                 while (lon < -180) {
@@ -257,13 +262,13 @@ window.console.log("HERE.. found a surv group  >> "+station_id);
                 }
 
                 let marker;
-                //XXlet marker = L.circleMarker([lat, lon], cgm_marker_style.normal);
-		    if(station_group == "cont") {
-                          marker = makeLeafletCircleMarker([lat, lon], cgm_marker_style.normal);
+                //let marker = L.circleMarker([lat, lon], cgm_marker_style.normal);
+		if(station_group == "cont") {
+                    marker = makeLeafletCircleMarker([lat, lon], cgm_marker_style.normal);
                     } else {
-                          //marker = makeLeafletTriangleMarker([lat, lon]);
-                          marker = makeLeafletCircleMarker([lat, lon], cgm_marker_style.normal2);
-		    }
+                       //marker = makeLeafletTriangleMarker([lat, lon]);
+                       marker = makeLeafletCircleMarker([lat, lon], cgm_marker_style.normal2);
+		}
 
                 // generate vectors
                 let start_latlng = marker.getLatLng();
@@ -1183,19 +1188,6 @@ http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
             }
 window.console.log("setupInterface: retrieved stations "+sz);
 
-            for (let i = 0; i < sz; i++) {
-                let item=cgm_gnss_station_data[i];
-                if(item['station_type'] == "continuous") {
-                    cont_site.push(item['station_id']);
-                    } else {
-                        if(item['station_type'] == "campaign") {
-                            surv_site.push(item['station_id']);
-                            } else {
-window.console.log("HUM...  "+item['station_type']);
-                        }
-                }
-            }
-
             this.activateData();
 
             $("#cgm-controlers-container").css('display','none');
@@ -1250,13 +1242,38 @@ window.console.log("HUM...  "+item['station_type']);
 
             viewermap.on("zoomend dragend panend",function() {
                  CGM_GNSS.generateVectorScale();
+
+// XX  update the marker size ???
+		let zoom=viewermap.getZoom();
+                let target = 3; // default
+                if(zoom > 6)  {
+                   target = (zoom > 9) ? 7 : (zoom - 6)+target;
+                }
+                if(cgm_marker_style.normal.radius == target) { // no changes..
+                   return;
+                }
+                cgm_marker_style.normal.radius=target;
+                cgm_marker_style.normal2.radius=target;
+                cgm_marker_style.selected.radius=target;
+                cgm_marker_style.hover.radius = (target *3) ;
+    
+window.console.log(" RESIZE: marker zoom("+zoom+") radius "+target);
+                CGM_GNSS.cgm_layers.eachLayer(function(layer){
+		  layer.setRadius(target);
+                });
+
             });
 
 
             $("#wait-spinner").hide();
         };
 
+	function _resetRadius(layer) {
+            layer.setRadius(cgm_marker_style.normal.radius);
+        }
+
         this.downloadHorizontalVelocities = function(gid_list) { // TODO };
+
     };
 
 }
