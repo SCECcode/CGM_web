@@ -41,6 +41,7 @@ var CGM_GNSS = new function () {
 
     var cgm_colors = {
         normal: '#006E90',
+        normal2: '#990000',
         selected: '#B02E0C',
         abnormal: '#00FFFF',
     };
@@ -54,8 +55,16 @@ var CGM_GNSS = new function () {
             riseOnHover: true,
             weight: 1,
         },
+        normal2: {
+            color: cgm_colors.normal2,
+            fillColor: cgm_colors.normal2,
+            fillOpacity: 0.5,
+            radius: 3,
+            riseOnHover: true,
+            weight: 1,
+        },
         selected: {
-            color: cgm_colors.selected,
+            //color: cgm_colors.selected,
             fillColor: cgm_colors.selected,
             fillOpacity: 1,
             radius: 3,
@@ -233,6 +242,13 @@ var CGM_GNSS = new function () {
                 let station_type = cgm_gnss_station_data[index].station_type;
                 let gid = cgm_gnss_station_data[index].gid;
 
+                let station_group = "cont";
+window.console.log("HERE", surv_site);
+		if(surv_site.includes(station_id)) {
+                    station_group = "surv";
+window.console.log("HERE.. found a surv group  >> "+station_id);
+                }
+
                 while (lon < -180) {
                     lon += 360;
                 }
@@ -240,7 +256,14 @@ var CGM_GNSS = new function () {
                     lon -= 360;
                 }
 
-                let marker = L.circleMarker([lat, lon], cgm_marker_style.normal);
+                let marker;
+                //XXlet marker = L.circleMarker([lat, lon], cgm_marker_style.normal);
+		    if(station_group == "cont") {
+                          marker = makeLeafletCircleMarker([lat, lon], cgm_marker_style.normal);
+                    } else {
+                          //marker = makeLeafletTriangleMarker([lat, lon]);
+                          marker = makeLeafletCircleMarker([lat, lon], cgm_marker_style.normal2);
+		    }
 
                 // generate vectors
                 let start_latlng = marker.getLatLng();
@@ -336,6 +359,7 @@ var CGM_GNSS = new function () {
                     vector_dist_path_style: cgm_line_path_style,
                     vector_dist_head_pattern: cgm_line_head_pattern,
                     type: station_type,
+                    group: station_group,
                     gid: gid,
                     selected: false,
                 };
@@ -416,7 +440,6 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
     };
 
     this.selectStationByLayer = function (layer, moveTableRow=false) {
-window.console.log("HERE.. selectStationByLayer..");
         layer.scec_properties.selected = true;
         layer.setStyle(cgm_marker_style.selected);
         layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.selected);
@@ -447,7 +470,14 @@ window.console.log("HERE.. selectStationByLayer..");
 
     this.unselectStationByLayer = function (layer) {
         layer.scec_properties.selected = false;
-        layer.setStyle(cgm_marker_style.normal);
+
+	let prop=layer.scec_properties;
+	if(prop.group == "cont") {
+          layer.setStyle(cgm_marker_style.normal);
+          } else {
+            layer.setStyle(cgm_marker_style.normal2);
+        }
+
 
         layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.normal);
         layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.normal]);
@@ -1157,9 +1187,12 @@ window.console.log("setupInterface: retrieved stations "+sz);
                 let item=cgm_gnss_station_data[i];
                 if(item['station_type'] == "continuous") {
                     cont_site.push(item['station_id']);
-                }
-                if(item['station_type'] == "surv") {
-                    surv_site.push(item['station_id']);
+                    } else {
+                        if(item['station_type'] == "campaign") {
+                            surv_site.push(item['station_id']);
+                            } else {
+window.console.log("HUM...  "+item['station_type']);
+                        }
                 }
             }
 

@@ -470,7 +470,7 @@ $cgm_insar = new CGM_INSAR();
 </div> <!-- mapDataBig -->
 
     <div id="top-select" class="row mt-1">
-        <div id="insar-descript-block" class="col-12" style="display:none;padding-right:0px; border:solid 1px green">
+        <div id="insar-descript-block" class="col-12" style="display:none;padding-right:0px; border:solid 0px green">
           <p id="insar-descript" style="margin-bottom:0"> Something about current InSAR track..</p>
         </div>
         <div class="col-12" style="padding-right:0px">

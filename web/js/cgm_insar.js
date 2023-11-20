@@ -215,7 +215,8 @@ window.console.log(">>> generateLayers..");
 // ref points
 		var icon=L.divIcon( { background: 'red', iconSize: L.point(10,10) });
                 let track_ref=L.marker([latr,lonr], { type:"ref", icon:icon });
-		let popref="<strong>Track name: </strong>"+track_name+"<br><strong>Reference: </strong>"+ref+"<br><strong>Lat: </strong>"+latr+"<br><strong>Lon: </strong>"+lonr+"<br>";
+                let track_gnss_ref=refGNSSInSAR(track_name);
+		let popref="<strong>"+ref+" InSAR Track: </strong>"+track_name+"<br><strong>GNSS reference: </strong>"+track_gnss_ref+"<br><strong>Lat: </strong>"+latr+"<br><strong>Lon: </strong>"+lonr+"<br>";
                 track_ref.bindPopup(popref, {maxWidth: 500});
 
                 track.addLayer(track_lines);

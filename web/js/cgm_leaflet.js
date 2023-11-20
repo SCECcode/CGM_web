@@ -41,6 +41,21 @@ var visibleFaults = new L.FeatureGroup();
 var drawing_rectangle=false;
 var drawing_point=false;
 
+var triangleIcon = L.icon({
+    iconUrl: './img/marker14_icon.png',
+    iconSize: [7, 7],
+    iconAnchor: [0, 0],
+    popupAnchor: [-3, -3],
+    clickable: true
+});
+
+var triangleHoverIcon = L.icon({
+    iconUrl: './img/marker14_icon.png',
+    iconSize: [21, 21],
+    iconAnchor: [0, 0],
+    popupAnchor: [-3, -3],
+    clickable: true
+});
 
 // scec
 var scecAttribution ='<a href="https://www.scec.org">SCEC</a>';
@@ -464,4 +479,8 @@ function makeLeafletCircleMarker(latlng, opt, cname=undefined) {
   return marker;
 }
 
+function makeLeafletTriangleMarker(latlng) {
+  let marker= L.marker(latlng, {icon:triangleIcon} );
+  return marker;
+}
 
