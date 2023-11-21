@@ -454,7 +454,7 @@ function make_markerGroup(enableCluster=true) {
                 function(ev) {
                     var myev=ev;
                     let cluster=myev.layer;
-                    let desc = "contains "+cluster.getAllChildMarkers().length + " InSAR reference points,<br>click to expand";
+                    let desc = "Contains "+cluster.getAllChildMarkers().length + " InSAR reference points,<br>click to expand";
                     myev.propagatedFrom.bindTooltip(desc,{sticky:true}).openTooltip();
                     setTimeout(function() {_unbindClusterTooltip(myev)},1000);
                     });

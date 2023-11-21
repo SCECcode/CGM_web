@@ -207,7 +207,7 @@ window.console.log(">>> generateLayers..");
 		let latlngs = [[lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4]];
                 let latlngs2 = [[lat1,lon1],[lat2,lon2],[lat3,lon3],[lat4,lon4],[lat1,lon1]];
                 let track_lines=L.polyline(latlngs2,{color:track_color,weight:1,riseOnHover:true});
-                let poptip="<strong>InSAR</strong><br>Track name: "+track_name+"<br>Info: "+ref+"<br>";
+                let poptip="<strong>InSAR</strong><br>Track: "+track_name+"<br>Info: "+ref+"<br>";
                 track_lines.bindTooltip(poptip).openTooltip();
 		track_lines.on('mouseover',function() { this.setStyle({weight:3}); });
                 track_lines.on('mouseout',function() { this.setStyle({weight:1}); });
