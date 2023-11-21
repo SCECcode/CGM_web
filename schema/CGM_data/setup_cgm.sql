@@ -11,8 +11,17 @@ COPY CGM_gnss_sites(name)
     FROM '/home/postgres/CGM/CGM_data/cont_site.csv' DELIMITER ',' CSV HEADER;
 UPDATE CGM_gnss_sites set type = 'cont';
 
-insert into CGM_gnss_sites(name,type)
-   select name,type from tmp0;
+
+INSERT INTO CGM_gnss_sites(name,type)
+   SELECT name,type FROM tmp0
+
+/*
+   WHERE NOT EXISTS 
+      (SELECT name
+       FROM CGM_gnss_sites
+       WHERE name=tmp0.name)
+*/
+       
 
 drop table tmp0;
 -----------------------

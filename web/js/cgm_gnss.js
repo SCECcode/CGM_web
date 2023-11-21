@@ -42,6 +42,7 @@ var CGM_GNSS = new function () {
     var cgm_colors = {
         normal: '#006E90',
         normal2: '#F18F01',
+        normal3: '#00FFFF',
         selected: '#B02E0C',
         abnormal: '#00FFFF',
     };
@@ -51,7 +52,7 @@ var CGM_GNSS = new function () {
             color: "white",
             fillColor: cgm_colors.normal,
             fillOpacity: 1,
-            radius: 3,
+            radius: 4,
             riseOnHover: true,
             weight: 1,
         },
@@ -59,7 +60,15 @@ var CGM_GNSS = new function () {
             color: "white",
             fillColor: cgm_colors.normal2,
             fillOpacity: 1,
-            radius: 3,
+            radius: 4,
+            riseOnHover: true,
+            weight: 1,
+        },
+        normal3: {
+            color: "white",
+            fillColor: cgm_colors.normal3,
+            fillOpacity: 1,
+            radius: 4,
             riseOnHover: true,
             weight: 1,
         },
@@ -67,7 +76,7 @@ var CGM_GNSS = new function () {
             //color: cgm_colors.selected,
             fillColor: cgm_colors.selected,
             fillOpacity: 1,
-            radius: 3,
+            radius: 4,
             riseOnHover: true,
             weight: 1,
         },
@@ -220,9 +229,26 @@ var CGM_GNSS = new function () {
 
     this.generateLayers = function () {
 
+// setup gnss sites
+        for (const idx in cgm_gnss_site_data) {
+            if (cgm_gnss_station_data.hasOwnProperty(idx)) {
+                let name = cgm_gnss_station_data[idx].name;
+                let type = cgm_gnss_station_data[index].type;
+                if(type == "cont") {
+                    cont_site.push(name);
+                    } else {
+                       if(type == "surv") {
+                           surv_site.push(name);
+                           } else {
+window.console.log( "This is bad..station "+name+" with bad type "+ type);
+                       }
+                }
+            }
+        }
+
+// setup gnss stations 
         this.cgm_layers = new L.FeatureGroup();
         this.cgm_vectors = new L.FeatureGroup();
-
         for (const index in cgm_gnss_station_data) {
             if (cgm_gnss_station_data.hasOwnProperty(index)) {
                 let lat = parseFloat(cgm_gnss_station_data[index].ref_north_latitude);
@@ -242,16 +268,18 @@ var CGM_GNSS = new function () {
                 let station_type = cgm_gnss_station_data[index].station_type;
                 let gid = cgm_gnss_station_data[index].gid;
 
+//XXX could be in cont/surv/both
                 let station_group="NA";
-                if(station_type == "continuous") {
-                    cont_site.push(station_id);
+                if(cont_site.includes(station_id)) {
                     station_group = "cont";
-                    } else {
-                       if(station_type == "campaign") {
-                           surv_site.push(station_id);
-                           station_group = "surv";
-window.console.log("FOUND .. a surv gnss site_group >> "+station_id);
-                       }
+                }
+                if(surv_site.includes(station_id)) {
+                    if(station_group == "cont") {
+window.console.log("gnss station "+station_id+" is in both site lists");
+                        station_group = "both";
+                        } else {
+                            station_group = "surv";
+                    }
                 }
 
                 while (lon < -180) {
@@ -265,9 +293,12 @@ window.console.log("FOUND .. a surv gnss site_group >> "+station_id);
                 //let marker = L.circleMarker([lat, lon], cgm_marker_style.normal);
 		if(station_group == "cont") {
                     marker = makeLeafletCircleMarker([lat, lon], cgm_marker_style.normal);
-                    } else {
-                       //marker = makeLeafletTriangleMarker([lat, lon]);
-                       marker = makeLeafletCircleMarker([lat, lon], cgm_marker_style.normal2);
+                }
+		if(station_group == "surv") {
+                    marker = makeLeafletCircleMarker([lat, lon], cgm_marker_style.normal2);
+		}
+		if(station_group == "both") {
+                    marker = makeLeafletCircleMarker([lat, lon], cgm_marker_style.normal3);
 		}
 
                 // generate vectors
@@ -291,7 +322,7 @@ window.console.log("FOUND .. a surv gnss site_group >> "+station_id);
                 // save the dist into cgm_gnss_station_data
                 cgm_gnss_station_data[index].vector_dist=dist;
 
-                let station_info = `<strong>GNSS</strong><br>Station: ${station_id}<br>Velocity: ${horizontalVelocity} mm/yr`;
+                let station_info = `<strong>GNSS</strong><br>Station: ${station_id}<br>Horizontal Velocity: ${horizontalVelocity} mm/yr`;
                 marker.bindTooltip(station_info).openTooltip();
 
                 let line_latlons = [
@@ -477,12 +508,9 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
         layer.scec_properties.selected = false;
 
 	let prop=layer.scec_properties;
-	if(prop.group == "cont") {
-          layer.setStyle(cgm_marker_style.normal);
-          } else {
-            layer.setStyle(cgm_marker_style.normal2);
-        }
-
+	if(prop.group == "cont") { layer.setStyle(cgm_marker_style.normal); }
+	if(prop.group == "surv") { layer.setStyle(cgm_marker_style.normal2); }
+	if(prop.group == "both") { layer.setStyle(cgm_marker_style.normal3); }
 
         layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.normal);
         layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.normal]);
@@ -1143,6 +1171,8 @@ from the attached cont_site.txt file,
 http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
 ******/
         var getDataDownloadURL = function(station_id, frame)  {
+window.console.log("LOOKING up the url.."+station_id);
+let ct=cont_site;
         if(cont_site.includes(station_id)) {
           let urlPrefix = "http://geoweb.mit.edu/~floyd/scec/cgm/ts/";
           let url=urlPrefix + station_id + ".cgm.wmrss_"+frame+".pos";
@@ -1243,21 +1273,23 @@ window.console.log("setupInterface: retrieved stations "+sz);
             viewermap.on("zoomend dragend panend",function() {
                  CGM_GNSS.generateVectorScale();
 
-// XX  update the marker size ???
+// update the marker size in demand
 		let zoom=viewermap.getZoom();
-                let target = 3; // default
-                if(zoom > 6)  {
-                   target = (zoom > 9) ? 7 : (zoom - 6)+target;
+                let target = 4; // default, zoom=7, radius=4
+                if(zoom > 7)  {
+                   target = (zoom > 9) ? 6 : (zoom - 7)+target;
                 }
+// window.console.log("zoom is "+zoom+ " target is "+target);
                 if(cgm_marker_style.normal.radius == target) { // no changes..
                    return;
                 }
                 cgm_marker_style.normal.radius=target;
                 cgm_marker_style.normal2.radius=target;
+                cgm_marker_style.normal3.radius=target;
                 cgm_marker_style.selected.radius=target;
                 cgm_marker_style.hover.radius = (target *3) ;
     
-window.console.log(" RESIZE: marker zoom("+zoom+") radius "+target);
+//window.console.log(" RESIZE: marker zoom("+zoom+") radius "+target);
                 CGM_GNSS.cgm_layers.eachLayer(function(layer){
 		  layer.setRadius(target);
                 });

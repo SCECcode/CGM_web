@@ -11,6 +11,7 @@ const Products = {
 var activeProduct = Products.GNSS;
 var viewermap;
 var cgm_gnss_station_data=null;
+var cgm_gnss_site_data=null;
 var cgm_insar_data=null;
 
 $(document).ready(function () {
@@ -239,7 +240,7 @@ window.console.log("==> reset what was there/INSAR");
 
     $("#wait-spinner").hide();
 
-window.console.log("DONE initialize from  Main");
+window.console.log("DONE initialize from  Main, zoom is "+viewermap.getZoom());
     $.event.trigger({ type: "page-ready", "message": "completed", });
 
 });

@@ -16,6 +16,17 @@ class CGM_GNSS extends SpatialData
 		// TODO: Implement search() method.
 	}
 
+	public function getAllSiteData() {
+                $query = "select name,type from cgm_gnss_sites";
+                $result = pg_query($this->connection, $query);
+                $site_data = array();
+                while($row = pg_fetch_object($result)) {
+                        $site_data[] = $row;
+                }
+                $this->php_result = $site_data;
+                return $this;
+        }
+
 	public function getAllStationData()
 	{
 		$query = "select gid, station_id, ref_north_latitude, ref_east_longitude, ref_velocity_north, ref_velocity_east, ref_velocity_up, station_type from cgm_gnss_station_velocities -- tablesample system(30) -- where station_id = 'P255'--  -- LIMIT 100";

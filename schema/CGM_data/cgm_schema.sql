@@ -20,7 +20,7 @@ CREATE TABLE cgm_gnss_station_velocities (
 CREATE TABLE cgm_gnss_sites(
     gid serial PRIMARY KEY,
     name VARCHAR(10) NOT NULL,
-    type VARCHAR(10) DEFAULT 'SCEC'
+    type VARCHAR(10) DEFAULT 'NA'
 );
 
 CREATE TABLE cgm_insar_tracks(

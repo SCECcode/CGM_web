@@ -710,6 +710,7 @@ $cgm_insar = new CGM_INSAR();
 <!-- -->
     <script type="text/javascript">
             cgm_gnss_station_data = <?php print $cgm_gnss->getAllStationData()->outputJSON(); ?>;
+            cgm_gnss_site_data = <?php print $cgm_gnss->getAllSiteData()->outputJSON(); ?>;
             cgm_insar_track_data = <?php print $cgm_insar->getAllTrackData()->outputJSON(); ?>;
     </script>
 
