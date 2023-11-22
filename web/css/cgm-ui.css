@@ -27,8 +27,8 @@
     z-index: 5000;
     position: absolute;
     background-color: transparent;
-    left: 10px;
-    bottom: 100px;
+    left: 0px;
+    bottom: 45px;
 }
 
 #expand-view-key {

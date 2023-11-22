@@ -35,7 +35,7 @@ var polygon_options = {
 
 var rectangleDrawer;
 var mymap, baseLayers, layerControl, currentLayer, currentLayerName;
-var mylegend;
+//var mylegend;
 var visibleFaults = new L.FeatureGroup();
 
 var drawing_rectangle=false;
@@ -145,14 +145,13 @@ function setup_viewer()
 // ==> scalebar <==
   L.control.scale({metric: 'false', imperial:'false', position: 'bottomleft'}).addTo(mymap);
 
+/*
   mylegend=L.control( {position:'bottomleft'});
-
   mylegend.onAdd = function (map) {
     this._div = L.DomUtil.create('div');
     this.update();
     return this._div;
   };
-
   mylegend.update = function (props, param=null) {
      if(param == null) {
        this._div.innerHTML="";
@@ -160,8 +159,8 @@ function setup_viewer()
      }
      this._div.innerHTML='<img src="./img/'+param+'" style="width:200px; margin-left:5px;" >';
   }
-
   mylegend.addTo(mymap);
+*/
 
 // ==> mouse location popup <==
 //   var popup = L.popup();
@@ -249,13 +248,23 @@ v.style.width="35rem";
   return mymap;
 }
 
-function removeColorLegend() {
-  mylegend.update();
-window.console.log("removeColorLegend..");
+function removeINSARColorLegend() { //mylegend.update();
+  $("#insar_colormap").css('display','none');
 }
-function showColorLegend(param) {
-  mylegend.update({}, param);
-window.console.log("showColorLegend..");
+function showINSARColorLegend() { //mylegend.update({}, param);
+  $("#insar_colormap").css('display','');
+}
+function removeGNSSColorLegend() {
+  $("#gnss_colormap").css('display','none');
+}
+function showGNSSColorLegend() { 
+  $("#gnss_colormap").css('display','');
+}
+function removeGNSSVectorColorLegend() {
+  $("#gnss_vector_space").css('display','none');
+}
+function showGNSSVectorColorLegend() { 
+  $("#gnss_vector_space").css('display','');
 }
 
 

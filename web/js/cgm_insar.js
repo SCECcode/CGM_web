@@ -983,7 +983,7 @@ window.console.log("calling INSAR setupInterface..");
 
         this.activateData();
 
-        showColorLegend("insar_colorbar.png");
+        showINSARColorLegend("insar_colorbar.png");
 
         $("#cgm-controlers-container").css('display','none');
         $("#cgm-insar-controlers-container").css('display','');

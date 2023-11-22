@@ -52,7 +52,7 @@ var CGM_GNSS = new function () {
             color: "white",
             fillColor: cgm_colors.normal,
             fillOpacity: 1,
-            radius: 4,
+            radius: 3.5,
             riseOnHover: true,
             weight: 1,
         },
@@ -60,7 +60,7 @@ var CGM_GNSS = new function () {
             color: "white",
             fillColor: cgm_colors.normal2,
             fillOpacity: 1,
-            radius: 4,
+            radius: 3.5,
             riseOnHover: true,
             weight: 1,
         },
@@ -68,7 +68,7 @@ var CGM_GNSS = new function () {
             color: "white",
             fillColor: cgm_colors.normal3,
             fillOpacity: 1,
-            radius: 4,
+            radius: 3.5,
             riseOnHover: true,
             weight: 1,
         },
@@ -169,23 +169,23 @@ var CGM_GNSS = new function () {
     this.generateVectorScale = function () {
         // clear old set
         this.cgm_vector_scale.eachLayer(function (layer) { viewermap.removeLayer(layer); });
+        removeGNSSVectorColorLegend()
 
         let z=viewermap.getZoom();
         // bounds of the visible map
         let pbds=viewermap.getPixelBounds();
         let pmin=pbds['min'];
         let pmax=pbds['max'];
+window.console.log("HERE..");
 
         // scale bar height = 34 pixels
         // vector bar target height = 34+17=51
-        let targetx=pmin['x']+20;
-//        let targety=pmax['y']-51;
-        let targety=pmax['y']-110;
+        let targetx=pmin['x']+10;
+        let targety=pmax['y']-55;
 
         if(this.cgm_vector_loc == 0) {
-           targetx=pmin['x'];
-//           targety=pmax['y']-40;
-           targety=pmax['y']-110;
+           targetx=pmin['x']+5;
+           targety=pmax['y']-50;
            this.cgm_vector_loc=targety;
         }
 
@@ -222,6 +222,7 @@ var CGM_GNSS = new function () {
             polyline.addTo(viewermap);
             arrowHeadDecorator.addTo(viewermap);
             mylabel.addTo(viewermap);
+            showGNSSVectorColorLegend();
         }
         this.cgm_vector_scale = new L.FeatureGroup([polyline, arrowHeadDecorator,mylabel]);
     }
@@ -245,6 +246,11 @@ window.console.log( "This is bad..station "+name+" with bad type "+ type);
                 }
             }
         }
+    let cc=cont_site;
+    let ss=surv_site;
+    let cc_cnt=0;
+    let ss_cnt=0;
+    let bb_cnt=0;
 
 // setup gnss stations 
         this.cgm_layers = new L.FeatureGroup();
@@ -268,19 +274,37 @@ window.console.log( "This is bad..station "+name+" with bad type "+ type);
                 let station_type = cgm_gnss_station_data[index].station_type;
                 let gid = cgm_gnss_station_data[index].gid;
 
+                let station_group="both";
+                if((station_type == "campaign") && surv_site.includes(station_id) ) {
+                    station_group = "surv";
+                    ss_cnt++;
+                }
+                //if((station_type == "continuous") && cont_site.includes(station_id) ) {
+                if((station_type == "continuous")) {
+                    station_group = "cont";
+                    cc_cnt++;
+                }
+                if(station_group == "both") {
+                    bb_cnt++;
+                }
 //XXX could be in cont/surv/both
+/****** cont_site and surv_site lists are bad..
                 let station_group="NA";
                 if(cont_site.includes(station_id)) {
                     station_group = "cont";
+                    cc_cnt++;
                 }
                 if(surv_site.includes(station_id)) {
                     if(station_group == "cont") {
-window.console.log("gnss station "+station_id+" is in both site lists");
+//window.console.log("gnss station "+station_id+" is in both site lists");
                         station_group = "both";
+                        bb_cnt++;
                         } else {
                             station_group = "surv";
+                            ss_cnt++;
                     }
                 }
+****/
 
                 while (lon < -180) {
                     lon += 360;
@@ -410,8 +434,10 @@ window.console.log("gnss station "+station_id+" is in both site lists");
                 this.cgm_layers.addLayer(marker);
             }
         }
+
 window.console.log("MAX found is "+ CGM_GNSS.cgm_vector_max);
 window.console.log("MIN found is "+ CGM_GNSS.cgm_vector_min);
+window.console.log("HHH cc_cnt"+cc_cnt+" ss_cnt"+ss_cnt+" bb_cnt"+bb_cnt);
 
         this.generateVectorScale();
 
@@ -749,6 +775,8 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
 
     this.showProduct = function () {
 
+        showGNSSColorLegend();
+
 window.console.log("SHOW product");
         let $cgm_model_checkbox = $("#cgm-model-gnss");
 
@@ -771,11 +799,13 @@ window.console.log("SHOW product");
 
     
     this.hideProduct = function () {
+
+        removeGNSSColorLegend();
+
         let $cgm_model_checkbox = $("#cgm-model-gnss");
         if ($cgm_model_checkbox.prop('checked')) {
             $cgm_model_checkbox.prop('checked', false);
         }
-window.console.log("Hide product, GNSS");
         if (CGM_GNSS.searching) {
             CGM_GNSS.search_result.remove();
         } else {
@@ -887,6 +917,7 @@ window.console.log(">>> calling freshSearch..");
         this.cgm_vector_scale.eachLayer(function (layer) {
             viewermap.addLayer(layer);
         });
+        showGNSSVectorColorLegend();
     };
 
 
@@ -913,6 +944,7 @@ window.console.log(">>> calling freshSearch..");
         this.cgm_vector_scale.eachLayer(function (layer) {
             viewermap.removeLayer(layer);
         });
+        removeGNSSVectorColorLegend();
 
         if ($("#cgm-model-gnss-vectors").prop('checked')) {
             $("#cgm-model-gnss-vectors").prop('checked', false);
@@ -1228,6 +1260,9 @@ window.console.log("setupInterface: retrieved stations "+sz);
             $("#downloadInSARBtn").css('display','none');
             $("#infoInSARBtn").css('display','none');
 
+            removeINSARColorLegend();
+            showGNSSColorLegend();
+
 //$("div.mapData div.map-container").removeClass("col-7 pr-0 pl-2").addClass("col-12").css('padding-left','30px');
 
             $("div.mapData div.map-container").css('padding-left','30px');
@@ -1277,7 +1312,7 @@ window.console.log("setupInterface: retrieved stations "+sz);
 
 // update the marker size in demand
 		let zoom=viewermap.getZoom();
-                let target = 4; // default, zoom=7, radius=4
+                let target = 3.5; // default, zoom=7, radius=4
                 if(zoom > 7)  {
                    target = (zoom > 9) ? 6 : (zoom - 7)+target;
                 }
