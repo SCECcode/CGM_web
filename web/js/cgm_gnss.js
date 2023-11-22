@@ -121,7 +121,7 @@ var CGM_GNSS = new function () {
     };
 
     var tablePlaceholderRow = `<tr id="placeholder-row">
-                        <td colspan="11">Metadata for selected points will appear here.</td>
+                        <td colspan="12">Metadata for selected points will appear here.</td>
                     </tr>`;
 
     this.activateData = function() {
@@ -231,9 +231,9 @@ var CGM_GNSS = new function () {
 
 // setup gnss sites
         for (const idx in cgm_gnss_site_data) {
-            if (cgm_gnss_station_data.hasOwnProperty(idx)) {
-                let name = cgm_gnss_station_data[idx].name;
-                let type = cgm_gnss_station_data[index].type;
+            if (cgm_gnss_site_data.hasOwnProperty(idx)) {
+                let name = cgm_gnss_site_data[idx].name;
+                let type = cgm_gnss_site_data[idx].type;
                 if(type == "cont") {
                     cont_site.push(name);
                     } else {
@@ -706,6 +706,7 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
         html += `<td class="cgm-data-click">${coordinates.lat}</td>`;
         html += `<td class="cgm-data-click">${coordinates.lng}</td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.type} </td>`;
+        html += `<td class="cgm-data-click">${layer.scec_properties.group} </td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.vel_east} </td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.vel_north} </td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.horizontalVelocity}</td>`;
@@ -1082,11 +1083,12 @@ window.console.log("generateResultsTable..");
                         <th class="hoverColor" onClick="sortMetadataTableByRow(2,'n')">Lat&nbsp<span id='sortCol_2' class="fas fa-angle-down"></span></th>
                         <th class="hoverColor" onClick="sortMetadataTableByRow(3,'n')">Lon&nbsp<span id='sortCol_3' class="fas fa-angle-down"></span></th>
                         <th style="width:6rem">Type</th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(5,'n')">East Vel&nbsp<span id='sortCol_5' class="fas fa-angle-down"></span></th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(6,'n')">North Vel&nbsp<span id='sortCol_6' class="fas fa-angle-down"></span></th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(7,'n')">Horizontal&nbsp<span id='sortCol_7' class="fas fa-angle-down"></span><br>Vel (mm/yr)</th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(8,'n')">Azimuth&nbsp<span id='sortCol_8' class="fas fa-angle-down"></span></th>
-                        <th class="hoverColor" onClick="sortMetadataTableByRow(9,'n')">Vertical Vel&nbsp<span id='sortCol_9' class="fas fa-angle-down"></span><br>(mm/yr)</th>
+                        <th style="width:3rem">Group</th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(6,'n')">East Vel&nbsp<span id='sortCol_5' class="fas fa-angle-down"></span></th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(7,'n')">North Vel&nbsp<span id='sortCol_6' class="fas fa-angle-down"></span></th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(8,'n')">Horizontal&nbsp<span id='sortCol_7' class="fas fa-angle-down"></span><br>Vel (mm/yr)</th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(9,'n')">Azimuth&nbsp<span id='sortCol_8' class="fas fa-angle-down"></span></th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(10,'n')">Vertical Vel&nbsp<span id='sortCol_9' class="fas fa-angle-down"></span><br>(mm/yr)</th>
 
 <!-- 
 <button id="infoBtn" class="btn cgm-small-btn" data-toggle="modal" data-target="#modalazimuth"><span class="fas fa-info-circle"></span> 

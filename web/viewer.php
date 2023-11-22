@@ -459,12 +459,29 @@ $cgm_insar = new CGM_INSAR();
                   </div>
                 </div>
             </div>
+
 <div id="expand-view-key-container" style="display:none;">
   <div id="expand-view-key" class="row" style="opacity:0.8; height:1.4rem;">
     <button id="bigMapBtn" class="btn cgm-small-btn" title="Expand into a larger map" style="color:black;background-color:rgb(255,255,255);padding: 0rem 0.3rem 0rem 0.3rem" onclick="toggleBigMap()"><span class="fas fa-expand"></span>
     </button>   
   </div>               
 </div>     
+
+<!-- 3 types of legend -->
+<div id="my-legends-container" style="display:;">
+  <div id="my-legends" class="col-2" style="border:solid 1px green;">
+
+    <div id="gnss_colorbar" style="border:solid 1px orange; width:200px;display:;">
+      <li style="list-style-image:url('./img/orange.png');"> surv sites</li>
+      <li style="list-style-image:url('./img/blue.png');"> cont sites</li>
+    </div>
+
+    <div id="insar_colorbar" style="border:solid 1px red; width:200px;display:none;">
+      <img src="./img/insar_colorbar.png" style="height:100%; width:100%; object-fit:contain" >
+    </div>
+  </div>               
+</div>     
+
         </div>
     </div> <!-- top-map -->
 </div> <!-- mapDataBig -->

@@ -13,7 +13,7 @@ UPDATE CGM_gnss_sites set type = 'cont';
 
 
 INSERT INTO CGM_gnss_sites(name,type)
-   SELECT name,type FROM tmp0
+   SELECT name,type FROM tmp0;
 
 /*
    WHERE NOT EXISTS 

@@ -1,5 +1,4 @@
 /* required styles */
-
 #gnss-frame-type input[type="radio"] {
   display: none;
 }
@@ -23,6 +22,14 @@
   color: white;
 }
 
+
+#my-legends {
+    z-index: 5000;
+    position: absolute;
+    background-color: transparent;
+    left: 10px;
+    bottom: 100px;
+}
 
 #expand-view-key {
     z-index: 5000;
