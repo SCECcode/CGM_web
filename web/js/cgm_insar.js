@@ -563,12 +563,22 @@ var generateTableRow = function(layer) {
         const $all_search_controls = $("#cgm-insar-controls-container ul li");
         switch (type) {
             case this.searchType.location:
+                if(this.track_name == 'undefined' || this.track_name == "" ) {
+	            alert(" Please select a track first (showSearch)");	
+                    $("#cgm-insar-search-type").val("");
+                    break;
+                }
                 $all_search_controls.hide();
                 $("#cgm-insar-location").show();
                 skipDrawRectangle();
                 addDrawPoint();
                 break;
             case this.searchType.latlon:
+                if(this.track_name == 'undefined' || this.track_name == "" ) {
+	            alert(" Please select a track first (showSearch)");	
+                    $("#cgm-insar-search-type").val("");
+                    break;
+                }
                 $all_search_controls.hide();
                 $("#cgm-insar-latlon").show();
                 addDrawRectangle();
@@ -741,7 +751,12 @@ window.console.log("STASHING "+results.length+" layers from PHP calls");
 
 
     this.search = function(type, criteria) {
-        window.console.log("insar  -->  calling search..");
+        window.console.log("insar  -->  calling search.. on ",this.track_name);
+
+        if(this.track_name == 'undefined' || this.track_name == "" ) {
+	  alert(" Please select a track first (search)");	
+          return 0; // bad
+        }
 
         $searchResult = $("#searchResult");
         if (!type || !criteria) {
@@ -768,6 +783,7 @@ window.console.log("STASHING "+results.length+" layers from PHP calls");
                    remove_bounding_rectangle_layer();
                    } else {
 	               alert(" No data available for selected point ");	
+                       return 0; // bad
                }
             } else {
 //window.console.log(cgm_insar_data);
@@ -877,12 +893,20 @@ window.console.log("nx is "+nx+" and ny "+ny);
             }
             CGM_INSAR.showPHP(type, results,ncriteria);
         });
+        return 1;
     };
 
     this.searchBox = function (type, criteria) {
 
+        if(this.track_name == 'undefined' || this.track_name == "" ) {
+            alert(" Please select a track first (searchBox)");	
+            $("#wait-spinner").hide();
+            return;
+
+        }
         this.searching = true;
         let results = this.search(type, criteria);
+
     };
 
     var modelVisible = function (){
