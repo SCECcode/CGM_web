@@ -86,11 +86,13 @@ function setup_warnTSTable() {
 }
 
 function showPlotTSWarning() {
+/* TODO: suppress the popup
   if(!skip_warning) {
     skip_warning=true;
     let elt=document.getElementById("viewTSWarnbtn");
     elt.click();
   }
+*/
 }
 
 

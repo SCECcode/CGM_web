@@ -823,7 +823,7 @@ window.console.log("STASHING "+results.length+" layers from PHP calls");
                                     gid: ngid,
                                     selected: false,
                                     };
-                              let bb_info = `Selected InSAR point<br>track:${track_name}<br>lat:${nlat} lon:${nlon}`;
+                              let bb_info = `Selected InSAR point<br>track:${track_name}<br>lat: ${nlat} lon: ${nlon}`;
                               marker_layer.bindTooltip(bb_info);
 
                               results.push(marker_layer);
@@ -884,7 +884,7 @@ window.console.log("nx is "+nx+" and ny "+ny);
                                  gid: ngid,
                                  selected: false,
                              };
-                             let bb_info = `Selected InSAR region<br>track:${track_name}<br>sw:${nlat1},${nlon1}<br>ne:${nlat2},${nlon2}`;
+                             let bb_info = `Selected InSAR region<br>track:${track_name}<br>sw: ${nlat1},${nlon1}<br>ne: ${nlat2},${nlon2}`;
                              layer.bindTooltip(bb_info);
                              results.push(layer);
                         }

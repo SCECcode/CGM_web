@@ -470,16 +470,16 @@ $cgm_insar = new CGM_INSAR();
 <!-- 3 types of legend -->
 <div id="my-legends-container" style="display:;">
   <div id="my-legends" class="row" style="margin-left:0px">
-    <div id="gnss_vector_space" class="col-3" style="margin-left:0px; border:solid 0px green; display:none;">
-    </div>
-    <div class="col-2" style="border:solid 0px blue;">
+    <div class="col-8" style="border:solid 0px blue;">
       <div id="insar_colormap" class="mb-2" style="border:solid 0px red; width:200px;display:none;">
         <img src="./img/insar_colorbar.png" style="height:100%; width:100%; object-fit:contain" >
       </div>
       <div id="gnss_colormap" class="row mb-2" style="border:solid 0px orange; width:300px;display:none;">
-        <li style="list-style-image:url('./img/orange.png');margin-left:20px; "> survey sites</li>
         <li style="list-style-image:url('./img/blue.png');margin-left:12px; "> continuous sites</li>
+        <li style="list-style-image:url('./img/orange.png');margin-left:20px; "> survey sites</li>
       </div>
+    </div>
+    <div id="gnss_vector_space" class="col-2" style="margin-left:0px; border:solid 0px green; display:none;">
     </div>
   </div>               
 </div>     
@@ -561,9 +561,6 @@ $cgm_insar = new CGM_INSAR();
     <div class="modal-content" id="modalTSContent">
       <!--Header-->
       <div class="modal-header">
-<!--
-        <button id="viewTSTogglebtn" class="btn btn-outline-primary btn-sm" type="button" onclick="toggleTSview()">Switch Frame Type</button>
--->
 <!-- selected in cgm_viewTS_util.js -->
          <div class="col" id="gnss-frame-selection">
          <p>Select GNSS Frame Type: </p>   
@@ -580,6 +577,7 @@ $cgm_insar = new CGM_INSAR();
              </form>
              </div>
          </div>
+         <button type="button" class="close" data-dismiss="modal">close</button>
       </div>
 
       <!--Body-->

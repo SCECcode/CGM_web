@@ -52,7 +52,7 @@ var CGM_GNSS = new function () {
             color: "white",
             fillColor: cgm_colors.normal,
             fillOpacity: 1,
-            radius: 3.5,
+            radius: 3,
             riseOnHover: true,
             weight: 1,
         },
@@ -60,7 +60,7 @@ var CGM_GNSS = new function () {
             color: "white",
             fillColor: cgm_colors.normal2,
             fillOpacity: 1,
-            radius: 3.5,
+            radius: 3,
             riseOnHover: true,
             weight: 1,
         },
@@ -68,7 +68,7 @@ var CGM_GNSS = new function () {
             color: "white",
             fillColor: cgm_colors.normal3,
             fillOpacity: 1,
-            radius: 3.5,
+            radius: 3,
             riseOnHover: true,
             weight: 1,
         },
@@ -180,12 +180,12 @@ window.console.log("HERE..");
 
         // scale bar height = 34 pixels
         // vector bar target height = 34+17=51
-        let targetx=pmin['x']+10;
+        let targetx=pmin['x']+235;
         let targety=pmax['y']-55;
 
         if(this.cgm_vector_loc == 0) {
-           targetx=pmin['x']+5;
-           targety=pmax['y']-50;
+           targetx=pmin['x']+230;
+           targety=pmax['y']-40;
            this.cgm_vector_loc=targety;
         }
 
@@ -1312,7 +1312,7 @@ window.console.log("setupInterface: retrieved stations "+sz);
 
 // update the marker size in demand
 		let zoom=viewermap.getZoom();
-                let target = 3.5; // default, zoom=7, radius=4
+                let target = 3; // default, zoom=7, radius=4
                 if(zoom > 7)  {
                    target = (zoom > 9) ? 6 : (zoom - 7)+target;
                 }

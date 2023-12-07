@@ -28,13 +28,13 @@ $header = getHeader("User Guide");
     <h1>CGM Viewer User Guide</h1>
         <div class="col-12">
             <figure class="cgm-interface figure float-lg-right">
-                <img src="img/cgm-viewer.png" class="figure-img img-fluid" alt="Screen capture of CSM viewer interface">
+                <img src="img/cgm-viewer.png" class="figure-img img-fluid" alt="Screen capture of CGM viewer interface">
                 <figcaption class="figure-caption">Screen capture of CGM viewer interface</figcaption>
             </figure>
-            <h4><strong>Community Geodetic Model (CSM) Viewer Overview</strong></h4>
+            <h4><strong>Community Geodetic Model (CGM) Viewer Overview</strong></h4>
 
 		<p>The CGM viewer provides interactive map-based views of the 
-                   <a href="https://doi.org/10.5281/zenodo.XXX">CGM version 2.0</a> 
+                   <a href="https://doi.org/10.5281/zenodo.10076838">CGM version 2.0</a> 
 		   contributed products.
                    The viewer allows users to select GNSS or InSAR products of interest,
                    using drop down menus at the top-left of the interface, and view the
