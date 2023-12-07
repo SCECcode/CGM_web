@@ -131,6 +131,16 @@ dl, ol, ul {
    margin-bottom:0;
 }
 
+#cgm-insar-latlonMenu p{
+   margin-top:0;
+   margin-bottom:0;
+}
+
+#cgm-insar-locationMenu p{
+   margin-top:0;
+   margin-bottom:0;
+}
+
 :root {
     /*font-size: 90%;*/
 }
@@ -430,6 +440,7 @@ select {
 input[type=text] {
    width: 140px;
    margin-left: 5px;
+   height: calc(2rem);
 }
 
 .banner-container {
@@ -705,12 +716,12 @@ div.guide ul {
     font-weight: normal;
 }
 
-#refresh-all-button {
-    height: calc(2.25rem + 2px);
+#refresh-gnss-all-button {
+    height: calc(2rem);
 }
 
 #refresh-insar-all-button {
-    height: calc(2.25rem + 2px);
+    height: calc(2rem);
 }
 
 #mapLayer {

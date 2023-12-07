@@ -247,6 +247,9 @@ function _process_data(gid, blob) {
       }	      
       let token=ll.split(",");
       if(token.length != 7) {
+         if( i == (sz-1) ) { // last line
+           continue;
+         }
          window.console.log("invalid data in this line "+i+" >>"+token.length);
          window.console.log(" bad line: >>"+ll+"<<");
          continue;
@@ -437,6 +440,7 @@ function clearAllPixiOverlay() {
 }
 
 function togglePixiOverlay(gid) {
+window.console.log("togglePixiOverlay.."+gid);
   for(let i=0; i<pixiOverlayList.length; i++) {
      let pixi=pixiOverlayList[i];
      if(pixi["gid"] == gid) {

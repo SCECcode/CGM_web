@@ -136,7 +136,7 @@ $cgm_insar = new CGM_INSAR();
         </div>
     </div>
 
-    <div id="top-control-row-1" class="row mb-2">
+    <div id="top-control-row-1" class="row">
         <div class="col-12 d-flex text-left pr-0">
             <div class="col-6" style="padding:0">
                 <div class="input-group input-group-sm custom-control-inline pull-left" id="dataset-controls" style="max-width:170px">
@@ -148,7 +148,7 @@ $cgm_insar = new CGM_INSAR();
                                  <option value="insar">InSAR</option>
                          </select>
                 </div>
-                <button id="infoGNSSBtn" class="infoBtn btn pull-left" style="display:"
+                <button id="infoGNSSBtn" class="infoBtn btn pull-left" style="display:;padding-left:0;"
                         title="show GNSS frame info"
                         onClick="infoGNSS()"
                         data-toggle="modal" data-target="#modalinfoProduct">
@@ -156,10 +156,18 @@ $cgm_insar = new CGM_INSAR();
                         title="show GNSS Frame info"
                         style="font-size:14px;"></span>
                 </button>
+                <button id="infoInSARBtn" class="infoBtn btn pull-left" style="display:none;padding-left:0;padding-right:15px;"
+                        title="show full InSAR track dataset info"
+			onClick="infoInSAR()"
+			data-toggle="modal" data-target="#modalinfoProduct">
+                        <span class="glyphicon glyphicon-info-sign"
+                        title="show InSAR Tracks info"
+			style="font-size:14px;"></span>
+                </button>
 
-                <div id="insar-track-controls" class="input-group input-group-sm custom-control-inline pull-left mb-2" style="max-width:160px;display:none">
+                <div id="insar-track-controls" class="input-group input-group-sm custom-control-inline pull-left" style="max-width:160px;display:none">
                          <div class="input-group-prepend">
-                                 <label style='border-bottom:1;' class="input-group-text" for="insar-track-select">Select Track</label>
+                                 <label class="input-group-text" for="insar-track-select">Select Track</label>
                          </div>
                          <select id='insar-track-select' class="custom-select custom-select-sm">
                                  <option selected value="">NONE</option>
@@ -169,15 +177,7 @@ $cgm_insar = new CGM_INSAR();
                                  <option value="A166">A166</option>
                          </select>
                 </div>
-                <button id="infoInSARBtn" class="infoBtn btn pull-left" style="display:none"
-                        title="show full InSAR track dataset info"
-			onClick="infoInSAR()"
-			data-toggle="modal" data-target="#modalinfoProduct">
-                        <span class="glyphicon glyphicon-info-sign"
-                        title="show InSAR Tracks info"
-			style="font-size:14px;"></span>
-                </button>
-                <button id="downloadInSARBtn" class="btn pull-left" style="display:none"
+                <button id="downloadInSARBtn" class="btn pull-left" style="display:none;padding-left:0;"
                         title="click to download full InSAR track"
                         onClick="downloadHDF5InSAR()">
                         <span class="glyphicon glyphicon-download"
@@ -191,7 +191,7 @@ $cgm_insar = new CGM_INSAR();
 <!-- GNSS select -->
     <div id="top-control-row-2">
     <div class="row control-container mt-1" id="cgm-gnss-controls-container" style="display:;">
-            <div class="col-4 input-group filters mb-3">
+            <div class="col-4 input-group input-group-sm filters mb-5">
                 <select id="cgm-gnss-search-type" class="custom-select">
                     <option value="">Search GNSS by</option>
                     <option value="stationname">Station Name</option>
@@ -284,9 +284,10 @@ $cgm_insar = new CGM_INSAR();
                 </ul>
             </div>
     </div>
+
 <!-- INSAR select -->
     <div class="row control-container mt-1" id="cgm-insar-controls-container" style="display:none;">
-            <div class="col-4 input-group filters mb-3">
+            <div class="col-4 input-group input-group-sm filters mb-5">
                 <select id="cgm-insar-search-type" class="custom-select">
                     <option value="">Search InSAR by</option>
                     <option value="location">Point Location</option>
@@ -704,12 +705,12 @@ $cgm_insar = new CGM_INSAR();
       <div class="modal-body" id="modalprogressBody">
         <div class="row col-md-11 ml-auto" style="overflow:hidden; font-size:10pt">
            <div class="row">
-	   <p id="modalprogressLabel" style="text-align:center;font-size:20px"> 
+	   <p id="modalprogressLabel" style="text-align:center;font-size:18px"> 
                 <input type="text" style="width:400px; border:0px solid red" id="wait-text">
                 <div class="row" style="display:none">
                   <input type="text" style="width:100px;margin-right:50px;" id="wait-expected" value="0">
                 </div>
-                <input type="text" style="text-align:center;width:60px;margin-right:50px;margin-left:10px;padding:0px" id="wait-progress" value="0%" disabled>
+                <input type="text" style="text-align:center;width:60px;padding:0px" id="wait-progress" value="0%" disabled>
 		<div class="row" id="myProgress" style="border:2px solid grey">
                        <div id="myProgressBar"></div>
                 </div>

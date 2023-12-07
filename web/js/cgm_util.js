@@ -105,7 +105,7 @@ function updateProgressBar(width) {
 }
 
 function startLoadTrackWait(track, n) {
-  let txt= "Please wait, retrieving InSAR track "+track;
+  let txt= "Retrieving InSAR track "+track+".  Please wait ...";
   setupProgressBar(n,txt);
   $("#modalprogress").modal({ backdrop: 'static', keyboard: false });
 }
