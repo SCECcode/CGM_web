@@ -37,7 +37,7 @@ class CGM_INSAR extends SpatialData {
 
     function __construct()
     {
-        $this->connection = pg_connect("host=db port=5432 dbname=CGM1_db user=webonly password=scec");
+        $this->connection = pg_connect("host=db port=5432 dbname=CGM2_db user=webonly password=scec");
         if (!$this->connection) { die('Could not connect'); }
     }
 

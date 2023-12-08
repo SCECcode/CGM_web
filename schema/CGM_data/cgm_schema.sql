@@ -4,7 +4,7 @@ CREATE TABLE cgm_gnss_station_velocities (
     gid serial PRIMARY KEY,
     ulabel VARCHAR(10) NOT NULL,   -- 0001_s
     Dot VARCHAR(5) NOT NULL,       --* 0001
-    velType VARCHAR(10) NOT NULL,  -- survey
+    stationType VARCHAR(10) NOT NULL,  -- survey
     Ref_epoch  numeric,            --* 19941103120000
     Ref_jday numeric,              -- 49659.5000
     Ref_X numeric,                 -- -2581457.64570

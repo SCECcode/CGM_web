@@ -35,14 +35,12 @@ var CGM_GNSS = new function () {
 
     this.pointType = {
         CONTINUOUS_GPS: 'continuous',
-        CAMPAIGN_GPS:  'campaign',
-        GRID: 'grid',
+        SURVEY_GPS:  'survey'
     };
 
     var cgm_colors = {
         normal: '#006E90',
         normal2: '#F18F01',
-        normal3: '#00FFFF',
         selected: '#B02E0C',
         abnormal: '#00FFFF',
     };
@@ -59,14 +57,6 @@ var CGM_GNSS = new function () {
         normal2: {
             color: "white",
             fillColor: cgm_colors.normal2,
-            fillOpacity: 1,
-            radius: 3,
-            riseOnHover: true,
-            weight: 1,
-        },
-        normal3: {
-            color: "white",
-            fillColor: cgm_colors.normal3,
             fillOpacity: 1,
             radius: 3,
             riseOnHover: true,
@@ -246,22 +236,17 @@ window.console.log( "This is bad..station "+name+" with bad type "+ type);
                 }
             }
         }
-    let cc=cont_site;
-    let ss=surv_site;
-    let cc_cnt=0;
-    let ss_cnt=0;
-    let bb_cnt=0;
 
 // setup gnss stations 
         this.cgm_layers = new L.FeatureGroup();
         this.cgm_vectors = new L.FeatureGroup();
         for (const index in cgm_gnss_station_data) {
             if (cgm_gnss_station_data.hasOwnProperty(index)) {
-                let lat = parseFloat(cgm_gnss_station_data[index].ref_north_latitude);
-                let lon = parseFloat(cgm_gnss_station_data[index].ref_east_longitude);
-                let vel_north = parseFloat(cgm_gnss_station_data[index].ref_velocity_north);
-                let vel_east = parseFloat(cgm_gnss_station_data[index].ref_velocity_east);
-                let vel_up = parseFloat(cgm_gnss_station_data[index].ref_velocity_up);
+                let lat = parseFloat(cgm_gnss_station_data[index].Ref_Nlat);
+                let lon = parseFloat(cgm_gnss_station_data[index].Ref_Elong);
+                let vel_north = parseFloat(cgm_gnss_station_data[index].dNOdt);
+                let vel_east = parseFloat(cgm_gnss_station_data[index].dEOdt);
+                let vel_up = parseFloat(cgm_gnss_station_data[index].dUOdt);
                 let vel_north_mm = (vel_north*1000).toFixed(3);
                 let vel_east_mm = (vel_east*1000).toFixed(3);
                 let vel_up_mm = (vel_up*1000).toFixed(3);
@@ -270,41 +255,10 @@ window.console.log( "This is bad..station "+name+" with bad type "+ type);
 //atan2("Vel E","Vel N")*180/pi
                 let azimuth = (Math.atan2(vel_east_mm,vel_north_mm) * 180 / Math.PI).toFixed(3);
                 let verticalVelocity = vel_up_mm;
-                let station_id = cgm_gnss_station_data[index].station_id;
-                let station_type = cgm_gnss_station_data[index].station_type;
+                let station_id = cgm_gnss_station_data[index].Dot;
+                let station_type = cgm_gnss_station_data[index].stationType;
+                let ulabel = cgm_gnss_station_data[index].ulabel;
                 let gid = cgm_gnss_station_data[index].gid;
-
-                let station_group="both";
-                if((station_type == "campaign") && surv_site.includes(station_id) ) {
-                    station_group = "surv";
-                    ss_cnt++;
-                }
-                //if((station_type == "continuous") && cont_site.includes(station_id) ) {
-                if((station_type == "continuous")) {
-                    station_group = "cont";
-                    cc_cnt++;
-                }
-                if(station_group == "both") {
-                    bb_cnt++;
-                }
-//XXX could be in cont/surv/both
-/****** cont_site and surv_site lists are bad..
-                let station_group="NA";
-                if(cont_site.includes(station_id)) {
-                    station_group = "cont";
-                    cc_cnt++;
-                }
-                if(surv_site.includes(station_id)) {
-                    if(station_group == "cont") {
-//window.console.log("gnss station "+station_id+" is in both site lists");
-                        station_group = "both";
-                        bb_cnt++;
-                        } else {
-                            station_group = "surv";
-                            ss_cnt++;
-                    }
-                }
-****/
 
                 while (lon < -180) {
                     lon += 360;
@@ -315,14 +269,11 @@ window.console.log( "This is bad..station "+name+" with bad type "+ type);
 
                 let marker;
                 //let marker = L.circleMarker([lat, lon], cgm_marker_style.normal);
-		if(station_group == "cont") {
+		if(station_type == "continous") {
                     marker = makeLeafletCircleMarker([lat, lon], cgm_marker_style.normal);
                 }
-		if(station_group == "surv") {
+		if(station_type == "survey") {
                     marker = makeLeafletCircleMarker([lat, lon], cgm_marker_style.normal2);
-		}
-		if(station_group == "both") {
-                    marker = makeLeafletCircleMarker([lat, lon], cgm_marker_style.normal3);
 		}
 
                 // generate vectors
@@ -419,8 +370,8 @@ window.console.log( "This is bad..station "+name+" with bad type "+ type);
                     vector_dist_path_style: cgm_line_path_style,
                     vector_dist_head_pattern: cgm_line_head_pattern,
                     type: station_type,
-                    group: station_group,
                     gid: gid,
+                    ulabel : ulabel,
                     selected: false,
                 };
 
@@ -437,7 +388,6 @@ window.console.log( "This is bad..station "+name+" with bad type "+ type);
 
 window.console.log("MAX found is "+ CGM_GNSS.cgm_vector_max);
 window.console.log("MIN found is "+ CGM_GNSS.cgm_vector_min);
-window.console.log("HHH cc_cnt"+cc_cnt+" ss_cnt"+ss_cnt+" bb_cnt"+bb_cnt);
 
         this.generateVectorScale();
 
@@ -534,9 +484,8 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
         layer.scec_properties.selected = false;
 
 	let prop=layer.scec_properties;
-	if(prop.group == "cont") { layer.setStyle(cgm_marker_style.normal); }
-	if(prop.group == "surv") { layer.setStyle(cgm_marker_style.normal2); }
-	if(prop.group == "both") { layer.setStyle(cgm_marker_style.normal3); }
+	if(prop.type == "continuous") { layer.setStyle(cgm_marker_style.normal); }
+	if(prop.type == "survey") { layer.setStyle(cgm_marker_style.normal2); }
 
         layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.normal);
         layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.normal]);
@@ -1322,7 +1271,6 @@ window.console.log("setupInterface: retrieved stations "+sz);
                 }
                 cgm_marker_style.normal.radius=target;
                 cgm_marker_style.normal2.radius=target;
-                cgm_marker_style.normal3.radius=target;
                 cgm_marker_style.selected.radius=target;
                 cgm_marker_style.hover.radius = (target *3) ;
     

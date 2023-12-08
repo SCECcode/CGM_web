@@ -1,6 +1,6 @@
 FROM mdillon/postgis:10-alpine
 ENV POSTGRES_USER postgres
-ENV POSTGRES_DB CGM1_db
+ENV POSTGRES_DB CGM2_db
 ENV PGDATA=/home/postgres/cgm_db
 
 WORKDIR /app

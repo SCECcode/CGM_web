@@ -26,7 +26,7 @@ alter table tmp1
     add constraint tmp1_pk
         primary key (gid);
 
-COPY tmp1(ulabel, Dot, velType, Ref_epoch, Ref_jday, Ref_X, Ref_Y, Ref_Z, Ref_Nlat, Ref_Elong, Ref_Up, dXOdt, dYOdt, dZOdt, SXd, SYd, SZd, Rxy, Rxz, Rzy, dNOdt, dEOdt, dUOdt, SNd, SEd, SUd, Rne, Rnu, Reu, first_epoch, last_epoch, n_observations)
+COPY tmp1(ulabel, Dot, stationType, Ref_epoch, Ref_jday, Ref_X, Ref_Y, Ref_Z, Ref_Nlat, Ref_Elong, Ref_Up, dXOdt, dYOdt, dZOdt, SXd, SYd, SZd, Rxy, Rxz, Rzy, dNOdt, dEOdt, dUOdt, SNd, SEd, SUd, Rne, Rnu, Reu, first_epoch, last_epoch, n_observations)
     FROM '/home/postgres/CGM/CGM_data/SCEC_CGMv2.0.0_GNSS_vels-nam14_final.csv' DELIMITER ',' CSV;
 UPDATE tmp1 set cgm_version = '2.0.0';
 
