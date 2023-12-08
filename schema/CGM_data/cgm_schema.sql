@@ -4,8 +4,8 @@ CREATE TABLE cgm_gnss_station_velocities (
     gid serial PRIMARY KEY,
     ulabel VARCHAR(10) NOT NULL,   -- 0001_s
     Dot VARCHAR(5) NOT NULL,       --* 0001
-    stationType VARCHAR(10) NOT NULL,  -- survey
-    Ref_epoch  numeric,            --* 19941103120000
+    stationType VARCHAR(15) NOT NULL,  -- survey or continuous
+    Ref_epoch  text,            --* 19941103120000
     Ref_jday numeric,              -- 49659.5000
     Ref_X numeric,                 -- -2581457.64570
     Ref_Y numeric,                 -- -4600859.94210
@@ -31,10 +31,10 @@ CREATE TABLE cgm_gnss_station_velocities (
     Rne text,                      -- -0.000
     Rnu text,                      -- NaN
     Reu text,                      -- NaN
-    first_epoch numeric,           --* 19920605120000
-    last_epoch numeric,            --* 19941103120000
+    first_epoch text,           --* 19920605120000
+    last_epoch text,            --* 19941103120000
     n_observations  numeric,       -- 6
-    cgm_version text,
+    cgm_version text
 );
 
 CREATE TABLE cgm_gnss_sites(

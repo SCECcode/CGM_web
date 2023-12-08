@@ -33,22 +33,6 @@ UPDATE tmp1 set cgm_version = '2.0.0';
 INSERT into CGM_gnss_station_velocities (select * from tmp1);
 
 drop table tmp1;
------------------------
-/*
-DELETE FROM cgm_gnss_station_velocities t2
-WHERE NOT EXISTS 
-(SELECT 1 FROM cgm_gnss_sites t1
- WHERE t1.name = t2.station_id);
-
-UPDATE CGM_gnss_station_velocities t2
-   SET station_type = 
-      ( select type FROM CGM_gnss_sites t1
-           where t2.station_id = t1.name);	
-UPDATE CGM_gnss_station_velocities t2
-   SET station_type = 
-      ( SELECT COUNT(*) FROM CGM_gnss_sites t1
-           where t2.station_id = t1.name);	
-*/
 
 -----------------------
 COPY cgm_insar_tracks(file,track,color,bb1_lat,bb1_lon,bb2_lat,bb2_lon,bb3_lat,bb3_lon,bb4_lat,bb4_lon,geocode_increment,geocode_range,ref_lat,ref_lon)
