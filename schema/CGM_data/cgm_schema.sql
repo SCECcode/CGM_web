@@ -1,4 +1,4 @@
-\c CGM1_db;
+\c CGM2_db;
 
 CREATE TABLE cgm_gnss_station_velocities (
     gid serial PRIMARY KEY,

@@ -1,5 +1,5 @@
 
-\c CGM1_db;
+\c CGM2_db;
 -----------------------
 CREATE TABLE tmp0 AS
     TABLE CGM_gnss_sites;
