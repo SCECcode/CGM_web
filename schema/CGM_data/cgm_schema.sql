@@ -25,9 +25,9 @@ CREATE TABLE cgm_gnss_station_velocities (
     dNOdt float,                 --* 0.03578
     dEOdt float,                 --* -0.03713
     dUOdt float,                 --* -0.00155
-    SNd text,                      -- 0.00152
-    SEd text,                      -- 0.00147
-    SUd text,                      -- 0.00573
+    SNd float,                      -- 0.00152
+    SEd float,                      -- 0.00147
+    SUd float,                      -- 0.00573
     Rne text,                      -- -0.000
     Rnu text,                      -- NaN
     Reu text,                      -- NaN

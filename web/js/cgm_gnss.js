@@ -6,10 +6,13 @@ var CGM_GNSS = new function () {
 
     // meters 22 - 35306
     this.cgm_vector_max = -1;
-    this.cgm_vector_min = 0;
+    this.cgm_vector_min = -1;
     this.cgm_vector_loc = 0;
 
     this.cgm_select_gid = [];
+
+    const ulabel_set=[];
+    const funny_set=[];
 
     // cgm_layers <= all marker layers for the stations/survey
     //               this is setup once from viewer.php
@@ -166,7 +169,6 @@ var CGM_GNSS = new function () {
         let pbds=viewermap.getPixelBounds();
         let pmin=pbds['min'];
         let pmax=pbds['max'];
-window.console.log("HERE..");
 
         // scale bar height = 34 pixels
         // vector bar target height = 34+17=51
@@ -217,7 +219,6 @@ window.console.log("HERE..");
         this.cgm_vector_scale = new L.FeatureGroup([polyline, arrowHeadDecorator,mylabel]);
     }
 
-
     this.generateLayers = function () {
 
 // setup gnss sites
@@ -242,22 +243,37 @@ window.console.log( "This is bad..station "+name+" with bad type "+ type);
         this.cgm_vectors = new L.FeatureGroup();
         for (const index in cgm_gnss_station_data) {
             if (cgm_gnss_station_data.hasOwnProperty(index)) {
-                let lat = parseFloat(cgm_gnss_station_data[index].Ref_Nlat);
-                let lon = parseFloat(cgm_gnss_station_data[index].Ref_Elong);
-                let vel_north = parseFloat(cgm_gnss_station_data[index].dNOdt);
-                let vel_east = parseFloat(cgm_gnss_station_data[index].dEOdt);
-                let vel_up = parseFloat(cgm_gnss_station_data[index].dUOdt);
+
+let dumdum=cgm_gnss_station_data[index];
+                let ulabel = cgm_gnss_station_data[index].ulabel;
+                if( ulabel_set.includes(ulabel)) {
+                  continue;
+                }
+                ulabel_set.push(ulabel);
+
+                let lat = parseFloat(cgm_gnss_station_data[index].ref_nlat);
+                let lon = parseFloat(cgm_gnss_station_data[index].ref_elong);
+
+                let vel_north = parseFloat(cgm_gnss_station_data[index].dnodt);
+                let vel_east = parseFloat(cgm_gnss_station_data[index].deodt);
+                let vel_up = parseFloat(cgm_gnss_station_data[index].duodt);
+
+                let vel_snd = parseFloat(cgm_gnss_station_data[index].snd);
+                let vel_sed = parseFloat(cgm_gnss_station_data[index].sed);
+
                 let vel_north_mm = (vel_north*1000).toFixed(3);
                 let vel_east_mm = (vel_east*1000).toFixed(3);
                 let vel_up_mm = (vel_up*1000).toFixed(3);
+                let vel_snd_mm = (vel_snd*1000).toFixed(3);
+                let vel_sed_mm = (vel_sed*1000).toFixed(3);
+
 //sqrt("Vel E"^2 + "Vel N"^2)
                 let horizontalVelocity = (Math.sqrt(Math.pow(vel_north_mm, 2) + Math.pow(vel_east_mm, 2))).toFixed(3);
 //atan2("Vel E","Vel N")*180/pi
                 let azimuth = (Math.atan2(vel_east_mm,vel_north_mm) * 180 / Math.PI).toFixed(3);
                 let verticalVelocity = vel_up_mm;
-                let station_id = cgm_gnss_station_data[index].Dot;
-                let station_type = cgm_gnss_station_data[index].stationType;
-                let ulabel = cgm_gnss_station_data[index].ulabel;
+                let station_id = cgm_gnss_station_data[index].dot;
+                let station_type = cgm_gnss_station_data[index].stationtype;
                 let gid = cgm_gnss_station_data[index].gid;
 
                 while (lon < -180) {
@@ -267,25 +283,60 @@ window.console.log( "This is bad..station "+name+" with bad type "+ type);
                     lon -= 360;
                 }
 
+// generate marker
                 let marker;
-                //let marker = L.circleMarker([lat, lon], cgm_marker_style.normal);
-		if(station_type == "continous") {
+		if(station_type == "continuous") {
                     marker = makeLeafletCircleMarker([lat, lon], cgm_marker_style.normal);
                 }
 		if(station_type == "survey") {
                     marker = makeLeafletCircleMarker([lat, lon], cgm_marker_style.normal2);
 		}
 
-                // generate vectors
+                let station_info = `<strong>GNSS</strong><br>Station: ${station_id}<br>Horizontal Velocity: ${horizontalVelocity} mm/yr`;
+                marker.bindTooltip(station_info).openTooltip();
+
+                marker.scec_properties = {
+                    station_id: station_id,
+                    horizontalVelocity: horizontalVelocity,
+                    verticalVelocity: verticalVelocity,
+                    azimuth: azimuth,
+                    vel_east: vel_east_mm,
+                    vel_north: vel_north_mm,
+                    has_vector: false;
+                    type: station_type,
+                    gid: gid,
+                    ulabel : ulabel,
+                    selected: false
+                };
+
+// only plot vector if ..
+// both the "SNd" and "SEd" fields (fields 23 and 24) are less than 0.020 (20 mm/yr); and 
+// (2) the velocity magnitude (sqrt("dN/dt"^2 + "dE/dt"^2) = sqrt(field20^2 + field21^2)) is less than 0.050 (50 mm/yr).
+/*
+		if( isNaN(vel_east) || isNaN(vel_north) || isNaN(vel_up) ||
+                    isNaN(vel_sed) || isNaN(vel_snd) ) {
+                    funny_set.push(ulabel);
+                    this.cgm_layers.addLayer(marker);
+                    continue;
+                }
+                if( (vel_sed < 0.000020) && (vel_snd < 0.000020) && (vel_up < 0.000050) ) {
+                  // go ahead and make vector..
+                } else {
+                    continue;
+                }
+*/
+
+// generate vectors
                 let start_latlng = marker.getLatLng();
                 // in meter
                 let end_latlng = calculateEndVectorLatLng(start_latlng, vel_north, vel_east, 1000000);
                 let dist_m = calculateDistanceMeter(start_latlng, {'lat':end_latlng[0], 'lng':end_latlng[1]} );
                 let dist = dist_m/1000;
 
+//window.console.log("HERE dist_m..",dist);
                 if (CGM_GNSS.cgm_vector_max == -1) {
-                  CGM_GNSS.cgm_vector_max=dist;
-                  CGM_GNSS.cgm_vector_min=dist;
+                   CGM_GNSS.cgm_vector_max=dist;
+                   CGM_GNSS.cgm_vector_min=dist;
                 }
                 if (dist > CGM_GNSS.cgm_vector_max) {
                    CGM_GNSS.cgm_vector_max = dist;
@@ -296,9 +347,6 @@ window.console.log( "This is bad..station "+name+" with bad type "+ type);
 
                 // save the dist into cgm_gnss_station_data
                 cgm_gnss_station_data[index].vector_dist=dist;
-
-                let station_info = `<strong>GNSS</strong><br>Station: ${station_id}<br>Horizontal Velocity: ${horizontalVelocity} mm/yr`;
-                marker.bindTooltip(station_info).openTooltip();
 
                 let line_latlons = [
                     [start_latlng.lat, start_latlng.lng],
@@ -359,21 +407,10 @@ window.console.log( "This is bad..station "+name+" with bad type "+ type);
                     patterns: [cgm_line_head_pattern.normal]
                 });
 
-                marker.scec_properties = {
-                    station_id: station_id,
-                    horizontalVelocity: horizontalVelocity,
-                    verticalVelocity: verticalVelocity,
-                    azimuth: azimuth,
-                    vel_east: vel_east_mm,
-                    vel_north: vel_north_mm,
-                    vector_dist: cgm_gnss_station_data[index].vector_dist,
-                    vector_dist_path_style: cgm_line_path_style,
-                    vector_dist_head_pattern: cgm_line_head_pattern,
-                    type: station_type,
-                    gid: gid,
-                    ulabel : ulabel,
-                    selected: false,
-                };
+                marker.scec_properties.has_vector=true;
+                marker.scec_properties.vector_dist = cgm_gnss_station_data[index].vector_dist;
+                marker.scec_properties.vector_dist_path_style = cgm_line_path_style;
+                marker.scec_properties.vector_dist_head_pattern = cgm_line_head_pattern;
 
                 // marker.scec_properties.vector = new L.FeatureGroup([polyline, arrowHeadDecorator]);
                 marker.scec_properties.vector = new L.FeatureGroup();
@@ -388,6 +425,8 @@ window.console.log( "This is bad..station "+name+" with bad type "+ type);
 
 window.console.log("MAX found is "+ CGM_GNSS.cgm_vector_max);
 window.console.log("MIN found is "+ CGM_GNSS.cgm_vector_min);
+window.console.log("total number of sites..",ulabel_set.length);
+window.console.log("total number of funny sites..",funny_set.length);
 
         this.generateVectorScale();
 
@@ -402,8 +441,10 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
         this.cgm_layers.on('mouseover', function(event) {
             let layer = event.layer;
             layer.setRadius(cgm_marker_style.hover.radius);
-            layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.hover);
-            layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.hover]);
+            if( layer.scec_properties.has_vector ) {
+              layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.hover);
+              layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.hover]);
+            }
         });
 
 
@@ -411,12 +452,14 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
             let layer = event.layer;
             layer.setRadius(cgm_marker_style.normal.radius);
 
-            if (layer.scec_properties.selected) {
-                layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.selected);
-                layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.selected]);
-                } else {
-                    layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.normal);
-                    layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.normal]);
+            if( layer.scec_properties.has_vector ) {
+              if (layer.scec_properties.selected) {
+                  layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.selected);
+                  layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.selected]);
+                  } else {
+                      layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.normal);
+                      layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.normal]);
+              }
             }
 
         });
@@ -454,8 +497,10 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
     this.selectStationByLayer = function (layer, moveTableRow=false) {
         layer.scec_properties.selected = true;
         layer.setStyle(cgm_marker_style.selected);
-        layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.selected);
-        layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.selected]);
+        if( layer.scec_properties.has_vector ) {
+          layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.selected);
+          layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.selected]);
+        }
         let gid = layer.scec_properties.gid;
 
         let $row = $(`tr[data-point-gid='${gid}'`);
@@ -487,8 +532,10 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
 	if(prop.type == "continuous") { layer.setStyle(cgm_marker_style.normal); }
 	if(prop.type == "survey") { layer.setStyle(cgm_marker_style.normal2); }
 
-        layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.normal);
-        layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.normal]);
+        if( layer.scec_properties.has_vector ) {
+          layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.normal);
+          layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.normal]);
+        }
 
         let gid = layer.scec_properties.gid;
 
@@ -922,6 +969,10 @@ window.console.log(">>> calling freshSearch..");
              let start_lng = start_latlng.lng;
              let end_lat = end_latlng.lat;
              let end_lng = end_latlng.lng;
+
+             if( (start_lat == end_lat) && (start_lng == end_lng) ) {
+               return 0;
+             }
 
              // from http://www.movable-type.co.uk/scripts/latlong.html
              const R = 6371e3; // metres
