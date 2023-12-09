@@ -4,6 +4,9 @@
 
 var CGM_GNSS = new function () {
 
+    var gnss_map_zoom_level = 6.5;
+    var gnss_map_coordinates = [34.50, -118.57];
+
     // meters 22 - 35306
     this.cgm_vector_max = -1;
     this.cgm_vector_min = -1;
@@ -11,8 +14,8 @@ var CGM_GNSS = new function () {
 
     this.cgm_select_gid = [];
 
-    const ulabel_set=[];
-    const funny_set=[];
+    this.ulabel_set=[];
+    this.funny_set=[];
 
     // cgm_layers <= all marker layers for the stations/survey
     //               this is setup once from viewer.php
@@ -26,8 +29,8 @@ var CGM_GNSS = new function () {
     this.searching = false;
     this.search_result = new L.FeatureGroup();
 
-    const cont_site=[];
-    const surv_site=[];
+    this.cont_site=[];
+    this.surv_site=[];
 
     const frameType = {
         IGB14: 'igb14',
@@ -102,9 +105,8 @@ var CGM_GNSS = new function () {
     };
 
     this.defaultMapView = {
-        // coordinates: [34.3, -118.4],
-        coordinates: [34.16, -118.57],
-        zoom: 7
+        coordinates: gnss_map_coordinates,
+        zoom: gnss_map_zoom_level
     };
 
     this.searchType = {
@@ -224,13 +226,13 @@ var CGM_GNSS = new function () {
 // setup gnss sites
         for (const idx in cgm_gnss_site_data) {
             if (cgm_gnss_site_data.hasOwnProperty(idx)) {
-                let name = cgm_gnss_site_data[idx].name;
+                let name = cgm_gnss_site_data[idx].ulabel;
                 let type = cgm_gnss_site_data[idx].type;
                 if(type == "cont") {
-                    cont_site.push(name);
+                    this.cont_site.push(name);
                     } else {
                        if(type == "surv") {
-                           surv_site.push(name);
+                           this.surv_site.push(name);
                            } else {
 window.console.log( "This is bad..station "+name+" with bad type "+ type);
                        }
@@ -246,10 +248,10 @@ window.console.log( "This is bad..station "+name+" with bad type "+ type);
 
 let dumdum=cgm_gnss_station_data[index];
                 let ulabel = cgm_gnss_station_data[index].ulabel;
-                if( ulabel_set.includes(ulabel)) {
+                if( this.ulabel_set.includes(ulabel)) {
                   continue;
                 }
-                ulabel_set.push(ulabel);
+                this.ulabel_set.push(ulabel);
 
                 let lat = parseFloat(cgm_gnss_station_data[index].ref_nlat);
                 let lon = parseFloat(cgm_gnss_station_data[index].ref_elong);
@@ -302,7 +304,7 @@ let dumdum=cgm_gnss_station_data[index];
                     azimuth: azimuth,
                     vel_east: vel_east_mm,
                     vel_north: vel_north_mm,
-                    has_vector: false;
+                    has_vector: false,
                     type: station_type,
                     gid: gid,
                     ulabel : ulabel,
@@ -312,13 +314,15 @@ let dumdum=cgm_gnss_station_data[index];
 // only plot vector if ..
 // both the "SNd" and "SEd" fields (fields 23 and 24) are less than 0.020 (20 mm/yr); and 
 // (2) the velocity magnitude (sqrt("dN/dt"^2 + "dE/dt"^2) = sqrt(field20^2 + field21^2)) is less than 0.050 (50 mm/yr).
-/*
 		if( isNaN(vel_east) || isNaN(vel_north) || isNaN(vel_up) ||
-                    isNaN(vel_sed) || isNaN(vel_snd) ) {
-                    funny_set.push(ulabel);
+                    isNaN(vel_sed) || isNaN(vel_snd) ||
+                    (vel_sed_mm > 20)  || (vel_snd > 20) || horizontalVelocity > 50 ) {
+                    this.funny_set.push(ulabel);
                     this.cgm_layers.addLayer(marker);
                     continue;
                 }
+
+/*
                 if( (vel_sed < 0.000020) && (vel_snd < 0.000020) && (vel_up < 0.000050) ) {
                   // go ahead and make vector..
                 } else {
@@ -423,10 +427,14 @@ let dumdum=cgm_gnss_station_data[index];
             }
         }
 
-window.console.log("MAX found is "+ CGM_GNSS.cgm_vector_max);
-window.console.log("MIN found is "+ CGM_GNSS.cgm_vector_min);
-window.console.log("total number of sites..",ulabel_set.length);
-window.console.log("total number of funny sites..",funny_set.length);
+window.console.log("  || ");
+window.console.log("  ||  MAX found is "+ CGM_GNSS.cgm_vector_max);
+window.console.log("  ||  MIN found is "+ CGM_GNSS.cgm_vector_min);
+window.console.log("  ||  total number of sites..",this.ulabel_set.length);
+window.console.log("  ||  total number of funny sites..",this.funny_set.length);
+window.console.log("  ||  total number of continous sites..",this.cont_site.length);
+window.console.log("  ||  total number of survey sites..",this.surv_site.length);
+window.console.log("  || ");
 
         this.generateVectorScale();
 
@@ -667,21 +675,21 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
       
           if(ftype == frameType.IGB14 || ftype == "all") {
             zcnt++;
-            let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.IGB14);
+            let downloadURL = getDataDownloadURL(layer.scec_properties.ulabel, layer.scec_properties.station_id,frameType.IGB14);
             let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
             let promise = $.get(downloadURL);
             nzip.file(dname,promise);
           }
           if(ftype == frameType.NAM14 || ftype == "all") {
             zcnt++;
-            let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.NAM14);
+            let downloadURL = getDataDownloadURL(layer.scec_properties.ulabel, layer.scec_properties.station_id,frameType.NAM14);
             let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
             let promise = $.get(downloadURL);
             nzip.file(dname,promise);
           }
           if(ftype == frameType.NAM17 || ftype == "all") {
             zcnt++;
-            let downloadURL = getDataDownloadURL(layer.scec_properties.station_id,frameType.NAM14);
+            let downloadURL = getDataDownloadURL(layer.scec_properties.ulabel, layer.scec_properties.station_id,frameType.NAM14);
             let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
             let promise = $.get(downloadURL);
             nzip.file(dname,promise);
@@ -715,10 +723,10 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
         let coordinates = layer.getLatLng();
         coordinates = {lat: parseFloat(coordinates.lat).toFixed(2), lng: parseFloat(coordinates.lng).toFixed(2) };
 
-        let downloadURL1 = getDataDownloadURL(layer.scec_properties.station_id,frameType.IGB14);
-        let downloadURL2 = getDataDownloadURL(layer.scec_properties.station_id,frameType.NAM14);
-        let downloadURL3 = getDataDownloadURL(layer.scec_properties.station_id,frameType.NAM17);
-        let downloadURL4 = getDataDownloadURL(layer.scec_properties.station_id,frameType.PCF14);
+        let downloadURL1 = getDataDownloadURL(layer.scec_properties.ulabel, layer.scec_properties.station_id,frameType.IGB14);
+        let downloadURL2 = getDataDownloadURL(layer.scec_properties.ulabel, layer.scec_properties.station_id,frameType.NAM14);
+        let downloadURL3 = getDataDownloadURL(layer.scec_properties.ulabel, layer.scec_properties.station_id,frameType.NAM17);
+        let downloadURL4 = getDataDownloadURL(layer.scec_properties.ulabel, layer.scec_properties.station_id,frameType.PCF14);
 
         html += `<tr data-point-gid="${layer.scec_properties.gid}">`;
         html += `<td style="width:25px" class="cgm-data-click button-container"> <button class="btn btn-sm cxm-small-btn" id="" title="highlight the station" onclick=''>
@@ -902,11 +910,15 @@ window.console.log(">>> calling freshSearch..");
     this.showVectors = function () {
         if (this.searching) {
             this.search_result.eachLayer(function (layer) {
-                viewermap.addLayer(layer.scec_properties.vector);
+                if(layer.scec_properties.has_vector) {
+                  viewermap.addLayer(layer.scec_properties.vector);
+                }
             });
         } else {
             this.cgm_layers.eachLayer(function (layer) {
-                viewermap.addLayer(layer.scec_properties.vector);
+                if(layer.scec_properties.has_vector) {
+                  viewermap.addLayer(layer.scec_properties.vector);
+                }
             });
         }
         this.cgm_vector_scale.eachLayer(function (layer) {
@@ -928,7 +940,9 @@ window.console.log(">>> calling freshSearch..");
 
         if (this.searching) {
             this.search_result.eachLayer(function(layer){
-                viewermap.removeLayer(layer.scec_properties.vector);
+                if(layer.scec_properties.has_vector) {
+                  viewermap.removeLayer(layer.scec_properties.vector);
+                }
             });
         } else {
             this.cgm_vectors.eachLayer(function(layer) {
@@ -997,8 +1011,9 @@ window.console.log("gnss --->> calling search.. <<----");
                     $("#cgm-minVectorSliderTxt").val(Math.floor(criteria[0]*10000)/10000);
                     $("#cgm-maxVectorSliderTxt").val(Math.floor(criteria[1]*10000)/10000);
                     this.cgm_layers.eachLayer(function (layer) {
-                        if (layer.scec_properties.vector_dist > criteria[0]
-                             && layer.scec_properties.vector_dist < criteria[1]){
+                        if (layer.scec_properties.has_vector 
+			      &&  layer.scec_properties.vector_dist > criteria[0]
+                                && layer.scec_properties.vector_dist < criteria[1]){
                             results.push(layer);
                         }
                     });
@@ -1202,14 +1217,14 @@ from the attached cont_site.txt file,
 
 http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
 ******/
-        var getDataDownloadURL = function(station_id, frame)  {
+        var getDataDownloadURL = function(station_ulabel, station_id, frame)  {
 window.console.log("LOOKING up the url.."+station_id);
-let ct=cont_site;
-        if(cont_site.includes(station_id)) {
+let ct=CGM_GNSS.cont_site;
+        if(CGM_GNSS.cont_site.includes(station_ulabel)) {
           let urlPrefix = "http://geoweb.mit.edu/~floyd/scec/cgm/ts/";
           let url=urlPrefix + station_id + ".cgm.wmrss_"+frame+".pos";
           return url;
-          } else if (surv_site.includes(station_id)) {
+          } else if (CGM_GNSS.surv_site.includes(station_ulabel)) {
             let urlPrefix = "http://geoweb.mit.edu/~floyd/scec/cgm/ts/";
             let url=urlPrefix + station_id + ".cgm.final_"+frame+".pos";
             return url;
@@ -1314,7 +1329,7 @@ window.console.log("setupInterface: retrieved stations "+sz);
                 if(zoom > 7)  {
                    target = (zoom > 9) ? 6 : (zoom - 7)+target;
                 }
-// window.console.log("zoom is "+zoom+ " target is "+target);
+//window.console.log("zoom is "+zoom+ " target size is "+target);
                 if(cgm_marker_style.normal.radius == target) { // no changes..
                    return;
                 }
