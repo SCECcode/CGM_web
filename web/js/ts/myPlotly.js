@@ -15,7 +15,6 @@ jQuery(document).ready(function() {
 //  load_INSAR_ProcessVSFromCSV([myURL],myParams);
 //  return;
 
-window.console.log("HERE.. in plotly..");
   [urls, ptype, ftypes]=getParams("");
 
   if(ptype == "gnss") {
@@ -48,9 +47,17 @@ window.addEventListener("DOMContentLoaded", function () {
       }
 // replot command
       if (typeof event.data == 'object' && event.data.call=='fromSCEC') {
+
+          if(event.data.value == "clearAll") {
+            clearPlotlyview();
+window.console.log("HERE..");
+            return;
+          }
+          // default is a initial one with url/params..
           let myParams=decodeURI(event.data.value);
           window.console.log("replot: myParams"+myParams);
-          changeTSview(myParams);
+          changePlotlyview(myParams);
+
           } else {
             window.console.log("IFRAME side>> invalid event data>"+event.data);
       }

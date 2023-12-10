@@ -110,6 +110,7 @@ function get_PARAMS() {
 //           [{}]/for INSAR
 function showTSview(urls,ptype,ftypes) {
 window.console.log("calling showTSview..");
+  $("#wait-spinner").show();
 
   setupTSviewSelection(urls,ptype,ftypes);
   [url,ptype,ftype] = getTSviewSelection();
@@ -125,6 +126,13 @@ window.console.log("calling showTSview..");
 window.console.log("showTSview..param > "+params);
 
   $('#viewTSIfram').attr('src',"cgm_ts.html?"+params);
+}
+
+function clearTSview() {
+  var iwindow=document.getElementById('viewTSIfram').contentWindow;
+  window.console.log("service, sending a message to iframe.");
+  iwindow.postMessage({call:'fromSCEC',value:'clearAll'},"*");
+  resetTSviewSelection();
 }
 
 function _replotTSview(url,ptype,ftype) {
@@ -234,10 +242,12 @@ window.console.log("server,need to toggle to "+ftype[0]);
 }
 
 function selectTSview(tname) {
+window.console.log("server,need to toggle to "+url[0]);
+window.console.log("server,need to toggle to "+ftype[0]);
+window.console.log("selectTSview : turn on spinner..");
+   $("#wait-spinner").show();
    let nx=findTSviewTrack(tname);
    updateTSviewSelection(nx);
    [url,ptype,ftype]=getTSviewSelection(); 
-window.console.log("server,need to toggle to "+url[0]);
-window.console.log("server,need to toggle to "+ftype[0]);
    _replotTSview(url,ptype,ftype);
 }

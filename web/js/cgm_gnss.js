@@ -1128,7 +1128,7 @@ window.console.log("generateResultsTable..");
                          <th class="hoverColor" onClick="sortMetadataTableByRow(1,'a')">Station&nbsp<span id='sortCol_1' class="fas fa-angle-down"></span><br>Name</th>
                         <th class="hoverColor" onClick="sortMetadataTableByRow(2,'n')">Lat&nbsp<span id='sortCol_2' class="fas fa-angle-down"></span></th>
                         <th class="hoverColor" onClick="sortMetadataTableByRow(3,'n')">Lon&nbsp<span id='sortCol_3' class="fas fa-angle-down"></span></th>
-                        <th style="width:6rem">Type</th>
+                        <th class="hoverColor" onClick="sortMetadataTableByRow(4,'a')" style="width:6rem" >Type&nbsp<span id='sortCol_5' class="fas fa-angle-down"></span></th>
                         <th class="hoverColor" onClick="sortMetadataTableByRow(5,'n')">East Vel&nbsp<span id='sortCol_5' class="fas fa-angle-down"></span></th>
                         <th class="hoverColor" onClick="sortMetadataTableByRow(6,'n')">North Vel&nbsp<span id='sortCol_6' class="fas fa-angle-down"></span></th>
                         <th class="hoverColor" onClick="sortMetadataTableByRow(7,'n')">Horizontal&nbsp<span id='sortCol_7' class="fas fa-angle-down"></span><br>Vel (mm/yr)</th>

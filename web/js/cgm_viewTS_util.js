@@ -62,6 +62,7 @@ function resetTSviewSelection(){
      return 0;
    }
    TS_track_view=0;
+   $("#frameigb14").prop("checked", true);
    return 1;
 }
 

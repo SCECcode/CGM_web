@@ -453,6 +453,7 @@ $cgm_insar = new CGM_INSAR();
     <div id="top-map" class="col-12 map-container">
         <div class="row" id='CGM_plot'
                    style="padding:0px;position:relative;border:solid 1px #ced4da; height:600px;">
+<!--
             <div  id='wait-spinner' style="z-index:9999;">
                 <div class="d-flex justify-content-center" >
                   <div class="spinner-border text-light" role="status">
@@ -460,6 +461,12 @@ $cgm_insar = new CGM_INSAR();
                   </div>
                 </div>
             </div>
+-->
+<!-- spinner -->
+             <div class="spinDialog" style="position:absolute;top:40%;left:50%; z-index:9999;">
+               <div id="wait-spinner" align="center" style="display:none;"><i class="glyphicon glyphicon-cog fa-spin" style="color:red"></i></div>
+             </div>
+
 
 <div id="expand-view-key-container" style="display:none;">
   <div id="expand-view-key" class="row" style="opacity:0.8; height:1.4rem;">
@@ -513,7 +520,7 @@ $cgm_insar = new CGM_INSAR();
 
 <!-- modal list -->
 <!--Modal: (modalkmlselect) -->
-<div class="modal" id="modalkmlselect" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal" id="modalkmlselect" tabindex="-1" style="z-index:8999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-small" id="modalkmlselectDialog" role="document">
 
     <!--Content-->
@@ -534,7 +541,7 @@ $cgm_insar = new CGM_INSAR();
 
 
 <!--Modal: (modalazimuth)  -->
-<div class="modal" id="modalazimuth" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal" id="modalazimuth" tabindex="-1" style="z-index:8999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" id="modalazimuthDialog" role="document">
 
     <!--Content-->
@@ -555,7 +562,7 @@ $cgm_insar = new CGM_INSAR();
 
 
 <!--Modal: (modalTS, time series)-->
-<div class="modal" id="modalTS" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="modalTS" aria-hidden="true">
+<div class="modal" id="modalTS" tabindex="-1" style="z-index:8999" role="dialog" aria-labelledby="modalTS" aria-hidden="true">
   <div class="modal-dialog modal-full" id="modalTSDialog" role="document">
 
     <!--Content-->
@@ -578,7 +585,7 @@ $cgm_insar = new CGM_INSAR();
              </form>
              </div>
          </div>
-         <button type="button" class="close" data-dismiss="modal">close</button>
+         <button type="button" class="close" data-dismiss="modal" onclick="clearTSview()">Close</button>
       </div>
 
       <!--Body-->
@@ -604,7 +611,7 @@ $cgm_insar = new CGM_INSAR();
 </div> <!--Modal: modalTS -->
 
 <!--Modal: (modalinfoTS) -->
-<div class="modal" id="modalinfoTS" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal" id="modalinfoTS" tabindex="-1" style="z-index:8999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xlg" id="modalinfoTSDialog" role="document">
     <!--Content-->
     <div class="modal-content" id="modalinfoTSContent">
@@ -623,7 +630,7 @@ $cgm_insar = new CGM_INSAR();
 </div> <!--Modal: modalinfoTS-->
 
 <!--Modal: (modalwarnTS)  -->
-<div class="modal" id="modalwarnTS" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal" id="modalwarnTS" tabindex="-1" style="z-index:8999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" id="modalwarnTSDialog" role="document">
 
     <!--Content-->
@@ -643,7 +650,7 @@ $cgm_insar = new CGM_INSAR();
 </div> <!--Modal: modalwarnTS -->
 
 <!--Modal: (modalinfoProduct)  -->
-<div class="modal" id="modalinfoProduct" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal" id="modalinfoProduct" tabindex="-1" style="z-index:8999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" id="modalinfoProductDialog" role="document">
 
     <!--Content-->
@@ -663,7 +670,7 @@ $cgm_insar = new CGM_INSAR();
 </div> <!--Modal: modalinfoProduct -->
 
 <!--Modal: (modalnotify) -->
-<div class="modal" id="modalnotify" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal" id="modalnotify" tabindex="-1" style="z-index:8999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-small" id="modalnotifyDialog" role="document">
     <!--Content-->
     <div class="modal-content" id="modalnotifyContent">
@@ -680,7 +687,7 @@ $cgm_insar = new CGM_INSAR();
 </div> <!--Modal: modalnotify-->
 
 <!--Modal: (modalwait) -->
-<div class="modal" id="modalwait" tabindex="-1" style="z-index:9999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal" id="modalwait" tabindex="-1" style="z-index:8999" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" id="modalwaitDialog" role="document">
     <!--Content-->
     <div class="modal-content" id="modalwaitContent">

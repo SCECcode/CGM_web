@@ -159,14 +159,18 @@ function load_INSAR_ProcessVSFromCSV(ulist,params) {
    plotly_plot_insar_vs({'type':track,'csv':vs_plot_data});
 }
 
-function changeTSview(params) {
+function clearPlotlyview() {
+  plotly_plot_clear();
+}
+
+function changePlotlyview(params) {
   plotly_plot_clear();
 
   // grab new params,
   [urls, ptype, ftypes]=getParams(params);
   if(urls==null) { return; }
 
-  window.console.log("changeTSview.."+urls[0]+" "+ptype+" "+ftypes[0]);
+  window.console.log("changePlotlyview.."+urls[0]+" "+ptype+" "+ftypes[0]);
   window.top.postMessage({'call':'fromTSviewer', value:'start loading'}, '*');
 
 
