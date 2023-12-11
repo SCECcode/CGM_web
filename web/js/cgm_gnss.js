@@ -706,7 +706,7 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
           }
           if(ftype == frameType.NAM17 || ftype == "all") {
             zcnt++;
-            let downloadURL = getDataDownloadURL(layer.scec_properties.ulabel, layer.scec_properties.station_id,frameType.NAM14);
+            let downloadURL = getDataDownloadURL(layer.scec_properties.ulabel, layer.scec_properties.station_id,frameType.NAM17);
             let dname=downloadURL.substring(downloadURL.lastIndexOf('/')+1);
             let promise = $.get(downloadURL);
             nzip.file(dname,promise);
