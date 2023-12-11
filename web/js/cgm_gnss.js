@@ -1223,8 +1223,12 @@ window.console.log("changeResultsTableBody..");
         };
 
 /******
+OLD:
 http://geoweb.mit.edu/~floyd/scec/cgm/ts/<cont_site>.cgm.wmrss_<frame>.pos
 http://geoweb.mit.edu/~floyd/scec/cgm/ts/<surv_site>.cgm.final_<frame>.pos
+
+GNSS:
+https://files.scec.org/s3fs-public/projects/cgm/2.0.0/data/gnss/pos
  
 where <cont_site> is a four-character continuous site ID 
 from the attached cont_site.txt file, 
@@ -1236,25 +1240,17 @@ from the attached cont_site.txt file,
 http://geoweb.mit.edu/~floyd/scec/cgm/ts/TWMS.cgm.wmrss_igb14.pos
 ******/
         var getDataDownloadURL = function(station_ulabel, station_id, frame)  {
-window.console.log("LOOKING up the url.."+station_id);
-let ct=CGM_GNSS.cont_site;
-        if(CGM_GNSS.cont_site.includes(station_ulabel)) {
-          let urlPrefix = "http://geoweb.mit.edu/~floyd/scec/cgm/ts/";
-          let url=urlPrefix + station_id + ".cgm.wmrss_"+frame+".pos";
-          return url;
-          } else if (CGM_GNSS.surv_site.includes(station_ulabel)) {
-            let urlPrefix = "http://geoweb.mit.edu/~floyd/scec/cgm/ts/";
-            let url=urlPrefix + station_id + ".cgm.final_"+frame+".pos";
+          let urlPrefix = "https://files.scec.org/s3fs-public/projects/cgm/2.0.0/data/gnss/pos/"+frame;
+          if(CGM_GNSS.cont_site.includes(station_ulabel)) {
+            let url=urlPrefix +"/"+station_id + ".cgm.wmrss_"+frame+".pos";
             return url;
-            } else {
-                window.console.log("BAD station name..");
-                return null;
-        } 
-
-/*
-          let urlPrefix = "https://files.scec.org/s3fs-public/projects/cgm/1.0/time-series/pos/";
-          return urlPrefix + station_id + ".cgm.edits_nam08.pos";
-*/
+            } else if (CGM_GNSS.surv_site.includes(station_ulabel)) {
+              let url=urlPrefix + "/" + station_id + ".cgm.final_"+frame+".pos";
+              return url;
+              } else {
+                  window.console.log("BAD station name..");
+                  return null;
+          } 
         };
 
         var resetVectorRangeColor = function (target_min, target_max){
