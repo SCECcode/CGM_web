@@ -185,9 +185,29 @@ window.console.log("FOUND..."+val);
             $(parent).removeClass('row-selected');
             $glyphElem.addClass('glyphicon-unchecked').removeClass('glyphicon-check');
         }
-
     });
 
+    $("#metadata-viewer-container").on('mouseover','td.cgm-data-hover', function(){
+        if ($(this).find('button[id="cgm-allBtn"]').length != 0) {
+            return;
+        }
+        let $glyphElem = $(this).find('span.cgm-data-row');
+        let parent = $(this).parent();
+
+        let gid = $(parent).data('point-gid');
+        CGM_GNSS.highlightStationByGid(gid);
+    });
+
+    $("#metadata-viewer-container").on('mouseout','td.cgm-data-hover', function(){
+        if ($(this).find('button[id="cgm-allBtn"]').length != 0) {
+            return;
+        }
+        let $glyphElem = $(this).find('span.cgm-data-row');
+        let parent = $(this).parent();
+
+        let gid = $(parent).data('point-gid');
+        CGM_GNSS.unhighlightStationByGid(gid);
+    });
 
     $("#metadata-viewer-container").on('click','td.cgm-insar-data-click', function(){
         if ($(this).find('button[id="cgm-allBtn"]').length != 0) {

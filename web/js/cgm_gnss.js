@@ -44,9 +44,10 @@ var CGM_GNSS = new function () {
         SURVEY_GPS:  'survey'
     };
 
+        //normal2: '#F18F01',
     var cgm_colors = {
         normal: '#006E90',
-        normal2: '#F18F01',
+        normal2: '#F16701',
         selected: '#B02E0C',
         abnormal: '#00FFFF',
     };
@@ -220,6 +221,37 @@ var CGM_GNSS = new function () {
         }
         this.cgm_vector_scale = new L.FeatureGroup([polyline, arrowHeadDecorator,mylabel]);
     }
+
+    this.highlightStation = function(layer) {
+        layer.setRadius(cgm_marker_style.hover.radius);
+        if( layer.scec_properties.has_vector ) {
+            layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.hover);
+            layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.hover]);                      
+        } 
+    };
+    this.highlightStationByGid = function(gid) {
+        let layer = this.getLayerByGid(gid);
+        return this.highlightStation(layer);
+    };
+
+    this.unhighlightStation = function(layer) {
+        layer.setRadius(cgm_marker_style.normal.radius);
+                             
+        if( layer.scec_properties.has_vector ) {
+          if (layer.scec_properties.selected) {
+              layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.selected);                             
+              layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.selected]);
+              } else {
+                  layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.normal);
+                  layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.normal]);
+          }
+        } 
+    };
+
+    this.unhighlightStationByGid = function(gid) {
+        let layer = this.getLayerByGid(gid);
+        return this.unhighlightStation(layer);
+    };
 
     this.generateLayers = function () {
 
@@ -448,28 +480,13 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
 
         this.cgm_layers.on('mouseover', function(event) {
             let layer = event.layer;
-            layer.setRadius(cgm_marker_style.hover.radius);
-            if( layer.scec_properties.has_vector ) {
-              layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.hover);
-              layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.hover]);
-            }
+            CGM_GNSS.highlightStation(layer);
         });
 
 
         this.cgm_layers.on('mouseout', function(event) {
             let layer = event.layer;
-            layer.setRadius(cgm_marker_style.normal.radius);
-
-            if( layer.scec_properties.has_vector ) {
-              if (layer.scec_properties.selected) {
-                  layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.selected);
-                  layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.selected]);
-                  } else {
-                      layer.scec_properties.vector.setStyle(layer.scec_properties.vector_dist_path_style.normal);
-                      layer.scec_properties.vectorArrowHead.setPatterns([layer.scec_properties.vector_dist_head_pattern.normal]);
-              }
-            }
-
+            CGM_GNSS.unhighlightStation(layer);
         });
 
     };
@@ -729,10 +746,11 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
         let downloadURL4 = getDataDownloadURL(layer.scec_properties.ulabel, layer.scec_properties.station_id,frameType.PCF14);
 
         html += `<tr data-point-gid="${layer.scec_properties.gid}">`;
-        html += `<td style="width:25px" class="cgm-data-click button-container"> <button class="btn btn-sm cxm-small-btn" id="" title="highlight the station" onclick=''>
+        html += `<td style="width:25px" class="cgm-data-click cgm-data-hover button-container"> <button class="btn btn-sm cxm-small-btn" id="" title="highlight the station" onclick=''>
             <span class="cgm-data-row glyphicon glyphicon-unchecked"></span>
         </button></td>`;
-        html += `<td class="cgm-data-click">${layer.scec_properties.station_id}</td>`;
+        html += `<td class="cgm-data-click cgm-data-hover">${layer.scec_properties.station_id}</td>`;
+
         html += `<td class="cgm-data-click">${coordinates.lat}</td>`;
         html += `<td class="cgm-data-click">${coordinates.lng}</td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.type} </td>`;

@@ -4,8 +4,9 @@
 This is leaflet specific utilities for CGM
 ***/
 
-var init_map_zoom_level = 7;
-var init_map_coordinates = [34.3, -118.4];
+var init_map_zoom_level = 6.5;
+var init_map_coordinates = [34.50, -118.57];
+
 
 var rectangle_options = {
        showArea: false,

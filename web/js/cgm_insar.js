@@ -4,8 +4,8 @@
 
 var CGM_INSAR = new function () {
 
-    var insar_map_zoom_level = 7;
-    var insar_map_coordinates = [34.16, -118.57];
+    var insar_map_zoom_level = 6.5;
+    var insar_map_coordinates = [34.50, -118.57];
 
     // useful range 
     this.cgm_velocity_max = 30;
