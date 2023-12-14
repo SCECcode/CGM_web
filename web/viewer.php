@@ -484,7 +484,7 @@ $cgm_insar = new CGM_INSAR();
       </div>
       <div id="gnss_colormap" class="row mb-2" style="border:solid 0px orange; width:300px;display:none;">
         <li style="list-style-image:url('./img/blue.png');margin-left:12px; "> continuous sites</li>
-        <li style="list-style-image:url('./img/orange2.png');margin-left:20px; "> survey sites</li>
+        <li style="list-style-image:url('./img/orange.png');margin-left:20px; "> survey sites</li>
       </div>
     </div>
     <div id="gnss_vector_space" class="col-2" style="margin-left:0px; border:solid 0px green; display:none;">
