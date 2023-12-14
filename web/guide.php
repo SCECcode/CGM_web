@@ -39,8 +39,9 @@ $header = getHeader("User Guide");
                    The viewer allows users to select GNSS or InSAR products of interest,
                    using drop down menus at the top-left of the interface, and view the
                    results. Users can view overlays of GNSS station locations and 
-                   velocities (relative to North America), InSAR track footprints and 
-                   Community Fault Model fault traces. Users can also download selected 
+                   velocities (relative to North America), InSAR track footprints,
+		   Community Fault Model fault traces and Geologic Framework Model regions.
+                   Users can also download selected 
                    product data without having to download the entire CGM product archive.
 		   The pages on this site include the 
                    <a href="<?php echo $host_site_actual_path; ?>">CGM viewer page</a>,
