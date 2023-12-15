@@ -100,7 +100,7 @@ $header = getHeader("User Guide");
 
 <ul>
 <li style="list-style-type:none;">
-	    <h5><strong>To explore the GNSS products</strong></h5>
+	    <h5><strong>To select the GNSS products</strong></h5>
                  <p><ul>
 			<li style="list-style-type:disc;">Hover over a station icon to see a 
 			    pop-up showing the station ID and nominal velocity relative to 
@@ -125,7 +125,7 @@ $header = getHeader("User Guide");
                      </ul></p>
 </li>
 <li style="list-style-type:none;">
-	    <h5><strong>To explore the InSAR products</strong></h5>
+	    <h5><strong>To select the InSAR products</strong></h5>
                  <p><ul>
 		       <li style="list-style-type:disc;">After track selection, as described 
 			   above, use the "Search InSAR by" dropdown menu to select a point or 
