@@ -87,32 +87,63 @@ $header = getHeader("User Guide");
 
 
             <h4><strong>Explore CGM products</strong></h4>
+
                  <p>The CGM viewer has two available sets of geodetic products (GNSS and InSAR) 
-                    and a few modes by which to select them. The “Select Dataset” dropdown menu,
-                    in the top-left corner, is GNSS by default. If “InSAR” is selected, a
-                    “Select Track” dropdown menu appears adjacent, which displays nothing 
-                    (“NONE”) by default. Select a track from this second dropdown menu and the 
+                    and a few modes by which to select them. The "Select Dataset" dropdown menu,
+                    in the top-left corner, is GNSS by default. If "InSAR" is selected, a
+                    "Select TracK" dropdown menu appears adjacent, which displays nothing 
+                    ("NONE") by default. Select a track from this second dropdown menu and the 
                     coverage of the chosen InSAR product is displayed (this may take up to one 
-                    minute to load) with a corresponding color scale of line-of- sight velocity
+                    minute to load) with a corresponding color scale of line-of-sight velocity
                     in the bottom-left of the map. Line-of-sight velocity is referenced to the
                     GNSS station location marked by the white square corresponding to the track.</p>
 
-                 <p>To explore the GNSS products, hover over a station icon to see a pop-up 
-                    showing the station ID and nominal velocity relative to North America.
-                    Select a specific station directly by clicking on its icon, if displayed
-                    using the “GNSS” checkbox (see “Display Layers”, above) or choose a selection
-                    method using the “Search GNSS by” dropdown menu below “Select Dataset” in 
-                    the top-left corner. Options are: “Station Name”, then enter the station name
-                    and press return; “Latitude & Longitude Box”, then either enter the latitude 
-                    and longitude of the lower-left and top-right points or auto-populate the 
-                    fields by clicking-and-dragging to draw a box within the interactive map; 
-                    or “Vector”, which automatically displays the GNSS vectors (see “Display Layers”,
-                    above), then select a range of velocities.</p>
-
-                 <p>To explore the InSAR products after track selection, as described above, 
-                    use the “Search InSAR by” dropdown menu to select either “Point Location” or
-                    “Latitude & Longitude Box”. Click the downward arrow within a circle to 
-                    download the full HDF5 file for the selected track at any time.</p>
+<ul>
+<li style="list-style-type:none;">
+	    <h5><strong>To explore the GNSS products</strong></h5>
+                 <p><ul>
+			<li style="list-style-type:disc;">Hover over a station icon to see a 
+			    pop-up showing the station ID and nominal velocity relative to 
+                            North America.</li>
+			<li style="list-style-type:disc;">Select a specific station directly 
+			    by clicking on its icon, or choose a selection method using the
+			    "Search GNSS by" dropdown menu below "Select Dataset" in the
+                            top-left corner.
+                            <br>
+                            Options are:
+			       <ul>
+				 <li><strong>Station Name</strong>, enter the station name 
+                                     and press return.</li>
+				 <li><strong>Latitude & Longitude Box</strong>, either 
+				     enter the latitude and longitude of the lower-left and 
+				     top-right points or auto-populate the fields by 
+                                     clicking-and-dragging to draw a box within the interactive map.</li>
+				 <li><strong>Vector</strong>, which automatically displays the 
+				     GNSS vectors (see "Display Layers"), then select a range of 
+                                     velocities with the slider.</p>
+                               </ul></li>
+                     </ul></p>
+</li>
+<li style="list-style-type:none;">
+	    <h5><strong>To explore the InSAR products</strong></h5>
+                 <p><ul>
+		       <li style="list-style-type:disc;">After track selection, as described 
+			   above, use the "Search InSAR by" dropdown menu to select a point or 
+                           mark a region.
+                           <br>
+                           Options are:
+                               <ul>
+				 <li><strong>Point Location</strong>, clicking on the interactive 
+                                     map to choose a point.</li>
+				 <li><strong>Latitude & Longitude Box</strong>, either 
+				     enter the latitude and longitude of the lower-left and 
+				     top-right points or auto-populate the fields by 
+                                     clicking-and-dragging to draw a box within the interactive map.</li>
+                               </ul></li> 
+                     </ul></p>
+</li>
+<li style="list-style-type:none;">
+	    <h5><strong>To visualize the selected products</strong></h5>
 
                  <p>In the case where GNSS stations are selected individually or by a selection
                     criterion, or where InSAR is selected by points, the time series associated 
@@ -121,6 +152,8 @@ $header = getHeader("User Guide");
 		    the case of GNSS, the reference frame may be changed by select one among 
 		    the GNSS frame type buttons in the top-left and other buttons along the 
                     bottom can close, reset or save the time series; select “Help” for details.</p>
+</li>
+</ul>
 
 	    <h4><strong>Select Points or Region to Download Data Subset</strong></h4>
 
@@ -128,14 +161,18 @@ $header = getHeader("User Guide");
                  <p>Once a product and specific points or regions have been selected, as described
                     above, users can download the subset of data by checking the box(es) in the 
                     left column of the table below the interactive map and selecting “Download”
-                    in the top line of the right column the the table. For GNSS, this will prompt
-                    the user to choose a reference frame or download all: igb14 is the International
-                    GNSS Service’s (IGS’s) second version of the International Terrestrial Reference
-                    Frame (ITRF) 2014 (Altamimi et al., 2016); nam14 is relative to North America,
-                    defined for ITRF2014 (Altamimi et al., 2017); nam17 is relative to North America,
-                    defined by Kreemer et al. (2018); and pcf14 is relative to the Pacific, 
-                    defined for ITRF2014 (Altamimi et al., 2017). The format is GAGE’s “pos” format.
-                    For InSAR, this will download a GMT-style “grd” (netCDF) file.</p>
+		    in the top line of the right column the the table. 
+		    For GNSS, this will prompt the user to choose a reference frame or download all: 
+		    igb14 is the International GNSS Service’s (IGS’s) second version of the 
+		    International Terrestrial Reference Frame (ITRF) 2014 (Altamimi et al., 2016); 
+		    nam14 is relative to North America, defined for ITRF2014 (Altamimi et al., 2017); 
+		    nam17 is relative to North America, defined by Kreemer et al. (2018); and pcf14 
+		    is relative to the Pacific, defined for ITRF2014 (Altamimi et al., 2017).
+                    The format is GAGE’s “pos” format.
+                    For InSAR, this will download LOS time series data files in "csv" format for
+		    selected points and composite velocity files in "csv' format for selected regions.
+		    Click the downward arrow within a circle by "Select Track" dropdown menu to
+                    download the full HDF5 file for the selected track at any time.</p>
 
 
 	    <h4><strong>References</strong></h4>
