@@ -1,6 +1,11 @@
 
-wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/cxm/models/cgm/insar/D071_COMB_CGM_InSAR_v0_0_1.hdf5
-wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/cxm/models/cgm/insar/A166_COMB_CGM_InSAR_v0_0_1.hdf5
-wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/cxm/models/cgm/insar/A064_COMB_CGM_InSAR_v0_0_1.hdf5
-wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/cxm/models/cgm/insar/D173_COMB_CGM_InSAR_v0_0_1.hdf5
+wget -nv https://files.scec.org/s3fs-public/projects/cgm/2.0.0/data/cgm-v2.0.0-insar.tar.gz
+tar zxvf cgm-v2.0.0-insar.tar.gz
+wget -nv https://files.scec.org/s3fs-public/projects/cgm/2.0.0/data/cgm-v2.0.0-insar-baseline.tar.gz
+tar zxvf cgm-v2.0.0-insar-baseline.tar.gz
+
+#wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/cxm/models/cgm/insar/D071_COMB_CGM_InSAR_v0_0_1.hdf5
+#wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/cxm/models/cgm/insar/A166_COMB_CGM_InSAR_v0_0_1.hdf5
+#wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/cxm/models/cgm/insar/A064_COMB_CGM_InSAR_v0_0_1.hdf5
+#wget -nv https://g-c662a6.a78b8.36fe.data.globus.org/cxm/models/cgm/insar/D173_COMB_CGM_InSAR_v0_0_1.hdf5
 

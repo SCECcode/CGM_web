@@ -11,7 +11,7 @@ RUN yum install -y httpd && \
 
 ## python/hdf5
 
-RUN yum install -y tar mkdir sudo which git wget gtar openblas yum-utils gcc make 
+RUN yum install -y tar mkdir sudo which git wget gtar openblas yum-utils gcc make
 RUN yum install -y zlib-devel openssl11-devel libffi-devel
 
 RUN cd /app/misc; tar zxvf cpython-3.8.11.tar.gz;cd cpython-3.8.11; ./configure --prefix=/usr/local/python-3.8.11; make; make install
@@ -28,14 +28,21 @@ RUN yum install -y hdf5-devel
 RUN python3 -m pip install h5py
 
 ## bring in the insar track data
-RUN cd /app/web/cgm_data && \
-    mkdir -p insar && \
-    wget -nv https://files.scec.org/s3fs-public/projects/cgm/2.0.0/data/cgm-v2.0.0-insar.tar.gz && \
-    wget -nv https://files.scec.org/s3fs-public/projects/cgm/2.0.0/data/cgm-v2.0.0-insar-baseline.tar.gz && \
+#RUN cd /app/web/cgm_data && \
+#    mkdir -p insar && \
+#    cd insar && \
+#    wget -nv https://files.scec.org/s3fs-public/projects/cgm/2.0.0/data/cgm-v2.0.0-insar.tar.gz && \
+#    wget -nv https://files.scec.org/s3fs-public/projects/cgm/2.0.0/data/cgm-v2.0.0-insar-baseline.tar.gz && \
+#    gtar -zxvf cgm-v2.0.0-insar.tar.gz && \
+#    gtar -zxvf cgm-v2.0.0-insar-baseline.tar.gz
+
+ADD https://files.scec.org/s3fs-public/projects/cgm/2.0.0/data/cgm-v2.0.0-insar.tar.gz /app/web/cgm_data/insar
+ADD https://files.scec.org/s3fs-public/projects/cgm/2.0.0/data/cgm-v2.0.0-insar-baseline.tar.gz /app/web/cgm_data/insar
+
+RUN cd /app/web/cgm_data/insar && \
     gtar -zxvf cgm-v2.0.0-insar.tar.gz && \
-    gtar -zxvf cgm-v2.0.0-insar-baseline.tar.gz
-     
-RUN cd /app && \
+    gtar -zxvf cgm-v2.0.0-insar-baseline.tar.gz && \
+    cd /app && \
     git clone https://github.com/kmaterna/InSAR_CGM_readers_writers.git && \
     cd InSAR_CGM_readers_writers && \
     ./setup.py install && \ 
