@@ -36,11 +36,12 @@ RUN python3 -m pip install h5py
 #    gtar -zxvf cgm-v2.0.0-insar.tar.gz && \
 #    gtar -zxvf cgm-v2.0.0-insar-baseline.tar.gz
 
-ADD https://files.scec.org/s3fs-public/projects/cgm/2.0.0/data/cgm-v2.0.0-insar.tar.gz /app/web/cgm_data/insar
+ADD https://files.scec.org/s3fs-public/projects/cgm/2.0.0/data/cgm-v2.0.0-insar.tar.gz /app/web/cgm_data
 ADD https://files.scec.org/s3fs-public/projects/cgm/2.0.0/data/cgm-v2.0.0-insar-baseline.tar.gz /app/web/cgm_data/insar
 
-RUN cd /app/web/cgm_data/insar && \
+RUN cd /app/web/cgm_data && \
     gtar -zxvf cgm-v2.0.0-insar.tar.gz && \
+    cd /app/web/cgm_data/insar && \
     gtar -zxvf cgm-v2.0.0-insar-baseline.tar.gz && \
     cd /app && \
     git clone https://github.com/kmaterna/InSAR_CGM_readers_writers.git && \
