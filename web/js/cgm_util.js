@@ -138,7 +138,7 @@ function downloadHDF5InSAR() {
       return;
     }
     window.console.log("TYPE ..", type);
-    let fname="./cgm_data/insar/"+type+"_COMB_CGM_InSAR_v0_0_1.hdf5";
+    let fname="./cgm_data/insar/"+type+"_COMB_CGM_InSAR_v2.0.0.hdf5";
     saveAsURLFile(fname);
 //  saveAsURLFile('./csm_data/LuttrellHardebeckJGR2021_Table1.csv');
 //  saveAsURLFile('https://files.scec.org/s3fs-public/LuttrellHardebeckJGR2021_Table1.csv');

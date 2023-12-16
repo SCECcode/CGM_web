@@ -15,16 +15,16 @@ function track_info($track)
     switch ($track)
     {
       case "A166":
-        $loc="/app/web/cgm_data/insar/A166_COMB_CGM_InSAR_v0_0_1.hdf5";
+        $loc="/app/web/cgm_data/insar/A166_COMB_CGM_InSAR_v2.0.0.hdf5";
         break;
       case "A064":
-        $loc= "/app/web/cgm_data/insar/A064_COMB_CGM_InSAR_v0_0_1.hdf5";
+        $loc= "/app/web/cgm_data/insar/A064_COMB_CGM_InSAR_v2.0.0.hdf5";
         break;
       case "D173":
-        $loc= "/app/web/cgm_data/insar/D173_COMB_CGM_InSAR_v0_0_1.hdf5";
+        $loc= "/app/web/cgm_data/insar/D173_COMB_CGM_InSAR_v2.0.0.hdf5";
         break;
       case "D071":
-        $loc="/app/web/cgm_data/insar/D071_COMB_CGM_InSAR_v0_0_1.hdf5";
+        $loc="/app/web/cgm_data/insar/D071_COMB_CGM_InSAR_v2.0.0.hdf5";
         break;
       default:
         print "eek\n";
