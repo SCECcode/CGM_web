@@ -1,18 +1,24 @@
-# ~~Community Geodetic Model~~
- _TODO: Write new documentation,
- 
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://github.com/SCECcode/CGM_web/blob/master/LICENSE.md)
+
+# CGM viewer
+
+## Community Geodetic Model
+
+A 2D viewer based on Leaflet, an open-source JavaScript library for interactive maps,
+https://leafletjs.com, map data services from OpenStreetMap, https://www.openstreetmap.org,
+OpenTopoMap, https://www.opentopomap.org and leaflet esri plugin,
+https://esri.github.io/esri-leaflet, for Ersi basemap from ArcGIS and 2D time series plots
+based on Plotly.js, a high-level delarative charting library.
+
+## Community Geodetic Model
+
+The Community Geodetic Model (CGM) provides displacement time series and velocities of the Earth’s surface over southern California using data from Global Navigation Satellite Systems (GNSS), which includes the Global Positioning System (GPS), and interferometric synthetic aperture radar (InSAR), both space-based geodetic observation techniques.
+
 ### https://www.scec.org/research/cgm
-
-##CGM viewer
-
- _TODO: Write new documentation
 
 ### Screen Capture
 
-Website URL: TBD
-
-![](doc/cgm_demo.jpg) 
-
+![](web/img/cgm-viewer.png) 
 
 ## CGM data service
 
