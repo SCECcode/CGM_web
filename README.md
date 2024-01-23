@@ -49,13 +49,15 @@ Deployment is accomplished using [Docker](https://docs.docker.com/) with [docker
 
 #### Development Deployment
 1. Run: `docker-compose -f docker-compose.yml -f development.yml up -d`
-2. After the build is complete, browse to http://localhost:8084
-3. The development.yml maps the code directory to the container for easy code development and exposes port 5432 for directly accessing the Postgres database.
+2. Run: `./load_insar.sh`
+3. After the build is complete, browse to http://localhost:8084
+4. The development.yml maps the code directory to the container for easy code development and exposes port 5432 for directly accessing the Postgres database.
 
 #### Production Deployment
 1. Run: `docker-compose -f docker-compose.yml up -d`
-2. After build is complete, browse to http://server-name:8084
-3. Optionally, set up a reverse proxy from a URL on an existing web server to localhost:8084.
+2. Run: `./load_insar.sh`
+3. After build is complete, browse to http://server-name:8084
+4. Optionally, set up a reverse proxy from a URL on an existing web server to localhost:8084.
 
 ### Layout 
 
