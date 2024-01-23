@@ -417,10 +417,10 @@ pixiOverlayList.push({"gid":gid,"vis":1,"overlay":overlay,"top":pixiContainer,"i
     return rc;
 }
 
-function foundOverlay(gid) {
+function foundOverlay(mygid) {
   for(let i=0; i<pixiOverlayList.length; i++) {
      let pixi=pixiOverlayList[i];
-     if(pixi["gid"] == gid) {
+     if(pixi["gid"] == mygid) {
        return 1;
      }
   }
@@ -439,11 +439,11 @@ function clearAllPixiOverlay() {
   });
 }
 
-function togglePixiOverlay(gid) {
-window.console.log("togglePixiOverlay.."+gid);
+function togglePixiOverlay(mygid) {
+window.console.log("togglePixiOverlay.."+mygid);
   for(let i=0; i<pixiOverlayList.length; i++) {
      let pixi=pixiOverlayList[i];
-     if(pixi["gid"] == gid) {
+     if(pixi["gid"] == mygid) {
        let v=pixi["vis"];
        let layer=pixi["overlay"];
        if(v==1) {
@@ -458,10 +458,10 @@ window.console.log("togglePixiOverlay.."+gid);
   }
 }
 
-function eyePixiOverlay(gid) {
+function eyePixiOverlay(mygid) {
   for(let i=0; i<pixiOverlayList.length; i++) {
      let pixi=pixiOverlayList[i];
-     if(pixi["gid"] == gid) {
+     if(pixi["gid"] == mygid) {
        let v=pixi["vis"];
        let layer=pixi["overlay"];
        return pixi["vis"];
