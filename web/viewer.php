@@ -447,21 +447,12 @@ $cgm_insar = new CGM_INSAR();
                         <option value="esri terrain">ESRI Terrain</option>
                     </select>
             </div>
-    </div> <!-- top-control-row-2 -->
+    </div> <!-- top-control-row-3 -->
 
 <div id="mapDataBig" class="row mapData">
     <div id="top-map" class="col-12 map-container">
         <div class="row" id='CGM_plot'
                    style="padding:0px;position:relative;border:solid 1px #ced4da; height:600px;">
-<!--
-            <div  id='wait-spinner' style="z-index:9999;">
-                <div class="d-flex justify-content-center" >
-                  <div class="spinner-border text-light" role="status">
-                    <span class="sr-only">Loading...</span>
-                  </div>
-                </div>
-            </div>
--->
 <!-- spinner -->
              <div class="spinDialog" style="position:absolute;top:40%;left:50%; z-index:9999;">
                <div id="wait-spinner" align="center" style="display:none;"><i class="glyphicon glyphicon-cog fa-spin" style="color:red"></i></div>
