@@ -18,7 +18,7 @@ $header = getHeader("Contact");
     <script type='text/javascript' src='js/vendor/jquery.min.js'></script>
     <script type='text/javascript' src='js/vendor/bootstrap.min.js'></script>
     <script type='text/javascript' src='js/vendor/jquery-ui.js'></script>
-    <title>Community Geodetic Model Viewer (Provisional): Contact</title>
+    <title>Community Geodetic Model Explorer (Provisional): Contact</title>
 </head>
 <body>
 <?php echo $header; ?>
@@ -29,7 +29,7 @@ $header = getHeader("Contact");
 
     <div>
         <p>
-            The <b>Southern California Earthquake Center</b> (SCEC) was founded as a Science & Technology Center on February 1, 1991, with joint funding by the National Science Foundation (NSF) and the U. S. Geological Survey (USGS). SCEC graduated from the STC Program in 2002 and has been funded as a stand-alone center under cooperative agreements with both agencies in four consecutive phases: SCEC2, 1 Feb 2002 to 31 Jan 2007; SCEC3, 1 Feb 2007 to 31 Jan 2012; SCEC4, 1 Feb 2012 to 31 Jan 2017; and SCEC5, 1 Feb 2017 to 31 Jan 2022.
+            The <b>Statewide California Earthquake Center</b> (SCEC) was founded as a Science & Technology Center on February 1, 1991, with joint funding by the National Science Foundation (NSF) and the U. S. Geological Survey (USGS). SCEC graduated from the STC Program in 2002 and has been funded as a stand-alone center under cooperative agreements with both agencies in four consecutive phases: SCEC2, 1 Feb 2002 to 31 Jan 2007; SCEC3, 1 Feb 2007 to 31 Jan 2012; SCEC4, 1 Feb 2012 to 31 Jan 2017; and SCEC5, 1 Feb 2017 to 31 Jan 2022.
         </p>
         <p>
             Please visit <a href="https://www.scec.org/about/">https://www.scec.org/about</a> to learn more about SCEC. To report any bugs or issues, contact us at <a href="mailto:software@scec.org">software@scec.org</a>.</p>

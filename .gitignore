@@ -108,3 +108,5 @@ venv.bak/
 /error_log
 .idea/
 /insar
+.DS_Store
+

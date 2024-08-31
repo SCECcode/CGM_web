@@ -52,7 +52,7 @@ function plotly_plot_gnss_ts(pdata) {
   let pUp=plot[2];
 
   let scec_image=[{
-        source: "img/SCEC_Traditional_Logo_Red.png",
+        source: "img/scec-statewide-logo-final-289x300_whitebg-v2.png",
         xref: "paper",
         yref: "paper",
         x:1,

@@ -18,25 +18,25 @@ $header = getHeader("User Guide");
     <script type='text/javascript' src='js/vendor/jquery.min.js'></script>
     <script type='text/javascript' src='js/vendor/bootstrap.min.js'></script>
     <script type='text/javascript' src='js/vendor/jquery-ui.js'></script>
-    <title>Community Geodetic Model Viewer: User Guide</title>
+    <title>Community Geodetic Model Explorer: User Guide</title>
 </head>
 <body>
 <?php echo $header; ?>
 
 <div class="container info-page-container scec-main-container guide">
 
-    <h1>CGM Viewer User Guide</h1>
+    <h1>CGM Explorer User Guide</h1>
         <div class="col-12">
             <figure class="cgm-interface figure float-lg-right">
-                <img src="img/cgm-viewer.png" class="figure-img img-fluid" alt="Screen capture of CGM viewer interface">
-                <figcaption class="figure-caption">Screen capture of CGM viewer interface</figcaption>
+                <img src="img/cgm-explorer.jpg" class="figure-img img-fluid" alt="Screen capture of CGM Explorer interface">
+                <figcaption class="figure-caption">Screen capture of CGM Explorer interface</figcaption>
             </figure>
-            <h4><strong>Community Geodetic Model (CGM) Viewer Overview</strong></h4>
+            <h4><strong>Community Geodetic Model (CGM) Explorer Overview</strong></h4>
 
-		<p>The CGM viewer provides interactive map-based views of the 
+		<p>The CGM Explorer provides interactive map-based views of the
                    <a href="https://doi.org/10.5281/zenodo.10076838">CGM version 2.0</a> 
 		   contributed products.
-                   The viewer allows users to select GNSS or InSAR products of interest,
+                   The explorer allows users to select GNSS or InSAR products of interest,
                    using drop down menus at the top-left of the interface, and view the
                    results. Users can view overlays of GNSS station locations and 
                    velocities (relative to North America), InSAR track footprints,
@@ -44,7 +44,7 @@ $header = getHeader("User Guide");
                    Users can also download selected 
                    product data without having to download the entire CGM product archive.
 		   The pages on this site include the 
-                   <a href="<?php echo $host_site_actual_path; ?>">CGM viewer page</a>,
+                   <a href="<?php echo $host_site_actual_path; ?>">CGM Explorer page</a>,
                    this user guide, <a href="disclaimer">a disclaimer</a>, and a
                    <a href="contact">contact information</a> page.</p>
 
@@ -88,7 +88,7 @@ $header = getHeader("User Guide");
 
             <h4><strong>Explore CGM products</strong></h4>
 
-                 <p>The CGM viewer has two available sets of geodetic products (GNSS and InSAR) 
+                 <p>The CGM Explorer has two available sets of geodetic products (GNSS and InSAR)
                     and a few modes by which to select them. The "Select Dataset" dropdown menu,
                     in the top-left corner, is GNSS by default. If "InSAR" is selected, a
                     "Select TracK" dropdown menu appears adjacent, which displays nothing 
@@ -121,7 +121,7 @@ $header = getHeader("User Guide");
 				 <li><strong>Vector</strong>, which automatically displays the 
 				     GNSS vectors (see "Display Layers"), then select a range of 
                                      velocities with the slider.</p>
-                               </ul></li>
+                             </li> </ul>
                      </ul></p>
 </li>
 <li style="list-style-type:none;">

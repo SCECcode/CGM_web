@@ -541,7 +541,7 @@ var generateTableRow = function(layer) {
           html += `<td class="cgm-insar-data-click">${layer.scec_properties.lon}</td>`;
           html += `<td class="cgm-insar-data-click">${layer.scec_properties.velocity}</td>`;
           html += `<td class="text-center">`;
-          html += `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM_INSAR.executePlotTS([\"${downloadURL}\"],\"${layer.scec_properties.track}\",\"${layer.scec_properties.gid}\")>plotTS&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+          html += `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM_INSAR.executePlotTS([\"${downloadURL}\"],\"${layer.scec_properties.track}\",\"${layer.scec_properties.gid}\")>plotTS&nbsp<span class=\"fa fa-chart-line\"></span></button>`;
           } else {
               let llat= layer.scec_properties.lat;
               let llon= layer.scec_properties.lon;
@@ -552,7 +552,7 @@ var generateTableRow = function(layer) {
               html += `<td class="cgm-insar-data-click">${ostring}</td>`;
               html += `<td class="cgm-insar-data-click">${vstring}</td>`;
               html += `<td class="text-center">`;
-              html += `<button class=\"btn btn-xs\" title=\"show velocity layer\" onclick=CGM_INSAR.executeShowVS(\"${layer.scec_properties.gid}\",\"${layer.scec_properties.file}\")>showVS&nbsp<span class=\"far fa-image\"></span></button>`;
+              html += `<button class=\"btn btn-xs\" title=\"show velocity layer\" onclick=CGM_INSAR.executeShowVS(\"${layer.scec_properties.gid}\",\"${layer.scec_properties.file}\")>showVS&nbsp<span class=\"fa fa-image\"></span></button>`;
         } 
 
         html += `</tr>`;

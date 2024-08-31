@@ -760,7 +760,7 @@ window.console.log(" Clicked on a layer--->"+ event.layer.scec_properties.statio
         html += `<td class="cgm-data-click">${layer.scec_properties.azimuth}</td>`;
         html += `<td class="cgm-data-click">${layer.scec_properties.verticalVelocity}</td>`;
         html += `<td class="text-center">`;
-        html += `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM_GNSS.executePlotTS([\"${downloadURL1}\",\"${downloadURL2}\",\"${downloadURL3}\",\"${downloadURL4}\"],[\"igb14\",\"nam14\",\"nam17\",\"pcf14\"])>plotTS&nbsp<span class=\"far fa-chart-line\"></span></button>`;
+        html += `<button class=\"btn btn-xs\" title=\"show time series\" onclick=CGM_GNSS.executePlotTS([\"${downloadURL1}\",\"${downloadURL2}\",\"${downloadURL3}\",\"${downloadURL4}\"],[\"igb14\",\"nam14\",\"nam17\",\"pcf14\"])>plotTS&nbsp<span class=\"fa fa-chart-line\"></span></button>`;
         html += `</tr>`;
 
         return html;

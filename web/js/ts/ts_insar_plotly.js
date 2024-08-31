@@ -55,7 +55,7 @@ function plotly_plot_insar_ts(cdata) {
   let pUp=plot[0];   
 
   let scec_image={
-        source: "img/SCEC_Traditional_Logo_Red.png",
+        source: "img/scec-statewide-logo-final-289x300_whitebg-v2.png",
         xref: "paper",
         yref: "paper",
         x:1,
@@ -208,7 +208,7 @@ function plotly_plot_insar_vs(cdata) {
   let pdata=plot[0];   
 
   let scec_image=[{
-        source: "img/SCEC_Traditional_Logo_Red.png",
+        source: "img/scec-statewide-logo-final-289x300_whitebg-v2.png",
         xref: "paper",
         yref: "paper",
         x:1,

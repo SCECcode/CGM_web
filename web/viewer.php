@@ -3,7 +3,7 @@ require_once("php/navigation.php");
 require_once("php/CGM_GNSS.php");
 require_once("php/CGM_INSAR.php");
 
-$header = getHeader("Viewer");
+$header = getHeader("explorer");
 $cgm_gnss = new CGM_GNSS();
 $cgm_insar = new CGM_INSAR();
 ?>
@@ -11,7 +11,7 @@ $cgm_insar = new CGM_INSAR();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Community Geodetic Viewer (Provisional)</title>
+    <title>Community Geodetic Explorer (Provisional)</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/vendor/font-awesome.min.css">
@@ -119,14 +119,23 @@ $cgm_insar = new CGM_INSAR();
 
     </script>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 </head>
 <body>
 <?php echo $header; ?>
 
 <div class="container">
 <div class="main" id="cgmMain">
-    <div id="top-intro">
-        <p>The Community Geodetic Model (CGM) provides displacement time series and velocities of the Earth’s surface over southern California using data from Global Navigation Satellite Systems (GNSS), which includes the Global Positioning System (GPS), and interferometric synthetic aperture radar (InSAR), both space-based geodetic observation techniques.</p>
+   <div id="top-intro" class="row">
+               <div class="col-1 links d-none d-md-block align-self-end">
+            <div>
+                <a href="https://www.scec.org/about">About SCEC</a>
+                <a href="https://www.scec.org/science/cem">About CEM</a>
+            </div>
+        </div>
+<p class="col-11 intro-text">The Community Geodetic Model (CGM) provides displacement time series and velocities of the Earth’s surface over southern California using data from Global Navigation Satellite Systems (GNSS), which includes the Global Positioning System (GPS), and interferometric synthetic aperture radar (InSAR), both space-based geodetic observation techniques.</p>
     </div>
 
     <div class="row" style="display:none;">
