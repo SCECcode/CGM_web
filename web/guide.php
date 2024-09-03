@@ -28,7 +28,7 @@ $header = getHeader("User Guide");
     <h1>CGM Explorer User Guide</h1>
         <div class="col-12">
             <figure class="cgm-interface figure float-lg-right">
-                <img src="img/cgm_explorer.png" class="figure-img img-fluid" alt="Screen capture of CGM Explorer interface">
+                <img src="img/cgm-explorer.png" class="figure-img img-fluid" alt="Screen capture of CGM Explorer interface">
                 <figcaption class="figure-caption">Screen capture of CGM Explorer interface</figcaption>
             </figure>
             <h4><strong>Community Geodetic Model (CGM) Explorer Overview</strong></h4>
