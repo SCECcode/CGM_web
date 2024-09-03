@@ -407,11 +407,11 @@ $cgm_insar = new CGM_INSAR();
                 </div>
                 <div class="form-check form-check-inline">
                      <label class='form-check-label ml-1 mini-option'
-                             title='Show Community Fault Model v6.1 on map'
+                             title='Show Community Fault Model v7.0 on map'
                              for="cgm-model-cfm">
                      <input class='form-check-inline mr-1'
                              type="checkbox"
-                             id="cgm-model-cfm" value="1" />CFM6.1
+                             id="cgm-model-cfm" value="1" />CFM7.0
                      </label>
                 </div>
 
