@@ -40,7 +40,11 @@ $('#top-select').css("display", "none");
 //$('#top-map').css("border-right-width", "0px");
 $('#top-map').css("padding-left", "15px");
 $('.navbar').css("margin-bottom", "0px");
+
 $('.container').css("max-width", "100%");
+$('.container').css("padding-left", "3px");
+$('.container').css("padding-right", "1px");
+
 $('.leaflet-control-attribution').css("width", "80rem");
 // minus the height of the container top 
 let elt = document.getElementById('banner-container');
