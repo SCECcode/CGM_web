@@ -135,7 +135,7 @@ $cgm_insar = new CGM_INSAR();
                 <a href="https://www.scec.org/science/cem">About CEM</a>
             </div>
         </div>
-<p class="col-11 intro-text">The Community Geodetic Model (CGM) provides displacement time series and velocities of the Earth’s surface over southern California using data from Global Navigation Satellite Systems (GNSS), which includes the Global Positioning System (GPS), and interferometric synthetic aperture radar (InSAR), both space-based geodetic observation techniques.</p>
+<p class="col-11 intro-text">The SCEC Community Geodetic Model (CGM) provides displacement time series and velocities of the Earth’s surface over southern California using data from Global Navigation Satellite Systems (GNSS), which includes the Global Positioning System (GPS), and interferometric synthetic aperture radar (InSAR), both space-based geodetic observation techniques.</p>
     </div>
 
     <div class="row" style="display:none;">
