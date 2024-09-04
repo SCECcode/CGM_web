@@ -1,3 +1,6 @@
+## 2024-09-04  Mei-Hui Su <mei@usc.edu> 
+* New Statewide styling <edric@usc.edu>
+
 ## 2023-01-20  Mei-Hui Su <mei@usc.edu>
 * looking to add
 
