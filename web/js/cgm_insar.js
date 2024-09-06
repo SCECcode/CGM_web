@@ -552,7 +552,7 @@ var generateTableRow = function(layer) {
               html += `<td class="cgm-insar-data-click">${ostring}</td>`;
               html += `<td class="cgm-insar-data-click">${vstring}</td>`;
               html += `<td class="text-center">`;
-              html += `<button class=\"btn btn-xs\" title=\"show velocity layer\" onclick=CGM_INSAR.executeShowVS(\"${layer.scec_properties.gid}\",\"${layer.scec_properties.file}\")>showVS&nbsp<span class=\"fa fa-image\"></span></button>`;
+              html += `<button class=\"btn btn-xs\" title=\"show velocity layer\" onclick=CGM_INSAR.executeShowVS(\"${layer.scec_properties.gid}\",\"${layer.scec_properties.file}\")>showVS&nbsp<span class=\"fa fa-image\"></span></button></td>`;
         } 
 
         html += `</tr>`;
