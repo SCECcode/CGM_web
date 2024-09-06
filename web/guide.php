@@ -45,7 +45,7 @@ $header = getHeader("User Guide");
                    product data without having to download the entire CGM product archive.
 		   The pages on this site include the 
                    <a href="<?php echo $host_site_actual_path; ?>">CGM Explorer page</a>,
-                   this user guide, <a href="disclaimer">a disclaimer</a>, and a
+                   this user guide, <a href="cite">citing usage of this dataset</a>, <a href="disclaimer">a disclaimer</a>, and a
                    <a href="contact">contact information</a> page.</p>
 
 		<p>The interactive map on the right displays the geographic extent of 
