@@ -768,12 +768,13 @@ window.console.log("STASHING "+results.length+" layers from PHP calls");
         }
 
         let JSON_criteria = JSON.stringify(criteria);
+        let track_name=this.track_name;
 //window.console.log("calling search() with the type.."+type);
 //window.console.log("calling search() with the string.."+JSON_criteria);
         $("#wait-spinner").show();
         $.ajax({
             url: "php/search.php",
-            data: {t: type, k: this.track_name, q: JSON_criteria},
+            data: {t: type, k: track_name, q: JSON_criteria},
         }).done(function(cgm_insar_data) {
 
             let results=[];

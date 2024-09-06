@@ -1,10 +1,10 @@
 #!/bin/bash
 
-dropdb --if-exists CGM2_db
-createdb CGM2_db
+dropdb --if-exists CGM_db
+createdb CGM_db
 mkdir -p /home/postgres/CGM
 cp -Rv /app/schema/CGM_data /home/postgres/CGM
-psql postgresql://postgres:example@localhost/CGM2_db << AAA
+psql postgresql://postgres:example@localhost/CGM_db << AAA
 
   CREATE EXTENSION postgis;
   SELECT PostGIS_Version();

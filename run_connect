@@ -1,7 +1,8 @@
-docker container exec -it $1 /bin/bash
 
+pid=`docker ps | grep cgm_web_web | cut -f 1 -d ' '`
 
-## hint
-## psql -U postgres -d CGM2_db
+docker container exec -it $pid /bin/bash
+
+## psql -U postgres -d CGM_db
 
 

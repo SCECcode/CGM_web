@@ -7,7 +7,7 @@ class CGM_GNSS extends SpatialData
 	// TODO: once we're in a separate database
 	function __construct()
 	{
-		$this->connection = pg_connect("host=db port=5432 dbname=CGM2_db user=webonly password=scec");
+		$this->connection = pg_connect("host=db port=5432 dbname=CGM_db user=webonly password=scec");
 		if (!$this->connection) { die('Could not connect'); }
 	}
 
