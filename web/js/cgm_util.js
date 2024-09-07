@@ -22,8 +22,13 @@ park_plot_container=$('#container').css("width");
 let height=window.innerHeight;
 let width=window.innerWidth;
 
-window.console.log("with wh"+height +" with ww"+width);
-window.console.log("nn with wh"+park_plot_height +" with ww"+park_plot_width+" with cc"+park_plot_container);
+$('#top-control-row-1').css("display", "none");
+$('#top-control-row-2').css("display", "none");
+$('#top-control-row-3').css("display", "none");
+$('#top-select').css("display", "none");
+$('.leaflet-control-attribution').css("width", "80rem");
+$('.navbar').css("margin-bottom", "0px");
+$('.container').css("max-width", "100%");
 
 let belt = document.getElementById('banner-container');
 let b_height = belt.clientHeight;
@@ -31,26 +36,14 @@ let b_height = belt.clientHeight;
 let telt = document.getElementById('top-intro');
 let t_height = telt.clientHeight;
 
-//$('#top-intro').css("display", "none");
-$('#top-control-row-1').css("display", "none");
-$('#top-control-row-2').css("display", "none");
-$('#top-control-row-3').css("display", "none");
-$('#top-select').css("display", "none");
-//$('#top-map').css("border-left-width", "0px");
-//$('#top-map').css("border-right-width", "0px");
-$('#top-map').css("padding-left", "15px");
-$('.navbar').css("margin-bottom", "0px");
+let celt = document.getElementById('cgmMain');
+let c_width = celt.clientWidth;
 
-$('.container').css("max-width", "100%");
-$('.container').css("padding-left", "3px");
-$('.container').css("padding-right", "1px");
-
-$('.leaflet-control-attribution').css("width", "80rem");
 // minus the height of the container top 
-let elt = document.getElementById('banner-container');
-let c_height = elt.clientHeight;
-let h = height - t_height - b_height -40;
-let w = width - 4.5;
+
+let h = height - t_height - b_height - 40 - 30 ;
+let w = width-20;
+
 $('#CGM_plot').css("height", h);
 $('#CGM_plot').css("width", w);
 resize_map();
@@ -62,8 +55,6 @@ window.console.log(" calling toNormalView..");
 
 let height=window.innerHeight;
 let width=window.innerWidth;
-window.console.log("with wh"+height +" with ww"+width);
-window.console.log("nn with wh"+park_plot_height +" with ww"+park_plot_width);
 
 $('#CGM_plot').css("height", park_plot_height);
 $('#CGM_plot').css("width", park_plot_width);
@@ -75,7 +66,6 @@ $('#top-map').css("padding-left", "30px");
 $('.navbar').css("margin-bottom", "20px");
 $('.container').css("max-width", "1140px");
 $('.leaflet-control-attribution').css("width", "35rem");
-//$('#top-intro').css("display", "");
 resize_map();
 }
 
