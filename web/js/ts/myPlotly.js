@@ -40,8 +40,12 @@ window.addEventListener("DOMContentLoaded", function () {
   window.addEventListener('message', function(event) {
       window.console.log("IFRAME side>> received a message..");
       var origin = event.origin;
-      if (origin != "http://localhost:8081" && origin != "http://moho.scec.org" &&
-                                  origin != "https://www.scec.org" ) {
+      if (origin != "http://localhost:8081" 
+	         && origin != "http://moho.scec.org"
+	         && origin != "https://moho.scec.org"
+	         && origin != "https://central.scec.org"
+	         && origin != "https://stress.scec.org"
+	         && origin != "https://www.scec.org" ) {
           window.console.log("IFRAME side>> bad message origin>"+origin);
           return;
       }
