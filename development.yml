@@ -11,5 +11,6 @@ services:
   web:
     volumes:
      - ./:/app
+     - ./scec-php.ini:/etc/php.d/scec-php.ini
     restart: unless-stopped
 
