@@ -1,8 +1,17 @@
 
 pid=`docker ps | grep cgm_web_web | cut -f 1 -d ' '`
 
-docker container exec -it $pid /bin/bash
+#docker container exec -it $pid /bin/bash
 
 ## psql -U postgres -d CGM_db
+### test the running container 
+docker container exec -it $pid php -v
+echo "--"
+docker exec -it $pid env | grep HDF5
+echo "--"
+docker exec -it $pid php -r "echo getenv('HDF5_DIR');"
+echo -e "\n--"
+
+
 
 

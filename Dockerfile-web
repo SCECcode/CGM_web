@@ -2,71 +2,77 @@ FROM amazonlinux:2023
 
 WORKDIR /app
 
-COPY . /app
-
-## php
-RUN dnf upgrade -y --releasever=latest && \
+# 1. Install System Dependencies & Apache
+RUN dnf update -y && \
     dnf install -y \
-        php8.3 php8.3-cli php8.3-pgsql php8.3-fpm && \
+        httpd \
+        php8.3 php8.3-cli php8.3-pgsql php8.3-fpm \
+        make perl libxml2-devel zip unzip \
+        tar wget gawk \
+        autoconf automake libtool file pkgconfig \
+        zlib zlib-devel \
+        gcc gcc-c++ gcc-gfortran binutils \
+        sudo which git \
+        openssl-devel libffi-devel python3-devel && \
     dnf clean all && \
-    rm -rf /var/cache/dnf && \
-    php -v
+    rm -rf /var/cache/dnf
 
+# 2. Build and install HDF5 C library from source (required for h5py on AL2023)
+RUN wget -q https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-1_12_2.tar.gz && \
+    tar -xzf hdf5-1_12_2.tar.gz && \
+    cd hdf5-hdf5-1_12_2 && \
+    ./configure --prefix=/usr/local/hdf5 --enable-build-mode=production && \
+    make -j$(nproc) && \
+    make install && \
+    cd .. && \
+    rm -rf hdf5-1_12_2.tar.gz hdf5-hdf5-1_12_2
+
+ENV HDF5_DIR=/usr/local/hdf5
+ENV LD_LIBRARY_PATH=/usr/local/hdf5/lib:${LD_LIBRARY_PATH}
+
+# 3. Configure PHP-FPM
 RUN mkdir -p /run/php-fpm && \
-    chown -R apache:apache /run/php-fpm
-
-RUN sed -i 's/^listen.acl_users =.*/;listen.acl_users =/' /etc/php-fpm.d/www.conf && \
+    chown -R apache:apache /run/php-fpm && \
+    sed -i 's/^listen.acl_users =.*/;listen.acl_users =/' /etc/php-fpm.d/www.conf && \
     sed -i 's/^;listen.owner =.*/listen.owner = apache/' /etc/php-fpm.d/www.conf && \
     sed -i 's/^;listen.group =.*/listen.group = apache/' /etc/php-fpm.d/www.conf && \
-    sed -i 's/^;listen.mode =.*/listen.mode = 0660/' /etc/php-fpm.d/www.conf
+    sed -i 's/^;listen.mode =.*/listen.mode = 0660/' /etc/php-fpm.d/www.conf && \
+    sed -i 's/^;clear_env = no/clear_env = no/' /etc/php-fpm.d/www.conf
 
-## python/hdf5
-RUN dnf install -y make yum perl libxml2-devel zip unzip && \
-    dnf install -y tar wget gawk zip coreutils && \
-    dnf install -y autoconf automake libtool file pkgconfig && \
-    dnf install -y zlib zlib-devel && \
-    dnf install -y gcc gcc-c++ gcc-gfortran binutils && \
-    dnf install -y sudo which gtar openblas yum-utils && \
-    dnf install -y openssl11-devel libffi-devel
+# 4. Copy application files before compiling custom Python
+COPY . /app
 
-##XXX
-RUN cd /app/misc; tar zxvf cpython-3.8.11.tar.gz;cd cpython-3.8.11; ./configure --prefix=/usr/local/python-3.8.11; make; make install
+# 5. Compile Python 3.8.11 from source
+RUN cd /app/misc && \
+    tar zxvf cpython-3.8.11.tar.gz && \
+    cd cpython-3.8.11 && \
+    ./configure --prefix=/usr/local/python-3.8.11 && \
+    make -j$(nproc) && \
+    make install && \
+    rm -rf /app/misc/cpython-3.8.11*
 
-RUN sudo ln -s /usr/local/python-3.8.11/bin/python3.8 /usr/bin/python3
-RUN python3 -m pip install setuptools wheel numpy netCDF4 
+# Link custom Python executable and upgrade pip tooling
+RUN ln -sf /usr/local/python-3.8.11/bin/python3.8 /usr/bin/python3 && \
+    ln -sf /usr/local/python-3.8.11/bin/pip3.8 /usr/bin/pip3 && \
+    python3 -m pip install --upgrade pip setuptools wheel
 
-## build hdf5
-#RUN amazon-linux-extras install -y epel && \
-#yum install –y epel-release && \
-#yum-config-manager --enable epel && \
-#yum install -y hdf5-devel && \
-#python3 -m pip install h5py
+# 6. Install Python dependencies (h5py will now detect HDF5_DIR)
+RUN HDF5_DIR=/usr/local/hdf5 python3 -m pip install --no-cache-dir numpy netCDF4 h5py
 
-RUN dnf install -y hdf5-devel gcc python3-devel && \
-    python3 -m pip install h5py
-
-## bring in the insar track data
-# RUN cd /app/web/cgm_data && \
-#     mkdir -p insar && \
-#     cd insar && \
-#     wget -nv https://files.scec.org/s3fs-public/projects/cgm/2.0.0/data/cgm-v2.0.0-insar.tar.gz && \
-#     gtar -zxvf cgm-v2.0.0-insar.tar.gz
-
-#ADD https://files.scec.org/s3fs-public/projects/cgm/2.0.0/data/cgm-v2.0.0-insar.tar.gz /app/web/cgm_data
-
+# 7. Install InSAR readers/writers library & set permissions
 RUN cd /app && \
     git clone https://github.com/SCECcode/InSAR_CGM_readers_writers.git && \
     cd InSAR_CGM_readers_writers && \
-    ./setup.py install && \ 
+    python3 setup.py install && \
+    mkdir -p /app/web/result /app/web/py && \
     chmod og+rw /app/web/result && \
-    chmod -R og+x /app/web/py &&\
-    cd /app
+    chmod -R og+x /app/web/py
 
+# 8. Configure Apache & Entrypoint
 COPY ./doc/cgm.conf /etc/httpd/conf.d/
 
-RUN sed -i 's/;clear_env = no/clear_env = no/g' /etc/php-fpm.d/www.conf
-
-RUN echo -e '#!/bin/bash\nphp-fpm -D\nexec /usr/sbin/httpd -D FOREGROUND' > /usr/local/bin/entrypoint.sh && chmod +x /usr/local/bin/entrypoint.sh
+RUN printf '#!/bin/bash\nphp-fpm -D\nexec /usr/sbin/httpd -D FOREGROUND\n' > /usr/local/bin/entrypoint.sh && \
+    chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 80
 

@@ -1,8 +1,11 @@
+## 2026-10-29  Mei-Hui Su <mei@usc.edu> 
+* Release 2026.10, update to amazonlinux2023 and php 8.3
+
 ## 2024-09-04  Mei-Hui Su <mei@usc.edu> 
 * New Statewide styling <edric@usc.edu>
 
 ## 2023-01-20  Mei-Hui Su <mei@usc.edu>
-* looking to add
+* Added
 
 -rw-r--r-- 1 mei scec_608 1.3G Jan 18 10:29 A064_COMB_CGM_InSAR_v0_0_1.hdf5
 -rw-r--r-- 1 mei scec_608 1.2G Jan 18 09:43 A166_COMB_CGM_InSAR_v0_0_1.hdf5
