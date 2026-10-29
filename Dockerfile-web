@@ -71,6 +71,9 @@ RUN cd /app && \
 # 8. Configure Apache & Entrypoint
 COPY ./doc/cgm.conf /etc/httpd/conf.d/
 
+## to allow environment variable to be passed down to php scripts
+RUN sed -i 's/;clear_env = no/clear_env = no/g' /etc/php-fpm.d/www.conf
+
 RUN printf '#!/bin/bash\nphp-fpm -D\nexec /usr/sbin/httpd -D FOREGROUND\n' > /usr/local/bin/entrypoint.sh && \
     chmod +x /usr/local/bin/entrypoint.sh
 
